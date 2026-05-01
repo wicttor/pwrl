@@ -1,0 +1,48 @@
+{
+  "name": "pwrl",
+  "version": "1.0.0",
+  "description": "Plan. Work. Review. Learn. — A disciplined agentic development framework",
+  "main": "index.js",
+  "bin": {
+    "pwrl": "./bin/pwrl.js"
+  },
+  "scripts": {
+    "postinstall": "node ./bin/postinstall.js"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "development",
+    "workflow",
+    "copilot",
+    "claude",
+    "cursor",
+    "gemini",
+    "planning",
+    "documentation",
+    "learning",
+    "code-review"
+  ],
+  "author": "Wicttor Picanço",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/pwrl.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/pwrl/issues"
+  },
+  "homepage": "https://github.com/your-org/pwrl#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "pwrl-*/**/*",
+    "bin/**/*",
+    "README.md",
+    "INSTALLATION.md",
+    "QUICKSTART.md",
+    "GUIDE.md",
+    "LICENSE"
+  ]
+}

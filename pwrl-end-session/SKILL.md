@@ -1,5 +1,5 @@
 ---
-name: end-session
+name: pwrl-end-session
 description: Create a single clear commit at session end capturing state and next steps.
 argument-hint: "[Optional: reason for ending session or switching tasks]"
 ---

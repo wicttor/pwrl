@@ -1,0 +1,95 @@
+# Frontmatter schema for learnings documented by pwrl-learnings
+# Treat this as the canonical contract for docs/learnings/
+
+# --- Required fields (all learnings) ----------------------------------------
+required_fields:
+  title:
+    type: string
+    max_length: 100
+    description: "Clear, descriptive title"
+
+  date:
+    type: string
+    pattern: '^\d{4}-\d{2}-\d{2}$'
+    description: "Date documented (YYYY-MM-DD)"
+
+  category:
+    type: enum
+    values:
+      - technical-fix # Bugs, errors, issues debugged and resolved
+      - pattern # Reusable code patterns, architecture decisions
+      - workflow # Process improvements, tooling, dev practices
+      - gotcha # Non-obvious behaviors, edge cases, surprises
+      - concept # Understanding about tech, frameworks, domains
+      - decision # Why a particular approach was chosen
+    description: "Type of learning - determines template and directory"
+
+  tags:
+    type: array[string]
+    min_items: 1
+    max_items: 8
+    description: "Searchable keywords (3-5 recommended)"
+
+  severity:
+    type: enum
+    values:
+      - high # Critical knowledge that prevents major issues
+      - medium # Important but not critical
+      - low # Nice to know, minor optimization
+    description: "Impact/importance of this learning"
+
+# --- Optional fields (all learnings) ----------------------------------------
+optional_fields:
+  context:
+    type: string
+    max_length: 200
+    description: "Brief context: project, technology stack, or situation"
+
+  related:
+    type: array[string]
+    description: "Paths to related learning docs or external links"
+
+  last_updated:
+    type: string
+    pattern: '^\d{4}-\d{2}-\d{2}$'
+    description: "Date of last update (for docs that get enhanced)"
+
+# --- Category guidelines ----------------------------------------------------
+#
+# technical-fix:
+#   Use when you debugged and fixed a bug, error, or unexpected behavior.
+#   Template sections: Problem, Symptoms, What Didn't Work, Solution, Why It Works, Prevention
+#
+# pattern:
+#   Use for reusable code patterns, architecture approaches, design decisions.
+#   Template sections: What It Is, Why It Matters, When to Use, Examples, Tradeoffs
+#
+# workflow:
+#   Use for dev environment setups, tool configurations, process improvements.
+#   Template sections: Context, The Practice, Why It Helps, How to Apply, Examples
+#
+# gotcha:
+#   Use for non-obvious behaviors, sharp edges, things you wish you'd known.
+#   Template sections: The Situation, What's Non-Obvious, What to Do, Why It Matters
+#
+# concept:
+#   Use for understanding gained about a technology, framework, or domain concept.
+#   Template sections: What It Is, Why It Matters, How It Works, Examples, Resources
+#
+# decision:
+#   Use for explaining why a particular approach was chosen over alternatives.
+#   Template sections: The Question, Options Considered, What We Chose, Why, Tradeoffs
+
+# --- YAML Safety Rules ------------------------------------------------------
+#
+# When writing frontmatter arrays (tags, related):
+# - Wrap items in double quotes if they start with: ` [ * & ! | > % @ ?
+# - Wrap items in double quotes if they contain ": "
+#
+# Examples:
+#   tags:
+#     - javascript
+#     - "react: hooks"        # contains ": "
+#     - "!important pattern"  # starts with !
+#
+# Most tags and values don't need quotes. Only quote when necessary.

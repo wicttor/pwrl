@@ -8,6 +8,10 @@ argument-hint: "[branch/PR or tokens like depth:fast, subagents:on]"
 
 Reviews code changes against quality standards, identifying issues in logic, security, maintainability, testing, performance, and API contracts.
 
+## Purpose
+
+Provide actionable code review feedback before merge to catch correctness, security, testing, performance, maintainability, and API contract issues.
+
 ## When to Use
 
 - Before creating a PR
@@ -15,9 +19,13 @@ Reviews code changes against quality standards, identifying issues in logic, sec
 - After completing implementation work
 - When you need feedback on code quality
 
-## Review Scope
+## Support Files
 
-The review examines:
+- `references/severity-guide.md` — P0-P3 definitions, severity assessment guidelines, and examples
+- `references/subagent-protocol.md` — Parallel reviewer orchestration, JSON schemas, error handling
+- `references/validator-template.md` — Validation prompt for deep mode findings
+
+## Review Lenses
 
 - **Correctness**: Logic errors, edge cases, state bugs, error handling
 - **Maintainability**: Code clarity, complexity, naming, duplication, abstraction
@@ -33,56 +41,32 @@ The review examines:
 | **P0** | Critical bug, security issue, or data corruption risk | Must fix before merge  |
 | **P1** | High-impact defect likely in normal usage             | Should fix             |
 | **P2** | Moderate issue with meaningful downside               | Fix if straightforward |
+| **P3** | Minor improvement or low-impact issue                 | Optional               |
 
-| **P3** | Minor improvement or low-impact issue | Optional |
+**See `references/severity-guide.md` for detailed definitions, assessment guidelines, and calibration examples.**
 
-## Argument Parsing & Depth Control
+## Control Tokens
 
-Parse the invocation for optional tokens. Tokens (if present) are stripped before interpreting the remainder as a branch name, PR number, commit SHA, or URL.
+Optional tokens control review depth and execution mode:
 
-- `depth:fast` — Quick scan. Minimal findings, no evidence artifacts. Single-pass, low-latency review.
-- `depth:standard` — Balanced review depth (default). Prefer subagents when available.
-- `depth:deep` — Thorough audit. Spawns parallel subagents (if available), generates run artifacts, and returns enriched findings with evidence.
+- `depth:fast` — Quick scan, minimal findings, no artifacts
+- `depth:standard` — Balanced review (default), prefer subagents if available
+- `depth:deep` — Thorough audit with parallel subagents and artifacts
+- `subagents:on|off` — Force subagent mode (default: auto)
 
-- `subagents:on` | `subagents:off` — Force subagent mode on or off. Default: `auto` (spawn subagents when the platform exposes them).
-
-If multiple conflicting depth tokens are provided, the skill stops with an error: "Conflicting depth tokens — please provide exactly one depth:<fast|standard|deep>."
+Tokens are stripped before interpreting remainder as branch/PR/commit/URL. Error if conflicting depth tokens provided.
 
 ## Workflow
 
 ### 1. Determine Scope
 
-**If argument is a PR number, commit SHA, or URL:**
+Get the diff based on argument type:
 
-```bash
-# Get PR details
-gh pr view <pr> --json title,body,baseRefName,url
-gh pr diff <pr>
-```
+- **PR/commit/URL**: Use `gh pr diff <pr>` or `git show <commit>`
+- **Branch**: Use `git diff $(git merge-base HEAD <branch>)..<branch>`
+- **No argument**: Use `git diff $(git merge-base HEAD $(git rev-parse --abbrev-ref HEAD)@{upstream})`
 
-```bash
-# Get commit details
-git show <commit> --stat --patch
-```
-
-**If argument is a branch name:**
-
-```bash
-git diff $(git merge-base HEAD <branch>)..<branch>
-```
-
-**If no argument (review current branch):**
-
-```bash
-BASE=$(git merge-base HEAD $(git rev-parse --abbrev-ref $(git rev-parse --abbrev-ref HEAD)@{upstream} 2>/dev/null || echo main))
-git diff $BASE
-```
-
-Extract:
-
-- Changed files list
-- Full diff with context
-- Line counts (added/removed)
+Extract changed files, full diff, and line counts.
 
 ### 2. Understand Intent
 
@@ -96,91 +80,33 @@ If intent is unclear, ask: "What is the primary goal of these changes?"
 
 ### 3. Review
 
-Examine the diff through each lens. The behavior varies by depth and by whether subagents are available.
+Examine the diff through each lens:
 
-3a. Subagent orchestration (deep or when `subagents:on`)
+- **Correctness**: Logic errors, edge cases, state bugs, error handling
+- **Testing**: Coverage gaps, edge case tests, assertion quality
+- **Maintainability**: Code clarity, complexity, naming, duplication
+- **Security**: Input validation, auth checks, injection risks, data exposure
+- **Performance**: Inefficient patterns, unnecessary work, resource usage
+- **API Contracts**: Breaking changes, versioning, backward compatibility
 
-- If the environment exposes a parallel subagent facility, spawn one reviewer per area in parallel. Assign areas to reviewers as follows: - `correctness-reviewer` — Logic, edge cases, state - `testing-reviewer` — Tests, coverage, assertions - `maintainability-reviewer` — Clarity, duplication, complexity - `security-reviewer` — Auth, validation, injection, data exposure - `performance-reviewer` — Hot paths, DB queries, caching - `api-reviewer` — Public APIs, schema/contract changes
+**Execution Modes:**
 
-- Each subagent should return compact JSON (per-finding: `title`, `severity`, `file`, `line`, `confidence`, `suggested_fix`) and — in `depth:deep` — write a full artifact to `.context/pwrl-review/{run_id}/{reviewer}.json` containing `why_it_matters` and `evidence[]`.
+- **Single-pass** (default or `subagents:off`): Review in-process using review lenses above
+- **Parallel subagents** (`depth:deep` or `subagents:on`): Spawn 6 specialized reviewers in parallel (correctness, testing, maintainability, security, performance, api)
 
-- Example run-id generation (used only in `depth:deep`):
+**See `references/subagent-protocol.md` for detailed orchestration, JSON schemas, and error handling.**
 
-```bash
-RUN_ID=$(date +%Y%m%d-%H%M%S)-$(head -c4 /dev/urandom | od -An -tx1 | tr -d ' ')
-mkdir -p ".context/pwrl-review/$RUN_ID"
-```
+**Validation Pass (depth:deep only):**
 
-- If subagents are not available or `subagents:off` is set, perform a single-pass review in-process using the same review lenses below.
+Run independent validators on top 15 findings using `references/validator-template.md`. Validators return `{"validated": true|false, "reason": "..."}`. Drop findings where `validated:false`.
 
-**Correctness:**
+**Artifacts (depth:deep only):**
 
-- Are there logic errors or off-by-one bugs?
-- Are edge cases handled (empty, null, max, min, boundary)?
-- Is error propagation correct?
-- Are state transitions valid?
-
-**Maintainability:**
-
-- Is the code clear and well-named?
-- Is complexity reasonable?
-- Are abstractions appropriate?
-- Is there unnecessary duplication?
-
-**Security:**
-
-- Is user input validated?
-- Are authorization checks present?
-- Could data leak or be exposed?
-- Are there injection risks (SQL, XSS, command)?
-
-**Testing:**
-
-- Are new features covered by tests?
-- Do tests verify edge cases?
-- Are tests meaningful (not just happy path)?
-- Are test assertions strong?
-
-**Performance:**
-
-- Are there unnecessary loops or operations?
-- Are expensive operations cached when appropriate?
-- Are database queries efficient?
-- Are resources released properly?
-
-**API Contracts:**
-
-- Are there breaking changes to public APIs?
-- Is versioning handled correctly?
-- Are types/schemas backward compatible?
-- Is the contract clearly documented?
-
-For each issue found, record:
-
-- **Title**: Clear, specific description
-- **Severity**: P0, P1, P2, or P3
-- **File & Line**: Where the issue occurs
-- **Category**: Which review area (correctness, security, etc.)
-- **Details**: Why this matters and what to fix
-
-### Validation pass (deep mode)
-
-When `depth:deep` is selected and subagents have produced per-finding artifacts, run an independent validator per surviving finding using the prompt in `references/validator-template.md`. The validator re-checks the finding against the diff and any available `why_it_matters` detail from the per-reviewer artifact. Validators must return the JSON envelope:
-
-```json
-{ "validated": true|false, "reason": "<one-sentence>" }
-```
-
-Notes:
-
-- Validators run in parallel when possible.
-- If there are more than 15 findings, validate the highest-severity 15 (P0 first, then P1, etc.). Drop the remainder and record the over-budget count in the review notes.
-- If a validator returns `validated:false` or fails to run, the finding is dropped and the reason is recorded.
-- Validators are strictly read-only. They must not modify the repository or run mutating commands.
+Write full analysis to `.context/pwrl-review/{run_id}/` with per-reviewer JSON and validation results.
 
 ### 4. Report Findings
 
-Present results as a simple checklist. When `depth:deep` is selected, include per-finding evidence and mention the artifact path `.context/pwrl-review/<run_id>/` where reviewers' full analyses are stored. Deep-mode findings should include a short `why_it_matters` snippet and 1–2 evidence lines when available.
+Present results as checklist format:
 
 ```
 # Code Review
@@ -192,40 +118,19 @@ Present results as a simple checklist. When `depth:deep` is selected, include pe
 ## Findings
 
 ### P0 - Critical
-- [ ] **[Correctness]** File:Line - Issue description
+- [ ] **[Category]** File:Line - Issue description
       → Why it matters | Suggested fix
-      Evidence: <short snippet or file:line>
+      Evidence: <snippet> (depth:deep only)
 
-### P1 - High
-- [ ] **[Security]** File:Line - Issue description
-      → Why it matters | Suggested fix
-      Evidence: <short snippet or file:line>
-
-### P2 - Moderate
-- [ ] **[Maintainability]** File:Line - Issue description
-      → Why it matters | Suggested fix
-
-### P3 - Low
-- [ ] **[Testing]** File:Line - Issue description
-      → Why it matters | Suggested fix
+[...P1, P2, P3 sections follow same format...]
 
 ## Summary
 
 **Verdict**: Ready to merge | Ready with fixes | Not ready
 **Reason**: <brief explanation>
-
-**Testing Gaps**: <list any important missing tests>
-**Notes**: <any additional context>
+**Testing Gaps**: <list important missing tests>
+**Artifacts**: .context/pwrl-review/<run_id>/ (depth:deep only)
 ```
-
-## Customization
-
-Extend this skill by:
-
-- Adjusting which review areas to emphasize
-- Adding project-specific checks (linting, style guides)
-- Incorporating custom quality standards
-- Defining additional severity levels or categories
 
 ## Example Invocations
 

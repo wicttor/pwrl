@@ -39,47 +39,18 @@ Review the conversation history to identify:
 
 ### 2. Classify the Learning
 
-Read `references/schema.yaml` to determine:
+Read `references/schema.yaml` and `references/categories.md` to determine:
 
-- **Learning type**: Which category best fits this learning?
-  - `technical-fix` — Bugs, errors, or issues that were debugged and resolved
-  - `pattern` — Reusable code patterns or architecture decisions
-  - `workflow` — Process improvements, tooling setups, or development practices
-  - `gotcha` — Non-obvious behaviors, edge cases, or "things I wish I knew"
-  - `concept` — Understanding gained about a technology, framework, or domain
-  - `decision` — Why a particular approach was chosen over alternatives
-
-- **Severity/Impact**: How significant is this learning?
-  - `high` — Critical knowledge that prevents major issues
-  - `medium` — Important but not critical
-  - `low` — Nice to know, minor optimization
+- **Learning type**: Which category fits this learning? (technical-fix, pattern, workflow, gotcha, concept, decision)
+- **Severity/Impact**: How significant is this learning? (high, medium, low)
 
 ### 3. Structure the Content
 
 Read `assets/templates.md` and choose the appropriate template based on the learning type.
 
-**For technical fixes** (bugs/errors):
-
-- What was the problem?
-- What were the symptoms?
-- What didn't work?
-- What was the solution?
-- Why does it work?
-- How to prevent it?
-
-**For patterns/concepts**:
-
-- What is it?
-- Why does it matter?
-- When to use it?
-- Examples showing it in action
-
-**For gotchas/decisions**:
-
-- What's the situation?
-- What's non-obvious?
-- What should you do instead?
-- Why does this matter?
+- Template structure varies by category (technical-fix, pattern, workflow, etc.)
+- Follow template sections for chosen category
+- Include code examples and concrete details
 
 ### 4. Generate Metadata
 
@@ -128,85 +99,34 @@ Provide:
 
 After documenting the new learning, evaluate whether related learnings might need updates.
 
-**Run `/pwrl-refresh-learnings` when:**
+**Suggest `/pwrl-refresh-learnings [scope]` when:**
 
-- ✅ This learning **contradicts or supersedes** an older documented approach
-- ✅ You found a **better solution** to a previously documented problem
-- ✅ This fix involved a **refactor, migration, or upgrade** that likely affected other docs
-- ✅ Step 6 found **similar/overlapping** learnings that might benefit from consolidation
-- ✅ The new learning fills a gap that makes an older doc **incomplete or outdated**
+- This learning contradicts or supersedes an older documented approach
+- A better solution was found for a previously documented problem
+- Similar/overlapping learnings were found in step 6 that could benefit from consolidation
+- This fills a gap that makes an older doc incomplete or outdated
 
-**Skip refresh when:**
+**Skip refresh when:** No related learnings found, or existing docs are still current and consistent.
 
-- ❌ No related learnings were found in step 6
-- ❌ Related learnings are still consistent and current
-- ❌ This is a completely new topic area
-- ❌ The overlap is superficial (different problems, just same general area)
+**How to suggest:** Provide specific scope based on findings (e.g., file:specific-doc.md, topic-name, or category). Let user decide whether to run refresh now.
 
-**How to suggest refresh:**
+## Output
 
-If refresh is warranted, suggest it with a **specific scope** based on what was found:
+Creates categorized learning document in `docs/learnings/[category]/[slug]-[date].md` with:
 
-```
-💡 Consider running a targeted refresh:
+- YAML frontmatter (title, date, category, tags, severity)
+- Structured content following category template
+- Code examples and concrete details
+- Cross-references to related learnings
 
-/pwrl-refresh-learnings [scope]
+**Directory structure example:**
 
-Reason: [brief explanation of why refresh makes sense]
-```
-
-**Scope examples:**
-
-- `/pwrl-refresh-learnings file:old-async-solution-2025-11-15.md` — when one specific doc is superseded
-- `/pwrl-refresh-learnings async-patterns` — when multiple related docs might be affected
-- `/pwrl-refresh-learnings technical-fix` — after a broad refactor affecting many fixes
-- `/pwrl-refresh-learnings authentication` — when the topic area has evolved
-
-**Let the user decide** — suggest with rationale, don't auto-invoke. The user knows whether they have time/context for maintenance now.
-
-## What It Captures
-
-Depending on learning type:
-
-**Technical fixes:**
-
-- Problem symptoms and error messages
-- Investigation attempts (what didn't work)
-- Root cause analysis
-- Working solution with code examples
-- Prevention strategies
-
-**Patterns & concepts:**
-
-- Core idea or pattern
-- When and why to use it
-- Examples and usage
-- Tradeoffs or alternatives
-
-**Gotchas & decisions:**
-
-- Non-obvious behavior
-- Context and impact
-- Recommended approach
-- Rationale
-
-## Output Structure
-
-```
-docs/learnings/
-  technical-fix/
-    async-state-race-condition-2026-04-30.md
-  pattern/
-    service-object-pattern-2026-04-15.md
-  workflow/
-    local-dev-setup-2026-03-10.md
-  gotcha/
-    date-timezone-parsing-2026-02-22.md
-  concept/
-    understanding-closure-scope-2026-01-18.md
-  decision/
-    why-postgres-over-mysql-2025-12-05.md
-```
+- `docs/learnings/technical-fix/` — Bug fixes and error resolutions
+- `docs/learnings/pattern/` — Reusable patterns and architecture
+- `docs/learnings/workflow/` — Process improvements and tooling
+- `docs/learnings/gotcha/` — Non-obvious behaviors and edge cases
+- `docs/learnings/concept/` — Technology and framework understanding
+- `docs/learnings/decision/` — Why specific approaches were chosen
 
 ## Best Practices
 

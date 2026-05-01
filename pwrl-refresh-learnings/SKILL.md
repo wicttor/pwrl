@@ -23,13 +23,11 @@ Keeps your learning collection current by identifying and updating docs that may
 /pwrl-refresh-learnings                 # Prompt for scope
 ```
 
-**Scope examples:**
+**Scope examples:** `authentication`, `technical-fix`, `2026-04`, `async-patterns`, `file:specific-doc.md`
 
-- `authentication` — Review learnings tagged or mentioning authentication
-- `technical-fix` — Review all technical fix learnings
-- `2026-04` — Review learnings from April 2026
-- `async-patterns` — Review learnings about async patterns
-- `file:async-race-condition-2026-04-30.md` — Review specific file
+## Support Files
+
+- `references/assessment-criteria.md` — Detailed assessment methodology and update procedures
 
 ## Workflow
 
@@ -45,53 +43,23 @@ If not provided, ask the user what to review:
 
 ### 2. Find Candidate Learnings
 
-Search `docs/learnings/` based on scope:
+Search `docs/learnings/` based on scope using find/grep:
 
-```bash
-# For category scope
-find docs/learnings/[category]/ -name "*.md"
+- Category: `find docs/learnings/[category]/ -name "*.md"`
+- Tag/keyword: `grep -r "tags:.*[keyword]" docs/learnings/`
+- Date range: `find docs/learnings/ -name "*-[YYYY-MM]*.md"`
 
-# For tag/keyword scope
-grep -r "tags:.*[keyword]" docs/learnings/
-grep -r "[keyword]" docs/learnings/  # also search content
-
-# For date range
-find docs/learnings/ -name "*-[YYYY-MM]*.md"
-```
-
-Limit to relevant files only — typically 3-10 documents. If scope is too broad (>15 files), ask user to narrow it.
+Limit to relevant files (typically 3-10 documents). If scope too broad (>15 files), ask user to narrow.
 
 ### 3. Load and Analyze
 
-For each candidate learning:
+For each candidate learning, read the full document and assess:
 
-**Read the full document** including:
+- **Freshness**: Is information still accurate? Code examples current? APIs/tools changed?
+- **Duplication**: Similar titles, tags, or content with other learnings?
+- **Gaps**: Missing prevention tips, examples, or cross-references?
 
-- YAML frontmatter (date, category, tags, severity)
-- All content sections
-- Code examples
-- Related links
-
-**Assess freshness** by checking:
-
-- Is the information still accurate?
-- Are code examples current?
-- Do newer learnings contradict this?
-- Have APIs, tools, or practices changed?
-- Are related links still valid?
-
-**Check for duplication**:
-
-- Search for learnings with similar titles, tags, or content
-- Identify overlap in problem, solution, or topic
-- Note which doc has better/fresher content
-
-**Identify gaps**:
-
-- Missing prevention tips?
-- Could use better examples?
-- Missing cross-references?
-- Related newer learnings not linked?
+**See `references/assessment-criteria.md` for detailed assessment methodology.**
 
 ### 4. Categorize Findings
 
@@ -165,37 +133,14 @@ Ask which actions to take:
 
 ### 7. Execute Updates
 
-Based on user choice:
+Based on user choice, execute updates according to category:
 
-**For updates** (🟡):
+- **Updates (🟡)**: Make targeted edits preserving structure; add `last_updated` to frontmatter
+- **Superseded (🟠)**: Add superseded notice at top; add `superseded_by` to frontmatter; link bidirectionally
+- **Consolidations (🔴)**: Merge unique content into base doc; archive merged-in docs; update incoming links
+- **Archives (⚫)**: Move to `docs/learnings/archive/`; add `archived: true` and `archive_reason` to frontmatter
 
-1. Read the existing doc
-2. Identify what needs updating (examples, links, prevention tips)
-3. Make targeted edits preserving structure
-4. Add `last_updated: [YYYY-MM-DD]` to frontmatter
-
-**For superseded docs** (🟠):
-
-1. Add notice at top: `> ⚠️ This learning is superseded by [link]. See that doc for current approach.`
-2. Add `superseded_by: [path]` to frontmatter
-3. Add `last_updated: [YYYY-MM-DD]`
-4. Optionally add `archived: true` to frontmatter
-
-**For consolidations** (🔴):
-
-1. Identify which doc has better foundation (usually newer)
-2. Merge unique content from both docs
-3. Combine tags, examples, and cross-references
-4. Update frontmatter: add both sets of tags, update date
-5. Archive or delete the merged-in doc
-6. Update any docs linking to the old one
-
-**For archives** (⚫):
-
-1. Create `docs/learnings/archive/` if needed
-2. Move file: `mv docs/learnings/[category]/[file] docs/learnings/archive/`
-3. Add `archived: true` and `archive_reason: [reason]` to frontmatter
-4. Update any docs linking to it
+**See `references/assessment-criteria.md` for detailed update procedures and decision guidelines.**
 
 ### 8. Summary
 
@@ -216,77 +161,27 @@ Archived: [N] docs
 No action: [N] docs (current)
 ```
 
-## Refresh Triggers
+## When to Use
 
-Run this skill when:
+✅ **Run this skill when:**
 
-- ✅ Recent work contradicts or improves on older learnings
-- ✅ Major refactor or migration happened
-- ✅ Dependencies were upgraded (breaking changes)
-- ✅ You notice duplicative learnings accumulating
-- ✅ Quarterly knowledge base maintenance
-- ✅ After documenting several learnings in same area
+- Recent work contradicts or improves on older learnings
+- Major refactor or migration happened
+- Dependencies were upgraded (breaking changes)
+- You notice duplicative learnings accumulating
+- After documenting several learnings in same area
 
-Don't run when:
+❌ **Skip when:**
 
-- ❌ Right after documenting one learning (unless obvious duplicate)
-- ❌ No evidence of staleness
-- ❌ Collection is small (<10 docs)
-
-## Guidelines
-
-### Update vs Consolidate
-
-**Update** when:
-
-- Doc is fundamentally sound but incomplete
-- Just needs fresher examples or links
-- Single targeted addition makes it better
-
-**Consolidate** when:
-
-- Two docs solve the same problem differently
-- Substantial content overlap (>50%)
-- Combined doc would be clearer than two separate ones
-- Both docs are referenced and should remain findable (keep the better filename, add redirect note in archived doc)
-
-### Archive vs Delete
-
-**Archive** (preferred):
-
-- Keep file in `docs/learnings/archive/`
-- Preserves history and links
-- Searchable but marked obsolete
-- Can reference in "what we used to do" contexts
-
-**Delete** (rare):
-
-- True duplicate with no unique content
-- Incorrectly documented learning
-- Sensitive content that should be removed
-
-### Batch vs Targeted
-
-**Targeted** (preferred):
-
-- Update 1-3 specific learnings
-- Focused scope and clear intent
-- Preserves context and accuracy
-
-**Batch**:
-
-- Only when many docs obviously need same update
-- Example: dependency upgrade affects many docs
-- Review each change even in batch mode
+- Right after documenting one learning (unless obvious duplicate)
+- No evidence of staleness
+- Collection is small (<10 docs)
 
 ## Best Practices
 
-- **Preserve intent** — Don't change the original learning's purpose
-- **Add, don't replace** — When updating, add new insights alongside old (mark what's superseded)
-- **Link forward and back** — When superseding, link both directions
-- **Tag consolidations** — Add `consolidated: true` to frontmatter of merged docs
-- **Be conservative** — When in doubt, leave it alone or ask user
-
-## Related
-
-Complements [pwrl-learnings](../pwrl-learnings/SKILL.md) — that skill creates learnings, this one maintains them.
+- **Preserve intent**: Don't change the original learning's purpose
+- **Add, don't replace**: When updating, add new insights alongside old (mark what's superseded)
+- **Link bidirectionally**: When superseding, link both directions (old → new and new → old)
+- **Be conservative**: When in doubt, ask user before making changes; prefer Archive over Delete
+- **Targeted over batch**: Update 1-3 specific learnings at a time; batch only for mechanical updates
+- **Test links**: After updates, verify all internal links and cross-references still work

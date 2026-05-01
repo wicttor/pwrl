@@ -69,7 +69,31 @@ Description of what this skill produces.
 - Quality criteria
 ```
 
-### 3. Skill Principles
+**For pwrl-\* skills specifically**, see `pwrl-standards/SCHEMA.md` for the canonical standardized format including:
+
+- Required YAML frontmatter fields
+- Document structure (required/optional sections)
+- Tone and style guidelines (imperative mood, active voice)
+- Support file organization (references/, assets/, examples/)
+- Verbosity targets (100-150 lines main SKILL.md)
+
+Use `pwrl-standards/TEMPLATE.md` as a starting template with inline examples.
+
+### 3. Validation Checklist
+
+Before submitting a pwrl-\* skill, verify:
+
+- [ ] **YAML Frontmatter**: Contains required `name` and `description` fields
+- [ ] **Line Count**: Main SKILL.md within 80-170 lines (target: 100-150)
+- [ ] **Section Structure**: Includes required sections (Purpose, Workflow) and appropriate optional sections
+- [ ] **Support Files**: Detailed content extracted to `references/`, `assets/`, or `examples/` directories
+- [ ] **Tone**: Uses imperative mood ("Do X" not "X should be done") and active voice
+- [ ] **Agent-Agnostic**: No tool-specific language (use "platform's ask_user facility" not "ask_user tool")
+- [ ] **Repository Paths**: All file paths are repository-relative (no absolute paths)
+- [ ] **Links Valid**: All references/ links point to existing files
+- [ ] **Scannable**: Uses bullets, short paragraphs, numbered steps for workflows
+
+### 4. Skill Principles
 
 **Keep it:**
 
@@ -257,6 +281,65 @@ How you tested this
 3. Tag release
 4. Publish to NPM
 5. Update documentation site (if exists)
+
+---
+
+## Lessons from Standardization
+
+The pwrl-\* skills were standardized in 2025 to improve consistency, scannability, and agent-framework compatibility. Key insights:
+
+### Verbosity Sweet Spot
+
+**Finding:** Original skills ranged from 49 to 292 lines (6x variation), making it hard to estimate complexity at a glance.
+
+**Solution:** Target 100-150 lines for main SKILL.md (acceptable range: 80-170). This balances scannability with completeness.
+
+**Benefit:** Users can quickly scan workflows; detailed content lives in `references/` for deep dives.
+
+### Support File Extraction
+
+**Finding:** Many skills had extractable content (templates, detailed procedures, assessment criteria) cluttering the main workflow.
+
+**Solution:** Move detailed content to:
+
+- `references/` — Schemas, templates, detailed guidance
+- `assets/` — Static resources, diagrams
+- `examples/` — Sample outputs, real-world cases
+
+**Benefit:** Main SKILL.md stays focused on workflow; supporting detail available via links.
+
+### Agent-Agnostic Language
+
+**Finding:** Tool-specific references (e.g., "ask_user tool", "@workspace search") reduce portability across agent frameworks.
+
+**Solution:** Use generic language:
+
+- ✅ "platform's ask_user facility"
+- ✅ "search the workspace"
+- ❌ "call ask_user() function"
+- ❌ "@workspace search"
+
+**Benefit:** Skills work across LangChain, AutoGen, custom orchestrators, and future frameworks.
+
+### Tone Consistency
+
+**Finding:** Mix of passive/active voice and indicative/imperative mood across skills.
+
+**Solution:** Standardize on imperative mood ("Do X") and active voice for all workflow steps.
+
+**Benefit:** Clear, action-oriented instructions that agents can execute directly.
+
+### Sequential Migration
+
+**Finding:** Migrating all skills simultaneously risks breaking multiple workflows if approach is flawed.
+
+**Solution:** Migrate sequentially from lowest to highest risk:
+
+1. Simple skills first (pwrl-end-session)
+2. Core workflow skills next (pwrl-work, pwrl-plan)
+3. Complex skills last (pwrl-review with subagent orchestration)
+
+**Benefit:** Early migrations validate approach; late migrations benefit from refined patterns.
 
 ---
 

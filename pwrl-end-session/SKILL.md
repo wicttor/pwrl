@@ -6,44 +6,160 @@ argument-hint: "[Optional: reason for ending session or switching tasks]"
 
 # End Session
 
-Produce one well-documented commit when a session ends. Use `#ask-user` for confirmations, include an `[AGENT: …]` trailer, and do not push automatically.
+Create a single well-documented commit when a work session ends, capturing state and providing context for future sessions.
 
-## Flow (concise)
+## Purpose
 
-1. Pre-flight
-   - Run `git status` or `get_changed_files`. If no changes, inform the user and exit.
-   - If changes exist, show files and ask which to stage.
+Session-end commits serve as checkpoints in AI-assisted development:
 
-2. Confirm
-   - Ask the user to confirm session completion. If not confirmed, list open todos and stop.
+- **Context preservation**: Future sessions can understand what was done and why
+- **Audit trail**: Clear attribution via `[AGENT: ...]` trailer
+- **Continuity**: Next steps documented for seamless session transitions
+- **Review quality**: Well-documented commits improve code review efficiency
 
-3. Prepare message
-   - Subject: imperative, ≤50 chars, no trailing period.
-   - Body: explain why and what changed (wrap ~72 chars).
-     - If a plan was followed during the session, reference it.
-     - If during the session the agent switched tasks, explain the reason and next steps.
-     - If the commit is partial work, explain the current state and next steps.
-     - If the commit is a fix, explain the issue and how it was resolved.
-     - If the commit is a new feature, explain the feature and its value.
-     - If the commit is a refactor, explain what was refactored and why.
-     - If the commit is a revert, explain what was reverted and why.
-     - List all the skills used during the session.
-     - If the commit has changes from other sessions, explain the context and how (or if) it relates to the current session.
-   - Append `[AGENT: {AGENT_NAME}]` on the last line.
-   - Present subject + body to the user for approval.
+## Usage
 
-4. Commit
-   - Stage selected files and run the commit.
-   - Return and display the commit SHA.
+```bash
+/pwrl-end-session                           # End current session
+/pwrl-end-session "switching to bugfix"     # End with context note
+```
 
-## Rules (short)
+## Workflow
 
-- Verify the working tree before starting.
-- Commit partial work if needed, but explain state and next steps in the body.
-- The `[AGENT: …]` trailer is mandatory.
-- Do not push to remote automatically.
+### Phase 1: Pre-flight Check
+
+1. Check working tree state:
+   - Run `git status` or use platform's changed files tool
+   - If no changes exist, inform user and exit
+
+2. Review changed files:
+   - Display list of modified, added, and deleted files
+   - Ask user which files to stage for commit
+   - Confirm unstaged files are intentionally excluded
+
+### Phase 2: Confirm Completion
+
+1. Ask user to confirm session is complete:
+   - Present clear yes/no question
+   - If user declines, check for open todos or incomplete work
+
+2. If not complete:
+   - List any open todos from task tracker
+   - Summarize incomplete work
+   - Exit without committing
+   - Suggest completing remaining work first
+
+### Phase 3: Prepare Commit Message
+
+1. Craft commit subject line:
+   - Use imperative mood: "Add feature" not "Added feature"
+   - Keep to 50 characters or less
+   - No trailing period
+   - Clear and descriptive
+
+2. Write commit body:
+   - Wrap lines at ~72 characters
+   - Explain **why** changes were made, not just what
+   - Include context based on work type:
+     - **Plan-based work**: Reference plan document used
+     - **Task switching**: Explain reason and next steps
+     - **Partial work**: Document current state and what remains
+     - **Fixes**: Describe issue and resolution approach
+     - **Features**: Explain feature value and key decisions
+     - **Refactors**: State what changed and rationale
+     - **Reverts**: Explain what was reverted and why
+   - List skills used during session (e.g., "Used: pwrl-plan, pwrl-work")
+   - Note any cross-session context if changes span multiple sessions
+
+3. Add agent attribution:
+   - Append `[AGENT: {AGENT_NAME}]` on last line of commit message
+   - Use actual agent name (e.g., "GitHub Copilot", "Claude", etc.)
+   - This trailer is mandatory for all session-end commits
+
+4. Present for approval:
+   - Show complete commit message (subject + body) to user
+   - Request confirmation or edits
+   - Apply user revisions if requested
+
+### Phase 4: Create Commit
+
+1. Stage selected files:
+   - Use `git add` for approved files
+   - Verify staging with `git status`
+
+2. Execute commit:
+   - Run `git commit` with prepared message
+   - Capture commit SHA from output
+
+3. Confirm and report:
+   - Display commit SHA to user
+   - Confirm commit was created successfully
+   - Remind user that changes are not pushed (manual push required)
+
+## Commit Message Examples
+
+**Feature work:**
+
+```
+Add user authentication system
+
+Implement JWT-based authentication with refresh tokens.
+Follows plan docs/plans/2026-05-01-001-auth.md.
+
+Key decisions:
+- JWT tokens with 15min expiry
+- Refresh tokens stored in httpOnly cookies
+- Redis for token blacklist
+
+Used: pwrl-plan, pwrl-work
+
+[AGENT: GitHub Copilot]
+```
+
+**Partial work:**
+
+```
+WIP: Add authentication middleware
+
+Implemented JWT validation middleware and tests.
+Auth controller and routes remain for next session.
+
+Next steps:
+- Complete auth controller (login, logout, refresh)
+- Add integration tests
+- Update API documentation
+
+Used: pwrl-work
+
+[AGENT: Claude]
+```
+
+**Bug fix:**
+
+```
+Fix race condition in async state updates
+
+User profile updates were sometimes lost due to race
+condition when multiple requests modified same user.
+
+Solution: Add optimistic locking with version field.
+Tests added to verify concurrent update handling.
+
+Used: pwrl-work
+
+[AGENT: GitHub Copilot]
+```
+
+## Rules
+
+- **Verify working tree** before starting (check for changes)
+- **Commit partial work** if session ends mid-task; document state and next steps clearly
+- **Agent trailer mandatory**: Every commit must include `[AGENT: ...]` on last line
+- **No automatic push**: Never push to remote automatically; user controls when to push
+- **User approval required**: Always present commit message for user confirmation before committing
 
 ## Acceptance Criteria
 
-- Input: user confirms completion and there are changes to commit.
-- Output: a created commit containing `[AGENT: …]` and a clear body; commit SHA returned.
+- **Input**: User confirms session completion and there are changes to commit
+- **Output**: Created commit containing `[AGENT: ...]` trailer and descriptive body
+- **Verification**: Commit SHA returned and displayed to user

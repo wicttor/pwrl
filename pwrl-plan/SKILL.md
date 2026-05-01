@@ -41,9 +41,13 @@ A good plan includes:
 
 ## Planning Tiers
 
-1. **Fast**: For small, well-bounded tasks or clear-cut additions. Focuses on speed and file targets.
-2. **Standard**: The default for software features. Includes technical decisions, risk assessment, and specific test scenarios.
-3. **Deep**: For cross-cutting, risky, or ambiguous work. Adds architectural design, alternative analysis, and phased rollout.
+Choose the appropriate tier based on task complexity and risk:
+
+1. **Fast**: Small, well-bounded tasks (1-3 files, clear scope, low risk)
+2. **Standard**: Most software features (technical decisions, moderate complexity, test scenarios)
+3. **Deep**: Cross-cutting or high-risk work (10+ files, architecture, security, migrations, alternatives analysis)
+
+**See `references/plan-templates.md` for full templates and examples.**
 
 ---
 
@@ -74,119 +78,23 @@ A good plan includes:
 
 ### Phase 4: Plan Generation
 
-- **Naming**: Save to `docs/plans/YYYY-MM-DD-NNN-<name>.md`.
-- **Relative Paths**: All file references must be repository-relative (e.g., `src/main.js`), never absolute.
-- **No Implementation**: Describe the _approach_ and _logic_. DO NOT WRITE production code inside the plan.
+1. Choose template tier (Fast/Standard/Deep) based on task complexity
+2. Read `references/plan-templates.md` for full template format
+3. Write plan following template structure:
+   - **Naming**: Save to `docs/plans/YYYY-MM-DD-NNN-<name>.md`
+   - **Relative Paths**: All file references must be repository-relative (e.g., `src/main.js`), never absolute
+   - **No Implementation**: Describe the _approach_ and _logic_; DO NOT WRITE production code inside the plan
+4. Include required sections per tier:
+   - **Fast**: Goal, Implementation Units with files/approach/verification
+   - **Standard**: Overview, Key Technical Decisions, Implementation Units with test scenarios, System-Wide Impact
+   - **Deep**: All Standard sections plus High-Level Technical Design, Alternative Approaches, Risk Analysis, Operational Notes
 
 ---
 
-## Plan Templates
+## Best Practices
 
-### 1. Fast Plan (Lightweight)
-
-> _Best for: Small tweaks, bug fixes, or well-understood tasks._
-
-```markdown
-#### Template:
-
-# [Title] (Fast)
-
-**Date:** [YYYY-MM-DD] | **Status:** active
-
-## Goal
-
-[One sentence description of the outcome]
-
-## Implementation Units
-
-- U1. **[Name]**
-  - **Files:** `path/to/file`
-  - **Approach:** [Brief technical note]
-  - **Verification:** [How to confirm it works]
-```
-
----
-
-### 2. Standard Plan (Technical)
-
-> _Best for: Standard feature development and bounded refactors._
-
-#### Template:
-
-```markdown
-# [Title] (Standard)
-
-**Date:** [YYYY-MM-DD] | **Type:** [feat|fix|refactor]
-
-## Overview
-
-[Summarize the problem frame and context]
-
-## Key Technical Decisions
-
-- [Decision]: [Rationale]
-
-## Implementation Units
-
-- U1. **[Name]**
-  - **Goal:** [What this unit accomplishes]
-  - **Dependencies:** [e.g., None or U2]
-  - **Files:**
-    - Create: `path/to/new`
-    - Modify: `path/to/existing`
-    - Test: `path/to/test`
-  - **Test Scenarios:** - [Happy Path]: [Input -> Expected Outcome]
-    - [Edge Case]: [Boundary condition -> Expected Outcome]
-
-## System-Wide Impact
-
-- [Interaction graph, state lifecycle risks, or API parity notes]
-```
-
----
-
-### 3. Deep Plan (High-Confidence)
-
-> _Best for: New architecture, migrations, or security-sensitive work._
-
-#### Template:
-
-```markdown
-# [Title] (Deep)
-
-**Date:** [YYYY-MM-DD] | **Risk:** [High/Med]
-
-## High-Level Technical Design
-
-> _Directional guidance for review; not implementation specification._
-> [Mermaid diagram, pseudo-code sketch, or data-flow map]
-
-## Implementation Units (Phased)
-
-### Phase 1: Foundation
-
-- U1. **[Unit Name]** ... [details as above]
-
-## Alternative Approaches Considered
-
-- [Approach]: [Why it was rejected in favor of the current plan]
-
-## Risk Analysis & Mitigation
-
-| Risk | Impact | Mitigation            |
-| ---- | ------ | --------------------- |
-| [X]  | [High] | [Step to prevent/fix] |
-
-## Operational / Rollout Notes
-
-[Feature flags, monitoring, or data migration steps]
-```
-
----
-
-## Rules of Execution
-
-1. **Portable Paths**: Absolute paths break plans. Use repo-relative paths only.
-2. **U-ID Stability**: IDs like `U1` are anchors for the implementer. Never renumber them.
-3. **Decisions, Not Code**: Capture boundaries and logic. Leave the variable naming and syntax to the implementation phase.
-4. **Research First**: If the codebase lacks local patterns for the task, always perform external research before finalizing.
+1. **Portable Paths**: Use repository-relative paths only (e.g., `src/main.js`); absolute paths break plans
+2. **U-ID Stability**: Implementation unit IDs like `U1`, `U2` are anchors; never renumber them if units are moved or deleted
+3. **Decisions, Not Code**: Capture boundaries, approach, and logic; leave variable naming and syntax to implementation phase
+4. **Research First**: If the codebase lacks local patterns for the task, always perform external research before finalizing
+5. **Right-Size**: Small tasks get short plans; complex work gets more structure; don't over-plan simple tasks

@@ -8,6 +8,15 @@ argument-hint: "[Plan doc path or work description. Leave blank to use the lates
 
 Execute implementation work from a plan or prompt with fast feedback loops and clear quality checks.
 
+## Purpose
+
+Transform plans or prompts into working code through systematic execution:
+
+- Test-first discipline ensures correctness
+- Incremental verification catches issues early
+- Clear quality gates prevent scope drift
+- Supports inline, serial, or parallel execution modes based on task complexity
+
 ## Input
 
 <input_document> #$ARGUMENTS </input_document>
@@ -25,7 +34,7 @@ Classify `<input_document>`:
   - small/medium: clear scope, under ~5 files → build task list, then execute
   - large: cross-cutting, architectural, 10+ files, sensitive areas, mostly backend implementation, modifications into core systems → recommend planning with `/pwrl-plan` workflow first; continue ONLY if user wants and expressly confirms understanding of risks and tradeoffs of skipping planning.
 
-### Phase 1: Prepare
+### Phase 1: Prepare Context and Environment
 
 1. Read and clarify
 
@@ -44,7 +53,7 @@ Classify `<input_document>`:
 
 3. Create tasks
 
-- Use the platform native task tracker.
+- Use the platform's task tracking facility.
 - Create specific, testable tasks with dependencies for medium work.
 - For most trivial work, inline execution without formal tasks is acceptable but still requires environment check and user confirmation.
 - Include testing and verification tasks.
@@ -124,10 +133,10 @@ When tasks are complete:
 - Code follows local patterns and conventions.
 - No unresolved blockers or ambiguous TODOs left behind.
 
-## Pitfalls to Avoid
+## Rules
 
-- Over-analysis before writing code.
-- Skipping clarifications for material ambiguities.
-- Deferring all testing to the end.
-- Shipping partial work without explicit follow-up tasks.
-- Expanding scope beyond plan boundaries without user confirmation.
+- **No over-analysis**: Start coding after clarifying material ambiguities; avoid excessive upfront planning
+- **Clarify ambiguities**: Ask questions when answers materially affect implementation
+- **Test incrementally**: Run tests after each logical unit; don't defer all testing to the end
+- **Complete work**: Ship only complete features with explicit follow-up tasks for partial work
+- **Respect scope**: Don't expand beyond plan boundaries without user confirmation

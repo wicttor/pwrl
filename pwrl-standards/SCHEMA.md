@@ -1,0 +1,566 @@
+# PWRL Skills Standardization Schema
+
+**Version:** 1.0
+**Date:** 2026-05-01
+**Scope:** pwrl-\* skill family
+
+This document defines the canonical structure, format, and conventions for all pwrl-\* skills to ensure consistency, maintainability, and agent-agnostic compatibility.
+
+---
+
+## Design Principles
+
+### 1. Agent-Agnostic
+
+Skills must work across any AI agent framework (LangChain, AutoGen, GitHub Copilot, Claude, Custom Orchestrators).
+
+**Requirements:**
+
+- No hardcoded framework-specific syntax or APIs
+- Use generic terms: "platform's ask_user tool" not "Copilot's askQuestions"
+- Avoid IDE or tool-specific commands unless clearly marked as optional/platform-specific
+- All paths must be repository-relative (e.g., `src/main.js`), never absolute
+
+### 2. Scannable & Actionable
+
+Skills must be quick to read and unambiguous to execute.
+
+**Requirements:**
+
+- Use imperative mood: "Read X" not "X should be read"
+- Active voice preferred over passive constructions
+- Short paragraphs (2-4 lines max)
+- Bullet lists for sequences and options
+- Clear phase/step numbering for workflows
+- Headers that describe actions, not topics
+
+### 3. Right-Sized
+
+Balance detail with brevity. Main SKILL.md files should be readable in one scroll.
+
+**Requirements:**
+
+- **Target:** 100-150 lines for main SKILL.md
+- **Acceptable range:** 80-170 lines (±20 from target)
+- **Extract to references/**: Schemas, detailed templates, complex decision trees, validation rules
+- Simple skills (like pwrl-end-session) can be shorter (~80-120 lines)
+- Complex skills (like pwrl-review) can approach upper bound (~140-170 lines)
+
+### 4. Complete & Verifiable
+
+Every skill must have clear success criteria and verification steps.
+
+**Requirements:**
+
+- Define what constitutes successful completion
+- Include verification or validation steps where applicable
+- Specify output format or artifacts produced
+- List quality criteria or acceptance conditions
+
+---
+
+## YAML Frontmatter Specification
+
+### Required Fields
+
+```yaml
+---
+name: pwrl-skillname
+description: "One-sentence description of what this skill does and when to use it"
+argument-hint: "[What users should provide when invoking this skill]"
+---
+```
+
+### Field Definitions
+
+**`name`** (string, required)
+
+- Format: `pwrl-<lowercase-hyphenated-name>`
+- Must match directory name
+- No spaces, underscores, or special characters except hyphens
+- Example: `pwrl-work`, `pwrl-refresh-learnings`
+
+**`description`** (string, required)
+
+- One sentence (two maximum)
+- 60-150 characters recommended
+- Describes both **what** the skill does and **when** to use it
+- Tone: Direct, informative, action-oriented
+- Example: "Create structured implementation plans for any task. Supports three tiers: Fast, Standard, and Deep."
+
+**`argument-hint`** (string, optional but recommended)
+
+- Wrapped in square brackets: `"[hint text]"`
+- Describes what input the user should provide
+- Keep under 80 characters
+- Examples:
+  - `"[task description, requirements doc, or goal to plan]"`
+  - `"[branch/PR or tokens like depth:fast, subagents:on]"`
+  - `"[Optional: reason for ending session or switching tasks]"`
+- Omit if skill takes no arguments (rare)
+
+### Optional Fields
+
+**`version`** (string, optional)
+
+- Semantic versioning: `"1.0.0"`
+- Only add if skills will be versioned independently
+- Not recommended for initial standardization
+
+---
+
+## Document Structure
+
+### Required Sections
+
+#### 1. Title & Purpose
+
+```markdown
+# Skill Name
+
+One-sentence statement of purpose. What does this skill accomplish?
+
+## Purpose
+
+[Optional: 2-4 sentence expanded purpose explaining the "why"]
+
+- Why this skill exists
+- What problem it solves
+- What value it provides
+```
+
+**Guidelines:**
+
+- Title matches the skill name (H1)
+- Opening sentence is standalone and complete
+- Purpose section optional if title + opening sentence are sufficient
+- Keep combined to 4-8 lines maximum
+
+#### 2. Usage
+
+````markdown
+## Usage
+
+```bash
+/pwrl-skillname [argument]              # Basic usage
+/pwrl-skillname [argument] [options]    # With options
+```
+````
+
+OR (for skills without shell invocation pattern):
+
+## Input
+
+<input_document> #$ARGUMENTS </input_document>
+
+````
+
+**Guidelines:**
+- Show concrete examples of invocation
+- Include optional parameters/flags if applicable
+- Keep to 3-8 lines
+- Use code blocks for commands
+
+#### 3. Workflow
+
+```markdown
+## Workflow
+
+### Phase 1: Name
+
+1. First step with clear action
+2. Second step with verification
+3. Continue with concrete steps
+
+### Phase 2: Name
+
+1. Next phase steps
+...
+````
+
+**Guidelines:**
+
+- Use numbered phases if workflow has distinct stages
+- Use numbered lists for sequential steps within phases
+- Each step should be concrete and actionable
+- Include verification or validation within workflow where applicable
+- Keep phase descriptions under 15 lines each
+- Typically 2-5 phases for standard skills
+
+**Alternative for simple skills:**
+
+```markdown
+## Workflow
+
+1. First step
+2. Second step
+3. Third step
+   ...
+```
+
+#### 4. Output / Acceptance Criteria
+
+Choose ONE of these patterns:
+
+**Pattern A: Output** (for skills that produce artifacts)
+
+```markdown
+## Output
+
+Description of what this skill produces:
+
+- File locations
+- Format specifications
+- Structure or schema
+```
+
+**Pattern B: Acceptance Criteria** (for skills that perform actions)
+
+```markdown
+## Acceptance Criteria
+
+- Input: [what must be true to start]
+- Output: [what must be true when complete]
+- Verification: [how to confirm success]
+```
+
+**Pattern C: Quality Criteria** (for skills with quality bars)
+
+```markdown
+## Quality Criteria
+
+- Requirement 1 is met
+- Requirement 2 is verified
+- No blockers or ambiguities remain
+```
+
+**Guidelines:**
+
+- Choose pattern that best fits skill's nature
+- Keep to 5-10 lines
+- Be specific and verifiable
+
+### Optional Sections
+
+#### Rules / Guidelines / Best Practices
+
+```markdown
+## Rules
+
+- Critical constraint or requirement
+- Mandatory behavior pattern
+- Safety or correctness requirement
+```
+
+OR
+
+```markdown
+## Best Practices
+
+- Recommended approach for common scenario
+- Tip for effective use
+- Pattern to follow
+```
+
+**When to include:**
+
+- Add "Rules" for mandatory constraints that must always be followed
+- Add "Best Practices" for recommendations that improve outcomes
+- Keep to 5-10 bullet points maximum
+- Omit if workflow already captures all necessary guidance
+
+#### Examples / When to Use
+
+```markdown
+## When to Use
+
+- Scenario where this skill applies
+- Another applicable situation
+- Condition that suggests using this skill
+```
+
+OR
+
+```markdown
+## Example Invocations
+
+- `@pwrl-skillname arg1` - Description
+- `@pwrl-skillname arg2 flag:value` - Description
+```
+
+**When to include:**
+
+- Add "When to Use" if usage scenarios need clarification
+- Add "Example Invocations" for skills with complex argument patterns
+- Omit if description and usage sections are sufficient
+
+---
+
+## Support File Organization
+
+### Directory Structure
+
+```
+pwrl-skillname/
+  SKILL.md              # Main agent-consumed workflow (required)
+  README.md             # User-facing quickstart (optional)
+  references/           # Supporting schemas, templates, guides (optional)
+  assets/               # Static resources like diagrams (optional)
+  examples/             # Sample outputs or sessions (optional)
+  scripts/              # Helper automation scripts (optional)
+```
+
+### When to Use Support Folders
+
+**`references/`** — Use when:
+
+- Skill needs detailed schemas (like YAML specifications)
+- Workflow requires templates (like plan templates or learning templates)
+- Complex decision trees or validation rules would clutter main file
+- Multi-step assessment criteria need detailed guidance
+- Subagent protocols or validator templates are needed
+
+**Examples:**
+
+- `references/schema.yaml` — Frontmatter specification
+- `references/plan-templates.md` — Fast/Standard/Deep plan formats
+- `references/validator-template.md` — Subagent validator prompt
+
+**`assets/`** — Use when:
+
+- Skill references diagrams, flowcharts, or images
+- Static configuration files are needed
+- Example screenshots illustrate the workflow
+
+**`examples/`** — Use when:
+
+- Sample outputs help users understand expected results
+- Real-world usage patterns are instructive
+- Before/after comparisons clarify transformations
+
+**`scripts/`** — Use when:
+
+- Shell scripts automate repetitive tasks
+- Validation or formatting tools support the skill
+- Helper utilities make the skill easier to use
+
+### Linking Support Files
+
+Always link support files explicitly from the workflow:
+
+```markdown
+### Phase 2: Classify the Learning
+
+Read `references/schema.yaml` to determine:
+
+- **Learning type**: Which category best fits...
+```
+
+OR
+
+```markdown
+### 3. Structure the Content
+
+Read `assets/templates.md` and choose the appropriate template based on the learning type.
+```
+
+**Guidelines:**
+
+- Use relative paths: `references/file.md` not `/full/path/to/file.md`
+- Link at the point in the workflow where the file should be consulted
+- Don't just list support files; integrate them into the process
+- Ensure referenced files actually exist and contain relevant content
+
+---
+
+## Tone & Style Guidelines
+
+### Imperative Mood
+
+✅ **Correct:**
+
+- "Read the existing doc"
+- "Search `docs/learnings/` for related content"
+- "Run the commit"
+- "Ask the user to confirm"
+
+❌ **Incorrect:**
+
+- "The existing doc should be read"
+- "`docs/learnings/` should be searched for related content"
+- "The commit should be run"
+- "The user should be asked to confirm"
+
+### Active Voice
+
+✅ **Correct:**
+
+- "The skill produces a durable implementation plan"
+- "Mark task in progress"
+- "Review diff for regressions"
+
+❌ **Incorrect:**
+
+- "A durable implementation plan is produced by the skill"
+- "The task should be marked in progress"
+- "The diff should be reviewed for regressions"
+
+### Concise & Scannable
+
+✅ **Correct:**
+
+- Use bullet lists for options, features, or criteria
+- Keep paragraphs to 2-4 lines
+- Use tables for structured comparisons
+- Break complex instructions into numbered steps
+
+❌ **Incorrect:**
+
+- Long prose paragraphs without breaks
+- Nested explanations that could be extracted
+- Inline examples that could be in code blocks
+- Redundant explanations across sections
+
+### Agent-Agnostic Language
+
+✅ **Correct:**
+
+- "Use the platform's `ask_user` tool"
+- "If the environment exposes a parallel subagent facility"
+- "Read tools (Read, Grep, Glob, git blame)"
+
+❌ **Incorrect:**
+
+- "Use GitHub Copilot's askQuestions function"
+- "If you're in Claude mode"
+- "Use VSCode's file explorer"
+
+---
+
+## Validation Checklist
+
+Use this checklist to verify skill compliance:
+
+### YAML Frontmatter
+
+- [ ] `name` field present and matches `pwrl-<skillname>` format
+- [ ] `description` field present, 60-150 characters, describes what and when
+- [ ] `argument-hint` field present (if skill takes arguments)
+- [ ] YAML syntax is valid (no unclosed quotes, proper indentation)
+
+### Document Structure
+
+- [ ] H1 title matches skill name
+- [ ] Opening one-sentence purpose statement present
+- [ ] "Usage" or "Input" section shows invocation pattern
+- [ ] "Workflow" section with clear phases and steps
+- [ ] "Output", "Acceptance Criteria", or "Quality Criteria" section present
+- [ ] Total line count: 80-170 lines
+
+### Workflow Quality
+
+- [ ] Steps are numbered and sequential
+- [ ] Each step uses imperative mood ("Do X")
+- [ ] Phases are named descriptively (not just "Phase 1")
+- [ ] Verification or validation steps included where applicable
+- [ ] No ambiguous or underspecified instructions
+
+### Agent-Agnostic
+
+- [ ] No hardcoded framework names (Copilot, Claude, LangChain)
+- [ ] No tool-specific commands unless marked as platform-specific
+- [ ] Uses generic terms: "platform's tool" not specific API names
+- [ ] All file paths are repository-relative
+
+### Tone & Clarity
+
+- [ ] Imperative mood throughout ("Read X" not "X should be read")
+- [ ] Active voice preferred (agent does action, not passive reception)
+- [ ] Paragraphs are short (2-4 lines)
+- [ ] Bullet lists used for options/criteria
+- [ ] No redundant explanations
+
+### Support Files
+
+- [ ] Referenced support files exist and are linked from workflow
+- [ ] Links use relative paths: `references/file.md`
+- [ ] Support files are organized by type (references/, assets/, examples/)
+- [ ] No orphaned files (all support files are referenced)
+
+### Content Integrity
+
+- [ ] No information deleted during migration (moved to references/ if needed)
+- [ ] All original workflow steps preserved or improved
+- [ ] Examples and edge cases retained
+- [ ] Git history preserved (git mv for renames when possible)
+
+---
+
+## Versioning & Maintenance
+
+### When to Update Schema
+
+Update this schema when:
+
+- New structural patterns emerge across multiple skills
+- Framework compatibility requirements change
+- Validation needs expand beyond current checklist
+- Support file conventions evolve
+
+### Schema Versioning
+
+- Increment version at top of document
+- Add dated changelog entry at bottom
+- Notify skill maintainers of breaking changes
+- Provide migration guide for major changes
+
+### Backward Compatibility
+
+When adding new requirements:
+
+- Make new fields optional unless critical
+- Grandfather existing skills (don't force retroactive changes)
+- Provide clear migration timeline for required changes
+- Document rationale for breaking changes
+
+---
+
+## Future Considerations
+
+### Applicability to Other Skill Families
+
+This schema is designed for `pwrl-*` skills but may be adapted for:
+
+- `ce-*` skills (Copilot Engineering workflows)
+- `work-execution/` and similar standalone skills
+- Custom skill families in other projects
+
+When adapting, consider:
+
+- Framework-specific vs. framework-agnostic patterns
+- Verbosity expectations (some families may need more/less detail)
+- Support file conventions (some may prefer inline documentation)
+- Validation requirements (some may need stricter checks)
+
+### Automation Opportunities
+
+Future enhancements:
+
+- `validate-skill.js` script to check schema compliance
+- `format-skill.js` to auto-format according to tone guidelines
+- Pre-commit hooks to enforce validation
+- CI/CD checks for pull requests
+
+**Recommendation:** Start with manual validation, automate only when maintenance burden justifies the investment.
+
+---
+
+## Changelog
+
+**v1.0 (2026-05-01):**
+
+- Initial schema release
+- Defines structure for pwrl-\* skill standardization
+- Establishes verbosity targets (100-150 lines)
+- Specifies agent-agnostic requirements
+- Documents support file organization patterns

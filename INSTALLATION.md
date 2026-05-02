@@ -37,7 +37,7 @@ Skills are automatically discovered by GitHub Copilot.
 cd your-project
 npm install --save-dev pwrl
 # or clone directly
-git clone https://github.com/your-org/pwrl.git .pwrl
+git clone https://github.com/wicttor/pwrl.git .pwrl
 ```
 
 Invoke skills with `/pwrl-plan`, `/pwrl-work`, etc.

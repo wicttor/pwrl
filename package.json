@@ -23,16 +23,16 @@
     "learning",
     "code-review"
   ],
-  "author": "Wicttor Picanço",
+  "author": "Wicttor Picanco Rios",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/pwrl.git"
+    "url": "https://github.com/wicttor/pwrl.git"
   },
   "bugs": {
-    "url": "https://github.com/your-org/pwrl/issues"
+    "url": "https://github.com/wicttor/pwrl/issues"
   },
-  "homepage": "https://github.com/your-org/pwrl#readme",
+  "homepage": "https://github.com/wicttor/pwrl#readme",
   "engines": {
     "node": ">=14.0.0"
   },

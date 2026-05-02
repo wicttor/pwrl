@@ -183,7 +183,7 @@ Include:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/pwrl.git
+git clone https://github.com/wicttor/pwrl.git
 cd pwrl
 
 # Install dependencies (if any)

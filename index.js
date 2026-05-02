@@ -27,7 +27,7 @@
  *   - QUICKSTART.md: Example workflows
  *   - GUIDE.md: Best practices
  *
- * For more information: https://github.com/your-org/pwrl
+ * For more information: https://github.com/wicttor/pwrl
  */
 
 const fs = require('fs');

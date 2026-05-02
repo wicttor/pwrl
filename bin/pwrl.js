@@ -40,7 +40,7 @@ Documentation:
   - QUICKSTART.md     Example workflows
   - GUIDE.md          Best practices and philosophy
 
-More info: https://github.com/your-org/pwrl
+More info: https://github.com/wicttor/pwrl
 `);
 }
 

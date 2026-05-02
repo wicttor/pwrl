@@ -242,4 +242,4 @@ MIT
 
 **PWRL** — Because shipping quality code with AI should be systematic, not chaotic.
 
-[GitHub](https://github.com/your-org/pwrl) · [Issues](https://github.com/your-org/pwrl/issues) · [Docs](INSTALLATION.md)
+[GitHub](https://github.com/wicttor/pwrl) · [Issues](https://github.com/wicttor/pwrl/issues) · [Docs](INSTALLATION.md)

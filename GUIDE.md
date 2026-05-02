@@ -4,6 +4,108 @@ Best practices, anti-patterns, and philosophy for effective AI-assisted developm
 
 ---
 
+## Skill Format and Standardization
+
+PWRL skills follow a standardized format to ensure consistency, scannability, and compatibility across AI frameworks.
+
+### Design Principles
+
+**Agent-Agnostic:**
+
+Skills use generic language that works across LangChain, AutoGen, custom orchestrators, and future frameworks:
+
+- ✅ "platform's ask_user facility"
+- ✅ "search the workspace"
+- ❌ "call ask_user() function"
+- ❌ "@workspace search"
+
+**Balanced Verbosity:**
+
+- Main `SKILL.md` files: 100-150 lines (acceptable: 80-170)
+- Detailed content extracted to `references/`, `assets/`, `examples/`
+- Keeps workflows scannable while preserving completeness
+
+**Consistent Tone:**
+
+- Imperative mood: "Do X" not "X should be done"
+- Active voice: "Create the file" not "The file is created"
+- Scannable structure: bullets, short paragraphs, numbered steps
+
+**Support File Organization:**
+
+```
+pwrl-skillname/
+  SKILL.md                  # Main workflow (100-150 lines)
+  references/               # Detailed guidance, schemas, templates
+    methodology.md
+    examples.md
+  assets/                   # Static resources, diagrams
+    template.yml
+  examples/                 # Sample outputs
+    output-sample.md
+```
+
+### For Contributors
+
+When creating or improving skills:
+
+1. **Check [pwrl-standards/SCHEMA.md](pwrl-standards/SCHEMA.md)** for canonical format specification
+2. **Use [pwrl-standards/TEMPLATE.md](pwrl-standards/TEMPLATE.md)** as starting template
+3. **Follow validation checklist** in CONTRIBUTING.md:
+   - YAML frontmatter with `name`, `description` fields
+   - Line count within 80-170 range
+   - Agent-agnostic language throughout
+   - Support files for detailed content
+   - Imperative mood and active voice
+   - Repository-relative paths only
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for complete contribution guidelines.
+
+---
+
+## Using Support Files Effectively
+
+PWRL skills separate scannable workflows from detailed guidance. When working with skills:
+
+### Start with SKILL.md
+
+Each skill's main file (e.g., `pwrl-plan/SKILL.md`) contains:
+
+- Purpose and when to use the skill
+- Core workflow steps
+- Essential rules and criteria
+- Links to support files for detail
+
+**Read this first** to understand the workflow.
+
+### Consult references/ for Detail
+
+When you need deeper guidance:
+
+- **pwrl-plan/references/plan-templates.md** — Full plan templates with real examples
+- **pwrl-review/references/severity-guide.md** — Complete P0-P3 definitions with calibration
+- **pwrl-refresh-learnings/references/assessment-criteria.md** — Detailed update procedures
+
+**Use these when:**
+
+- First time using a skill
+- Need specific examples
+- Customizing for your project
+- Training team members
+
+### Navigation Pattern
+
+```
+1. Read SKILL.md → Understand workflow
+2. Execute workflow → Follow steps
+3. Check references/ → When you need specifics
+4. Return to SKILL.md → Continue workflow
+```
+
+This pattern keeps you focused on execution while detail is available on-demand.
+
+---
+
 ## Core Philosophy
 
 ### Plan First, Code Second

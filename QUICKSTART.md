@@ -2,6 +2,8 @@
 
 Get started with PWRL workflows for common development tasks.
 
+**Note:** All PWRL skills follow a standardized format (100-150 line main files) with detailed guidance in `references/` subdirectories. Skills are agent-agnostic and work across any AI framework.
+
 ## Core Workflow
 
 ```
@@ -310,6 +312,46 @@ Skills used: pwrl-plan, pwrl-work, pwrl-review, pwrl-learnings
 
 [AGENT: GitHub Copilot]
 ```
+
+---
+
+## Understanding Skill Support Files
+
+Many skills include detailed reference material in subdirectories:
+
+### pwrl-plan
+
+- **Main workflow** ([SKILL.md](pwrl-plan/SKILL.md)): 100 lines covering planning tiers and workflow
+- **Detailed templates** ([references/plan-templates.md](pwrl-plan/references/plan-templates.md)): Full Fast/Standard/Deep plan templates with real-world examples
+
+### pwrl-learnings
+
+- **Main workflow** ([SKILL.md](pwrl-learnings/SKILL.md)): 135 lines covering 9-phase documentation process
+- **Schema** ([references/schema.yaml](pwrl-learnings/references/schema.yaml)): Frontmatter field definitions
+- **Categories** ([references/categories.md](pwrl-learnings/references/categories.md)): When to use each category
+
+### pwrl-refresh-learnings
+
+- **Main workflow** ([SKILL.md](pwrl-refresh-learnings/SKILL.md)): 184 lines covering refresh workflow
+- **Assessment criteria** ([references/assessment-criteria.md](pwrl-refresh-learnings/references/assessment-criteria.md)): Detailed assessment methodology and update procedures
+
+### pwrl-review
+
+- **Main workflow** ([SKILL.md](pwrl-review/SKILL.md)): 142 lines covering review workflow and depth control
+- **Severity guide** ([references/severity-guide.md](pwrl-review/references/severity-guide.md)): P0-P3 definitions with calibration examples
+- **Subagent protocol** ([references/subagent-protocol.md](pwrl-review/references/subagent-protocol.md)): Parallel reviewer orchestration details
+
+**Tip:** Start with the main `SKILL.md` file for any skill. Consult `references/` files when you need deep detail or examples.
+
+---
+
+## For Contributors
+
+Want to create or improve skills? See:
+
+- [CONTRIBUTING.md](CONTRIBUTING.md) — Contribution guidelines
+- [pwrl-standards/SCHEMA.md](pwrl-standards/SCHEMA.md) — Standardized format specification
+- [pwrl-standards/TEMPLATE.md](pwrl-standards/TEMPLATE.md) — Starting template with examples
 
 ---
 

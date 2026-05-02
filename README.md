@@ -69,6 +69,12 @@ Problem → Plan → Work → Review → Learn → Commit
 - **[GUIDE.md](GUIDE.md)** — Best practices, anti-patterns, philosophy
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — How to contribute new skills
 
+### For Contributors
+
+- **[pwrl-standards/SCHEMA.md](pwrl-standards/SCHEMA.md)** — Canonical standardized format for pwrl-\* skills
+- **[pwrl-standards/TEMPLATE.md](pwrl-standards/TEMPLATE.md)** — Unified skill template with examples
+- **[pwrl-standards/AUDIT.md](pwrl-standards/AUDIT.md)** — Standardization audit and migration analysis
+
 ---
 
 ## Example: Feature Development
@@ -200,8 +206,20 @@ your-project/
 1. **Plan First** — Explore approaches before coding
 2. **Document Fresh** — Capture solutions while context is hot
 3. **Ship Complete** — Tests, edge cases, quality gates
+4. **Agent-Agnostic** — Skills work across any AI framework (LangChain, AutoGen, etc.)
 
 Read [GUIDE.md](GUIDE.md) for the full philosophy and best practices.
+
+### Skill Design
+
+PWRL skills follow a standardized format:
+
+- **Concise main files** (100-150 lines) for scannability
+- **Support files** in `references/`, `assets/`, `examples/` for detailed content
+- **Agent-agnostic language** for cross-framework compatibility
+- **Consistent tone** (imperative mood, active voice) for clear execution
+
+See [pwrl-standards/SCHEMA.md](pwrl-standards/SCHEMA.md) for the complete specification.
 
 ---
 

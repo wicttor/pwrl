@@ -1,5 +1,5 @@
 {
-  "name": "pwrl",
+  "name": "@wicttor/pwrl",
   "version": "1.0.0",
   "description": "Plan. Work. Review. Learn. — A disciplined agentic development framework",
   "main": "index.js",

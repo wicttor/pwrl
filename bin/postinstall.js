@@ -37,9 +37,9 @@ if (isGlobal) {
 `);
 } else {
   const relPath = path.relative(process.cwd(), PWRL_DIR);
-  console.log(`     - GitHub Copilot: Skills discovered in node_modules/pwrl
+  console.log(`     - GitHub Copilot: Skills discovered in node_modules/@wicttor/pwrl
      - Claude: Add skills from ${relPath}
-     - Cursor: Skills discovered in node_modules/pwrl
+     - Cursor: Skills discovered in node_modules/@wicttor/pwrl
      - Others: Reference skills from ${relPath}
 `);
 }

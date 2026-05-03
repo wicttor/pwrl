@@ -10,7 +10,7 @@ Stop vibing, start shipping. PWRL turns chaotic AI-assisted coding into predicta
 
 ```bash
 # Install
-npm install -g pwrl
+npm install -g @wicttor/pwrl
 
 # Initialize in your project
 pwrl init
@@ -141,13 +141,13 @@ Problem → Plan → Work → Review → Learn → Commit
 
 ```bash
 # Global (recommended)
-npm install -g pwrl
+npm install -g @wicttor/pwrl
 pwrl init
 
 # Per-project
 cd your-project
-npm install --save-dev pwrl
-npx pwrl init
+npm install --save-dev @wicttor/pwrl
+npx @wicttor/pwrl init
 ```
 
 See [INSTALLATION.md](INSTALLATION.md) for platform-specific setup.

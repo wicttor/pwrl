@@ -17,7 +17,7 @@
  * - Other AI assistants
  *
  * Usage:
- *   Install: npm install -g pwrl
+ *   Install: npm install -g @wicttor/pwrl
  *   Initialize: pwrl init
  *   Use skills in your AI assistant: /pwrl-plan, /pwrl-work, etc.
  *

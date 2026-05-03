@@ -29,6 +29,9 @@ Next Steps:
   2. Configure your AI assistant:
 `);
 
+// Note: Running 'pwrl init' in a project will copy bundled skills into .agents/skills/
+
+
 if (isGlobal) {
   console.log(`     - GitHub Copilot: Skills auto-discovered
      - Claude: Add skills from ${PWRL_DIR}

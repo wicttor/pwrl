@@ -148,6 +148,7 @@ pwrl init
 cd your-project
 npm install --save-dev @wicttor/pwrl
 npx @wicttor/pwrl init
+# This will copy bundled skills into .agents/skills/ in your project
 ```
 
 See [INSTALLATION.md](INSTALLATION.md) for platform-specific setup.

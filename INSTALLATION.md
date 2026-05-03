@@ -38,6 +38,7 @@ cd your-project
 npm install --save-dev @wicttor/pwrl
 # or clone directly
 git clone https://github.com/wicttor/pwrl.git .pwrl
+# Then run: npx @wicttor/pwrl init  # copies bundled skills into .agents/skills/
 ```
 
 Invoke skills with `/pwrl-plan`, `/pwrl-work`, etc.

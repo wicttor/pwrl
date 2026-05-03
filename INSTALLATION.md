@@ -14,7 +14,7 @@ PWRL provides standardized workflow skills:
 ## NPM Installation (Recommended)
 
 ```bash
-npm install -g pwrl
+npm install -g @wicttor/pwrl
 ```
 
 This installs PWRL skills globally and makes them available to your AI assistant.
@@ -26,7 +26,7 @@ This installs PWRL skills globally and makes them available to your AI assistant
 **Option 1: Global (via NPM)**
 
 ```bash
-npm install -g pwrl
+npm install -g @wicttor/pwrl
 ```
 
 Skills are automatically discovered by GitHub Copilot.
@@ -35,7 +35,7 @@ Skills are automatically discovered by GitHub Copilot.
 
 ```bash
 cd your-project
-npm install --save-dev pwrl
+npm install --save-dev @wicttor/pwrl
 # or clone directly
 git clone https://github.com/wicttor/pwrl.git .pwrl
 ```
@@ -50,7 +50,7 @@ Invoke skills with `/pwrl-plan`, `/pwrl-work`, etc.
 
 1. Create a Claude Project for your codebase
 2. Add PWRL skill folders as project knowledge:
-   - If installed via NPM: `~/.npm/pwrl/` or `node_modules/pwrl/`
+   - If installed via NPM: `~/.npm/@wicttor/pwrl/` or `node_modules/@wicttor/pwrl/`
    - Or download skills from GitHub
 3. Reference skills with `/pwrl-plan`, `/pwrl-work`, etc.
 
@@ -67,14 +67,14 @@ Invoke skills with `/pwrl-plan`, `/pwrl-work`, etc.
 **Option 1: Global**
 
 ```bash
-npm install -g pwrl
+npm install -g @wicttor/pwrl
 ```
 
 **Option 2: Workspace**
 
 ```bash
 cd your-project
-npm install --save-dev pwrl
+npm install --save-dev @wicttor/pwrl
 ```
 
 Reference skills in `.cursorrules` or project settings.
@@ -87,8 +87,8 @@ Invoke with `/pwrl-plan`, `/pwrl-work`, etc.
 **Via NPM:**
 
 ```bash
-npm install -g pwrl
-# Skills available at: ~/.npm/pwrl/ or /usr/local/lib/node_modules/pwrl/
+npm install -g @wicttor/pwrl
+# Skills available at: ~/.npm/@wicttor/pwrl/ or /usr/local/lib/node_modules/@wicttor/pwrl/
 ```
 
 1. Upload skill documents from installation directory as system instructions
@@ -108,7 +108,7 @@ npm install -g pwrl
 **Via NPM:**
 
 ```bash
-npm install -g pwrl
+npm install -g @wicttor/pwrl
 ```
 
 **Manual Setup:**
@@ -211,7 +211,7 @@ If you want to create or improve skills:
 ## Updating
 
 ```bash
-npm update -g pwrl
+npm update -g @wicttor/pwrl
 ```
 
 ---
@@ -219,7 +219,7 @@ npm update -g pwrl
 ## Uninstalling
 
 ```bash
-npm uninstall -g pwrl
+npm uninstall -g @wicttor/pwrl
 ```
 
 ---

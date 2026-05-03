@@ -123,6 +123,54 @@ function initProject() {
     }
   });
 
+  // Create .agents/skills and copy bundled skills into project
+  try {
+    const agentsDir = path.join(cwd, '.agents');
+    const skillsDir = path.join(agentsDir, 'skills');
+
+    if (!fs.existsSync(agentsDir)) {
+      fs.mkdirSync(agentsDir);
+      console.log('✓ Created .agents/');
+    }
+
+    if (!fs.existsSync(skillsDir)) {
+      fs.mkdirSync(skillsDir, { recursive: true });
+      console.log('✓ Created .agents/skills/');
+    }
+
+    const bundledSkills = fs.readdirSync(PWRL_DIR)
+      .filter(name => name.startsWith('pwrl-'))
+      .filter(name => {
+        const skillPath = path.join(PWRL_DIR, name);
+        return fs.existsSync(skillPath) && fs.statSync(skillPath).isDirectory();
+      });
+
+    function copyRecursiveSync(src, dest) {
+      const stat = fs.statSync(src);
+      if (stat.isDirectory()) {
+        if (!fs.existsSync(dest)) fs.mkdirSync(dest);
+        fs.readdirSync(src).forEach(child => {
+          copyRecursiveSync(path.join(src, child), path.join(dest, child));
+        });
+      } else {
+        fs.copyFileSync(src, dest);
+      }
+    }
+
+    bundledSkills.forEach(skill => {
+      const src = path.join(PWRL_DIR, skill);
+      const dest = path.join(skillsDir, skill);
+      if (fs.existsSync(dest)) {
+        console.log(`- Skill already exists: ${dest}`);
+      } else {
+        copyRecursiveSync(src, dest);
+        console.log(`✓ Copied skill: ${skill} -> .agents/skills/${skill}`);
+      }
+    });
+  } catch (err) {
+    console.error('Failed to copy skills to .agents/skills/:', err.message);
+  }
+
   // Create .gitignore entry if needed
   const gitignorePath = path.join(cwd, '.gitignore');
   if (fs.existsSync(gitignorePath)) {
@@ -133,29 +181,7 @@ function initProject() {
     }
   }
 
-  console.log(`
-✓ PWRL initialized successfully!
-
-Directory structure created:
-  docs/
-    learnings/
-      technical-fix/
-      pattern/
-      workflow/
-      gotcha/
-      concept/
-      decision/
-    plans/
-
-Next steps:
-  1. Start using PWRL skills in your AI assistant
-  2. Run: /pwrl-plan <your task description>
-  3. See QUICKSTART.md for example workflows
-
-Documentation:
-  pwrl docs    Open documentation
-  pwrl info    Show skill locations
-`);
+  console.log(`\n✓ PWRL initialized successfully!\n\nDirectory structure created:\n  docs/\n    learnings/\n      technical-fix/\n      pattern/\n      workflow/\n      gotcha/\n      concept/\n      decision/\n    plans/\n\n  .agents/skills/ (project-local PWRL skills)\n\nNext steps:\n  1. Start using PWRL skills in your AI assistant\n  2. Run: /pwrl-plan <your task description>\n  3. See QUICKSTART.md for example workflows\n\nDocumentation:\n  pwrl docs    Open documentation\n  pwrl info    Show skill locations\n`);
 }
 
 function showDocs() {

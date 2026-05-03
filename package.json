@@ -1,14 +1,7 @@
 {
-  "name": "pwrl",
+  "name": "@wicttor/pwrl",
   "version": "1.0.0",
   "description": "Plan. Work. Review. Learn. — A disciplined agentic development framework",
-  "main": "index.js",
-  "bin": {
-    "pwrl": "./bin/pwrl.js"
-  },
-  "scripts": {
-    "postinstall": "node ./bin/postinstall.js"
-  },
   "keywords": [
     "ai",
     "agent",
@@ -23,18 +16,20 @@
     "learning",
     "code-review"
   ],
-  "author": "Wicttor Picanco Rios",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wicttor/pwrl.git"
-  },
+  "homepage": "https://github.com/wicttor/pwrl#readme",
   "bugs": {
     "url": "https://github.com/wicttor/pwrl/issues"
   },
-  "homepage": "https://github.com/wicttor/pwrl#readme",
-  "engines": {
-    "node": ">=14.0.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wicttor/pwrl.git"
+  },
+  "license": "MIT",
+  "author": "Wicttor Picanco Rios",
+  "type": "commonjs",
+  "main": "index.js",
+  "bin": {
+    "pwrl": "bin/pwrl.js"
   },
   "files": [
     "pwrl-*/**/*",
@@ -44,5 +39,11 @@
     "QUICKSTART.md",
     "GUIDE.md",
     "LICENSE"
-  ]
+  ],
+  "scripts": {
+    "postinstall": "node ./bin/postinstall.js"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
 }

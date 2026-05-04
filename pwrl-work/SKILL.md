@@ -1,7 +1,7 @@
 ---
 name: pwrl-work
 description: Execute implementation work efficiently while maintaining quality and shipping complete features
-argument-hint: "[Plan doc path or work description. Leave blank to use the latest plan-like document]"
+argument-hint: "[Task file, plan doc path, or work description. Leave blank to use latest plan/task]"
 ---
 
 # PWRL Work
@@ -27,21 +27,47 @@ Transform plans or prompts into working code through systematic execution:
 
 Classify `<input_document>`:
 
-- If input is a plan path, use it directly.
-- If input is a bare prompt, scan likely files, related tests, and local patterns.
-- For bare prompts, choose a route by size and complexity:
-  - trivial: 1-2 files, no behavior change → implement directly after environment check
-  - small/medium: clear scope, under ~5 files → build task list, then execute
-  - large: cross-cutting, architectural, 10+ files, sensitive areas, mostly backend implementation, modifications into core systems → recommend planning with `/pwrl-plan` workflow first; continue ONLY if user wants and expressly confirms understanding of risks and tradeoffs of skipping planning.
+- **If input is a task file path** (contains `unit-id` in frontmatter):
+  - Read task frontmatter to extract: `unit-id`, `plan`, `status`, `dependencies`, `files`, `github-issue` (if present)
+  - Read linked plan file for broader context and technical decisions
+  - Check `.pwrlrc.json` to determine if GitHub Issues integration is enabled
+  - If `github-issue` field exists AND GitHub integration is enabled, prepare to sync status updates
+  - Extract implementation steps, code patterns, edge cases, and testing strategy from task body
+  - Proceed to Phase 1 with task context
+
+- **If input is a plan path** (no `unit-id` in frontmatter):
+  - Use it directly as before
+  - Follow standard plan-based workflow
+
+- **If input is a bare prompt**:
+  - Scan likely files, related tests, and local patterns
+  - Choose a route by size and complexity:
+    - trivial: 1-2 files, no behavior change → implement directly after environment check
+    - small/medium: clear scope, under ~5 files → build task list, then execute
+    - large: cross-cutting, architectural, 10+ files, sensitive areas, mostly backend implementation, modifications into core systems → recommend planning with `/pwrl-plan` workflow first; continue ONLY if user wants and expressly confirms understanding of risks and tradeoffs of skipping planning.
 
 ### Phase 1: Prepare Context and Environment
 
 1. Read and clarify
 
-- Read the plan end-to-end when provided.
-- Use implementation units, files, verification, and test scenarios as source material.
-- Capture non-goals and implementation-time unknowns before coding.
-- Ask questions only for ambiguities that can materially change implementation.
+**For task files:**
+
+- Task file already contains structured implementation steps, code patterns, and acceptance criteria
+- Read the linked plan (from `plan` field in frontmatter) for broader context and rationale
+- Review dependencies (from `dependencies` field) to understand what work must be completed first
+- Ask questions only for ambiguities that can materially change implementation
+- If dependencies exist, verify they are complete before proceeding
+
+**For plan files:**
+
+- Read the plan end-to-end when provided
+- Use implementation units, files, verification, and test scenarios as source material
+- Capture non-goals and implementation-time unknowns before coding
+- Ask questions only for ambiguities that can materially change implementation
+
+**For bare prompts:**
+
+- Scan codebase for relevant context, patterns, and existing tests
 
 2. Setup branch context
 
@@ -49,15 +75,31 @@ Classify `<input_document>`:
   - A new branch (e.g., `feat/xyz`, `fix/abc`) is recommended for non-trivial work.
   - For trivial work, confirm if direct commit to default branch is acceptable.
 - Avoid committing to default branch without explicit confirmation.
-- Create a minimal task list for medium work and get user approval before proceeding.
+- For plan-based work: Create a minimal task list for medium work and get user approval before proceeding.
+- For task-based work: Task is already defined; proceed with execution after confirming branch strategy.
 
-3. Create tasks
+3. Create or update tasks
 
-- Use the platform's task tracking facility.
-- Create specific, testable tasks with dependencies for medium work.
-- For most trivial work, inline execution without formal tasks is acceptable but still requires environment check and user confirmation.
-- Include testing and verification tasks.
-- Preserve stable unit IDs from the plan if present.
+**For task files:**
+
+- Task already exists at the provided path (e.g., `docs/tasks/to-do/YYYY-MM-DD-u1-task-name.md`)
+- Update task status from `to-do` to `in-progress` in task file frontmatter
+- Move task file from `docs/tasks/to-do/` to `docs/tasks/in-progress/` if using directory-based organization
+- If GitHub Issues integration enabled AND `github-issue` field present:
+  - Update GitHub issue status: add `in-progress` label, remove `to-do` label
+  - Add comment: "Started work on this task - [Link to task file]"
+
+**For plan files:**
+
+- Use the platform's task tracking facility
+- Create specific, testable tasks with dependencies for medium work
+- For most trivial work, inline execution without formal tasks is acceptable but still requires environment check and user confirmation
+- Include testing and verification tasks
+- Preserve stable unit IDs from the plan if present
+
+**For bare prompts:**
+
+- Create inline task list if needed
 
 4. Choose execution mode
 
@@ -81,13 +123,38 @@ Parallel constraints:
 
 For each task:
 
-- Mark task in progress.
-- Read target and reference files.
-- Reuse existing patterns and naming conventions.
-- Find and update tests for touched behavior.
-- Run relevant tests after meaningful changes.
-- Add tests for new behavior, update tests for changed behavior, remove obsolete tests.
-- Mark complete only when verification passes, otherwise iterate. If stuck, ask user for guidance or clarification, or escalate to a human if needed.
+**Task Start:**
+
+- Mark task in progress (if not already done in Phase 1)
+- For task files: Status should already be `in-progress` from Phase 1
+- For inline/plan-based tasks: Use platform's task tracking facility to mark in-progress
+- If GitHub Issues integration is enabled (check `.pwrlrc.json`) AND task has `github-issue` field:
+  - Ensure GitHub issue has been updated with `in-progress` label
+  - Add progress update comment if substantial time has passed
+
+**Implementation:**
+
+- Read target and reference files
+- Reuse existing patterns and naming conventions
+- Find and update tests for touched behavior
+- Run relevant tests after meaningful changes
+- Add tests for new behavior, update tests for changed behavior, remove obsolete tests
+
+**Task Completion:**
+
+- Mark complete only when verification passes, otherwise iterate
+- If stuck, ask user for guidance or clarification, or escalate to a human if needed
+- When task is complete:
+  - **For task files:**
+    - Update task frontmatter: change `status: in-progress` to `status: for-review`
+    - Move task file from `docs/tasks/in-progress/` to `docs/tasks/for-review/`
+    - Update `docs/tasks/INDEX.md` to reflect status change
+    - If GitHub Issues integration enabled AND `github-issue` field present:
+      - Update GitHub issue: add `for-review` label, remove `in-progress` label
+      - Add comment: "🔍 Ready for review - [Brief summary of what was implemented]"
+      - Include links to commits if available
+  - **For inline tasks:**
+    - Mark as ready for review in platform's task tracking facility
 
 Execution notes:
 

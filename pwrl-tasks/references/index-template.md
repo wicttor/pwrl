@@ -25,10 +25,11 @@ This template defines the structure for the `docs/tasks/INDEX.md` file that pwrl
 ### Critical Path
 
 The longest dependency chain (determines minimum project duration):
+```
 
-```
 U1 → U2 → U3 → U5 → U7 (5 tasks)
-```
+
+````
 
 **Estimated Duration:** [If time estimates are available]
 
@@ -105,32 +106,37 @@ graph TD
     U5 --> U3
     U1 --> U4
     U2 --> U4
-```
+````
 
 ## Task Status
 
 ### Status Tracking
 
 Tasks can be tracked by:
-1. **File Location**: Move files between `to-do/`, `in-progress/`, `done/` folders
+
+1. **File Location**: Move files between `to-do/`, `in-progress/`, `for-review/`, `done/` folders
 2. **Frontmatter**: Update `status` field in task file frontmatter
 
 **To move a task to in-progress:**
+
 ```bash
 mv docs/tasks/to-do/YYYY-MM-DD-u1-task.md docs/tasks/in-progress/
 ```
 
 Or update frontmatter:
+
 ```yaml
 status: in-progress
 ```
 
 **To mark a task complete:**
+
 ```bash
 mv docs/tasks/in-progress/YYYY-MM-DD-u1-task.md docs/tasks/done/
 ```
 
 Or update frontmatter:
+
 ```yaml
 status: done
 ```
@@ -138,11 +144,13 @@ status: done
 ### Updating This Index
 
 This index should be regenerated when:
+
 - Tasks move between status folders
 - Dependencies change
 - New tasks are added or removed
 
 **Regenerate command:**
+
 ```bash
 # Run pwrl-tasks again or manually update this file
 ```
@@ -154,7 +162,8 @@ This index should be regenerated when:
 ---
 
 **Last Updated:** YYYY-MM-DD HH:MM
-```
+
+````
 
 ---
 
@@ -182,7 +191,7 @@ For projects with fewer than 5 tasks or simple linear dependencies:
 - To Do: 3
 - In Progress: 0
 - Done: 0
-```
+````
 
 ---
 
@@ -194,9 +203,10 @@ Shows the longest dependency chain:
 
 ```markdown
 ### Critical Path
-
 ```
+
 U1 → U2 → U5 → U7
+
 ```
 
 This is the minimum number of sequential tasks. The project cannot complete faster than this chain.
@@ -212,12 +222,15 @@ Shows which tasks can run simultaneously:
 ### Parallel Execution Groups
 
 **Group 1** (Start now):
+
 - U1, U4, U6 (no dependencies)
 
 **Group 2** (After U1):
+
 - U2 (needs U1), U5 (needs U1)
 
 **Group 3** (After U2 and U5):
+
 - U3 (needs U2, U5)
 ```
 
@@ -227,7 +240,7 @@ Shows which tasks can run simultaneously:
 
 Visual representation of task relationships:
 
-```markdown
+````markdown
 ## Dependency Graph
 
 ```mermaid
@@ -240,7 +253,9 @@ graph TD
     U1 --> U3
     U2 --> U3
 ```
-```
+````
+
+````
 
 **Purpose:** Visual understanding of dependencies, helpful for planning and communication.
 
@@ -263,7 +278,7 @@ Organized view of all tasks:
 |---------|------|--------------|-------|
 | U1 | [Name](to-do/file.md) | None | `file.ts` |
 | U2 | [Name](to-do/file.md) | U1 | `file.ts` |
-```
+````
 
 **Purpose:** Quick reference for task details and status.
 
@@ -280,7 +295,7 @@ interface TaskInfo {
   filePath: string;
   dependencies: string[];
   files: string[];
-  status: 'to-do' | 'in-progress' | 'done' | 'blocked';
+  status: "to-do" | "in-progress" | "for-review" | "done" | "blocked";
 }
 
 function collectTasks(): TaskInfo[] {
@@ -297,8 +312,8 @@ function calculateMetrics(tasks: TaskInfo[]) {
   return {
     criticalPath: findCriticalPath(tasks),
     parallelGroups: findParallelGroups(tasks),
-    startableTasks: tasks.filter(t => t.dependencies.length === 0),
-    totalByStatus: countByStatus(tasks)
+    startableTasks: tasks.filter((t) => t.dependencies.length === 0),
+    totalByStatus: countByStatus(tasks),
   };
 }
 ```
@@ -307,7 +322,7 @@ function calculateMetrics(tasks: TaskInfo[]) {
 
 ```typescript
 function generateMermaidGraph(tasks: TaskInfo[]): string {
-  let graph = 'graph TD\n';
+  let graph = "graph TD\n";
 
   // Add nodes
   for (const task of tasks) {
@@ -330,16 +345,15 @@ function generateMermaidGraph(tasks: TaskInfo[]): string {
 
 ```typescript
 function generateStatusTable(tasks: TaskInfo[], status: string): string {
-  const filtered = tasks.filter(t => t.status === status);
+  const filtered = tasks.filter((t) => t.status === status);
 
-  let table = '| Unit ID | Task | Dependencies | Files |\n';
-  table += '|---------|------|--------------|-------|\n';
+  let table = "| Unit ID | Task | Dependencies | Files |\n";
+  table += "|---------|------|--------------|-------|\n";
 
   for (const task of filtered) {
-    const deps = task.dependencies.length > 0
-      ? task.dependencies.join(', ')
-      : 'None';
-    const files = task.files.map(f => `\`${f}\``).join(', ');
+    const deps =
+      task.dependencies.length > 0 ? task.dependencies.join(", ") : "None";
+    const files = task.files.map((f) => `\`${f}\``).join(", ");
 
     table += `| ${task.unitId} | [${task.name}](${task.filePath}) | ${deps} | ${files} |\n`;
   }
@@ -370,6 +384,7 @@ The INDEX file serves multiple purposes for pwrl-work:
 4. **Parallel Execution**: Use parallel groups to distribute work
 
 **Example pwrl-work invocation:**
+
 ```bash
 # Start next available task
 /pwrl-work --auto-select-from docs/tasks/INDEX.md
@@ -387,12 +402,14 @@ When should INDEX be updated?
 ### Automatic Updates
 
 pwrl-tasks should regenerate INDEX:
+
 - After initial task generation
 - When re-slicing a plan with new units
 
 ### Manual Updates
 
 Developers should update INDEX:
+
 - When moving tasks between status folders
 - When marking tasks complete
 - When dependencies change during implementation

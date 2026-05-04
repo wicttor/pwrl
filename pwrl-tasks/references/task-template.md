@@ -244,17 +244,17 @@ files: [path/to/file.ts]
 
 ## Frontmatter Fields Reference
 
-| Field            | Required | Format                         | Purpose                           |
-| ---------------- | -------- | ------------------------------ | --------------------------------- |
-| `unit-id`        | Yes      | `U1`, `U2`, etc.               | Stable identifier from plan       |
-| `plan`           | Yes      | Relative path                  | Link back to source plan          |
-| `status`         | Yes      | `to-do`, `in-progress`, `done` | Current task state                |
-| `created`        | Yes      | `YYYY-MM-DD`                   | When task was generated           |
-| `dependencies`   | Yes      | YAML array of unit IDs         | Tasks that must complete first    |
-| `files`          | Yes      | YAML array of paths            | Files this task will modify       |
-| `assignee`       | No       | String                         | Person working on this (optional) |
-| `estimated-time` | No       | String                         | Time estimate (optional)          |
-| `priority`       | No       | `high`, `medium`, `low`        | Task priority (optional)          |
+| Field            | Required | Format                                       | Purpose                           |
+| ---------------- | -------- | -------------------------------------------- | --------------------------------- |
+| `unit-id`        | Yes      | `U1`, `U2`, etc.                             | Stable identifier from plan       |
+| `plan`           | Yes      | Relative path                                | Link back to source plan          |
+| `status`         | Yes      | `to-do`, `in-progress`, `for-review`, `done` | Current task state                |
+| `created`        | Yes      | `YYYY-MM-DD`                                 | When task was generated           |
+| `dependencies`   | Yes      | YAML array of unit IDs                       | Tasks that must complete first    |
+| `files`          | Yes      | YAML array of paths                          | Files this task will modify       |
+| `assignee`       | No       | String                                       | Person working on this (optional) |
+| `estimated-time` | No       | String                                       | Time estimate (optional)          |
+| `priority`       | No       | `high`, `medium`, `low`                      | Task priority (optional)          |
 
 ---
 

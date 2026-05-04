@@ -43,25 +43,34 @@ pwrl init
 
 ## Core Skills
 
-| Skill                         | Purpose                     | When to Use                |
-| ----------------------------- | --------------------------- | -------------------------- |
-| **`/pwrl-plan`**              | Create implementation plans | Before non-trivial work    |
-| **`/pwrl-work`**              | Execute with quality gates  | Implement features/fixes   |
-| **`/pwrl-review`**            | Code quality checks         | Before PRs, after features |
-| **`/pwrl-learnings`**         | Document solutions          | After solving problems     |
-| **`/pwrl-refresh-learnings`** | Maintain knowledge          | After refactors, quarterly |
-| **`/pwrl-end-session`**       | Clean commits               | End of every session       |
+| Skill                         | Purpose                           | When to Use                |
+| ----------------------------- | --------------------------------- | -------------------------- |
+| **`/pwrl-plan`**              | Create implementation plans       | Before non-trivial work    |
+| **`/pwrl-tasks`**             | Slice plans into executable tasks | After planning, optional   |
+| **`/pwrl-work`**              | Execute with quality gates        | Implement features/fixes   |
+| **`/pwrl-review`**            | Code quality checks               | After work, before merge   |
+| **`/pwrl-learnings`**         | Document solutions                | After solving problems     |
+| **`/pwrl-refresh-learnings`** | Maintain knowledge                | After refactors, quarterly |
+| **`/pwrl-end-session`**       | Clean commits                     | End of every session       |
 
 ---
 
 ## Workflow
 
 ```
-Problem → Plan → Work → Review → Learn → Commit
-   ↓       ↓      ↓       ↓        ↓        ↓
-  Goal   Docs   Tests  Quality  Docs/    Clean
-        Plans   Pass   Gates   Learnings Git
+Problem → Plan → [Tasks] → Work → Review → Learn → Commit
+   ↓       ↓       ↓        ↓       ↓        ↓        ↓
+  Goal   Docs   Task    Tests  Quality  Docs/    Clean
+        Plans   Files   Pass   Gates   Learnings Git
+                                ↓
+                          (for-review)
+                                ↓
+                         Approve/Reopen
 ```
+
+**Task Status Flow:** `to-do` → `in-progress` → `for-review` → `done`
+
+**Optional:** Use `/pwrl-tasks` to break plans into granular task files with GitHub Issues integration.
 
 ---
 
@@ -93,57 +102,73 @@ You can reconfigure at any time by running `pwrl init` again or editing `.pwrlrc
 
 ## Example: Feature Development
 
+### Option 1: Direct Plan-to-Work (Simple)
+
 ```bash
 # 1. Plan
 /pwrl-plan Add JWT authentication with refresh tokens
 
-# Agent creates plan in docs/plans/ with:
+# 2. Work - Execute plan directly
+/pwrl-work
+
+# 3. Review - Work moves to for-review
+/pwrl-review
+
+# 4. Learn & Commit
+/pwrl-learnings
+/pwrl-end-session
+```
+
+### Option 2: Task-Based (Complex/Team)
+
+```bash
+# 1. Plan
+/pwrl-plan Add JWT authentication with refresh tokens
+# Creates docs/plans/2026-05-04-jwt-auth.md with:
 # - Technical decisions (JWT vs sessions, with rationale)
-# - Implementation units (U1: models, U2: middleware, U3: endpoints, etc.)
+# - Implementation units (U1: models, U2: middleware, U3: endpoints)
 # - Test scenarios (happy path + edge cases)
 # - Risk analysis
 
-# 2. Work
-/pwrl-work
+# 2. Create Tasks (Optional)
+/pwrl-tasks docs/plans/2026-05-04-jwt-auth.md
+# Creates granular task files in docs/tasks/to-do/:
+# - 2026-05-04-u1-add-user-model.md
+# - 2026-05-04-u2-auth-middleware.md
+# - 2026-05-04-u3-auth-endpoints.md
+# If GitHub integration enabled: creates issues for each task
 
-# Agent executes plan:
+# 3. Work on Task
+/pwrl-work docs/tasks/to-do/2026-05-04-u1-add-user-model.md
+# Executes task:
+# - Moves task: to-do → in-progress
 # - Creates tests first
-# - Implements each unit
+# - Implements user model
 # - Verifies tests pass
-# - Reviews code quality
+# - Moves task: in-progress → for-review
+# - GitHub: Updates issue to "for-review" label
 
-# 3. Review
+# 4. Review Task
 /pwrl-review
+# Reviews code:
+# - Checks correctness, security, maintainability, testing
+# - If approved: moves task for-review → done, closes GitHub issue
+# - If changes needed: moves task for-review → in-progress, reopens issue
 
-# Agent checks:
-# - Correctness (logic, edge cases, error handling)
-# - Security (auth, validation, injection risks)
-# - Maintainability (clarity, complexity, patterns)
-# - Testing (coverage, assertions, edge cases)
+# 5. Repeat for remaining tasks
+/pwrl-work docs/tasks/to-do/2026-05-04-u2-auth-middleware.md
+/pwrl-review
+# ... continue for U3, etc.
 
-# 4. Learn
+# 6. Learn & Commit
 /pwrl-learnings
-
-# Agent documents in docs/learnings/:
+# Documents in docs/learnings/:
 # - JWT token refresh pattern learned
 # - Auth middleware gotcha avoided
 # - Test strategy for async auth flows
 
-# 5. Commit
 /pwrl-end-session
-
-# Agent creates clean commit:
-# feat: Add JWT authentication system
-#
-# Implemented user authentication using JWT with refresh flow.
-# Includes middleware for protected routes and comprehensive tests.
-#
-# Key decisions:
-# - JWT over sessions for stateless API
-# - 15min access token, 7d refresh token
-#
-# Skills: pwrl-plan, pwrl-work, pwrl-review, pwrl-learnings
-# [AGENT: GitHub Copilot]
+# Creates clean commit with all tasks completed
 ```
 
 **Time saved vs vibe coding:** ~50%
@@ -202,9 +227,23 @@ After initialization:
 
 ```
 your-project/
+  .agents/
+    skills/                   # PWRL skills (or custom location)
+      pwrl-plan/
+      pwrl-tasks/
+      pwrl-work/
+      pwrl-review/
+      pwrl-learnings/
+      ...
   docs/
     plans/                    # Implementation plans
-      2026-04-30-001-auth.md
+      2026-05-04-auth.md
+    tasks/                    # Task files (if using task-based workflow)
+      INDEX.md                # Task overview and dependencies
+      to-do/                  # Ready to implement
+      in-progress/            # Currently being worked
+      for-review/             # Awaiting review
+      done/                   # Completed and approved
     learnings/                # Knowledge base
       technical-fix/
       pattern/
@@ -212,6 +251,7 @@ your-project/
       gotcha/
       concept/
       decision/
+  .pwrlrc.json                # PWRL configuration
 ```
 
 ---

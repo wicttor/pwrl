@@ -21,13 +21,25 @@ pwrl init
 
 ## Core Workflow
 
+**Simple (Direct):**
+
 ```
 Problem → /pwrl-plan → /pwrl-work → /pwrl-review → /pwrl-learnings → /pwrl-end-session
 ```
 
+**Task-Based (Complex/Team):**
+
+```
+Problem → /pwrl-plan → /pwrl-tasks → /pwrl-work [task] → /pwrl-review → repeat → /pwrl-learnings → /pwrl-end-session
+```
+
+**Task Status:** `to-do` → `in-progress` → `for-review` → `done`
+
 ---
 
 ## Implementing a New Feature
+
+### Simple Feature (Direct)
 
 ```bash
 # 1. Plan the work
@@ -36,7 +48,7 @@ Problem → /pwrl-plan → /pwrl-work → /pwrl-review → /pwrl-learnings → /
 # 2. Execute the plan
 /pwrl-work
 
-# 3. Review before committing
+# 3. Review (moves work to for-review status)
 /pwrl-review
 
 # 4. Document any insights
@@ -49,10 +61,50 @@ Problem → /pwrl-plan → /pwrl-work → /pwrl-review → /pwrl-learnings → /
 **What happens:**
 
 - **Plan** creates structured implementation plan in `docs/plans/`
-- **Work** executes with test-first discipline
-- **Review** checks correctness, security, quality
+- **Work** executes with test-first discipline, moves to for-review when done
+- **Review** checks correctness, security, quality; approves (done) or requests changes (back to in-progress)
 - **Learnings** documents solutions while context is fresh
 - **End-session** creates clean commit with context
+
+### Complex Feature (Task-Based)
+
+```bash
+# 1. Plan
+/pwrl-plan Add user profile editing with validation
+
+# 2. Break into tasks (optional)
+/pwrl-tasks docs/plans/2026-05-04-user-profile-editing.md
+# Creates task files:
+# - docs/tasks/to-do/2026-05-04-u1-profile-model.md
+# - docs/tasks/to-do/2026-05-04-u2-edit-endpoint.md
+# - docs/tasks/to-do/2026-05-04-u3-validation-logic.md
+# - docs/tasks/to-do/2026-05-04-u4-ui-components.md
+
+# 3. Work on first task
+/pwrl-work docs/tasks/to-do/2026-05-04-u1-profile-model.md
+# Status: to-do → in-progress → for-review
+
+# 4. Review first task
+/pwrl-review
+# If approved: for-review → done
+# If changes needed: for-review → in-progress
+
+# 5. Continue with remaining tasks
+/pwrl-work docs/tasks/to-do/2026-05-04-u2-edit-endpoint.md
+/pwrl-review
+# Repeat for U3, U4...
+
+# 6. Document and commit
+/pwrl-learnings
+/pwrl-end-session
+```
+
+**Benefits of task-based approach:**
+
+- Break complex work into reviewable units
+- Enable parallel work across team members
+- Track progress with GitHub Issues (if enabled)
+- Clear dependencies and completion criteria
 
 ---
 
@@ -61,9 +113,11 @@ Problem → /pwrl-plan → /pwrl-work → /pwrl-review → /pwrl-learnings → /
 ```bash
 # 1. Quick plan or dive straight to work
 /pwrl-work Fix null reference error in user controller
+# Status: Creates inline task, completes work, moves to for-review
 
 # 2. Review the fix
 /pwrl-review
+# Approves fix: for-review → done
 
 # 3. Document the bug and solution
 /pwrl-learnings
@@ -72,7 +126,7 @@ Problem → /pwrl-plan → /pwrl-work → /pwrl-review → /pwrl-learnings → /
 /pwrl-end-session Bug fix for null reference
 ```
 
-**For trivial fixes**, skip planning and go straight to work.
+**For trivial fixes**, skip planning and go straight to work. The review step still validates quality before marking done.
 
 ---
 
@@ -82,18 +136,25 @@ Problem → /pwrl-plan → /pwrl-work → /pwrl-review → /pwrl-learnings → /
 # 1. Plan the refactor (recommended for non-trivial changes)
 /pwrl-plan Refactor authentication service to use dependency injection
 
-# 2. Execute with tests
-/pwrl-work
+# 2. Optional: Break into tasks for large refactors
+/pwrl-tasks  # Creates incremental refactoring tasks
 
-# 3. Verify no regressions
+# 3. Execute with tests
+/pwrl-work [task-file-if-using-tasks]
+# Status: to-do → in-progress → for-review
+
+# 4. Verify no regressions
 /pwrl-review
+# Approves: for-review → done
 
-# 4. Document patterns learned
+# 5. Document patterns learned
 /pwrl-learnings
 
-# 5. Commit
+# 6. Commit
 /pwrl-end-session
 ```
+
+**For large refactors**, use task-based workflow to break into safe, reviewable increments.
 
 ---
 
@@ -103,13 +164,18 @@ Problem → /pwrl-plan → /pwrl-work → /pwrl-review → /pwrl-learnings → /
 # 1. Plan test strategy
 /pwrl-plan Add integration tests for payment flow
 
-# 2. Implement tests
-/pwrl-work
+# 2. Optional: Break into test suites
+/pwrl-tasks  # Creates separate tasks for different test scenarios
 
-# 3. Review coverage and assertions
+# 3. Implement tests
+/pwrl-work [task-file-if-using-tasks]
+# Status: to-do → in-progress → for-review
+
+# 4. Review coverage and assertions
 /pwrl-review
+# Approves: for-review → done
 
-# 4. Commit
+# 5. Commit
 /pwrl-end-session
 ```
 
@@ -196,7 +262,27 @@ Choose the right planning depth:
 
 ```bash
 /pwrl-work Fix typo in error message
+# Work completes, moves to for-review
+/pwrl-review
+# Quick approval: for-review → done
 ```
+
+## When to Use Tasks
+
+✅ **Use `/pwrl-tasks` for:**
+
+- Complex features with multiple implementation units
+- Team collaboration (parallel work on different tasks)
+- GitHub Issues integration for tracking
+- Breaking risky changes into safe increments
+- Clear progress visibility across large efforts
+
+❌ **Skip `/pwrl-tasks` for:**
+
+- Simple features (1-3 files)
+- Solo work on straightforward implementations
+- Quick fixes and trivial changes
+- When you prefer inline task management
 
 ---
 

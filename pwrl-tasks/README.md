@@ -56,14 +56,16 @@ docs/
       YYYY-MM-DD-u1-task-name.md     # Individual task files
       YYYY-MM-DD-u2-task-name.md
     in-progress/                      # Tasks currently being worked
-    done/                             # Completed tasks
+    for-review/                       # Tasks awaiting review
+    done/                             # Completed and approved tasks
 ```
 
 ## Integration with Other Skills
 
 - **Input from `pwrl-plan`**: Reads plans from `docs/plans/`
 - **Output to `pwrl-work`**: Task files are ready to be executed by `pwrl-work`
-- **Workflow**: `pwrl-plan` → **`pwrl-tasks`** → `pwrl-work`
+- **Review with `pwrl-review`**: Tasks move through statuses: to-do → in-progress → for-review → done
+- **Workflow**: `pwrl-plan` → **`pwrl-tasks`** → `pwrl-work` → `pwrl-review` (approves or reopens)
 
 ## Configuration
 
@@ -105,22 +107,28 @@ Each task file must:
 ## Example Workflow
 
 1. **Create a plan:**
+
    ```
    /pwrl-plan "Add user authentication"
    ```
+
    → Generates `docs/plans/2026-05-04-001-user-auth.md`
 
 2. **Slice into tasks:**
+
    ```
    /pwrl-tasks docs/plans/2026-05-04-001-user-auth.md
    ```
+
    → Generates multiple task files in `docs/tasks/to-do/`
    → Creates `docs/tasks/INDEX.md`
 
 3. **Execute tasks:**
+
    ```
    /pwrl-work docs/tasks/to-do/2026-05-04-u1-add-auth-middleware.md
    ```
+
    → Implements the task
 
 4. **Track progress:**
@@ -160,21 +168,25 @@ After running `pwrl-tasks`, verify:
 ## Troubleshooting
 
 **"No plan found"**
+
 - Ensure plan exists in `docs/plans/`
 - Check plan has `status: active` or `status: draft`
 - Or provide explicit path: `/pwrl-tasks docs/plans/your-plan.md`
 
 **"Circular dependency detected"**
+
 - Review the dependency graph in INDEX.md
 - Refactor plan to break the cycle
 - Consider extracting common functionality into new unit
 
 **"Task too vague"**
+
 - Original plan unit may lack detail
 - Update plan with more specific approach/files
 - Re-run `pwrl-tasks` to regenerate
 
 **"Missing dependencies"**
+
 - Task references unit that doesn't exist
 - Check plan for typos in unit IDs
 - Verify all units are included in plan

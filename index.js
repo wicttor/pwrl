@@ -82,8 +82,14 @@ function getVersion() {
   return packageJson.version;
 }
 
+/**
+ * Configuration utilities
+ */
+const config = require('./lib/config');
+
 module.exports = {
   getSkills,
   getInstallDir,
-  getVersion
+  getVersion,
+  config
 };

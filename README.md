@@ -12,8 +12,11 @@ Stop vibing, start shipping. PWRL turns chaotic AI-assisted coding into predicta
 # Install
 npm install -g @wicttor/pwrl
 
-# Initialize in your project
+# Initialize in your project (interactive setup)
 pwrl init
+
+# Skills will be copied to .agents/skills/ (or your custom location)
+# Configuration saved in .pwrlrc.json
 
 # Use in your AI assistant
 /pwrl-plan
@@ -59,6 +62,17 @@ Problem → Plan → Work → Review → Learn → Commit
   Goal   Docs   Tests  Quality  Docs/    Clean
         Plans   Pass   Gates   Learnings Git
 ```
+
+---
+
+## Configuration
+
+After running `pwrl init`, your project settings are stored in `.pwrlrc.json`:
+
+- **Skills location**: Where PWRL skills are installed (default: `.agents/skills/`)
+- **GitHub Issues integration**: Enable automatic task tracking with GitHub Issues
+
+You can reconfigure at any time by running `pwrl init` again or editing `.pwrlrc.json` manually.
 
 ---
 

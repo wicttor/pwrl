@@ -4,6 +4,21 @@ Get started with PWRL workflows for common development tasks.
 
 **Note:** All PWRL skills follow a standardized format (100-150 line main files) with detailed guidance in `references/` subdirectories. Skills are agent-agnostic and work across any AI framework.
 
+## Installation and Setup
+
+```bash
+# Install globally
+npm install -g @wicttor/pwrl
+
+# Initialize in your project (interactive)
+cd your-project
+pwrl init
+
+# Follow prompts to configure:
+# - Skills folder location (default: .agents/skills/)
+# - GitHub Issues integration (optional)
+```
+
 ## Core Workflow
 
 ```

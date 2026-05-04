@@ -151,7 +151,15 @@ PWRL's review and verification steps ensure:
 - Tests cover new behavior
 - Edge cases are handled
 - Quality standards are met
+- Code passes review before marking done
 - Sessions end with clean commits
+
+**Task Status Flow:**
+
+- `to-do`: Ready to be picked up
+- `in-progress`: Currently being implemented
+- `for-review`: Work complete, awaiting review
+- `done`: Review approved, ready to merge
 
 **Why it matters:**
 
@@ -159,6 +167,7 @@ PWRL's review and verification steps ensure:
 - Makes code reviewable
 - Builds confidence in AI-assisted work
 - Creates audit trail
+- Separates implementation from approval
 
 ---
 
@@ -190,11 +199,37 @@ PWRL's review and verification steps ensure:
 
 ---
 
+### /pwrl-tasks
+
+✅ **Use when:**
+
+- Complex plan with multiple implementation units
+- Team collaboration (parallel work needed)
+- Want GitHub Issues integration for tracking
+- Breaking risky changes into safe increments
+- Need clear progress visibility
+
+❌ **Skip when:**
+
+- Simple features (1-3 files)
+- Solo work on straightforward implementations
+- Prefer inline task management
+
+**Workflow:** Creates task files in `docs/tasks/to-do/` from plan units. Each task has:
+
+- Goal and context
+- Implementation steps
+- Acceptance criteria
+- Optional GitHub issue tracking
+
+---
+
 ### /pwrl-work
 
 ✅ **Use when:**
 
 - You have a plan to execute
+- You have a task file to implement
 - Task is small/clear enough to work directly
 - Following test-first discipline
 - Implementing against defined requirements
@@ -212,20 +247,29 @@ PWRL's review and verification steps ensure:
 
 ✅ **Always review when:**
 
+- Work is complete and in `for-review` status
 - Before creating a PR
 - After completing feature work
 - When quality concerns exist
 - Before deploying to production
 - After fixing critical bugs
 
-✅ **What it catches:**
+✅ **What it does:**
 
-- Logic errors and edge cases
-- Security vulnerabilities
-- Maintainability issues
-- Test coverage gaps
-- Performance problems
-- Breaking API changes
+- Checks correctness (logic errors, edge cases)
+- Validates security (vulnerabilities, auth, validation)
+- Assesses maintainability (clarity, complexity, patterns)
+- Reviews test coverage (gaps, quality, assertions)
+- Identifies performance issues
+- Checks for breaking API changes
+
+✅ **Review outcomes:**
+
+- **Ready to merge**: Moves task `for-review` → `done`, closes GitHub issue
+- **Ready with fixes**: Moves task `for-review` → `in-progress`, lists required changes
+- **Not ready**: Moves task back to `in-progress`, provides detailed feedback
+
+**For task-based workflow**: Review controls the final approval. Implementation completes work and requests review; reviewer approves (done) or requests changes (back to in-progress).
 
 ---
 

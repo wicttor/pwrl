@@ -1,4 +1,4 @@
-# PWRL
+![created using ai](thumbnail.png)
 
 **Plan. Work. Review. Learn.** — A disciplined agentic development framework.
 
@@ -57,16 +57,7 @@ pwrl init
 
 ## Workflow
 
-```
-Problem → Plan → [Tasks] → Work → Review → Learn → Commit
-   ↓       ↓       ↓        ↓       ↓        ↓        ↓
-  Goal   Docs   Task    Tests  Quality  Docs/    Clean
-        Plans   Files   Pass   Gates   Learnings Git
-                                ↓
-                          (for-review)
-                                ↓
-                         Approve/Reopen
-```
+![created using ai](flow.png)
 
 **Task Status Flow:** `to-do` → `in-progress` → `for-review` → `done`
 

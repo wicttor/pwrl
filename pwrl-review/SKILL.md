@@ -167,6 +167,10 @@ If review is based on a task file:
 
 - **If verdict is "Ready with fixes" or "Not ready"**:
   - Update task frontmatter: change `status: for-review` back to `status: in-progress`
+  - Update task file content to include review summary and required fixes (if any)
+    - Include checklist of P0/P1 findings as required fixes
+    - Add any relevant context from the review summary to guide next steps
+    - Ensure task file clearly communicates what needs to be addressed before the next review
   - Move task file from `docs/tasks/for-review/` back to `docs/tasks/in-progress/`
   - Update `docs/tasks/INDEX.md` to reflect status change
   - If GitHub Issues integration enabled AND `github-issue` field present:

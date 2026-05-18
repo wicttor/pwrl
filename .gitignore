@@ -36,3 +36,4 @@
 # PWRL temporary files
 .context/
 .agents/
+.pwrlrc.json

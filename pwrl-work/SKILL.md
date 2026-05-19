@@ -19,7 +19,45 @@ Transform plans or prompts into working code through systematic execution:
 
 ## Input
 
-<input_document> #$ARGUMENTS </input_document>
+<input_document> (task-file | plan-path | freeform prompt) </input_document>
+
+## Interaction Method
+
+- Use the platform's `ask_user` tool for clarifying questions and decision handshakes.
+- Ask one focused question at a time. Use multiple rounds to iterate.
+- For high-stakes or irreversible choices, require `ask_user` confirmation before proceeding.
+- When possible, provide multiple-choice options to make decisions deterministic.
+- Example: Use `ask_user` to ask: "Choose branch strategy" with options: Create new branch | Commit to default branch
+
+## File Reading Strategy
+
+**Be targeted when reading files to minimize token usage:**
+
+1. **When looking for specific content** (function, class, variable, component, constant):
+   - Use `bash` with `rg` (ripgrep) or `grep` to search for the specific identifier first
+   - Example: `rg -n "function mainNavItems" src/` or `rg -n "const mainNavItems" src/`
+   - Read only the relevant section using the line numbers from search results
+   - Use `read` with `offset` and `limit` parameters to read specific sections
+
+2. **When to read full files:**
+   - Understanding overall file structure for the first time
+   - Changes affect multiple unrelated sections
+   - File is small (< 200 lines)
+   - Need to understand component relationships or imports
+
+3. **Search patterns:**
+   - Functions: `rg -n "(function|const|let|var)\s+functionName"` or `rg -n "functionName\s*[=:]\s*(\(|function)"`
+   - Classes: `rg -n "class\s+ClassName"`
+   - React components: `rg -n "(function|const)\s+ComponentName" or rg -n "export.*ComponentName"`
+   - Variables/constants: `rg -n "(const|let|var)\s+variableName"`
+   - TypeScript interfaces/types: `rg -n "(interface|type)\s+TypeName"`
+
+4. **Example workflow:**
+   - Task says: "Modify `app-sidebar.tsx` to add item to `mainNavItems` array"
+   - Run: `rg -n "mainNavItems" resources/js/components/app-sidebar.tsx`
+   - Get result: `42:const mainNavItems = [`
+   - Read targeted section: `read` with `offset: 35, limit: 20`
+   - Make precise edit to that section only
 
 ## Workflow
 
@@ -30,7 +68,7 @@ Classify `<input_document>`:
 - **If input is a task file path** (contains `unit-id` in frontmatter):
   - Read task frontmatter to extract: `unit-id`, `plan`, `status`, `dependencies`, `files`, `github-issue` (if present)
   - Read linked plan file for broader context and technical decisions
-  - Check `.pwrlrc.json` to determine if GitHub Issues integration is enabled
+  - Check `.pwrlrc.json` to determine if GitHub Issues integration is enabled (common fields: `github.enabled`, `github.repo`, `github.tokenEnvVar`) 
   - If `github-issue` field exists AND GitHub integration is enabled, prepare to sync status updates
   - Extract implementation steps, code patterns, edge cases, and testing strategy from task body
   - Proceed to Phase 1 with task context
@@ -50,12 +88,17 @@ Classify `<input_document>`:
 
 1. Read and clarify
 
+**Use targeted file reading (see File Reading Strategy above) when:**
+- Task/plan specifies exact functions, classes, or components to modify
+- Looking for specific code patterns or implementations
+- Verifying existence of specific identifiers
+
 **For task files:**
 
 - Task file already contains structured implementation steps, code patterns, and acceptance criteria
 - Read the linked plan (from `plan` field in frontmatter) for broader context and rationale
 - Review dependencies (from `dependencies` field) to understand what work must be completed first
-- Ask questions only for ambiguities that can materially change implementation
+- Ask questions only for ambiguities that can materially change implementation. Use the platform's `ask_user` tool to ask one focused question at a time (see Interaction Method).
 - If dependencies exist, verify they are complete before proceeding
 
 **For plan files:**
@@ -63,7 +106,7 @@ Classify `<input_document>`:
 - Read the plan end-to-end when provided
 - Use implementation units, files, verification, and test scenarios as source material
 - Capture non-goals and implementation-time unknowns before coding
-- Ask questions only for ambiguities that can materially change implementation
+- Ask questions only for ambiguities that can materially change implementation. Use the platform's `ask_user` tool to ask one focused question at a time (see Interaction Method).
 
 **For bare prompts:**
 
@@ -72,11 +115,15 @@ Classify `<input_document>`:
 2. Setup branch context
 
 - Confirm branch strategy.
-  - A new branch (e.g., `feat/xyz`, `fix/abc`) is recommended for non-trivial work.
+  - A new branch (e.g., `feat/<ticket>-short`, `fix/<ticket>-short`) is recommended for non-trivial work.
   - For trivial work, confirm if direct commit to default branch is acceptable.
+  - Example: `git checkout -b feat/123-add-profile`
 - Avoid committing to default branch without explicit confirmation.
 - For plan-based work: Create a minimal task list for medium work and get user approval before proceeding.
 - For task-based work: Task is already defined; proceed with execution after confirming branch strategy.
+- Suggested workflow when starting work:
+  - Create and push branch: `git checkout -b feat/123-short && git push -u origin feat/123-short`
+  - Update task frontmatter `status` to `in-progress` (if applicable) and commit the change.
 
 3. Create or update tasks
 
@@ -134,7 +181,10 @@ For each task:
 
 **Implementation:**
 
-- Read target and reference files
+- **Read target and reference files efficiently:**
+  - Search for specific functions/classes/variables before reading (see File Reading Strategy)
+  - Read only relevant sections when changes are targeted
+  - Read full files only when necessary for context
 - Reuse existing patterns and naming conventions
 - Find and update tests for touched behavior
 - Run relevant tests after meaningful changes

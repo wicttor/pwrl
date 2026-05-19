@@ -23,6 +23,7 @@ pwrl init
 /pwrl-work
 /pwrl-review
 /pwrl-learnings
+/pwrl-update-learnings
 /pwrl-end-session
 ```
 
@@ -51,6 +52,7 @@ pwrl init
 | **`/pwrl-review`**            | Code quality checks               | After work, before merge   |
 | **`/pwrl-learnings`**         | Document solutions                | After solving problems     |
 | **`/pwrl-refresh-learnings`** | Maintain knowledge                | After refactors, quarterly |
+| **`/pwrl-update-learnings`**  | Sync learnings index              | After session commit       |
 | **`/pwrl-end-session`**       | Clean commits                     | End of every session       |
 
 ---

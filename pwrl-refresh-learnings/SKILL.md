@@ -16,6 +16,8 @@ Keeps your learning collection current by identifying and updating docs that may
 - **Duplicative** — Multiple docs covering essentially the same learning
 - **Incomplete** — Missing important context discovered since creation
 
+Also keeps `docs/learnings/INDEX.md` accurate so every learning has a short, current description.
+
 ## Usage
 
 ```bash
@@ -28,6 +30,7 @@ Keeps your learning collection current by identifying and updating docs that may
 ## Support Files
 
 - `references/assessment-criteria.md` — Detailed assessment methodology and update procedures
+- `docs/learnings/INDEX.md` — Canonical index to audit and sync
 
 ## Workflow
 
@@ -48,6 +51,8 @@ Search `docs/learnings/` based on scope using find/grep:
 - Category: `find docs/learnings/[category]/ -name "*.md"`
 - Tag/keyword: `grep -r "tags:.*[keyword]" docs/learnings/`
 - Date range: `find docs/learnings/ -name "*-[YYYY-MM]*.md"`
+
+Always load `docs/learnings/INDEX.md` first (or create it if missing) and use it as the starting candidate list when possible.
 
 Limit to relevant files (typically 3-10 documents). If scope too broad (>15 files), ask user to narrow.
 
@@ -140,6 +145,13 @@ Based on user choice, execute updates according to category:
 - **Consolidations (🔴)**: Merge unique content into base doc; archive merged-in docs; update incoming links
 - **Archives (⚫)**: Move to `docs/learnings/archive/`; add `archived: true` and `archive_reason` to frontmatter
 
+After each content update, sync `docs/learnings/INDEX.md`:
+
+- Update short descriptions to reflect current guidance
+- Remove or mark archived/superseded entries appropriately
+- Add missing entries for unindexed learning files
+- Ensure each active learning has exactly one index row
+
 **See `references/assessment-criteria.md` for detailed update procedures and decision guidelines.**
 
 ### 8. Summary
@@ -159,6 +171,11 @@ Archived: [N] docs
   - [filename]
 
 No action: [N] docs (current)
+
+Index updates:
+  - Added: [N]
+  - Updated: [N]
+  - Archived/Removed: [N]
 ```
 
 ## When to Use

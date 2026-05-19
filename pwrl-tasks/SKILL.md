@@ -42,6 +42,11 @@ Plan document path or blank to auto-discover the latest plan in `docs/plans/`.
    - Verify test scenarios exist (for Standard/Deep plans)
    - If plan is too vague, suggest improvements or ask user to clarify
 
+4. **Learnings Index Gate**
+   - Read `docs/learnings/INDEX.md` before generating tasks
+   - Map each implementation unit (U1, U2, etc.) to relevant learnings from the index
+   - If a unit has no relevant learning, mark it as a learning gap and include a follow-up learning-capture action in the task
+
 ### Phase 2: Generate Task Files
 
 For each implementation unit:
@@ -61,6 +66,7 @@ For each implementation unit:
    created: YYYY-MM-DD
    dependencies: [U2, U3] # Other unit IDs this depends on
    files: [path/to/file.ts, ...] # Primary files affected
+   learnings: [docs/learnings/pattern/example.md, ...] # Related learnings from index
    ---
    ```
 
@@ -69,6 +75,7 @@ For each implementation unit:
    Include these sections:
    - **Goal**: What this task accomplishes (from unit name/approach)
    - **Context**: Why this is needed (from plan overview/decisions)
+   - **Related Learnings**: Relevant index entries and how they apply
    - **Implementation Steps**: Detailed, actionable steps with code patterns
    - **Code Patterns**: Examples from codebase or external research
    - **Edge Cases**: Potential issues and how to handle them
@@ -82,6 +89,7 @@ For each implementation unit:
    - For API integrations, include endpoint details and authentication notes
    - For UI changes, note existing component patterns and styling conventions
    - Add test examples from similar features
+   - If no related learning exists, add a concrete step: `Document new learning with /pwrl-learnings` including a suggested title and short description for `docs/learnings/INDEX.md`
 
 ### Phase 3: Review and Report
 
@@ -101,6 +109,7 @@ For each implementation unit:
    - Number of tasks created
    - Critical path (longest dependency chain)
    - Recommended starting tasks (those with no dependencies)
+   - Learning coverage: units with linked learnings vs units with learning gaps
    - Any units that couldn't be converted (and why)
 
 ## Task File Quality Standards

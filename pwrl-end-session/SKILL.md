@@ -24,6 +24,8 @@ Session-end commits serve as checkpoints in AI-assisted development:
 /pwrl-end-session "switching to bugfix"     # End with context note
 ```
 
+After a successful commit, this skill should chain into `/pwrl-update-learnings` to keep `docs/learnings/INDEX.md` synchronized.
+
 ## Workflow
 
 ### Phase 1: Pre-flight Check
@@ -96,6 +98,20 @@ Session-end commits serve as checkpoints in AI-assisted development:
    - Confirm commit was created successfully
    - Remind user that changes are not pushed (manual push required)
 
+### Phase 5: Post-Commit Learnings Index Sync
+
+1. Trigger learnings index update:
+   - Automatically invoke `/pwrl-update-learnings` after successful commit
+   - Default scope: `changed-only` for learnings touched in this session
+
+2. Fallback behavior:
+   - If automatic skill chaining is unavailable, explicitly instruct user to run `/pwrl-update-learnings`
+   - If no learnings changed, skill may still run and return `0 updated`
+
+3. Final summary:
+   - Include commit SHA
+   - Include learnings index sync result (added/updated/removed counts)
+
 ## Commit Message Examples
 
 **Feature work:**
@@ -157,9 +173,10 @@ Used: pwrl-work
 - **Agent trailer mandatory**: Every commit must include `[AGENT: ...]` on last line
 - **No automatic push**: Never push to remote automatically; user controls when to push
 - **User approval required**: Always present commit message for user confirmation before committing
+- **Auto index sync**: Run `/pwrl-update-learnings` after successful commit, or provide manual fallback
 
 ## Acceptance Criteria
 
 - **Input**: User confirms session completion and there are changes to commit
 - **Output**: Created commit containing `[AGENT: ...]` trailer and descriptive body
-- **Verification**: Commit SHA returned and displayed to user
+- **Verification**: Commit SHA returned and displayed; learnings index sync executed (or manual fallback provided)

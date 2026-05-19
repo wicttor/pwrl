@@ -41,7 +41,8 @@ function parseFrontmatter(markdownText) {
   const frontmatter = {};
 
   for (const line of frontmatterLines) {
-    if (!line.trim()) continue;
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
     const match = /^([A-Za-z0-9_-]+):\s*(.*)\s*$/.exec(line);
     if (!match) return null;
     const key = match[1];
@@ -90,7 +91,7 @@ function validateSkillDir(skillDirName) {
 
   const parsed = parseFrontmatter(content);
   if (!parsed) {
-    errors.push('Missing or invalid YAML frontmatter (--- ... ---)');
+    errors.push('Missing or invalid frontmatter (validator expects simple single-line key: value entries)');
     return errors;
   }
 

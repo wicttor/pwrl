@@ -83,7 +83,13 @@ function validateSkillDir(skillDirName) {
 
   const content = fs.readFileSync(skillPath, 'utf8');
   const lines = content.split(/\r?\n/);
-  const lineCount = lines.length;
+  
+  // Trim trailing blank lines to avoid counting trailing newlines
+  let lastNonEmptyIndex = lines.length - 1;
+  while (lastNonEmptyIndex >= 0 && lines[lastNonEmptyIndex].trim() === '') {
+    lastNonEmptyIndex--;
+  }
+  const lineCount = lastNonEmptyIndex + 1;
 
   if (lineCount < 80 || lineCount > 170) {
     errors.push(`Line count ${lineCount} out of standard range (80-170)`);

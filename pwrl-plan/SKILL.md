@@ -61,9 +61,12 @@ Choose the appropriate tier based on task complexity and risk:
    - Review the existing plan (if they want to see it before deciding)
    - Archive the existing plan (if it should be kept for reference but not active)
    - Delete the existing plan (if it should be removed entirely)
-2. **Requirements Check:** Search `docs/brainstorms/`, `docs/requirements/`, **Memory** and `ARCHITECTURE.md` for relevant context.
-3. **Domain Check:** If the task isn't software-related (e.g., "plan a vacation"), use a universal planning template instead.
-4. **Bootstrap:** If no docs exist, briefly define the Problem Frame, Intended Behavior, and Success Criteria.
+2. **Requirements Check:** Search `docs/brainstorms/`, `docs/requirements/`, `docs/learnings/INDEX.md`, **Memory** and `ARCHITECTURE.md` for relevant context.
+3. **Learnings Index Gate:** Before writing the plan, review `docs/learnings/INDEX.md` and identify related learnings to reuse.
+   - Add a `Related Learnings` section to the plan with links and 1-line applicability notes.
+   - If no relevant learning exists for an important area, add a `Learning Gap` note in the plan and include a follow-up action to document it during/after implementation via `/pwrl-learnings`.
+4. **Domain Check:** If the task isn't software-related (e.g., "plan a vacation"), use a universal planning template instead.
+5. **Bootstrap:** If no docs exist, briefly define the Problem Frame, Intended Behavior, and Success Criteria.
 
 ### Phase 2: Research & Design
 
@@ -88,6 +91,10 @@ Choose the appropriate tier based on task complexity and risk:
    - **Fast**: Goal, Implementation Units with files/approach/verification
    - **Standard**: Overview, Key Technical Decisions, Implementation Units with test scenarios, System-Wide Impact
    - **Deep**: All Standard sections plus High-Level Technical Design, Alternative Approaches, Risk Analysis, Operational Notes
+5. Add a `Related Learnings` section in every plan tier:
+   - List relevant entries from `docs/learnings/INDEX.md`
+   - Include file path and short applicability rationale per learning
+   - If none apply, explicitly state `No relevant learnings found` and keep the `Learning Gap` follow-up
 
 ---
 

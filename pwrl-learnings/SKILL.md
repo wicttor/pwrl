@@ -9,7 +9,7 @@ Capture learnings, problems solved, and insights in a structured format for futu
 
 ## Purpose
 
-Document solutions, patterns, and insights while context is fresh. Creates structured documentation in `docs/learnings/` with frontmatter for searchability.
+Document solutions, patterns, and insights while context is fresh. Creates structured documentation in `docs/learnings/` with frontmatter for searchability and keeps `docs/learnings/INDEX.md` updated.
 
 **Why document learnings?** The first time you solve a problem takes research. Document it, and the next occurrence takes minutes. Knowledge compounds.
 
@@ -25,6 +25,7 @@ Document solutions, patterns, and insights while context is fresh. Creates struc
 - `references/schema.yaml` — frontmatter fields and valid categories
 - `references/categories.md` — category descriptions and when to use each
 - `assets/templates.md` — markdown templates for different learning types
+- `docs/learnings/INDEX.md` — canonical index of all learnings with short descriptions
 
 ## Workflow
 
@@ -80,22 +81,33 @@ Search `docs/learnings/` for related content:
 - If a very similar learning exists, consider updating it instead of creating a new one
 - Note any related learnings to cross-reference
 
-### 7. Write the File
+### 7. Update Learnings Index
+
+Update `docs/learnings/INDEX.md` as part of the same workflow.
+
+- If index does not exist, create it using the standard table format
+- Add one row for the learning with: date, category, title, path, and short description
+- **Short description requirement**: 1 sentence, concrete, and searchable (target 80-140 chars)
+- If learning already exists in index, update the existing row instead of duplicating
+- Keep entries sorted newest-first by date
+
+### 8. Write the File
 
 - Create directory if needed: `mkdir -p docs/learnings/[category]/`
 - Write the complete markdown file
 - Validate YAML frontmatter
 - Confirm file path with user
 
-### 8. Completion Summary
+### 9. Completion Summary
 
 Provide:
 
 - File path created
 - Brief 1-line description
+- Index row added/updated in `docs/learnings/INDEX.md`
 - Suggestion: any related learnings to cross-reference or update
 
-### 9. Consider Refresh (Optional)
+### 10. Consider Refresh (Optional)
 
 After documenting the new learning, evaluate whether related learnings might need updates.
 
@@ -118,6 +130,8 @@ Creates categorized learning document in `docs/learnings/[category]/[slug]-[date
 - Structured content following category template
 - Code examples and concrete details
 - Cross-references to related learnings
+
+Also updates `docs/learnings/INDEX.md` so every learning has a short description entry.
 
 **Directory structure example:**
 

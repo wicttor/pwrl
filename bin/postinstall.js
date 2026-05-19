@@ -52,6 +52,7 @@ console.log(`  3. Start using skills in your AI assistant:
      /pwrl-work            Execute the work
      /pwrl-review          Review code quality
      /pwrl-learnings       Document insights
+    /pwrl-update-learnings Sync learnings index
      /pwrl-end-session     Clean commit
 
 Documentation:

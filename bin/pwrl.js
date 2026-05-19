@@ -58,6 +58,7 @@ Available Skills:
   - pwrl-review            Code review and quality checks
   - pwrl-learnings         Document solutions and insights
   - pwrl-refresh-learnings Update learning collection
+  - pwrl-update-learnings  Sync learnings index
   - pwrl-end-session       Clean commit at session end
 
 Skill Locations:

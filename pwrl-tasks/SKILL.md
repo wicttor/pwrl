@@ -4,228 +4,84 @@ description: "Slice implementation plans into granular, executable task files. U
 argument-hint: "[Path to plan file, or leave blank to find latest plan]"
 ---
 
-# PWRL Tasks - Plan Slicing
+# PWRL Tasks
 
-Transform implementation plans into granular, executable task files for pwrl-work.
+Slice a plan into granular, executable task files for `/pwrl-work`.
 
 ## Purpose
 
-Bridge the gap between planning and execution by:
+- Create ready-to-execute work items in `docs/tasks/to-do/`
+- Preserve unit IDs and dependencies from the plan
+- Enrich tasks with implementation steps, tests, and acceptance criteria
 
-- Breaking plans into focused, single-purpose task files
-- Enriching each task with detailed implementation guidance
-- Maintaining dependency relationships and unit IDs
-- Creating ready-to-execute work items in `docs/tasks/to-do/`
+## Usage
+
+```bash
+/pwrl-tasks
+/pwrl-tasks docs/plans/2026-05-01-001-auth.md
+```
 
 ## Input
 
-Plan document path or blank to auto-discover the latest plan in `docs/plans/`.
+Plan document path, or blank to auto-discover the latest plan in `docs/plans/`.
+
+## Support Files
+
+- `references/task-template.md` — Canonical task structure (body + frontmatter)
+- `references/index-template.md` — Canonical `docs/tasks/INDEX.md` structure
+- `references/dependency-resolution.md` — Dependency modeling and validation guidance
+- `references/examples.md` — Examples of good tasks and indexes
+- `references/github-issues-integration.md` — Optional GitHub Issues sync rules
 
 ## Workflow
 
-### Phase 1: Locate and Parse Plan
+### Phase 1: Locate and Read the Plan
 
-1. **Find Plan**
-   - If path provided, read that plan
-   - If blank, scan `docs/plans/` for most recent `active` or `draft` plan
-   - If no plan found, prompt user for plan path or ask if they want to create one with `/pwrl-plan`
-
-2. **Parse Plan Structure**
-   - Extract plan metadata (date, status, overview)
-   - Identify all implementation units (U1, U2, etc.)
-   - Extract dependencies between units (look for "depends on", "after", "requires" language)
-   - Note key technical decisions, constraints, and test scenarios
-
-3. **Validate Plan Quality**
-   - Ensure units have clear file paths
-   - Check that approach/technical decisions are present
-   - Verify test scenarios exist (for Standard/Deep plans)
-   - If plan is too vague, suggest improvements or ask user to clarify
-
-4. **Learnings Index Gate**
-   - Read `docs/learnings/INDEX.md` before generating tasks
-   - Map each implementation unit (U1, U2, etc.) to relevant learnings from the index
-   - If a unit has no relevant learning, mark it as a learning gap and include a follow-up learning-capture action in the task
+1. If a path is provided, read that plan; otherwise scan `docs/plans/` for the latest active/draft plan.
+2. If no plan exists, ask the user to create one with `/pwrl-plan` or provide a path.
+3. Extract implementation units (`U1`, `U2`, ...) plus any dependencies and test scenarios.
+4. Read `docs/learnings/INDEX.md` and map relevant learnings to each unit (or mark a learning gap).
 
 ### Phase 2: Generate Task Files
 
-For each implementation unit:
-
-1. **Create Task File**
-   - Filename: `YYYY-MM-DD-[unit-id]-[slug].md` (e.g., `2026-05-04-u1-add-email-validation.md`)
-   - Location: `docs/tasks/to-do/` (create directory if needed)
-   - Slug: lowercase, hyphen-separated, derived from unit name
-
-2. **Build Frontmatter**
+1. For each unit, create `docs/tasks/to-do/YYYY-MM-DD-uX-<slug>.md`.
+2. Use `references/task-template.md` as the canonical task structure and keep tasks self-contained.
+3. Ensure task frontmatter includes (at minimum):
 
    ```yaml
    ---
-   unit-id: U1 # Stable ID from plan
-   plan: docs/plans/[plan-name].md # Reference to source plan
-   status: to-do # to-do | in-progress | for-review | done
-   created: YYYY-MM-DD
-   dependencies: [U2, U3] # Other unit IDs this depends on
-   files: [path/to/file.ts, ...] # Primary files affected
-   learnings: [docs/learnings/pattern/example.md, ...] # Related learnings from index
+   unit-id: U1
+   plan: docs/plans/YYYY-MM-DD-NNN-name.md
+   status: to-do
+   dependencies: [U2]
+   files: [path/to/file.ts]
+   learnings: [docs/learnings/pattern/example.md]
    ---
    ```
 
-3. **Write Task Body** (see `references/task-template.md` for full structure)
+4. Ensure task body includes: goal, context, steps, edge cases, testing, acceptance criteria, and references.
+5. If a unit has no relevant learning, add an explicit step to document one via `/pwrl-learnings`.
 
-   Include these sections:
-   - **Goal**: What this task accomplishes (from unit name/approach)
-   - **Context**: Why this is needed (from plan overview/decisions)
-   - **Related Learnings**: Relevant index entries and how they apply
-   - **Implementation Steps**: Detailed, actionable steps with code patterns
-   - **Code Patterns**: Examples from codebase or external research
-   - **Edge Cases**: Potential issues and how to handle them
-   - **Testing**: Test scenarios, test-first approach, verification steps
-   - **Acceptance Criteria**: Specific conditions for task completion
-   - **References**: Links to related files, docs, APIs
+### Phase 3: Generate Index and Report
 
-4. **Enrich with Detail**
-   - Search codebase for similar patterns to include as examples
-   - If plan includes external research, incorporate relevant findings
-   - For API integrations, include endpoint details and authentication notes
-   - For UI changes, note existing component patterns and styling conventions
-   - Add test examples from similar features
-   - If no related learning exists, add a concrete step: `Document new learning with /pwrl-learnings` including a suggested title and short description for `docs/learnings/INDEX.md`
+1. Create/update `docs/tasks/INDEX.md` using `references/index-template.md`.
+2. Validate dependencies (see `references/dependency-resolution.md` for guidance).
+3. Report created tasks, critical path, and recommended starting tasks.
 
-### Phase 3: Review and Report
+## Output
 
-1. **Create Task Index**
-   - Generate `docs/tasks/INDEX.md` with:
-     - List of all tasks by status (to-do, in-progress, for-review, done)
-     - Dependency graph (which tasks must complete before others)
-     - Link back to source plan
-     - Quick reference table: Unit ID | Task File | Status | Dependencies
-
-2. **Validate Dependencies**
-   - Check for circular dependencies
-   - Verify all referenced dependencies exist
-   - Suggest execution order based on dependency graph
-
-3. **Report to User**
-   - Number of tasks created
-   - Critical path (longest dependency chain)
-   - Recommended starting tasks (those with no dependencies)
-   - Learning coverage: units with linked learnings vs units with learning gaps
-   - Any units that couldn't be converted (and why)
-
-## Task File Quality Standards
-
-Each task file must:
-
-- Be independently executable (with dependencies noted but self-contained)
-- Include enough context that pwrl-work can complete it without revisiting the plan
-- Have clear acceptance criteria for verification
-- Reference specific files and line ranges where applicable
-- Include concrete code examples, not just descriptions
+- Task files created under `docs/tasks/to-do/`
+- A task index at `docs/tasks/INDEX.md` reflecting statuses and dependencies
 
 ## Best Practices
 
-1. **One Task = One Cohesive Change**: Don't split units that should be atomic
-2. **Dependency Clarity**: If U3 depends on U1, explicitly note what from U1 is needed
-3. **Test-First Alignment**: Structure tasks to support test-first workflow
-4. **Progressive Detail**: Simple tasks stay simple; complex tasks get more guidance
-5. **Codebase Patterns**: Always search for and include similar existing patterns
-6. **Stable IDs**: Preserve unit IDs from plan; never renumber
+- Keep each task independently executable (with dependencies noted)
+- Preserve stable unit IDs from the plan; never renumber
+- Prefer linking to existing codebase patterns over inventing new conventions
+- If GitHub Issues sync is enabled, follow `references/github-issues-integration.md`
 
-## Error Handling
+## Rules
 
-- **No plan found**: Offer to create one with `/pwrl-plan` or ask for path
-- **Vague units**: List unclear units and ask user to clarify before proceeding
-- **Missing dependencies**: Mark task with `status: blocked` and note missing info
-- **Directory conflicts**: If `docs/tasks/to-do/` has existing tasks, ask whether to merge or clean
-
-## Integration with pwrl-work
-
-Generated tasks are designed to be consumed by pwrl-work:
-
-- Each task file path can be passed directly to `/pwrl-work`
-- Status tracking enables parallel execution of independent tasks
-- Dependency tracking prevents out-of-order execution
-- Detailed implementation steps reduce clarification loops
-
-## GitHub Issues Integration
-
-If GitHub Issues integration is enabled in `.pwrlrc.json` (via `pwrl init`), tasks are automatically synced with GitHub:
-
-### Task Creation
-
-When generating task files, for each task:
-
-1. **Check Configuration**: Read `.pwrlrc.json` to verify `integrations.githubIssues` is `true`
-2. **Create GitHub Issue**:
-   - Title: Task unit ID + name (e.g., "U1: Add email validation")
-   - Body: Link to task file + goal + acceptance criteria
-   - Labels: `pwrl-task`, `to-do`, and any plan-specific labels
-   - Assign to appropriate milestone (if plan has one)
-3. **Update Task Frontmatter**: Add `github-issue: <issue-number>` field
-4. **Report**: Inform user of created issue with link
-
-### Task Status Updates
-
-When task status changes (e.g., moved from `to-do` to `in-progress`, `for-review`, or `done`):
-
-1. **Read Task Frontmatter**: Extract `github-issue` field
-2. **Update Issue**:
-   - Change labels to reflect status (`in-progress`, `for-review`, `done`)
-   - Add comment with progress summary
-   - Keep issue open for `to-do`, `in-progress`, and `for-review` statuses
-   - Close issue only if status is `done` (after review approval)
-3. **Report**: Confirm sync with issue number
-
-### Configuration Check
-
-Before any GitHub operation:
-
-```javascript
-const config = require("@wicttor/pwrl").config;
-const isEnabled = config.isGitHubIssuesEnabled();
-
-if (!isEnabled) {
-  // Skip GitHub sync, only create local task files
-  return;
-}
-```
-
-### Manual Sync
-
-If tasks exist without GitHub issues, user can run:
-
-```
-/pwrl-tasks --sync-github
-```
-
-This will:
-
-- Scan all tasks in `docs/tasks/`
-- Create issues for tasks without `github-issue` field
-- Update task frontmatter with issue numbers
-
-### Error Handling
-
-- **GitHub API errors**: Log error, continue with local task creation
-- **Authentication issues**: Prompt user to configure GitHub credentials
-- **Rate limiting**: Batch create issues with delays
-
-### GitHub API Requirements
-
-Tasks skill will use platform's GitHub facilities when available:
-
-- GitHub Copilot: Native GitHub integration
-- Claude/Cursor: Prompt user to install GitHub CLI or configure tokens
-- Other platforms: Provide manual sync option or skip GitHub integration
-
-## Example Usage
-
-```
-/pwrl-tasks docs/plans/2026-05-01-add-user-auth.md
-```
-
-Output:
-
-- Creates 5 task files in `docs/tasks/to-do/`
-- Generates `docs/tasks/INDEX.md` with dependency graph
-- Reports recommended starting tasks: U1, U4 (no dependencies)
+- Never delete or overwrite existing tasks without explicit user confirmation.
+- Use repository-relative paths only in tasks and indexes.
+- If dependency information is ambiguous, ask before encoding it into tasks.

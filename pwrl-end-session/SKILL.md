@@ -4,18 +4,15 @@ description: Create a single clear commit at session end capturing state and nex
 argument-hint: "[Optional: reason for ending session or switching tasks]"
 ---
 
-# End Session
+# PWRL End Session
 
-Create a single well-documented commit when a work session ends, capturing state and providing context for future sessions.
+Create a single well-documented commit when a work session ends, capturing state and next steps.
 
 ## Purpose
 
-Session-end commits serve as checkpoints in AI-assisted development:
-
-- **Context preservation**: Future sessions can understand what was done and why
-- **Audit trail**: Clear attribution via `[AGENT: ...]` trailer
-- **Continuity**: Next steps documented for seamless session transitions
-- **Review quality**: Well-documented commits improve code review efficiency
+- Preserve context for the next session (what changed, why, and what’s next)
+- Ensure attribution via an `[AGENT: ...]` trailer
+- Keep release metadata consistent when a version is bumped
 
 ## Usage
 
@@ -26,184 +23,61 @@ Session-end commits serve as checkpoints in AI-assisted development:
 
 After a successful commit, this skill should chain into `/pwrl-update-learnings` to keep `docs/learnings/INDEX.md` synchronized.
 
+## Support Files
+
+- `references/commit-message-examples.md` — Example commit messages for common scenarios
+
 ## Workflow
 
 ### Phase 1: Pre-flight Check
 
-1. Check working tree state:
-   - Run `git status` or use platform's changed files tool
-   - If no changes exist, inform user and exit
-
-2. Review changed files:
-   - Display list of modified, added, and deleted files
-   - Ask user which files to stage for commit
-   - Confirm unstaged files are intentionally excluded
+1. Check working tree state (e.g., `git status` or platform changed-files tool).
+2. If there are no changes, inform the user and exit.
+3. Review changed files and confirm what will be included in the commit.
 
 ### Phase 2: Confirm Completion
 
-1. Ask user to confirm session is complete:
-   - Present clear yes/no question
-   - If user declines, check for open todos or incomplete work
-
-2. If not complete:
-   - List any open todos from task tracker
-   - Summarize incomplete work
-   - Exit without committing
-   - Suggest completing remaining work first
+1. Ask the user to confirm the session is ready to be closed.
+2. If not, summarize incomplete work and exit without committing.
 
 ### Phase 3: Prepare Commit Message
 
-1. Craft commit subject line:
-   - Use imperative mood: "Add feature" not "Added feature"
-   - Keep to 50 characters or less
-   - No trailing period
-   - Clear and descriptive
-
-2. Write commit body:
-   - Wrap lines at ~72 characters
-   - Explain **why** changes were made, not just what
-   - Include context based on work type:
-     - **Plan-based work**: Reference plan document used
-     - **Task switching**: Explain reason and next steps
-     - **Partial work**: Document current state and what remains
-     - **Fixes**: Describe issue and resolution approach
-     - **Features**: Explain feature value and key decisions
-     - **Refactors**: State what changed and rationale
-     - **Reverts**: Explain what was reverted and why
-   - List skills used during session (e.g., "Used: pwrl-plan, pwrl-work")
-   - Note any cross-session context if changes span multiple sessions
-
-3. Add agent attribution:
-   - Append `[AGENT: {AGENT_NAME}]` on last line of commit message
-   - Use actual agent name (e.g., "GitHub Copilot", "Claude", etc.)
-   - This trailer is mandatory for all session-end commits
-
-4. Present for approval:
-   - Show complete commit message (subject + body) to user
-   - Request confirmation or edits
-   - Apply user revisions if requested
-
-### Phase 3.5: Version & Changelog Check
-
-1. Detect version bump:
-   - Check if any version-bearing files were modified (e.g., `package.json`, `pyproject.toml`, `Cargo.toml`, `*.csproj`, `version.txt`)
-   - Extract old version (from `git show HEAD:<file>`) and new version (from working tree)
-   - If no version change is detected, skip this phase entirely
-
-2. Update CHANGELOG:
-   - Open `CHANGELOG.md` (or equivalent) in the repository root
-   - Add a new entry at the top of the changelog under the new version number and today's date
-   - Summarize all changes made in this session (features, fixes, refactors, etc.)
-   - Follow the existing changelog format (e.g., Keep a Changelog style)
-   - Stage the updated `CHANGELOG.md` alongside the other files
-
-3. Confirm changelog entry:
-   - Show the new changelog entry to the user
-   - Request confirmation or edits before proceeding
+1. Draft a commit subject (imperative mood, ≤50 chars).
+2. Write a body that explains why, highlights key decisions, and lists next steps if work is partial.
+3. Append `[AGENT: <agent name>]` as the last line (mandatory).
+4. Show the full message to the user and apply any edits they request.
 
 ### Phase 4: Create Commit
 
-1. Stage selected files:
-   - Use `git add` for approved files
-   - Verify staging with `git status`
-
-2. Execute commit:
-   - Run `git commit` with prepared message
-   - Capture commit SHA from output
-
-3. Tag the release (only when version was bumped):
-   - Create an annotated tag using the new version: `git tag -a v<version> <SHA> -m "Release v<version>"`
-   - Display the tag name to the user
-   - Remind user that both the commit and tag must be pushed manually (`git push && git push --tags`)
-
-4. Confirm and report:
-   - Display commit SHA to user
-   - Confirm commit was created successfully
-   - If a tag was created, display its name
-   - Remind user that changes are not pushed (manual push required)
+1. Stage approved files and verify staging state.
+2. Create the commit and capture the commit SHA.
+3. If a version bump is detected, update `CHANGELOG.md` and (optionally) create an annotated tag `v<version>`.
+4. Remind the user that pushing is manual and controlled by them.
 
 ### Phase 5: Post-Commit Learnings Index Sync
 
-1. Trigger learnings index update:
-   - Automatically invoke `/pwrl-update-learnings` after successful commit
-   - Default scope: `changed-only` for learnings touched in this session
-
-2. Fallback behavior:
-   - If automatic skill chaining is unavailable, explicitly instruct user to run `/pwrl-update-learnings`
-   - If no learnings changed, skill may still run and return `0 updated`
-
-3. Final summary:
-   - Include commit SHA
-   - Include learnings index sync result (added/updated/removed counts)
-
-## Commit Message Examples
-
-**Feature work:**
-
-```
-Add user authentication system
-
-Implement JWT-based authentication with refresh tokens.
-Follows plan docs/plans/2026-05-01-001-auth.md.
-
-Key decisions:
-- JWT tokens with 15min expiry
-- Refresh tokens stored in httpOnly cookies
-- Redis for token blacklist
-
-Used: pwrl-plan, pwrl-work
-
-[AGENT: GitHub Copilot]
-```
-
-**Partial work:**
-
-```
-WIP: Add authentication middleware
-
-Implemented JWT validation middleware and tests.
-Auth controller and routes remain for next session.
-
-Next steps:
-- Complete auth controller (login, logout, refresh)
-- Add integration tests
-- Update API documentation
-
-Used: pwrl-work
-
-[AGENT: Claude]
-```
-
-**Bug fix:**
-
-```
-Fix race condition in async state updates
-
-User profile updates were sometimes lost due to race
-condition when multiple requests modified same user.
-
-Solution: Add optimistic locking with version field.
-Tests added to verify concurrent update handling.
-
-Used: pwrl-work
-
-[AGENT: GitHub Copilot]
-```
+1. If possible, invoke `/pwrl-update-learnings` (default scope: `changed-only`).
+2. If automatic chaining isn’t available, instruct the user to run `/pwrl-update-learnings`.
+3. Include the commit SHA and index sync result in the final summary.
 
 ## Rules
 
 - **Verify working tree** before starting (check for changes)
-- **Commit partial work** if session ends mid-task; document state and next steps clearly
 - **Agent trailer mandatory**: Every commit must include `[AGENT: ...]` on last line
 - **No automatic push**: Never push to remote automatically; user controls when to push
 - **User approval required**: Always present commit message for user confirmation before committing
-- **Changelog required on version bump**: If the version changed, a changelog entry must be created and staged before committing
-- **Tag on version bump**: If the version changed, an annotated git tag must be created after the commit
-- **Auto index sync**: Run `/pwrl-update-learnings` after successful commit, or provide manual fallback
+- **Changelog on version bump**: If the version changed, stage a changelog entry in the commit
+- **Index sync**: Run `/pwrl-update-learnings` after commit (or provide manual fallback)
+
+## Best Practices
+
+- If work is partial, make next steps explicit and actionable in the commit body.
+- Link to the plan/task file that guided the session when applicable.
+- Keep the commit message readable (wrap at ~72 chars).
 
 ## Acceptance Criteria
 
 - **Input**: User confirms session completion and there are changes to commit
 - **Output**: Created commit containing `[AGENT: ...]` trailer and descriptive body
-- **Version bump**: If version changed - updated `CHANGELOG.md` staged in the commit and annotated tag created
-- **Verification**: Commit SHA returned and displayed; tag name displayed if applicable; learnings index sync executed (or manual fallback provided)
+- **Version bump**: If version changed, updated `CHANGELOG.md` is staged in the commit
+- **Verification**: Commit SHA returned and displayed; learnings index sync executed (or manual fallback provided)

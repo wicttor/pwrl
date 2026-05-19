@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and this project adheres to Semantic Versioning.
 
+## [1.0.6] - 2026-05-18
+
+### Added
+
+- Added version-aware end-session workflow guidance to require changelog updates when a release version is bumped.
+
+### Changed
+
+- Updated the `pwrl-end-session` skill to include a dedicated version/changelog validation phase before commit creation.
+- Updated session-end release flow to define annotated tag creation for version-bump commits.
+- Expanded acceptance criteria and rules for `pwrl-end-session` to verify changelog inclusion and tag output when applicable.
+
 ## [1.0.5] - 2026-05-18
 
 This is the first changelog release and summarizes published git history through the current package version.

@@ -83,6 +83,24 @@ After a successful commit, this skill should chain into `/pwrl-update-learnings`
    - Request confirmation or edits
    - Apply user revisions if requested
 
+### Phase 3.5: Version & Changelog Check
+
+1. Detect version bump:
+   - Check if any version-bearing files were modified (e.g., `package.json`, `pyproject.toml`, `Cargo.toml`, `*.csproj`, `version.txt`)
+   - Extract old version (from `git show HEAD:<file>`) and new version (from working tree)
+   - If no version change is detected, skip this phase entirely
+
+2. Update CHANGELOG:
+   - Open `CHANGELOG.md` (or equivalent) in the repository root
+   - Add a new entry at the top of the changelog under the new version number and today's date
+   - Summarize all changes made in this session (features, fixes, refactors, etc.)
+   - Follow the existing changelog format (e.g., Keep a Changelog style)
+   - Stage the updated `CHANGELOG.md` alongside the other files
+
+3. Confirm changelog entry:
+   - Show the new changelog entry to the user
+   - Request confirmation or edits before proceeding
+
 ### Phase 4: Create Commit
 
 1. Stage selected files:
@@ -93,9 +111,15 @@ After a successful commit, this skill should chain into `/pwrl-update-learnings`
    - Run `git commit` with prepared message
    - Capture commit SHA from output
 
-3. Confirm and report:
+3. Tag the release (only when version was bumped):
+   - Create an annotated tag using the new version: `git tag -a v<version> <SHA> -m "Release v<version>"`
+   - Display the tag name to the user
+   - Remind user that both the commit and tag must be pushed manually (`git push && git push --tags`)
+
+4. Confirm and report:
    - Display commit SHA to user
    - Confirm commit was created successfully
+   - If a tag was created, display its name
    - Remind user that changes are not pushed (manual push required)
 
 ### Phase 5: Post-Commit Learnings Index Sync
@@ -173,10 +197,13 @@ Used: pwrl-work
 - **Agent trailer mandatory**: Every commit must include `[AGENT: ...]` on last line
 - **No automatic push**: Never push to remote automatically; user controls when to push
 - **User approval required**: Always present commit message for user confirmation before committing
+- **Changelog required on version bump**: If the version changed, a changelog entry must be created and staged before committing
+- **Tag on version bump**: If the version changed, an annotated git tag must be created after the commit
 - **Auto index sync**: Run `/pwrl-update-learnings` after successful commit, or provide manual fallback
 
 ## Acceptance Criteria
 
 - **Input**: User confirms session completion and there are changes to commit
 - **Output**: Created commit containing `[AGENT: ...]` trailer and descriptive body
-- **Verification**: Commit SHA returned and displayed; learnings index sync executed (or manual fallback provided)
+- **Version bump**: If version changed - updated `CHANGELOG.md` staged in the commit and annotated tag created
+- **Verification**: Commit SHA returned and displayed; tag name displayed if applicable; learnings index sync executed (or manual fallback provided)

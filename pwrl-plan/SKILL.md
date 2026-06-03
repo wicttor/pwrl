@@ -4,104 +4,79 @@ description: "Create structured implementation plans for any task. Supports thre
 argument-hint: "[task description, requirements doc, or goal to plan]"
 ---
 
-# Universal Planner
+# PWRL Plan
 
-**Note: The current year is 2026.**
+Create a durable implementation plan that can be handed off for execution.
 
-This skill defines **HOW** to build a solution. It produces a durable implementation plan that can be handed off for execution. When invoked, always stay in the planning workflow—if the input is unclear, ask clarifying questions rather than abandoning the task.
+## Purpose
 
-## Interaction Method
-
-- Use the platform's `ask_user` tool for questions.
-- Ask one question at a time. Use follow-up questions to clarify scope, requirements, or constraints.
-- Use multiple rounds of questioning to refine the plan before generating it.
-- Use multiple-choice questions when possible to guide the user toward specific details (e.g., "Is this a new feature, a bug fix, or a refactor?").
-- If the input is empty, ask: "What would you like to plan? Describe the task or project."
-
-## Core Principles
-
-1. **Focus on decisions, not code**: Define approach, structure, risks, and sequencing — not implementation details.
-2. **Right-size the plan**: Small tasks → short plans. Complex work → more structure.
-3. **Separate planning from execution**: Don’t simulate coding, testing, or runtime behavior.
-4. **Be concrete**: Use specific files, components, or steps where relevant.
-5. **Stay portable**: Avoid tool-specific instructions or environment assumptions.
+- Define approach, sequencing, risks, and verification (not production code)
+- Right-size planning effort via tiers: Fast, Standard, Deep
+- Keep plans portable across tools and environments
 
 ## Plan Quality Bar
 
-A good plan includes:
+A good plan is concrete, testable, and easy to execute later:
 
-- Clear problem and scope
-- Key requirements or success criteria
-- Concrete steps or implementation units
-- Dependencies and sequencing
-- Risks or unknowns
-- Test or validation scenarios (when applicable)
+- Clear goal and explicit non-goals
+- Key requirements and success criteria
+- Stable implementation units (`U1`, `U2`, ...) with file touch-points
+- Dependencies/sequencing and any rollout/migration notes
+- Risks/unknowns and how to de-risk them
+- Verification scenarios (tests, checks, manual steps)
 
----
+## Usage
 
-## Planning Tiers
-
-Choose the appropriate tier based on task complexity and risk:
-
-1. **Fast**: Small, well-bounded tasks (1-3 files, clear scope, low risk)
-2. **Standard**: Most software features (technical decisions, moderate complexity, test scenarios)
-3. **Deep**: Cross-cutting or high-risk work (10+ files, architecture, security, migrations, alternatives analysis)
-
-**See `references/plan-templates.md` for full templates and examples.**
-
----
+```bash
+/pwrl-plan
+/pwrl-plan "add oauth login"
+/pwrl-plan docs/requirements/auth.md
+```
 
 ## Workflow
 
-### Phase 1: Context & Scope
+### Phase 1: Clarify Scope
 
-1. **Resume or Create:** If a plan exists in `docs/plans/`, ask the user if they want to:
-   - Resume the existing plan (if it's active)
-   - Create a new plan (if the existing one is outdated or irrelevant)
-   - Review the existing plan (if they want to see it before deciding)
-   - Archive the existing plan (if it should be kept for reference but not active)
-   - Delete the existing plan (if it should be removed entirely)
-2. **Requirements Check:** Search `docs/brainstorms/`, `docs/requirements/`, `docs/learnings/INDEX.md`, **Memory** and `ARCHITECTURE.md` for relevant context.
-3. **Learnings Index Gate:** Before writing the plan, review `docs/learnings/INDEX.md` and identify related learnings to reuse.
-   - Add a `Related Learnings` section to the plan with links and 1-line applicability notes.
-   - If no relevant learning exists for an important area, add a `Learning Gap` note in the plan and include a follow-up action to document it during/after implementation via `/pwrl-learnings`.
-4. **Domain Check:** If the task isn't software-related (e.g., "plan a vacation"), use a universal planning template instead.
-5. **Bootstrap:** If no docs exist, briefly define the Problem Frame, Intended Behavior, and Success Criteria.
+1. If the input is unclear or empty, ask clarifying questions (one at a time).
+2. Prefer multiple-choice questions when they speed up decisions (feature vs bugfix vs refactor).
+3. Check for existing context: `docs/plans/`, `docs/requirements/`, `docs/brainstorms/`, `ARCHITECTURE.md`.
+4. Read `docs/learnings/INDEX.md` and identify relevant learnings to reuse.
 
-### Phase 2: Research & Design
+### Phase 2: Choose a Tier
 
-1. **Local Research:** Identify existing patterns, tech stack versions, and relevant files.
-2. **External Research:** Run if the task involves high-risk areas (Security, Payments, APIs) or if the codebase lacks 3+ examples of the required pattern.
-3. **Technical Design (Optional):** For complex logic, include a Mermaid diagram (sequence, state, or flowchart) or a pseudo-code grammar. Frame as _directional guidance_, not a specification to copy.
+1. Pick the tier based on complexity and risk:
+   - **Fast**: 1-3 files, low risk
+   - **Standard**: most features, moderate complexity
+   - **Deep**: cross-cutting/high-risk work (10+ files, security, migrations)
+2. Read `references/plan-templates.md` for the chosen template.
 
-### Phase 3: Implementation Units
+### Phase 3: Draft the Plan
 
-1. Break the work into stable **U-IDs** (U1, U2, etc.).
-2. **Stability:** Never renumber IDs if units are moved or deleted.
+1. Write the plan (no production code) using repository-relative paths only.
+2. Break work into stable implementation units (`U1`, `U2`, ...); never renumber.
+3. Include test/verification scenarios for each unit when applicable.
+4. Add `Related Learnings` links with 1-line applicability notes (or explicitly state none).
+5. Save to `docs/plans/YYYY-MM-DD-NNN-<name>.md`.
 
-### Phase 4: Plan Generation
+## Output
 
-1. Choose template tier (Fast/Standard/Deep) based on task complexity
-2. Read `references/plan-templates.md` for full template format
-3. Write plan following template structure:
-   - **Naming**: Save to `docs/plans/YYYY-MM-DD-NNN-<name>.md`
-   - **Relative Paths**: All file references must be repository-relative (e.g., `src/main.js`), never absolute
-   - **No Implementation**: Describe the _approach_ and _logic_; DO NOT WRITE production code inside the plan
-4. Include required sections per tier:
-   - **Fast**: Goal, Implementation Units with files/approach/verification
-   - **Standard**: Overview, Key Technical Decisions, Implementation Units with test scenarios, System-Wide Impact
-   - **Deep**: All Standard sections plus High-Level Technical Design, Alternative Approaches, Risk Analysis, Operational Notes
-5. Add a `Related Learnings` section in every plan tier:
-   - List relevant entries from `docs/learnings/INDEX.md`
-   - Include file path and short applicability rationale per learning
-   - If none apply, explicitly state `No relevant learnings found` and keep the `Learning Gap` follow-up
-
----
+- A plan document at `docs/plans/YYYY-MM-DD-NNN-<name>.md`
+- Uses the selected tier template from `pwrl-plan/references/plan-templates.md`
+- Includes stable unit IDs, dependencies, risks/unknowns, and verification scenarios
 
 ## Best Practices
 
-1. **Portable Paths**: Use repository-relative paths only (e.g., `src/main.js`); absolute paths break plans
-2. **U-ID Stability**: Implementation unit IDs like `U1`, `U2` are anchors; never renumber them if units are moved or deleted
-3. **Decisions, Not Code**: Capture boundaries, approach, and logic; leave variable naming and syntax to implementation phase
-4. **Research First**: If the codebase lacks local patterns for the task, always perform external research before finalizing
-5. **Right-Size**: Small tasks get short plans; complex work gets more structure; don't over-plan simple tasks
+- Use repository-relative paths (absolute paths break portability)
+- Capture decisions and boundaries, not implementation details
+- Research locally first; do external research for high-risk areas or missing patterns
+
+## Rules
+
+- Stay in planning mode; do not implement production code.
+- Use repository-relative paths in the plan (e.g., `src/main.js`).
+- Keep unit IDs stable once created; never renumber.
+
+## When to Use
+
+- Use when you need a concrete implementation plan before coding.
+- Prefer for medium/large work, unclear requirements, or risky changes.

@@ -4,13 +4,23 @@ description: "Standard code review focusing on correctness, maintainability, sec
 argument-hint: "[branch/PR or tokens like depth:fast, subagents:on]"
 ---
 
-# Code Review
+# PWRL Review
 
 Reviews code changes against quality standards, identifying issues in logic, security, maintainability, testing, performance, and API contracts.
 
 ## Purpose
 
 Provide actionable code review feedback before merge to catch correctness, security, testing, performance, maintainability, and API contract issues.
+
+## Usage
+
+```bash
+/pwrl-review
+/pwrl-review depth:fast
+/pwrl-review depth:deep subagents:on
+/pwrl-review feature/new-api
+/pwrl-review 123
+```
 
 ## When to Use
 
@@ -37,14 +47,7 @@ Provide actionable code review feedback before merge to catch correctness, secur
 
 ## Severity Levels
 
-| Level  | Meaning                                               | Action                 |
-| ------ | ----------------------------------------------------- | ---------------------- |
-| **P0** | Critical bug, security issue, or data corruption risk | Must fix before merge  |
-| **P1** | High-impact defect likely in normal usage             | Should fix             |
-| **P2** | Moderate issue with meaningful downside               | Fix if straightforward |
-| **P3** | Minor improvement or low-impact issue                 | Optional               |
-
-**See `references/severity-guide.md` for detailed definitions, assessment guidelines, and calibration examples.**
+Use P0-P3 severity. See `references/severity-guide.md` for definitions and calibration examples.
 
 ## Control Tokens
 
@@ -157,33 +160,10 @@ Present results as checklist format:
 
 If review is based on a task file:
 
-- **If verdict is "Ready to merge"**:
-  - Update task frontmatter: change `status: for-review` to `status: done`
-  - Move task file from `docs/tasks/for-review/` to `docs/tasks/done/`
-  - Update `docs/tasks/INDEX.md` to reflect completion
-  - If GitHub Issues integration enabled AND `github-issue` field present:
-    - Close the GitHub issue
-    - Add closing comment: "✅ Review passed - Ready to merge"
+1. If verdict is **Ready to merge**: mark task `done` and move it to `docs/tasks/done/`.
+2. If verdict is **Ready with fixes / Not ready**: move task back to `in-progress` and add required fixes (P0/P1) to the task body.
 
-- **If verdict is "Ready with fixes" or "Not ready"**:
-  - Update task frontmatter: change `status: for-review` back to `status: in-progress`
-  - Update task file content to include review summary and required fixes (if any)
-    - Include checklist of P0/P1 findings as required fixes
-    - Add any relevant context from the review summary to guide next steps
-    - Ensure task file clearly communicates what needs to be addressed before the next review
-  - Move task file from `docs/tasks/for-review/` back to `docs/tasks/in-progress/`
-  - Update `docs/tasks/INDEX.md` to reflect status change
-  - If GitHub Issues integration enabled AND `github-issue` field present:
-    - Re-open the GitHub issue (if closed)
-    - Update labels: add `in-progress`, remove `for-review`
-    - Add comment listing required fixes (P0/P1 items)
+## Output
 
-## Example Invocations
-
-- `@pwrl-review` - Review current branch (defaults to `depth:standard`)
-- `@pwrl-review depth:fast` - Quick scan, minimal output
-- `@pwrl-review depth:deep subagents:on` - Thorough audit, spawn parallel subagents and write artifacts
-- `@pwrl-review feature/new-api depth:standard` - Review specific branch with standard depth
-- `@pwrl-review 123 depth:fast` - Review PR #123 with a quick scan
-- `@pwrl-review https://github.com/org/repo/pull/123 depth:deep` - Review PR by URL with deep audit
-- `@pwrl-review docs/tasks/in-progress/2026-05-04-u1-task.md` - Review work for specific task file
+- A checklist-style review report grouped by severity (P0-P3)
+- For `depth:deep`, optional artifacts written to `.context/pwrl-review/<run_id>/`

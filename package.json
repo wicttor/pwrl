@@ -42,7 +42,8 @@
     "LICENSE"
   ],
   "scripts": {
-    "postinstall": "node ./bin/postinstall.js"
+    "postinstall": "node ./bin/postinstall.js",
+    "validate:skills": "node ./pwrl-standards/scripts/validate-skills.js"
   },
   "engines": {
     "node": ">=14.0.0"

@@ -546,7 +546,7 @@ When adapting, consider:
 
 Future enhancements:
 
-- `validate-skill.js` script to check schema compliance
+- `pwrl-standards/scripts/validate-skills.js` script to check schema compliance (`npm run validate:skills`)
 - `format-skill.js` to auto-format according to tone guidelines
 - Pre-commit hooks to enforce validation
 - CI/CD checks for pull requests

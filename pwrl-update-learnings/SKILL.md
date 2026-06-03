@@ -4,7 +4,7 @@ description: Update docs/learnings/INDEX.md from current learning documents, typ
 argument-hint: "[Optional: scope such as changed-only, full, or category]"
 ---
 
-# Update Learnings Index
+# PWRL Update Learnings
 
 Keep `docs/learnings/INDEX.md` synchronized with the current learning documents.
 

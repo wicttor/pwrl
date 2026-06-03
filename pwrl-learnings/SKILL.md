@@ -1,9 +1,10 @@
 ---
 name: pwrl-learnings
 description: Document a recently solved problem or insight while context is fresh
+argument-hint: "[Optional: brief context about what was learned]"
 ---
 
-# /pwrl-learnings
+# PWRL Learnings
 
 Capture learnings, problems solved, and insights in a structured format for future reference.
 

@@ -1,6 +1,6 @@
 ---
 name: pwrl-plan
-description: "Create structured implementation plans for any task. Supports three tiers: Fast (lightweight), Standard (technical), and Deep (high-confidence/risky)."
+description: "Create structured implementation plans for any task. Supports three tiers: Fast (lightweight), Standard (technical), and Deep (high-confidence/risky). Automatically routes to agent (pwrl-planner.agent.md) when available; falls back to monolithic workflow otherwise."
 argument-hint: "[task description, requirements doc, or goal to plan]"
 ---
 
@@ -9,6 +9,52 @@ argument-hint: "[task description, requirements doc, or goal to plan]"
 **Note: The current year is 2026.**
 
 This skill defines **HOW** to build a solution. It produces a durable implementation plan that can be handed off for execution. When invoked, always stay in the planning workflow—if the input is unclear, ask clarifying questions rather than abandoning the task.
+
+---
+
+## Agent vs. Fallback Routing
+
+This skill intelligently routes between two paths depending on system configuration:
+
+### Path 1: Agent-Enhanced (Recommended)
+- **Condition:** `.agents/agents/pwrl-planner.agent.md` exists AND agents are enabled in system configuration
+- **Behavior:** Delegates to the pwrl-planner.agent.md orchestrator, which calls micro-skills (pwrl-plan-scope, pwrl-plan-research, pwrl-plan-design, pwrl-plan-generate) in sequence with phase-by-phase feedback
+- **Checkpoint:** User can review and adjust each phase before proceeding
+- **Log:** "ℹ️  Agents detected — delegating to pwrl-planner.agent.md"
+
+### Path 2: Monolithic Fallback (Always Works)
+- **Condition:** Agents unavailable, agent file missing, or agent invocation fails
+- **Behavior:** Runs the original Phase 1-4 workflow inline (see below)
+- **Checkpoint:** Same checkpoints, all within this skill
+- **Log:** "ℹ️  Agents not available — running monolithic planning workflow"
+
+### How Agent Detection Works
+
+```
+if (.agents/agents/pwrl-planner.agent.md exists) AND (agents enabled in config) {
+  call agent → if successful, return agent output
+  if agent fails → log error → fall back to monolithic
+} else {
+  run monolithic fallback inline
+}
+```
+
+### How to Enable the Agent Path
+1. Ensure `.agents/agents/pwrl-planner.agent.md` exists
+2. Enable agents in system configuration
+3. Call `/pwrl-plan [task]` — should detect and delegate
+4. If still running fallback, verify agent file and system agent settings
+
+### Troubleshooting
+
+| Symptom                      | Likely Cause                | Fix                                      |
+| ---------------------------- | --------------------------- | ---------------------------------------- |
+| Always runs fallback         | Agent file missing          | Create `.agents/agents/pwrl-planner.agent.md` |
+| Always runs fallback         | Agents disabled in config   | Enable agents in system settings         |
+| Agent fails; fallback runs   | Agent has errors            | Check agent file for syntax or logic bugs|
+| Both paths fail              | Invalid input or state      | Check error logs; simplify task input    |
+
+---
 
 ## Interaction Method
 
@@ -51,7 +97,9 @@ Choose the appropriate tier based on task complexity and risk:
 
 ---
 
-## Workflow
+## Fallback Workflow (Monolithic Path)
+
+The following workflow is used when the agent path is unavailable. It preserves the original complete Phase 1-4 planning logic inline, ensuring planning always works regardless of system configuration.
 
 ### Phase 1: Context & Scope
 
@@ -105,3 +153,17 @@ Choose the appropriate tier based on task complexity and risk:
 3. **Decisions, Not Code**: Capture boundaries, approach, and logic; leave variable naming and syntax to implementation phase
 4. **Research First**: If the codebase lacks local patterns for the task, always perform external research before finalizing
 5. **Right-Size**: Small tasks get short plans; complex work gets more structure; don't over-plan simple tasks
+
+---
+
+## Agent Detection & Delegation Summary
+
+For operators/advanced users:
+
+- This skill checks `.agents/agents/pwrl-planner.agent.md` exists and system agents are enabled
+- If yes: Delegates to agent, which calls micro-skills (pwrl-plan-scope → pwrl-plan-research → pwrl-plan-design → pwrl-plan-generate)
+- If no: Runs monolithic fallback (all phases inline)
+- If agent call fails: Catches error gracefully and runs monolithic fallback
+- No configuration needed: Detection is automatic on every invocation
+
+For details on agent behavior, see `.agents/agents/pwrl-planner.agent.md`. For micro-skill behavior, see individual skill files (`pwrl-plan-*`).

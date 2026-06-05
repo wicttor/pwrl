@@ -37,6 +37,15 @@ This document contains the full templates for the three planning tiers supported
   - **Files:** `path/to/file`
   - **Approach:** [Brief technical note]
   - **Verification:** [How to confirm it works]
+
+## Related Learnings
+
+- **[Learning Title]** — `docs/learnings/XXX.md` — [1-line applicability note]
+- (List relevant entries from `docs/learnings/INDEX.md`; if none apply, state "No relevant learnings found")
+
+## Learning Gaps
+
+- [Any gap identified during planning that should be documented after implementation via `/pwrl-learnings`]
 ```
 
 ### Example
@@ -123,6 +132,15 @@ Validate email format on signup form before submission.
 - API compatibility or breaking changes
 - Performance implications
 - Security considerations
+
+## Related Learnings
+
+- **[Learning Title]** — `docs/learnings/XXX.md` — [1-line applicability note]
+- (List relevant entries from `docs/learnings/INDEX.md`; if none apply, state "No relevant learnings found")
+
+## Learning Gaps
+
+- [Any gap identified during planning that should be documented after implementation via `/pwrl-learnings`]
 ```
 
 ### Example
@@ -308,6 +326,15 @@ User Input → Validation → Processing → Storage → Event Bus → Notificat
 - Data migration: [Steps to migrate existing data]
 - Rollback plan: [How to safely revert if issues arise]
 - Performance baseline: [Expected throughput, latency targets]
+
+## Related Learnings
+
+- **[Learning Title]** — `docs/learnings/XXX.md` — [1-line applicability note]
+- (List relevant entries from `docs/learnings/INDEX.md`; if none apply, state "No relevant learnings found")
+
+## Learning Gaps
+
+- [Any gap identified during planning that should be documented after implementation via `/pwrl-learnings`]
 
 ````
 
@@ -497,3 +524,44 @@ Start
 - Fast: <1 hour to plan, <1 day to implement
 - Standard: 1-2 hours to plan, 1-5 days to implement
 - Deep: 2-4 hours to plan, 1-3 weeks to implement (often phased)
+
+---
+
+## Template Usage Rules
+
+### Required Sections Per Tier
+
+| Section                          | Fast | Standard | Deep |
+| -------------------------------- | :--: | :------: | :--: |
+| Goal / Overview                  | ✅   | ✅       | ✅   |
+| Implementation Units             | ✅   | ✅       | ✅   |
+| Related Learnings                | ✅   | ✅       | ✅   |
+| Learning Gaps                    | ✅   | ✅       | ✅   |
+| Key Technical Decisions          |      | ✅       | ✅   |
+| System-Wide Impact               |      | ✅       | ✅   |
+| Test Scenarios (per unit)        |      | ✅       | ✅   |
+| High-Level Technical Design      |      |          | ✅   |
+| Alternative Approaches           |      |          | ✅   |
+| Risk Analysis & Mitigation       |      |          | ✅   |
+| Operational / Rollout Notes      |      |          | ✅   |
+
+### File Path Requirements
+
+- All file paths in plans must be **repository-relative** (e.g., `src/main.js`, `docs/plans/YYYY-MM-DD-NNN-name.md`)
+- Never use absolute paths (e.g., `/home/user/project/src/main.js`)
+- Use backtick inline code formatting for file paths: `` `path/to/file` ``
+
+### Learnings Embedding Rules
+
+- Every plan **must** include a `## Related Learnings` section
+- Scan `docs/learnings/INDEX.md` for relevant entries
+- Include file path and a 1-line applicability rationale per learning
+- If no relevant learnings exist, state: "No relevant learnings found"
+- Add a `## Learning Gaps` section for areas where knowledge is missing but needed
+- Learning gaps should include a follow-up action to document via `/pwrl-learnings`
+
+### Naming Convention
+
+- Plan files: `docs/plans/YYYY-MM-DD-NNN-<kebab-case-name>.md`
+- U-ID format: `U1`, `U2`, ... `UX` (never renumber)
+- Frontmatter: `id`, `status`, `tier`, `created`, `updated` fields required

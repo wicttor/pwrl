@@ -55,6 +55,19 @@ pwrl init
 | **`/pwrl-update-learnings`**  | Sync learnings index              | After session commit       |
 | **`/pwrl-end-session`**       | Clean commits                     | End of every session       |
 
+### Planning Micro-Skills (Internal)
+
+When agents are enabled, `/pwrl-plan` orchestrates four micro-skills in sequence:
+
+| Micro-Skill              | Phase | Purpose                                   |
+| ------------------------ | ----- | ----------------------------------------- |
+| **`pwrl-plan-scope`**    | S2    | Gather context, validate domain           |
+| **`pwrl-plan-research`** | S3    | Discover patterns, detect high-risk areas |
+| **`pwrl-plan-design`**   | S4    | Decompose into implementation units       |
+| **`pwrl-plan-generate`** | S5    | Select tier, render plan, save to docs    |
+
+**Note:** Micro-skills are called automatically by `pwrl-plan` when agents are enabled. They can also be called directly if agents are unavailable. Users typically call `/pwrl-plan` only.
+
 ---
 
 ## Workflow

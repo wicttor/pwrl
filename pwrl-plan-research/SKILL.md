@@ -88,22 +88,7 @@ This findings object is passed to `pwrl-plan-design` (S4) for the design phase.
 
 ### Step 2: High-Risk Area Detection
 
-1. Scan the task description and scoped context for high-risk keywords:
-
-   | Area            | Keywords                                       |
-   | --------------- | ---------------------------------------------- |
-   | Security        | auth, jwt, oauth, session, encryption, ssl     |
-   | Payments        | payment, billing, stripe, checkout, invoice    |
-   | APIs            | api, rest, graphql, endpoint, integration      |
-   | Migrations      | migration, upgrade, data, schema, version      |
-   | Complex Logic   | algorithm, analysis, processing, computation   |
-   | Infrastructure  | deploy, kubernetes, docker, scaling, network   |
-
-2. If any keyword matches, set `high_risk_detected: true`.
-3. Map risk level:
-   - HIGH: 2+ high-risk areas OR security/payments/infrastructure
-   - MEDIUM: 1 high-risk area that's not security/payments
-   - LOW: No high-risk areas detected
+Scan the task description and scoped context for high-risk keywords across six areas: Security, Payments, APIs, Migrations, Complex Logic, and Infrastructure. For details on the risk keyword table, area definitions, and heuristics for assigning risk levels, see **[high-risk-detection.md](references/high-risk-detection.md)**.
 
 ### Step 3: External Research Decision
 
@@ -121,20 +106,7 @@ This findings object is passed to `pwrl-plan-design` (S4) for the design phase.
 
 ### Step 4: External Research Guidance (if needed)
 
-1. Generate a targeted librarian or web search query:
-   - Include the specific area (e.g., "payment gateway")
-   - Include the tech stack context (e.g., "node.js express")
-   - Include scope (e.g., "best practices", "patterns", "migration guide")
-2. Provide the guidance as a runnable command:
-   ```
-   /librarian "oauth2 implementation patterns javascript 2024"
-   ```
-   or
-   ```
-   Web search: "payment gateway stripe integration node.js best practices"
-   ```
-3. If the librarian skill is expected to be available, mention its usage explicitly.
-4. If librarian is unavailable, suggest manual external research with the query.
+Generate targeted librarian or web search queries when external research is recommended. For query templates, formatting guidance, and examples for each high-risk area, see **[external-research-guidance.md](references/external-research-guidance.md)**.
 
 ### Step 5: Technical Constraints Gathering
 
@@ -158,56 +130,11 @@ This findings object is passed to `pwrl-plan-design` (S4) for the design phase.
 
 ## Edge Cases
 
-### 1. No local patterns found (zero examples)
-- Set confidence to LOW.
-- If high-risk: external research is strongly recommended.
-- If low-risk: proceed; note "No local patterns found; design from scratch."
-
-### 2. Conflicting patterns
-- If two different approaches exist for the same concept (e.g., `auth/jwt.ts` and `auth/session.ts`), document both.
-- Note the inconsistency for the design phase.
-
-### 3. Missing tech stack info
-- No `package.json`, `composer.json`, etc. found.
-- Document: "Tech stack auto-detection failed. Verify manually."
-- Suggest user provide tech stack details.
-
-### 4. User declines external research for high-risk task
-- Proceed with local findings.
-- Add a risk note: "External research was declined. Risk: HIGH. Proceed with caution."
-- The design phase (S4) should consider this risk.
-
-### 5. Two conflicting high-risk areas
-- Example: "migrate payment system" (payments + migration = 2 high-risk areas)
-- Risk level: HIGH (multiple high-risk areas)
-- External research strongly recommended for each area.
-
-### 6. Librarian/web search unavailable
-- Fall back: Provide the search query as a suggestion for the user to run manually.
-- Document: "Automated external research unavailable. Suggested manual query: [query]"
-
-### 7. Research context too large
-- If many patterns found (10+), summarize the top 5 most relevant.
-- Note: "[count] patterns found; showing most relevant."
+Seven edge cases encountered during research: no local patterns found, conflicting local patterns, missing tech stack info, user declining external research on high-risk tasks, multiple high-risk areas, unavailable librarian/search, and overwhelming pattern count. For decision trees, handling strategies, and examples, see **[edge-cases.md](references/edge-cases.md)**.
 
 ## State Passing (to S4: pwrl-plan-design)
 
-After completing this skill, the research findings object is passed to `pwrl-plan-design`. The findings use a simple markdown format with a YAML frontmatter section (see "Output: Research Findings" above).
-
-**Schema contract (stable):**
-
-| Field                     | Type    | Required | Description                                       |
-| ------------------------- | ------- | -------- | ------------------------------------------------- |
-| `patterns_found`          | array   | yes      | File paths and descriptions of local patterns      |
-| `high_risk_detected`      | boolean | yes      | Whether high-risk areas were identified            |
-| `risk_level`              | string  | yes      | "HIGH", "MEDIUM", or "LOW"                         |
-| `external_research_needed`| boolean | yes      | Whether external research is recommended           |
-| `tech_stack`              | object  | yes      | Tech stack versions and libraries found            |
-| `external_guidance`       | string  | no       | Librarian query or web search guidance             |
-| `technical_constraints`   | array   | yes      | List of constraints found or gathered              |
-| `findings_summary`        | string  | yes      | 2-3 sentence summary                               |
-
-**Versioning:** Fields will only be added, never removed or renamed. Downstream skills should handle extra fields gracefully.
+Research findings are passed to `pwrl-plan-design` in markdown format with YAML frontmatter. Downstream skills read it from memory or from `docs/plans/.research/YYYY-MM-DD-NNN-research.md`. For detailed schema documentation, field reference, storage conventions, and versioning rules, see **[state-schema.md](references/state-schema.md)**.
 
 ## References
 

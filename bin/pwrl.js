@@ -227,6 +227,36 @@ async function initProject() {
       console.error(`✗ Failed to copy skills to ${skillsPath}/:`, err.message);
     }
 
+    // Copy agents to .agents/agents/
+    try {
+      const agentsPath = path.join(cwd, '.agents', 'agents');
+      const bundledAgentsPath = path.join(PWRL_DIR, '.agents', 'agents');
+
+      if (fs.existsSync(bundledAgentsPath)) {
+        if (!fs.existsSync(agentsPath)) {
+          fs.mkdirSync(agentsPath, { recursive: true });
+          console.log('✓ Created .agents/agents/');
+        }
+
+        function copyRecursiveSync(src, dest) {
+          const stat = fs.statSync(src);
+          if (stat.isDirectory()) {
+            if (!fs.existsSync(dest)) fs.mkdirSync(dest);
+            fs.readdirSync(src).forEach(child => {
+              copyRecursiveSync(path.join(src, child), path.join(dest, child));
+            });
+          } else {
+            fs.copyFileSync(src, dest);
+          }
+        }
+
+        copyRecursiveSync(bundledAgentsPath, agentsPath);
+        console.log('✓ Copied agents to .agents/agents/');
+      }
+    } catch (err) {
+      console.error(`✗ Failed to copy agents:`, err.message);
+    }
+
     // Save configuration
     const config = {
       version: '1.0',
@@ -270,10 +300,11 @@ async function initProject() {
     console.log('    learnings/     (categorized knowledge capture)');
     console.log('    plans/         (implementation plans)');
     console.log('    tasks/         (executable task files)');
-    console.log(`  ${skillsPath}/   (PWRL skills)\n`);
+    console.log(`  ${skillsPath}/   (PWRL skills)`);
+    console.log('  .agents/agents/  (PWRL agents - orchestrators)\n');
     console.log('Next steps:');
-    console.log('  1. Start using PWRL skills in your AI assistant');
-    console.log('  2. Run: /pwrl-plan <your task description>');
+    console.log('  1. Enable agents in your AI assistant (see INSTALLATION.md)');
+    console.log('  2. Start using PWRL skills: /pwrl-plan <your task description>');
     console.log('  3. See QUICKSTART.md for example workflows\n');
     console.log('Documentation:');
     console.log('  pwrl docs    Open documentation');

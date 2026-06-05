@@ -780,6 +780,97 @@ Human: /pwrl-end-session
 
 ---
 
+## Agent Development
+
+PWRL includes pre-built agents for orchestrating complex workflows. Agents are optional but recommended for their superior UX with phase checkpoints and state management.
+
+### Understanding Agents
+
+**What agents do:**
+
+- Orchestrate multi-phase workflows (e.g., planning, review)
+- Collect user feedback at strategic checkpoints
+- Manage state between skill invocations
+- Provide better UX than inline skill calls
+- Enable complex conditional logic
+
+**What agents aren't:**
+
+- Required (all PWRL workflows have fallback implementations)
+- Platform-specific (PWRL agents are framework-agnostic)
+- Replacement for skills (agents orchestrate skills)
+
+### Built-In Agents
+
+**PWRL Planner Agent** (`.agents/agents/pwrl-planner.agent.md`)
+
+Orchestrates the planning workflow:
+1. Scope Gathering → `pwrl-plan-scope`
+2. Research & Findings → `pwrl-plan-research`
+3. Design & Units → `pwrl-plan-design`
+4. Plan Generation → `pwrl-plan-generate`
+
+Each phase has a user checkpoint for review/adjustment before proceeding.
+
+**Usage:**
+```bash
+# When agents enabled in your platform:
+/pwrl-plan [task description]
+
+# Automatically routes to PWRL Planner Agent
+# Without agents, runs inline fallback
+```
+
+### Creating Custom Agents
+
+Agent files follow YAML frontmatter + Markdown format (`.agents/agents/NAME.agent.md`):
+
+```markdown
+---
+name: "Agent Name"
+role: Agent Role
+description: "What the agent does"
+model: Auto
+version: 1.0
+tools: [read, write, bash, grep, find]
+---
+
+# Agent Instructions
+
+Clear, imperative instructions for the agent...
+```
+
+**Best practices:**
+
+1. **Document state clearly** — Define what state passes between phases
+2. **Explicit checkpoints** — Ask user at decision points
+3. **Graceful fallback** — Handle user cancellations/edits
+4. **Reuse skills** — Call existing skills rather than reimplementing
+5. **Keep it focused** — One agent per workflow type
+6. **Test thoroughly** — Walk through multiple scenarios
+
+### Debugging Agents
+
+| Symptom                  | Likely Cause              | Fix                           |
+| ------------------------ | ------------------------- | ----------------------------- |
+| Agent not discovered     | File in wrong path        | Verify `.agents/agents/` path |
+| Agent fails silently      | YAML syntax error         | Check frontmatter formatting  |
+| Phase doesn't complete   | Missing skill call        | Verify skill is available     |
+| User sees no checkpoints | Missing ask_user calls    | Add explicit user decisions   |
+| State lost between calls | State not being passed    | Explicitly pass state forward |
+
+### Examples
+
+See `.agents/agents/pwrl-planner.agent.md` for a complete working example of:
+
+- Phase-by-phase orchestration
+- User checkpoints with multiple-choice questions
+- State management across phases
+- Graceful error handling
+- Skill invocation and result integration
+
+---
+
 ## Team Adoption
 
 ### Individual Developer

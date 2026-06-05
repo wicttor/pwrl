@@ -57,16 +57,23 @@ pwrl init
 
 ### Planning Micro-Skills (Internal)
 
-When agents are enabled, `/pwrl-plan` orchestrates four micro-skills in sequence:
+When agents are enabled, `/pwrl-plan` delegates to the **PWRL Planner Agent**, which orchestrates four micro-skills in sequence with user feedback at each phase:
 
 | Micro-Skill              | Phase | Purpose                                   |
 | ------------------------ | ----- | ----------------------------------------- |
-| **`pwrl-plan-scope`**    | S2    | Gather context, validate domain           |
-| **`pwrl-plan-research`** | S3    | Discover patterns, detect high-risk areas |
-| **`pwrl-plan-design`**   | S4    | Decompose into implementation units       |
-| **`pwrl-plan-generate`** | S5    | Select tier, render plan, save to docs    |
+| **`pwrl-plan-scope`**    | S1    | Gather context, validate domain           |
+| **`pwrl-plan-research`** | S2    | Discover patterns, detect high-risk areas |
+| **`pwrl-plan-design`**   | S3    | Decompose into implementation units       |
+| **`pwrl-plan-generate`** | S4    | Select tier, render plan, save to docs    |
 
-**Note:** Micro-skills are called automatically by `pwrl-plan` when agents are enabled. They can also be called directly if agents are unavailable. Users typically call `/pwrl-plan` only.
+**How it works:**
+
+- **With Agents Enabled:** `/pwrl-plan [task]` → PWRL Planner Agent orchestrates phases 1-4 automatically, collecting user approval at each checkpoint
+- **Without Agents (Fallback):** `/pwrl-plan [task]` → Runs all phases inline within the main workflow
+
+**Setup:** See [INSTALLATION.md](INSTALLATION.md#agent-setup) for enabling agents on your platform.
+
+**Note:** Micro-skills can also be called directly (e.g., `/pwrl-plan-scope`) if agents are unavailable or you need fine-grained control. However, most users invoke `/pwrl-plan` only, and agent routing happens automatically.
 
 ---
 

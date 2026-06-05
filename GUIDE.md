@@ -98,8 +98,123 @@ When you need deeper guidance:
 ```
 1. Read SKILL.md → Understand workflow
 2. Execute workflow → Follow steps
+3. Consult references/ as needed → Deep dives
+```
+
+---
+
+## Planning with pwrl-plan
+
+The planning workflow is the foundation of PWRL. Understanding how it works helps you create better plans and use the framework more effectively.
+
+### Planning Tiers
+
+Plans are tailored to task complexity using three tiers:
+
+**Fast (5-15 min):** Small, well-understood tasks with clear scope and low risk
+
+- 1-3 files affected
+- No major architectural decisions
+- Examples: bug fixes, documentation updates, small tweaks
+
+**Standard (30-45 min):** Most software features with moderate complexity
+
+- 4-8 files affected
+- 2-5 key technical decisions
+- Examples: new features, API integrations, auth flows
+
+**Deep (1-2 hours):** Complex, high-risk work requiring extensive design
+
+- 9+ files affected
+- 5+ technical decisions or cross-cutting impact
+- Examples: security overhauls, payment systems, major migrations
+
+See `pwrl-plan/references/planning-tiers.md` for detailed tier descriptions and decision criteria.
+
+### Planning Workflow (Four Phases)
+
+When you call `/pwrl-plan`, the workflow proceeds in four phases:
+
+**Phase 1: Scope Gathering** (`pwrl-plan-scope`)
+
+- Check for existing plans
+- Search for related documentation and learnings
+- Validate domain (software vs. non-software)
+- Bootstrap problem frame, intended behavior, success criteria
+
+**Phase 2: Research & Findings** (`pwrl-plan-research`)
+
+- Discover local patterns and tech stack
+- Detect high-risk areas (security, payments, APIs, migrations)
+- Recommend external research if needed
+- Document constraints and patterns found
+
+**Phase 3: Design & Units** (`pwrl-plan-design`)
+
+- Decompose work into stable implementation units (U1, U2, ... UX)
+- Define dependencies and acceptance criteria
+- Optionally generate Mermaid diagrams
+- Determine complexity hint (Fast/Standard/Deep)
+
+**Phase 4: Plan Generation** (`pwrl-plan-generate`)
+
+- Select tier based on complexity
+- Render plan from appropriate template
+- Embed related learnings and learning gaps
+- Save to `docs/plans/YYYY-MM-DD-NNN-<name>.md`
+
+Each phase has a user checkpoint for review and adjustment before proceeding.
+
+### Agent-Enhanced vs. Fallback
+
+The planning workflow can run in two modes:
+
+**Agent-Enhanced (Recommended):**
+
+- `.agents/agents/pwrl-planner.agent.md` orchestrates all four phases
+- Clear phase boundaries with checkpoints
+- Can iterate within each phase before moving forward
+- Better user experience with staged feedback
+
+**Monolithic Fallback:**
+
+- All four phases run within `pwrl-plan` when agents unavailable
+- Same checkpoints and logic, all inline
+- Guaranteed to work regardless of system configuration
+- See `pwrl-plan/references/fallback-workflow.md` for complete Phase 1-4 logic
+
+### Best Practices for Planning
+
+1. **Answer questions fully:** When the planning skill asks questions, provide context. Short answers lead to shallow plans.
+2. **Be honest about risk:** If an area feels risky, flag it. The plan will include risk mitigation.
+3. **Leverage learnings:** Review existing learnings before planning. Reuse proven approaches rather than reinventing.
+4. **Research unfamiliar patterns:** If the codebase has <3 examples of a pattern you need, run external research. It's worth the time.
+5. **Don't over-plan:** Small tasks don't need Deep tier plans. Match tier to complexity to save time.
+6. **Document gaps:** If important knowledge is missing, add a learning gap to the plan. Document it after implementation via `/pwrl-learnings`.
+7. **Stable unit IDs:** Once a plan is created, unit IDs (U1, U2, ...) are anchors. If you need to adjust, keep the same IDs; don't renumber.
+
+### Plan Quality Checklist
+
+A good plan includes:
+
+- ✅ Clear problem statement and intended behavior
+- ✅ 1-3 specific, measurable success criteria
+- ✅ Implementation units with dependencies and acceptance criteria
+- ✅ Files to create/modify/test per unit
+- ✅ Key technical decisions with rationale (Standard/Deep)
+- ✅ Risk analysis and mitigation (Deep)
+- ✅ Related learnings with applicability notes
+- ✅ Learning gaps flagged for post-implementation documentation
+
+If your plan is missing any of these, re-run the planning workflow with more detail.
+
+---
+
+## Using Support Files Effectively
+
 3. Check references/ → When you need specifics
 4. Return to SKILL.md → Continue workflow
+
 ```
 
 This pattern keeps you focused on execution while detail is available on-demand.
@@ -345,6 +460,7 @@ PWRL's review and verification steps ensure:
 **Problem:**
 
 ```
+
 Human: Add user authentication
 Agent: [writes code without planning]
 Human: That broke registration
@@ -354,11 +470,13 @@ Agent: [fixes tests]
 Human: Wait, we need password reset too
 Agent: [adds more code]
 [Session ends, context lost, no documentation]
+
 ```
 
 **Solution:**
 
 ```
+
 Human: /pwrl-plan Add user authentication system
 [Plan created with JWT decision, all flows, tests]
 Human: /pwrl-work
@@ -367,6 +485,7 @@ Human: /pwrl-learnings
 [Document JWT patterns learned]
 Human: /pwrl-end-session
 [Clean commit with context]
+
 ```
 
 ---
@@ -476,7 +595,9 @@ Human: /pwrl-end-session
 **Example:**
 
 ```
+
 /pwrl-plan Add loading spinner to submit button
+
 ```
 
 ---
@@ -501,7 +622,9 @@ Human: /pwrl-end-session
 **Example:**
 
 ```
+
 /pwrl-plan Implement user authentication with JWT
+
 ```
 
 ---
@@ -527,8 +650,10 @@ Human: /pwrl-end-session
 **Example:**
 
 ```
+
 /pwrl-plan Migrate database from MongoDB to PostgreSQL
-```
+
+````
 
 ---
 
@@ -691,7 +816,7 @@ Cross-reference related learnings:
 
 - [JWT token rotation](technical-fix/jwt-rotation-2026-04-15.md)
 - [Auth middleware pattern](pattern/auth-middleware-2026-04-10.md)
-```
+````
 
 ### Plan Templates
 

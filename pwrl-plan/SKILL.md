@@ -4,7 +4,7 @@ description: "Create structured implementation plans with three tiers (Fast/Stan
 argument-hint: "[task description, requirements doc, or goal to plan]"
 ---
 
-# Universal Planner
+# PWRL Plan
 
 Create durable implementation plans that can be handed off for execution. When invoked, stay in the planning workflow—if input is unclear, ask clarifying questions rather than abandoning the task.
 

@@ -60,6 +60,10 @@ Documentation:
   ${isGlobal ? '$ pwrl info' : '$ npx pwrl info'}          Show skill locations
   ${isGlobal ? '$ pwrl help' : '$ npx pwrl help'}          Show CLI help
 
+Agents (Optional):
+  PWRL includes pre-built agents for advanced orchestration. After initialization,
+  agents in .agents/agents/ will be auto-discovered by your AI platform.
+
 Quick Start:
   See QUICKSTART.md for example workflows
   Read GUIDE.md for best practices

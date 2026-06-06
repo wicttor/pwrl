@@ -19,6 +19,27 @@ pwrl init
 # - GitHub Issues integration (optional)
 ```
 
+### Enable Agents (Recommended)
+
+For advanced orchestration with agent-based planning:
+
+**GitHub Copilot (VS Code):**
+
+1. Enable "GitHub Copilot: Agents" in VS Code settings
+2. Restart VS Code
+3. Agents in `.agents/agents/` will auto-discover
+
+**Cursor:**
+
+1. Cursor auto-discovers agents in `.agents/agents/`
+
+**Claude (Desktop/Web):**
+
+1. Create a Claude Project including `.agents/agents/` folder
+2. Agents will be available in that project
+
+See [INSTALLATION.md](INSTALLATION.md#agent-setup) for complete setup instructions.
+
 ## Core Workflow
 
 **Simple (Direct):**
@@ -26,6 +47,34 @@ pwrl init
 ```
 Problem → /pwrl-plan → /pwrl-work → /pwrl-review → /pwrl-learnings → /pwrl-end-session
 ```
+
+**Agent-Based Planning (Recommended):**
+
+When agents are enabled, `/pwrl-plan` automatically delegates to the PWRL Planner Agent:
+
+```
+Problem → /pwrl-plan
+  │
+  ├─ Phase 1: Scope Gathering (pwrl-plan-scope)
+  │           ↓ [User confirms scope]
+  │
+  ├─ Phase 2: Research & Findings (pwrl-plan-research)
+  │           ↓ [User confirms research]
+  │
+  ├─ Phase 3: Design & Units (pwrl-plan-design)
+  │           ↓ [User confirms units]
+  │
+  ├─ Phase 4: Plan Generation (pwrl-plan-generate)
+  │           ↓ [User approves plan]
+  │
+  └─ Output: docs/plans/YYYY-MM-DD-NNN-<name>.md
+
+  → /pwrl-work → /pwrl-review → /pwrl-learnings → /pwrl-end-session
+```
+
+**Without Agents (Fallback):**
+
+If agents aren't available, `/pwrl-plan` runs all phases inline (same output, no agent orchestration).
 
 **Task-Based (Complex/Team):**
 
@@ -45,6 +94,10 @@ Problem → /pwrl-plan → /pwrl-tasks → /pwrl-work [task] → /pwrl-review �
 # 1. Plan the work
 /pwrl-plan Add user profile editing with validation
 
+# With agents enabled: Planner Agent orchestrates 4 phases with user checkpoints
+# Without agents: Runs inline in fallback mode
+# Either way: Creates docs/plans/YYYY-MM-DD-NNN-add-user-profile-editing.md
+
 # 2. Execute the plan
 /pwrl-work
 
@@ -61,6 +114,8 @@ Problem → /pwrl-plan → /pwrl-tasks → /pwrl-work [task] → /pwrl-review �
 **What happens:**
 
 - **Plan** creates structured implementation plan in `docs/plans/`
+  - If agents enabled: PWRL Planner Agent guides you through scope → research → design → generate phases
+  - If agents disabled: All phases run inline automatically
 - **Work** executes with test-first discipline, moves to for-review when done
 - **Review** checks correctness, security, quality; approves (done) or requests changes (back to in-progress)
 - **Learnings** documents solutions while context is fresh
@@ -208,44 +263,62 @@ Problem → /pwrl-plan → /pwrl-tasks → /pwrl-work [task] → /pwrl-review �
 
 ## Planning Tiers
 
-Choose the right planning depth:
+Choose the right planning depth based on scope and risk. Planning runs through a 4-phase workflow:
 
-### Fast (Small Tasks)
+1. **Scope** — Gather context and requirements
+2. **Research** — Discover patterns and inform decisions
+3. **Design** — Decompose work into implementation units
+4. **Generate** — Select tier and render final plan
+
+When agents are available, planning uses [pwrl-planner.agent.md](.agents/agents/pwrl-planner.agent.md) for checkpoints at each phase. Otherwise, planning runs a monolithic fallback workflow.
+
+### Fast Tier (1-3 files, LOW risk)
 
 ```bash
 /pwrl-plan Add loading spinner to submit button
 ```
 
-**Use for:**
+**Use when:**
 
-- 1-3 files
-- Clear approach
-- Low risk
+- 1-3 files affected
+- Clear, straightforward approach
+- Low risk (no security, performance, or stability concerns)
+- No unknowns
 
-### Standard (Default)
+**Typical timeline:** 5-15 minutes
+
+### Standard Tier (4-8 files, MEDIUM risk)
 
 ```bash
 /pwrl-plan Implement user authentication with JWT
 ```
 
-**Use for:**
+**Use when:**
 
-- Features with technical decisions
-- Moderate complexity
-- Some unknowns
+- 4-8 files affected
+- Technical decisions required
+- Moderate complexity with some unknowns
+- Medium risk (affects multiple features but contained impact)
 
-### Deep (High-Risk)
+**Typical timeline:** 30-45 minutes
+
+### Deep Tier (9+ files, HIGH risk)
 
 ```bash
 /pwrl-plan Migrate database from MongoDB to PostgreSQL
 ```
 
-**Use for:**
+**Use when:**
 
+- 9+ files affected
 - Architecture changes
-- Migrations
-- Security-critical areas
-- Cross-cutting concerns
+- Migrations or cross-cutting concerns
+- High risk (affects core systems, security, or user data)
+- Significant unknowns or experimental approaches
+
+**Typical timeline:** 1-2 hours
+
+**Tier Selection:** See [pwrl-plan/references/planning-tiers.md](pwrl-plan/references/planning-tiers.md) for decision heuristic and detailed tier guidelines.
 
 ---
 
@@ -420,16 +493,30 @@ Skills used: pwrl-plan, pwrl-work, pwrl-review, pwrl-learnings
 
 Many skills include detailed reference material in subdirectories:
 
-### pwrl-plan
+### pwrl-plan (Main Planning Orchestrator)
 
-- **Main workflow** ([SKILL.md](pwrl-plan/SKILL.md)): 100 lines covering planning tiers and workflow
-- **Detailed templates** ([references/plan-templates.md](pwrl-plan/references/plan-templates.md)): Full Fast/Standard/Deep plan templates with real-world examples
+- **Main workflow** ([SKILL.md](pwrl-plan/SKILL.md)): Planning entry point, routes to agent or monolithic fallback
+- **Planning tiers** ([references/planning-tiers.md](pwrl-plan/references/planning-tiers.md)): Tier selection heuristic, detailed tier descriptions, decision tree
+- **Plan templates** ([references/plan-templates.md](pwrl-plan/references/plan-templates.md)): Fast/Standard/Deep plan templates with real-world examples
+- **Agent routing** ([references/agent-routing.md](pwrl-plan/references/agent-routing.md)): Agent detection logic, enabling agent-enhanced path, troubleshooting
+- **Fallback workflow** ([references/fallback-workflow.md](pwrl-plan/references/fallback-workflow.md)): Complete 4-phase monolithic workflow (backup when agents unavailable)
+
+### pwrl-plan Micro-Skills (Phase-Specific)
+
+When `/pwrl-plan` routes through the agent, it calls these micro-skills automatically:
+
+- **pwrl-plan-scope** ([SKILL.md](pwrl-plan-scope/SKILL.md)): Phase 1 — Gather context and scope requirements
+- **pwrl-plan-research** ([SKILL.md](pwrl-plan-research/SKILL.md)): Phase 2 — Research patterns and high-risk areas
+- **pwrl-plan-design** ([SKILL.md](pwrl-plan-design/SKILL.md)): Phase 3 — Design decomposition and implementation units
+- **pwrl-plan-generate** ([SKILL.md](pwrl-plan-generate/SKILL.md)): Phase 4 — Generate final plan from templates
+
+**Note:** You don't call micro-skills directly. They're invoked automatically by `/pwrl-plan` through the agent orchestrator or fallback workflow.
 
 ### pwrl-learnings
 
 - **Main workflow** ([SKILL.md](pwrl-learnings/SKILL.md)): 135 lines covering 9-phase documentation process
 - **Schema** ([references/schema.yaml](pwrl-learnings/references/schema.yaml)): Frontmatter field definitions
-- **Categories** ([references/categories.md](pwrl-learnings/references/categories.md)): When to use each category
+- **Categories** ([references/categories.md](pwrl-learnings/references/categories.md)): When to use each category (pattern, technical-fix, gotcha, decision, gotcha, workflow)
 
 ### pwrl-refresh-learnings
 

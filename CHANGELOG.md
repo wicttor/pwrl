@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and this project adheres to Semantic Versioning.
 
+## [Unreleased]
+
+### Added
+
+- Added PWRL Planner Agent (`.agents/agents/pwrl-planner.agent.md`) for orchestrating planning workflow with phase checkpoints
+- Added agent routing documentation in `pwrl-plan/references/agent-routing.md` with detection logic and troubleshooting
+- Added agent setup instructions to INSTALLATION.md for GitHub Copilot, Cursor, Claude, and custom frameworks
+- Added agent-based planning examples to QUICKSTART.md showing phase-by-phase workflow with checkpoints
+- Added "Agent Development" section to GUIDE.md with best practices, debugging, and examples
+- Added agents folder copying to `pwrl init` CLI command — agents now auto-copy to `.agents/agents/`
+- Enhanced postinstall.js and pwrl.js to include agent setup guidance in initialization output
+
+### Changed
+
+- Updated README.md to clarify agent-enhanced planning flow and distinguish from fallback mode
+- Updated INSTALLATION.md directory structure to show `.agents/agents/` location
+- Enhanced `pwrl init` output to mention `.agents/agents/` folder and agent setup steps
+- Improved pwrl-plan documentation to emphasize agent routing with fallback guarantee
+
+### Documentation
+
+- Expanded planning documentation with clear explanation of agent orchestration
+- Added troubleshooting table for agent setup issues
+- Clarified when agents are enabled vs. when fallback runs
+- Added agent development guidelines for contributors
+
+---
+
 ## [1.0.6] - 2026-05-18
 
 ### Added

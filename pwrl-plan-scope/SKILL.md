@@ -103,16 +103,7 @@ If the user already provided rich context in the initial input, extract these fr
 
 ### Step 4: Learnings Index Gate
 
-1. Read `docs/learnings/INDEX.md`.
-2. Search entries for keywords matching the task description (problem, domain, technologies, patterns).
-3. **For each match:**
-   - Add to `Related Learnings` list with file path and 1-line applicability note
-   - Rate relevance: high / medium / low
-4. **Identify learning gaps:**
-   - If the task touches areas not covered by existing learnings, add a `Learning Gap` note
-   - Include a follow-up action to document via `/pwrl-learnings` during/after implementation
-   - Example: If task involves "deploying to Kubernetes" but no learning exists for Kubernetes patterns → gap
-5. If no relevant learnings found, set `Related Learnings` to empty and note "No relevant learnings found."
+Search project learnings (in `docs/learnings/INDEX.md`) for entries matching the task description. For details on keyword matching, relevance rating, gap identification, and examples, see **[learnings-gate-logic.md](references/learnings-gate-logic.md)**. Add HIGH and MEDIUM relevance learnings to `Related Learnings`; identify and document any learning gaps.
 
 ### Step 5: Requirements Search
 
@@ -136,59 +127,11 @@ If the user already provided rich context in the initial input, extract these fr
 
 ## Edge Cases
 
-### 1. Existing plan is outdated
-- Show a summary of the plan (title, date, status, goal)
-- Ask user to confirm: "This plan was created on [date]. Is it still relevant?"
-- Default to "Create New" if user is unsure
-
-### 2. Multiple existing plans found
-- List all found plans with their titles and dates
-- Ask user to select one or choose "None of these — create new"
-- If selected, treat as single existing plan (Step 1)
-
-### 3. No learnings indexed yet
-- `docs/learnings/INDEX.md` may have no entries (empty table)
-- Set `Related Learnings` to empty, note: "No learnings indexed yet — consider documenting via /pwrl-learnings"
-- Proceed normally; learning gaps will be identified during implementation
-
-### 4. No brainstorms/requirements directories
-- These directories may not exist in all projects
-- Silently skip search; set `Requirements Found` to empty
-- Proceed with bootstrap approach in Step 3
-
-### 5. User provides very vague input
-- Ask clarifying questions first (e.g., "Is this a new feature, a bug fix, or a refactor?")
-- If still unclear after 2 rounds, ask user to provide a written description or requirements doc
-- Do not proceed until Problem Frame is reasonably clear
-
-### 6. Non-software domain
-- Set `domain: non-software`
-- Explain: "This planning skill is designed for software engineering tasks. For non-software planning, consider a universal planning template instead."
-- Offer to proceed with a simplified generic context or exit
-
-### 7. Learning gaps identified
-- Include gap notes in the output
-- Suggest that downstream skills (especially pwrl-plan-generate) add a `Related Learnings` section with gap follow-ups
-- Gaps are not blockers; they are tracked for post-implementation documentation
+Seven edge cases commonly encountered during scope gathering: outdated existing plans, multiple plans found, no learnings indexed, missing requirement directories, vague user input, non-software domains, and learning gaps. For handling instructions, decision trees, and examples, see **[edge-cases.md](references/edge-cases.md)**.
 
 ## State Passing (to S3: pwrl-plan-research)
 
-After completing this skill, the scoped context object is passed to `pwrl-plan-research`. The context uses a simple markdown format with a YAML frontmatter section (see "Output: Scoped Context" above). Downstream skills read the file from memory or from a stored location at `docs/plans/.scope/YYYY-MM-DD-NNN-scope.md`.
-
-**Schema contract (stable):**
-
-| Field              | Type                       | Required | Description                              |
-| ------------------ | -------------------------- | -------- | ---------------------------------------- |
-| `domain`           | string                     | yes      | "software" or "non-software"             |
-| `problem`          | string                     | yes      | Problem frame statement                  |
-| `intended_behavior`| string                     | yes      | Desired outcome                          |
-| `success_criteria` | string[]                   | yes      | 1-3 success criteria                     |
-| `existing_plan`    | object {path, action}      | yes      | Path to existing plan or null            |
-| `related_learnings`| string[]                   | yes      | Learning file paths with applicability   |
-| `learning_gaps`    | string[]                   | yes      | Identified gaps with follow-up actions   |
-| `requirements`     | string[]                   | yes      | Found requirements/brainstorms excerpts  |
-
-**Versioning:** Fields will only be added, never removed or renamed. Downstream skills should handle extra fields gracefully.
+The scoped context object is passed to `pwrl-plan-research` in markdown format with YAML frontmatter. Downstream skills read it from memory or from `docs/plans/.scope/YYYY-MM-DD-NNN-scope.md`. For detailed schema documentation, field reference, storage conventions, and versioning rules, see **[state-schema.md](references/state-schema.md)**.
 
 ## References
 

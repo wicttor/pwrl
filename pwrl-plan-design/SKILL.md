@@ -89,17 +89,7 @@ The units object is passed to `pwrl-plan-generate` (S5) for plan rendering.
 
 ### Step 3: Implement U-ID Generator
 
-Stable U-ID rules:
-- Start at U1, increment sequentially (U1, U2, U3, ...)
-- Once assigned, a U-ID **never changes**, even if a unit is deleted or reordered
-- If a unit is deleted, its ID is retired (not reassigned)
-- New units added later get the next available ID (U{N+1})
-
-Implementation pattern:
-```
-current_id = 1
-for each unit: assign current_id++, never reuse retired IDs
-```
+Assign stable, sequential Unit Identifiers (U1, U2, U3, ...) to each unit. For the complete implementation pattern, stability rules (never reassign retired IDs), edge cases (deletion, merging, splitting), and best practices, see **[u-id-generator.md](references/u-id-generator.md)**.
 
 ### Step 4: Create Each Unit
 
@@ -140,17 +130,7 @@ The hint is advisory. The generate skill (S5) uses it for template selection. Th
 
 ### Step 7: Optional Mermaid Diagram
 
-1. Detect if diagram would be beneficial:
-   - 5+ units with complex interdependencies
-   - High-risk workflow that needs clarity
-   - User asks for a diagram
-2. Ask user: "Would you like a Mermaid diagram to visualize the workflow?"
-   - Options: Yes (sequence), Yes (state), Yes (flowchart), No
-3. If yes: Generate the diagram in Mermaid syntax.
-   - **Sequence diagram:** Best for workflow/interaction patterns between units
-   - **State diagram:** Best for stateful logic (auth, data lifecycle)
-   - **Flowchart:** Best for decision trees or branching workflows
-4. Include the diagram in the output.
+Detect if a diagram would add clarity (5+ units, complex interdependencies, high-risk workflow). For decision criteria, diagram type selection (sequence, state, flowchart), user prompts, and embedding instructions, see **[mermaid-diagram-guide.md](references/mermaid-diagram-guide.md)**.
 
 ### Step 8: Present and Confirm
 
@@ -163,55 +143,11 @@ The hint is advisory. The generate skill (S5) uses it for template selection. Th
 
 ## Edge Cases
 
-### 1. Non-software domain
-- Units will be generic (not code-focused)
-- Complexity hint: Fast (simpler to describe non-code work)
-- Skip Mermaid diagram (diagrams are for technical designs)
-
-### 2. User wants fewer/more units than estimated
-- Adjust flexibly; re-present for confirmation
-- If 16+ units: suggest splitting into sub-plans
-
-### 3. Unit deleted — ID retired
-- If user deletes U2, remaining units are U1, U3, U4, U5 (NOT U1, U2, U3, U4)
-- Document: "U2 was deleted — ID retired (never reassigned)"
-
-### 4. Circular dependencies
-- Detect cycles after all units defined
-- Prompt user to break the cycle
-- Offer: "U3 depends on U4 while U4 depends on U3. Choose one direction."
-
-### 5. User is unsure about approach for a unit
-- Offer to add a "Research" note within the unit
-- Suggest revisiting in the implementation phase
-
-### 6. Very large plan (16+ units)
-- Suggest splitting into sub-plans (multiple plan files)
-- Ask: "This looks like a large effort. Should we split into sub-plans?"
-
-### 7. User declines Mermaid diagram
-- Proceed without diagram
-- Set `diagram: null` in output
+Seven edge cases commonly encountered during design: non-software domains, user adjusting unit count, retired U-IDs, circular dependencies, user uncertainty about approach, very large plans, and declined diagrams. For handling strategies, decision trees, and examples, see **[edge-cases.md](references/edge-cases.md)**.
 
 ## State Passing (to S5: pwrl-plan-generate)
 
-After completing this skill, the implementation units object is passed to `pwrl-plan-generate`. The units use the markdown format defined in "Output: Implementation Units" above.
-
-**Schema contract (stable):**
-
-| Field              | Type    | Required | Description                                    |
-| ------------------ | ------- | -------- | ---------------------------------------------- |
-| `units`            | array   | yes      | Ordered list of implementation units           |
-| `units[].id`       | string  | yes      | U1, U2, ... UX (never renumber)                |
-| `units[].name`     | string  | yes      | Short descriptive name                         |
-| `units[].scope`    | string  | yes      | What this unit accomplishes                    |
-| `units[].files`    | object  | yes      | Files: create[], modify[], test[]              |
-| `units[].approach` | string  | yes      | High-level approach description                |
-| `units[].criteria` | array   | yes      | 1-3 specific acceptance criteria               |
-| `complexity_hint`  | string  | yes      | "fast", "standard", or "deep"                  |
-| `diagram`          | string  | no       | Mermaid diagram code (optional)                |
-
-**Versioning:** Fields will only be added, never removed or renamed. Downstream skills should handle extra fields gracefully.
+Implementation units are passed to `pwrl-plan-generate` in markdown format with YAML frontmatter. Downstream skills read it from memory or from `docs/plans/.design/YYYY-MM-DD-NNN-design.md`. For detailed schema documentation, field reference, storage conventions, and versioning rules, see **[state-schema.md](references/state-schema.md)**.
 
 ## References
 

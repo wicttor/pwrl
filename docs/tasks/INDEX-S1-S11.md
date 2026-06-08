@@ -21,7 +21,7 @@ This index documents 11 implementation tasks (S1-S11) for slicing the `pwrl-work
 | S5 | Extract Execute Logic (U4) | for-review | S1, S2, S3, S4 | pwrl-work-execute/SKILL.md | Very Large |
 | S6 | Extract Review Logic (U5) | for-review | S1, S5 | pwrl-work-review/SKILL.md | Large |
 | S7 | Extract Ship Logic (U6) | for-review | S1, S6 | pwrl-work-ship/SKILL.md | Large |
-| S8 | Create Orchestrator Agent | to-do | S2-S7 | agents/pwrl-work.agent.md | Large |
+| S8 | Create Orchestrator Agent | for-review | S2-S7 | agents/pwrl-work.agent.md | Large |
 | S9 | Update Fallback Logic | to-do | S1, S8 | pwrl-work/SKILL.md | Medium |
 | S10 | Update Documentation | to-do | S2-S9 | docs/examples/*.md | Medium |
 | S11 | Integration Testing | to-do | S8, S9, S10 | tests/pwrl-work/** | Very Large |

@@ -1,7 +1,7 @@
 ---
 unit-id: S10
 plan: docs/plans/2026-06-05-002-slice-pwrl-work-skill.md
-status: to-do
+status: for-review
 created: 2026-06-05
 dependencies: [S2, S3, S4, S5, S6, S7, S8, S9]
 files:

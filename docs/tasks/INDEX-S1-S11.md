@@ -24,7 +24,7 @@ This index documents 11 implementation tasks (S1-S11) for slicing the `pwrl-work
 | S8 | Create Orchestrator Agent | for-review | S2-S7 | agents/pwrl-work.agent.md | Large |
 | S9 | Update Fallback Logic | for-review | S1, S8 | pwrl-work/SKILL.md | Medium |
 | S10 | Update Documentation | for-review | S2-S9 | docs/examples/*.md | Medium |
-| S11 | Integration Testing | to-do | S8, S9, S10 | tests/pwrl-work/** | Very Large |
+| S11 | Integration Testing | for-review | S8, S9, S10 | tests/pwrl-work/** | Very Large |
 
 ---
 

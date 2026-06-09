@@ -198,45 +198,21 @@ planningRecommended: false
 
 ## Error Handling
 
-### Task File Not Found
-- Log: `Task file not found at [path]`
-- Ask user: "The file `[path]` does not exist. Would you like to provide a different path, or create a new task?"
+| Scenario | Handling |
+|---|---|
+| Task file not found | Log path; ask user: "Provide a different path or create a new task?" |
+| Plan file not found | Log path; ask user: "Provide a different path or use /pwrl-plan?" |
+| Circular dependencies | Walk dep tree; fail with `Circular: [A→B→C→A]`; ask user to resolve |
+| Missing dependencies | Log; add to `blockedBy`; warn: "Not found in INDEX. Proceeding may cause ordering issues." |
+| Input is empty | Ask user: "What would you like to work on?" |
+| File unreadable | Log error; ask user: "Cannot read file. Retry or provide different path?" |
+| Malformed frontmatter | Log details; ask user to fix frontmatter and retry |
+| Complexity is `large` (bare prompt) | Warn; require user confirmation before proceeding |
+| Task references non-existent plan | Warn; proceed with caution |
 
-### Plan File Not Found
-- Log: `Plan file not found at [path]`
-- Ask user: "The plan at `[path]` does not exist. Would you like to provide a different path or create a new plan with `/pwrl-plan`?"
+**Retry limit:** 3 attempts per operation, then ask user to fix manually.
 
-### Circular Dependencies
-- Detect: Walk dependency tree; if a unit-id appears twice → circular
-- Fail with: `Circular dependency detected: [A → B → C → A]`
-- Ask user to resolve the circular reference before proceeding
-
-### Missing Dependencies
-- Log: `Dependency [unit-id] not found in INDEX`
-- Add to `blockedBy` as `missing: [unit-id]`
-- Warn: "Task depends on [unit-id] which was not found in the task index. Proceeding may cause ordering issues."
-
----
-
-## Quality Gates
-
-**❌ Fail if:**
-- Input is completely empty (ask user for input)
-- Circular dependencies prevent safe execution
-- Task file cannot be read or frontmatter is malformed
-- Plan file cannot be read or frontmatter is missing
-
-**⚠️ Warn but continue if:**
-- Complexity is `large` without prior planning (require user confirmation)
-- Dependencies are not yet completed (offer to wait or proceed with manual dependency check)
-- Task file references a non-existent plan file
-
-**✅ Proceed if:**
-- Input successfully classified
-- Complexity estimated with confidence
-- Dependencies resolved (or user acknowledged and accepted blockers)
-- No circular dependencies
-- User confirmed for large work (prompt mode)
+**Fallback:** If all retries fail, log the error and ask user: "Retry, skip, or abort?"
 
 ---
 

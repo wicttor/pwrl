@@ -30,10 +30,21 @@ Skills:
   The PWRL skills (pwrl-plan, pwrl-work, pwrl-review, etc.) are invoked
   through your AI assistant, not via this CLI.
 
-  For GitHub Copilot, use: /pwrl-plan, /pwrl-work, etc.
-  For Claude, use: /pwrl-plan, /pwrl-work, etc.
-  For Cursor, use: /pwrl-plan, /pwrl-work, etc.
-  For other assistants, reference the skill workflows in context.
+  Agent-Enhanced (Recommended):
+    When agents are enabled, /pwrl-plan and /pwrl-work orchestrate multi-phase
+    workflows with user checkpoints for better control and feedback.
+
+    Planning: /pwrl-plan → Planner Agent → 4 phases
+    Work: /pwrl-work → Work Agent → 5 phases
+
+  Fallback Mode:
+    Without agents, all workflows run inline automatically with same logic.
+
+  Platform Examples:
+    - GitHub Copilot: Agents auto-discovered in .agents/agents/
+    - Cursor: Agents auto-discovered in .agents/agents/
+    - Claude: Add .agents/agents/ to Claude Project
+    - Others: Reference skill workflows in context
 
 Documentation:
   - README.md         Quick overview
@@ -53,13 +64,31 @@ PWRL v${packageJson.version}
 Installed at: ${PWRL_DIR}
 
 Available Skills:
-  - pwrl-plan              Create implementation plans
-  - pwrl-work              Execute implementation work
+  - pwrl-plan              Create implementation plans (orchestrated: scope → research → design → generate)
+  - pwrl-work              Execute implementation work (orchestrated: triage → prepare → execute → review → ship)
   - pwrl-review            Code review and quality checks
   - pwrl-learnings         Document solutions and insights
   - pwrl-refresh-learnings Update learning collection
   - pwrl-update-learnings  Sync learnings index
   - pwrl-end-session       Clean commit at session end
+
+Micro-Skills (usually called by agents):
+  Planning:
+  - pwrl-plan-scope        Phase 1: Gather context and validate domain
+  - pwrl-plan-research     Phase 2: Discover patterns and high-risk areas
+  - pwrl-plan-design       Phase 3: Design and decompose implementation units
+  - pwrl-plan-generate     Phase 4: Generate and render final plan
+
+  Work:
+  - pwrl-work-triage       Phase 1: Classify input and extract context
+  - pwrl-work-prepare      Phase 2: Set up environment and create task lists
+  - pwrl-work-execute      Phase 3: Implement tasks (inline, serial, or parallel)
+  - pwrl-work-review       Phase 4: Simplify and consolidate code
+  - pwrl-work-ship         Phase 5: Finalize and commit work
+
+  Other:
+  - pwrl-tasks             Break plans into granular executable task files
+  - pwrl-work-sync-status  Sync task status with GitHub Issues
 
 Skill Locations:
 `);

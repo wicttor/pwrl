@@ -14,17 +14,17 @@ This index documents 11 implementation tasks (S1-S11) for slicing the `pwrl-work
 
 | ID | Task | Status | Dependencies | Files | Complexity |
 |----|------|--------|--------------|-------|------------|
-| S1 | Analyze pwrl-work Structure | for-review | — | — | Small |
-| S2 | Extract Triage Logic (U1) | for-review | S1 | pwrl-work-triage/SKILL.md | Medium |
-| S3 | Extract Prepare Logic (U2) | for-review | S1, S2 | pwrl-work-prepare/SKILL.md | Large |
-| S4 | Create GitHub Sync Utility (U3) | for-review | S1 | pwrl-work-sync-status/SKILL.md | Medium |
-| S5 | Extract Execute Logic (U4) | for-review | S1, S2, S3, S4 | pwrl-work-execute/SKILL.md | Very Large |
-| S6 | Extract Review Logic (U5) | for-review | S1, S5 | pwrl-work-review/SKILL.md | Large |
-| S7 | Extract Ship Logic (U6) | for-review | S1, S6 | pwrl-work-ship/SKILL.md | Large |
-| S8 | Create Orchestrator Agent | for-review | S2-S7 | agents/pwrl-work.agent.md | Large |
-| S9 | Update Fallback Logic | for-review | S1, S8 | pwrl-work/SKILL.md | Medium |
-| S10 | Update Documentation | for-review | S2-S9 | docs/examples/*.md | Medium |
-| S11 | Integration Testing | for-review | S8, S9, S10 | tests/pwrl-work/** | Very Large |
+| S1 | Analyze pwrl-work Structure | done | — | — | Small |
+| S2 | Extract Triage Logic (U1) | done | S1 | pwrl-work-triage/SKILL.md | Medium |
+| S3 | Extract Prepare Logic (U2) | done | S1, S2 | pwrl-work-prepare/SKILL.md | Large |
+| S4 | Create GitHub Sync Utility (U3) | done | S1 | pwrl-work-sync-status/SKILL.md | Medium |
+| S5 | Extract Execute Logic (U4) | done | S1, S2, S3, S4 | pwrl-work-execute/SKILL.md | Very Large |
+| S6 | Extract Review Logic (U5) | done | S1, S5 | pwrl-work-review/SKILL.md | Large |
+| S7 | Extract Ship Logic (U6) | done | S1, S6 | pwrl-work-ship/SKILL.md | Large |
+| S8 | Create Orchestrator Agent | done | S2-S7 | agents/pwrl-work.agent.md | Large |
+| S9 | Update Fallback Logic | done | S1, S8 | pwrl-work/SKILL.md | Medium |
+| S10 | Update Documentation | done | S2-S9 | docs/examples/*.md | Medium |
+| S11 | Integration Testing | done | S8, S9, S10 | tests/pwrl-work/** | Very Large |
 
 ---
 

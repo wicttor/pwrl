@@ -18,15 +18,15 @@ plan: docs/plans/2026-06-05-001-slice-pwrl-plan-skill.md
 
 | Unit   | Task                            | Status | Dependencies           | Duration | Priority     |
 | ------ | ------------------------------- | ------ | ---------------------- | -------- | ------------ |
-| **S1** | Extract Templates Module        | for-review | —                   | 1-2h     | 🔴 Critical  |
-| **S2** | Create pwrl-plan-scope Skill    | for-review | S1                | 2-3h     | 🔴 Critical  |
-| **S3** | Create pwrl-plan-research Skill | for-review | S1, S2          | 2-3h     | 🔴 Critical  |
-| **S4** | Create pwrl-plan-design Skill   | for-review | S1, S2, S3      | 2-3h     | 🔴 Critical  |
-| **S5** | Create pwrl-plan-generate Skill | for-review | S1, S2, S3, S4      | 2-3h     | 🔴 Critical  |
-| **S6** | Create pwrl-planner.agent.md    | for-review | S2, S3, S4, S5         | 2-3h     | 🟡 Important |
-| **S7** | Update pwrl-plan Fallback       | for-review | S1, S2, S3, S4, S5     | 1-2h     | 🔴 Critical  |
-| **S8** | Update Documentation            | for-review | S2, S3, S4, S5, S6, S7 | 2-3h     | 🟡 Important |
-| **S9** | Integration Testing             | for-review | S1-S8               | 3-4h     | 🔴 Critical  |
+| **S1** | Extract Templates Module        | done | —                   | 1-2h     | 🔴 Critical  |
+| **S2** | Create pwrl-plan-scope Skill    | done | S1                | 2-3h     | 🔴 Critical  |
+| **S3** | Create pwrl-plan-research Skill | done | S1, S2          | 2-3h     | 🔴 Critical  |
+| **S4** | Create pwrl-plan-design Skill   | done | S1, S2, S3      | 2-3h     | 🔴 Critical  |
+| **S5** | Create pwrl-plan-generate Skill | done | S1, S2, S3, S4      | 2-3h     | 🔴 Critical  |
+| **S6** | Create pwrl-planner.agent.md    | done | S2, S3, S4, S5         | 2-3h     | 🟡 Important |
+| **S7** | Update pwrl-plan Fallback       | done | S1, S2, S3, S4, S5     | 1-2h     | 🔴 Critical  |
+| **S8** | Update Documentation            | done | S2, S3, S4, S5, S6, S7 | 2-3h     | 🟡 Important |
+| **S9** | Integration Testing             | done | S1-S8               | 3-4h     | 🔴 Critical  |
 
 **Estimated Total Time:** 17-26 hours (2-3 days for one developer)
 

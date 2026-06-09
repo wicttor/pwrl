@@ -230,42 +230,25 @@ Before proceeding to execution, present a summary and ask for confirmation:
 
 ## Error Handling
 
-**❌ Fail if:**
-- Branch creation fails (git error, permission denied)
-- Task file format is invalid (malformed YAML frontmatter)
-- Dependency chain has unresolved circular references
-- User cancels at checkpoint
+| Scenario | Handling |
+|---|---|
+| Branch creation fails | Log git error; ask user: "Resolve git state manually or retry?" |
+| Malformed task frontmatter | Log details; ask user to fix and retry |
+| Circular dependencies detected | Fail; ask user to resolve circular references |
+| User cancels at checkpoint | Exit gracefully; preserve current state |
+| Blocking dependencies exist | Warn; ask user: "Proceed anyway or wait for dependencies?" |
+| GitHub integration check fails | Log warning; continue without sync |
+| Task file doesn't exist | Offer to create from plan; ask user: "Create task or provide different path?" |
+| INDEX.md is missing | Create automatically; warn user |
+| No tasks in task list | Block execution; ask user to review and confirm task list |
+| Execution mode indeterminate | Ask user to specify preferred mode |
+| Dependency chain >5 deep | Flag for review; user can accept or simplify |
+| File conflicts detected | Force serial mode; inform user |
+| GitHub sync skipped (missing issues) | Log warning; continue without sync |
 
-**⚠️ Warn but continue if:**
-- Task has blocking dependencies (user confirms to proceed anyway)
-- GitHub integration check fails (continue without sync)
-- Task file doesn't exist (offer to create from plan)
-- INDEX.md is missing (create it)
+**Retry limit:** 3 attempts per operation, then ask user to fix manually.
 
-**✅ Proceed if:**
-- Branch strategy confirmed
-- Task list ready (created or updated)
-- Execution mode selected with clear reasoning
-- User confirms at checkpoint
-
----
-
-## Quality Gates
-
-**❌ Block execution if:**
-- No tasks in task list
-- Execution mode can't be determined
-- User cancels
-
-**⚠️ Flag for review if:**
-- Dependency chain is complex (>5 deep)
-- File conflicts detected (forced serial)
-- GitHub sync skipped due to missing issues
-
-**✅ Proceed if:**
-- All requirements from classified context are addressed
-- User has reviewed and confirmed the plan
-- State object is complete and ready for execution
+**Fallback:** If all retries fail, log the error and ask user: "Retry, skip, or abort?"
 
 ---
 

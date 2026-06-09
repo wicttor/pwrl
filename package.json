@@ -43,7 +43,10 @@
   ],
   "scripts": {
     "postinstall": "node ./bin/postinstall.js",
-    "validate:skills": "node ./pwrl-standards/scripts/validate-skills.js"
+    "validate:skills": "node ./pwrl-standards/scripts/validate-skills.js",
+    "test": "node --test tests/**/*.test.js",
+    "test:plan": "node --test tests/pwrl-plan/skills.test.js",
+    "test:work": "node --test tests/pwrl-work/skills.test.js"
   },
   "engines": {
     "node": ">=14.0.0"

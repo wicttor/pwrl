@@ -48,7 +48,9 @@ See [INSTALLATION.md](INSTALLATION.md#agent-setup) for complete setup instructio
 Problem → /pwrl-plan → /pwrl-work → /pwrl-review → /pwrl-learnings → /pwrl-end-session
 ```
 
-**Agent-Based Planning (Recommended):**
+`/pwrl-work` orchestrates 5 phases (triage → prepare → execute → review → ship) including an internal review in Phase 4. The standalone `/pwrl-review` skill remains part of the main flow for an explicit, dedicated review pass before marking work done.
+
+**Agent-Based Planning & Work (Recommended):**
 
 When agents are enabled, `/pwrl-plan` automatically delegates to the PWRL Planner Agent:
 
@@ -69,7 +71,26 @@ Problem → /pwrl-plan
   │
   └─ Output: docs/plans/YYYY-MM-DD-NNN-<name>.md
 
-  → /pwrl-work → /pwrl-review → /pwrl-learnings → /pwrl-end-session
+→ /pwrl-work
+  │
+  ├─ Phase 1: Triage (pwrl-work-triage)
+  │           ↓ [User confirms classification]
+  │
+  ├─ Phase 2: Prepare (pwrl-work-prepare)
+  │           ↓ [User confirms environment]
+  │
+  ├─ Phase 3: Execute (pwrl-work-execute)
+  │           ↓ [User reviews results]
+  │
+  ├─ Phase 4: Review (pwrl-work-review)
+  │           ↓ [User confirms readiness]
+  │
+  ├─ Phase 5: Ship (pwrl-work-ship)
+  │           ↓ [Work committed]
+  │
+  └─ Output: Committed code with GitHub Issues updates
+
+→ /pwrl-learnings → /pwrl-end-session
 ```
 
 **Without Agents (Fallback):**
@@ -81,6 +102,8 @@ If agents aren't available, `/pwrl-plan` runs all phases inline (same output, no
 ```
 Problem → /pwrl-plan → /pwrl-tasks → /pwrl-work [task] → /pwrl-review → repeat → /pwrl-learnings → /pwrl-end-session
 ```
+
+Each `/pwrl-work [task]` invocation runs the 5-phase orchestration (triage → prepare → execute → review → ship), with `/pwrl-review` providing the dedicated review pass before moving the task to `done`.
 
 **Task Status:** `to-do` → `in-progress` → `for-review` → `done`
 
@@ -100,14 +123,14 @@ Problem → /pwrl-plan → /pwrl-tasks → /pwrl-work [task] → /pwrl-review �
 
 # 2. Execute the plan
 /pwrl-work
+# With agents enabled: Work Agent orchestrates 5 phases (triage → prepare → execute → review → ship)
+# Without agents: Runs all phases inline in fallback mode
+# Either way: Work completed, committed, and status updated
 
-# 3. Review (moves work to for-review status)
-/pwrl-review
-
-# 4. Document any insights
+# 3. Document any insights
 /pwrl-learnings
 
-# 5. Clean commit
+# 4. Clean commit
 /pwrl-end-session
 ```
 
@@ -116,8 +139,10 @@ Problem → /pwrl-plan → /pwrl-tasks → /pwrl-work [task] → /pwrl-review �
 - **Plan** creates structured implementation plan in `docs/plans/`
   - If agents enabled: PWRL Planner Agent guides you through scope → research → design → generate phases
   - If agents disabled: All phases run inline automatically
-- **Work** executes with test-first discipline, moves to for-review when done
+- **Work** runs 5 orchestrated phases with test-first discipline (triage → prepare → execute → review → ship) and commits the work
+  - If using task files: status moves `to-do` → `in-progress` → `for-review`
 - **Review** checks correctness, security, quality; approves (done) or requests changes (back to in-progress)
+  - This is the dedicated `/pwrl-review` step (Phase 4 of `/pwrl-work` runs an internal review, but `/pwrl-review` is the explicit main-flow review)
 - **Learnings** documents solutions while context is fresh
 - **End-session** creates clean commit with context
 

@@ -103,7 +103,120 @@ When you need deeper guidance:
 
 ---
 
-## Planning with pwrl-plan
+## Work Execution with pwrl-work
+
+The work execution workflow is orchestrated by agents when available, or runs in monolithic mode as a fallback. Understanding both modes helps you execute effectively.
+
+### Execution Workflow (Five Phases)
+
+When you call `/pwrl-work [task/plan/prompt]`, the workflow proceeds in five phases:
+
+**Phase 1: Triage** (`pwrl-work-triage`)
+
+- Classify work input (task file, plan, or bare prompt)
+- Extract context and requirements
+- Bootstrap implementation approach
+- Set up initial work state
+
+**Phase 2: Prepare** (`pwrl-work-prepare`)
+
+- Set up execution environment
+- Create subtask lists if needed
+- Choose execution mode (inline, serial, parallel)
+- Review environment readiness
+
+**Phase 3: Execute** (`pwrl-work-execute`)
+
+- Implement work according to selected mode
+- Write tests first (TDD discipline)
+- Build features incrementally
+- Verify tests pass after each change
+
+**Phase 4: Review** (`pwrl-work-review`)
+
+- Simplify and consolidate code
+- Check for duplication and clarity
+- Verify edge cases handled
+- Prepare for shipping
+
+**Phase 5: Ship** (`pwrl-work-ship`)
+
+- Finalize all changes
+- Approve work quality
+- Create commit
+- Update task status (if using task-based workflow)
+- Optionally update GitHub Issues if integration enabled
+
+Each phase has a user checkpoint for review and adjustment before proceeding.
+
+### Agent-Enhanced vs. Fallback
+
+The work execution workflow can run in two modes:
+
+**Agent-Enhanced (Recommended):**
+
+- `.agents/agents/pwrl-work.agent.md` orchestrates all five phases
+- Clear phase boundaries with checkpoints
+- Can iterate within each phase before moving forward
+- Better user experience with staged feedback
+- Supports parallel execution mode for concurrent subtasks
+
+**Monolithic Fallback:**
+
+- All five phases run within `pwrl-work` when agents unavailable
+- Same checkpoints and logic, all inline
+- Guaranteed to work regardless of system configuration
+- See `pwrl-work/SKILL.md` (Monolithic Fallback Path section) for complete Phase 1-5 logic and `pwrl-work/references/workflow-details.md` for execution modes and task status rules
+
+### Execution Modes
+
+During Phase 2 (Prepare), you select an execution mode for your work:
+
+**Inline Mode:**
+- Single focused task
+- Implement directly without subtasks
+- Best for small, straightforward work
+- Fastest for 1-3 file changes
+
+**Serial Mode:**
+- Multiple subtasks executed one-by-one
+- Dependencies handled automatically
+- Best for linear workflows with clear order
+- Default for complex work
+
+**Parallel Mode (Agent-Enhanced Only):**
+- Multiple independent subtasks run concurrently
+- Requires agent orchestration
+- Best for team collaboration or large features
+- Each subtask has isolated context and execution
+- Results consolidated in Phase 4 (Review)
+
+### Best Practices for Work Execution
+
+1. **Test-first always:** Work execution enforces test-first discipline. Write failing tests before implementation.
+2. **Stay focused:** Stick to the task scope. Expand scope with new tasks, not mid-execution.
+3. **Verify as you go:** Run tests after each meaningful change. Don't batch verification.
+4. **Use inline for simple work:** Don't over-engineer with phases for trivial changes.
+5. **Break complex work:** If work feels large or risky, use task-based workflow to break into units.
+6. **Learn as you go:** Document gotchas and patterns discovered during execution via `/pwrl-learnings`.
+7. **Commit atomically:** Each work execution produces one clean commit. Use `/pwrl-end-session` or agent shipping.
+
+### Work Quality Checklist
+
+A good work execution produces:
+
+- ✅ Failing tests written first (before implementation)
+- ✅ Implementation satisfies all test cases
+- ✅ Edge cases tested
+- ✅ Code review findings addressed
+- ✅ No breaking API changes (or intentional, documented changes)
+- ✅ Performance acceptable (no obvious optimizations missed)
+- ✅ Single, clean commit with context
+- ✅ GitHub Issues updated if task-based workflow used
+
+If your work execution is missing any of these, re-run the work workflow or address gaps before shipping.
+
+---
 
 The planning workflow is the foundation of PWRL. Understanding how it works helps you create better plans and use the framework more effectively.
 
@@ -207,17 +320,6 @@ A good plan includes:
 - ✅ Learning gaps flagged for post-implementation documentation
 
 If your plan is missing any of these, re-run the planning workflow with more detail.
-
----
-
-## Using Support Files Effectively
-
-3. Check references/ → When you need specifics
-4. Return to SKILL.md → Continue workflow
-
-```
-
-This pattern keeps you focused on execution while detail is available on-demand.
 
 ---
 
@@ -574,7 +676,88 @@ Human: /pwrl-end-session
 
 ---
 
-## Planning Tiers Deep Dive
+## Planning with pwrl-plan
+
+The planning workflow is the foundation of PWRL. Understanding how it works helps you create better plans and use the framework more effectively.
+
+### Planning Workflow (Four Phases)
+
+When you call `/pwrl-plan [task]`, the workflow proceeds in four phases:
+
+**Phase 1: Scope Gathering** (`pwrl-plan-scope`)
+
+- Check for existing plans
+- Search for related documentation and learnings
+- Validate domain (software vs. non-software)
+- Bootstrap problem frame, intended behavior, success criteria
+
+**Phase 2: Research & Findings** (`pwrl-plan-research`)
+
+- Discover local patterns and tech stack
+- Detect high-risk areas (security, payments, APIs, migrations)
+- Recommend external research if needed
+- Document constraints and patterns found
+
+**Phase 3: Design & Units** (`pwrl-plan-design`)
+
+- Decompose work into stable implementation units (U1, U2, ... UX)
+- Define dependencies and acceptance criteria
+- Optionally generate Mermaid diagrams
+- Determine complexity hint (Fast/Standard/Deep)
+
+**Phase 4: Plan Generation** (`pwrl-plan-generate`)
+
+- Select tier based on complexity
+- Render plan from appropriate template
+- Embed related learnings and learning gaps
+- Save to `docs/plans/YYYY-MM-DD-NNN-<name>.md`
+
+Each phase has a user checkpoint for review and adjustment before proceeding.
+
+### Agent-Enhanced vs. Fallback
+
+The planning workflow can run in two modes:
+
+**Agent-Enhanced (Recommended):**
+
+- `.agents/agents/pwrl-planner.agent.md` orchestrates all four phases
+- Clear phase boundaries with checkpoints
+- Can iterate within each phase before moving forward
+- Better user experience with staged feedback
+
+**Monolithic Fallback:**
+
+- All four phases run within `pwrl-plan` when agents unavailable
+- Same checkpoints and logic, all inline
+- Guaranteed to work regardless of system configuration
+- See `pwrl-plan/references/fallback-workflow.md` for complete Phase 1-4 logic
+
+### Best Practices for Planning
+
+1. **Answer questions fully:** When the planning skill asks questions, provide context. Short answers lead to shallow plans.
+2. **Be honest about risk:** If an area feels risky, flag it. The plan will include risk mitigation.
+3. **Leverage learnings:** Review existing learnings before planning. Reuse proven approaches rather than reinventing.
+4. **Research unfamiliar patterns:** If the codebase has <3 examples of a pattern you need, run external research. It's worth the time.
+5. **Don't over-plan:** Small tasks don't need Deep tier plans. Match tier to complexity to save time.
+6. **Document gaps:** If important knowledge is missing, add a learning gap to the plan. Document it after implementation via `/pwrl-learnings`.
+7. **Stable unit IDs:** Once a plan is created, unit IDs (U1, U2, ...) are anchors. If you need to adjust, keep the same IDs; don't renumber.
+
+### Plan Quality Checklist
+
+A good plan includes:
+
+- ✅ Clear problem statement and intended behavior
+- ✅ 1-3 specific, measurable success criteria
+- ✅ Implementation units with dependencies and acceptance criteria
+- ✅ Files to create/modify/test per unit
+- ✅ Key technical decisions with rationale (Standard/Deep)
+- ✅ Risk analysis and mitigation (Deep)
+- ✅ Related learnings with applicability notes
+- ✅ Learning gaps flagged for post-implementation documentation
+
+If your plan is missing any of these, re-run the planning workflow with more detail.
+
+---
 
 ### Fast Plans
 
@@ -812,12 +995,24 @@ Orchestrates the planning workflow:
 
 Each phase has a user checkpoint for review/adjustment before proceeding.
 
+**PWRL Work Agent** (`.agents/agents/pwrl-work.agent.md`)
+
+Orchestrates the work execution workflow:
+1. Triage → `pwrl-work-triage`
+2. Prepare → `pwrl-work-prepare`
+3. Execute → `pwrl-work-execute`
+4. Review → `pwrl-work-review`
+5. Ship → `pwrl-work-ship`
+
+Each phase has a user checkpoint for review/adjustment before proceeding. Supports inline, serial, and parallel execution modes.
+
 **Usage:**
 ```bash
 # When agents enabled in your platform:
 /pwrl-plan [task description]
+/pwrl-work [task file or prompt]
 
-# Automatically routes to PWRL Planner Agent
+# Automatically routes to appropriate agent
 # Without agents, runs inline fallback
 ```
 

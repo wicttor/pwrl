@@ -11,7 +11,7 @@ This document compares the two available paths for running the planning workflow
 ### Prerequisites
 
 - Agent infrastructure enabled in system configuration
-- `agents/pwrl-planner.agent.md` exists
+- `.agents/agents/pwrl-planner.agent.md` exists
 - Micro-skills installed: `pwrl-plan-scope`, `pwrl-plan-research`, `pwrl-plan-design`, `pwrl-plan-generate`
 - Templates available: `pwrl-plan/references/plan-templates.md`
 
@@ -42,6 +42,7 @@ Or via the skill browser: select "PWRL Planner Agent".
 ```
 
 **Expected output:**
+
 ```
 ✅ Plan saved to docs/plans/2026-06-05-001-email-notification-system.md
 📝 Preview: Implement email notification system using SendGrid API...
@@ -70,6 +71,7 @@ Next step: Run /pwrl-tasks docs/plans/2026-06-05-001-email-notification-system.m
 ```
 
 This auto-detects whether agents are available:
+
 - If agents available AND `pwrl-planner.agent.md` exists → delegates to agent (same as Workflow 1)
 - If agents unavailable or file missing → runs monolithic workflow inline
 
@@ -99,16 +101,16 @@ The same four phases execute, but entirely within the `pwrl-plan` skill. The use
 
 ## Comparison
 
-| Aspect                | Agent Path                              | Fallback Path                         |
-| --------------------- | --------------------------------------- | ------------------------------------- |
-| **Invocation**        | `/pwrl-planner-agent [task]`            | `/pwrl-plan [task]` (auto-routes)     |
-| **Requirements**      | Agents enabled, agent file exists       | None (always available)               |
-| **User Experience**   | Interactive, phase-by-phase             | Inline, same checkpoints              |
-| **Speed**             | Fast (~5-10 min)                        | Same speed                            |
-| **Robustness**        | Enhanced (dedicated orchestrator)       | Proven (monolithic)                   |
-| **Debugging**         | Phase-level error isolation             | Single-skill debugging                |
-| **Extensibility**     | Easy to add phases or skills            | Requires modifying SKILL.md           |
-| **Log Message**       | "Agents detected — delegating to agent" | "Agents not available — running monolithic" |
+| Aspect              | Agent Path                              | Fallback Path                               |
+| ------------------- | --------------------------------------- | ------------------------------------------- |
+| **Invocation**      | `/pwrl-planner-agent [task]`            | `/pwrl-plan [task]` (auto-routes)           |
+| **Requirements**    | Agents enabled, agent file exists       | None (always available)                     |
+| **User Experience** | Interactive, phase-by-phase             | Inline, same checkpoints                    |
+| **Speed**           | Fast (~5-10 min)                        | Same speed                                  |
+| **Robustness**      | Enhanced (dedicated orchestrator)       | Proven (monolithic)                         |
+| **Debugging**       | Phase-level error isolation             | Single-skill debugging                      |
+| **Extensibility**   | Easy to add phases or skills            | Requires modifying SKILL.md                 |
+| **Log Message**     | "Agents detected — delegating to agent" | "Agents not available — running monolithic" |
 
 ---
 
@@ -129,16 +131,17 @@ if (agents/pwrl-planner.agent.md exists) AND (agents enabled in config) {
 ### How to Know Which Path You're Using
 
 Look for the log message at the start of the workflow:
-- **Agent path:** "ℹ️  Agents detected — delegating to pwrl-planner.agent.md"
-- **Fallback path:** "ℹ️  Agents not available — running monolithic planning workflow"
+
+- **Agent path:** "ℹ️ Agents detected — delegating to pwrl-planner.agent.md"
+- **Fallback path:** "ℹ️ Agents not available — running monolithic planning workflow"
 
 ### How to Force One Path
 
-| Goal                              | Action                                                          |
-| --------------------------------- | --------------------------------------------------------------- |
-| Always use agent path             | Enable agents in config; ensure `agents/pwrl-planner.agent.md` exists |
-| Always use fallback               | Disable agents in config, or temporarily rename the agent file  |
-| Test both paths                   | Run `/pwrl-plan` with agents enabled, then disable and run again |
+| Goal                  | Action                                                                        |
+| --------------------- | ----------------------------------------------------------------------------- |
+| Always use agent path | Enable agents in config; ensure `.agents/agents/pwrl-planner.agent.md` exists |
+| Always use fallback   | Disable agents in config, or temporarily rename the agent file                |
+| Test both paths       | Run `/pwrl-plan` with agents enabled, then disable and run again              |
 
 ---
 
@@ -159,13 +162,15 @@ Regardless of path used:
 ### Q: Always running fallback. Why?
 
 Check these:
-1. Does `agents/pwrl-planner.agent.md` exist? → `ls -la agents/pwrl-planner.agent.md`
+
+1. Does `.agents/agents/pwrl-planner.agent.md` exist? → `ls -la agents/pwrl-planner.agent.md`
 2. Are agents enabled in system config?
 3. Is the agent file valid? Check for syntax errors.
 
 ### Q: Agent fails; fallback also fails?
 
 Both paths failed. Check:
+
 1. Are all micro-skills installed? (S2-S5 SKILL.md files)
 2. Is the templates reference file present? (`pwrl-plan/references/plan-templates.md`)
 3. Check error logs for specific failures.
@@ -188,7 +193,7 @@ Yes, but you'll get two plan files. Best practice: choose one path and stick wit
 
 ## Related Documents
 
-- `agents/pwrl-planner.agent.md` — Agent orchestrator instructions
+- `.agents/agents/pwrl-planner.agent.md` — Agent orchestrator instructions
 - `pwrl-plan/SKILL.md` — Fallback skill with agent detection
 - `pwrl-plan-scope/SKILL.md` — Scope gathering micro-skill
 - `pwrl-plan-research/SKILL.md` — Research micro-skill

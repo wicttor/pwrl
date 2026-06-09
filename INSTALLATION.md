@@ -129,6 +129,13 @@ Agents orchestrate complex workflows by calling multiple skills in sequence with
   - Manages state between micro-skills
   - Produces final plan file at `docs/plans/`
 
+- **PWRL Work Agent** (`.agents/agents/pwrl-work.agent.md`)
+  - Orchestrates execution workflow: triage → prepare → execute → review → ship
+  - Collects user feedback at each phase
+  - Manages state between micro-skills
+  - Supports inline, serial, and parallel execution modes
+  - Produces committed code with optional GitHub Issues updates
+
 ### Enabling Agents
 
 **GitHub Copilot (VS Code):**

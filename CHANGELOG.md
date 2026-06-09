@@ -6,6 +6,12 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+## [1.1.3] - 2026-06-09
+
+### Fixed
+
+- Republish package on npm with README visible (version bump to trigger registry refresh)
+
 ## [1.1.1] - 2026-06-09
 
 ### Changed

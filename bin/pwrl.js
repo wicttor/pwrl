@@ -123,10 +123,6 @@ async function askQuestion(rl, question) {
 
 async function initProject() {
   const cwd = process.cwd();
-  const docsDir = path.join(cwd, 'docs');
-  const learningsDir = path.join(docsDir, 'learnings');
-  const plansDir = path.join(docsDir, 'plans');
-  const tasksDir = path.join(docsDir, 'tasks');
   const configPath = path.join(cwd, '.pwrlrc.json');
 
   console.log('╔═══════════════════════════════════════════════════════════════╗');
@@ -158,55 +154,7 @@ async function initProject() {
     rl.close();
 
     console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-    console.log('Creating project structure...\n');
-
-    // Create directory structure
-    const categories = [
-      'technical-fix',
-      'pattern',
-      'workflow',
-      'gotcha',
-      'concept',
-      'decision'
-    ];
-
-    if (!fs.existsSync(docsDir)) {
-      fs.mkdirSync(docsDir);
-      console.log('✓ Created docs/');
-    }
-
-    if (!fs.existsSync(plansDir)) {
-      fs.mkdirSync(plansDir);
-      console.log('✓ Created docs/plans/');
-    }
-
-    if (!fs.existsSync(tasksDir)) {
-      fs.mkdirSync(tasksDir);
-      console.log('✓ Created docs/tasks/');
-
-      // Create subdirectories for task organization
-      const taskSubdirs = ['to-do', 'in-progress', 'for-review', 'done'];
-      taskSubdirs.forEach(subdir => {
-        const subdirPath = path.join(tasksDir, subdir);
-        if (!fs.existsSync(subdirPath)) {
-          fs.mkdirSync(subdirPath);
-          console.log(`✓ Created docs/tasks/${subdir}/`);
-        }
-      });
-    }
-
-    if (!fs.existsSync(learningsDir)) {
-      fs.mkdirSync(learningsDir);
-      console.log('✓ Created docs/learnings/');
-    }
-
-    categories.forEach(category => {
-      const categoryDir = path.join(learningsDir, category);
-      if (!fs.existsSync(categoryDir)) {
-        fs.mkdirSync(categoryDir);
-        console.log(`✓ Created docs/learnings/${category}/`);
-      }
-    });
+    console.log('Setting up PWRL...\n');
 
     // Create skills directory and copy bundled skills into project
     try {
@@ -324,13 +272,9 @@ async function initProject() {
     console.log('Configuration:');
     console.log(`  Skills location: ${skillsPath}/`);
     console.log(`  GitHub Issues:   ${enableGitHubIssues ? 'Enabled' : 'Disabled'}\n`);
-    console.log('Directory structure:');
-    console.log('  docs/');
-    console.log('    learnings/     (categorized knowledge capture)');
-    console.log('    plans/         (implementation plans)');
-    console.log('    tasks/         (executable task files)');
-    console.log(`  ${skillsPath}/   (PWRL skills)`);
-    console.log('  .agents/agents/  (PWRL agents - orchestrators)\n');
+    console.log('Project structure:');
+    console.log(`  ${skillsPath}/        (PWRL skills)`);
+    console.log('  .agents/agents/         (PWRL agents - orchestrators)\n');
     console.log('Next steps:');
     console.log('  1. Enable agents in your AI assistant (see INSTALLATION.md)');
     console.log('  2. Start using PWRL skills: /pwrl-plan <your task description>');

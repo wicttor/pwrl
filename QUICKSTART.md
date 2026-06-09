@@ -69,7 +69,26 @@ Problem → /pwrl-plan
   │
   └─ Output: docs/plans/YYYY-MM-DD-NNN-<name>.md
 
-  → /pwrl-work → /pwrl-review → /pwrl-learnings → /pwrl-end-session
+→ /pwrl-work
+  │
+  ├─ Phase 1: Triage (pwrl-work-triage)
+  │           ↓ [User confirms classification]
+  │
+  ├─ Phase 2: Prepare (pwrl-work-prepare)
+  │           ↓ [User confirms environment]
+  │
+  ├─ Phase 3: Execute (pwrl-work-execute)
+  │           ↓ [User reviews results]
+  │
+  ├─ Phase 4: Review (pwrl-work-review)
+  │           ↓ [User confirms readiness]
+  │
+  ├─ Phase 5: Ship (pwrl-work-ship)
+  │           ↓ [Work committed]
+  │
+  └─ Output: Committed code with GitHub Issues updates
+
+→ /pwrl-learnings → /pwrl-end-session
 ```
 
 **Without Agents (Fallback):**
@@ -100,14 +119,14 @@ Problem → /pwrl-plan → /pwrl-tasks → /pwrl-work [task] → /pwrl-review �
 
 # 2. Execute the plan
 /pwrl-work
+# With agents enabled: Work Agent orchestrates 5 phases (triage → prepare → execute → review → ship)
+# Without agents: Runs all phases inline in fallback mode
+# Either way: Work completed, committed, and status updated
 
-# 3. Review (moves work to for-review status)
-/pwrl-review
-
-# 4. Document any insights
+# 3. Document any insights
 /pwrl-learnings
 
-# 5. Clean commit
+# 4. Clean commit
 /pwrl-end-session
 ```
 

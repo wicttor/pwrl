@@ -6,6 +6,19 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-06-09
+
+### Changed
+
+**CLI & Installation:**
+- Simplified `initProject()` to remove automatic docs directory creation
+- Updated initialization output messaging to focus on skills and agent setup
+- Removed reference documentation from init output (users should consult GUIDE.md and README.md)
+
+### Fixed
+
+- Removed unnecessary directory creation logic from initialization (project structure can be created on-demand by skills)
+
 ### Added
 
 **Agents & Orchestration:**

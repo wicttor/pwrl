@@ -8,23 +8,92 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ### Added
 
-- Added PWRL Work Agent (`.agents/agents/pwrl-work.agent.md`) that orchestrates the 5-phase work execution workflow (triage → prepare → execute → review → ship) with phase-by-phase user feedback and inline/serial/parallel execution modes
-- Added `Work Execution with pwrl-work` section to GUIDE.md documenting the 5 phases, execution modes, best practices, and work quality checklist
-- Documented work agent orchestration in QUICKSTART.md and README.md core workflow diagrams
-- Added platform-specific agent setup guidance to `bin/postinstall.js` (GitHub Copilot, Cursor, Claude, others)
-- Enhanced `bin/pwrl.js` `help` and `info` output to list all micro-skills with phase numbers and explain agent-enhanced vs. fallback modes
+**Agents & Orchestration:**
+- Added `pwrl-work.agent.md` orchestrator that implements 5-phase work execution workflow (triage → prepare → execute → review → ship) with phase-by-phase user feedback and inline/serial/parallel execution modes
+- Added `pwrl-planner.agent.md` orchestrator that routes planning requests through 4 planning micro-skills (scope → research → design → generate) with fallback monolithic workflow support
+
+**Micro-Skills:**
+- Added `pwrl-work-triage` micro-skill for task prioritization and dependencies analysis
+- Added `pwrl-work-prepare` micro-skill for environment and context setup
+- Added `pwrl-work-execute` micro-skill for implementation execution with inline/serial/parallel modes
+- Added `pwrl-work-review` micro-skill for code quality and test validation
+- Added `pwrl-work-ship` micro-skill for deployment and changelog updates
+- Added `pwrl-work-sync-status` utility for GitHub integration and deployment status tracking
+
+**Planning Micro-Skills (Enhanced):**
+- Added `pwrl-plan-scope` micro-skill with learnings gate and requirement bootstrap
+- Added `pwrl-plan-research` micro-skill for local and external research with high-risk detection
+- Added `pwrl-plan-design` micro-skill for technical design with state schema and U-ID generation
+- Added `pwrl-plan-generate` micro-skill for plan rendering with edge case handling
+- Added comprehensive reference documentation for all planning micro-skills (edge cases, state schemas, workflow details)
+
+**Testing & Validation:**
+- Added comprehensive test suites for pwrl-work skills (`tests/pwrl-work/skills.test.js`)
+- Added comprehensive test suites for pwrl-plan skills (`tests/pwrl-plan/skills.test.js`)
+- Added test fixtures and sample plans for validation scenarios
+
+**Documentation & Learning:**
+- Added `docs/analysis/2026-06-05-pwrl-work-structure-analysis.md` documenting work skill decomposition
+- Added `docs/examples/pwrl-work-agent-example.md` with complete workflow examples
+- Added `docs/examples/work-workflow.md` showing 5-phase execution examples
+- Added `docs/examples/github-integration-example.md` demonstrating GitHub sync integration
+- Added learning documents:
+  - `decision/fallback-architecture-design-2026-06-05.md` on orchestrator vs fallback design
+  - `pattern/skill-decomposition-agent-orchestration-2026-06-05.md` on micro-skill architecture
+  - `pattern/state-schema-workflow-context-2026-06-05.md` on state management
+  - `pattern/planning-tier-architecture-2026-06-05.md` on planning tier design
+  - `workflow/compact-after-every-unit-2026-06-08.md` on iterative compacting workflow
+  - `workflow/pwrl-documentation-revised-for-work-agent-orchestration-2026-06-08.md` on doc updates
+- Added task documentation for all 11 work skill implementation units
+- Updated `docs/learnings/INDEX.md` with latest patterns and decisions
+
+**CLI & Installation:**
+- Enhanced `bin/pwrl.js` to list all available agents and micro-skills with phase numbers
+- Enhanced `bin/postinstall.js` with platform-specific agent setup guidance (GitHub Copilot, Cursor, Claude, others)
+- Added agent-enhanced vs. fallback mode explanations to CLI help output
 
 ### Changed
 
-- Updated QUICKSTART.md "What happens", "Common Patterns", and core workflow diagrams to mention the 5-phase `/pwrl-work` (triage → prepare → execute → review → ship) while keeping `/pwrl-review` as part of the main flow (Phase 4 of `/pwrl-work` runs an internal review; the dedicated `/pwrl-review` skill remains the explicit main-flow review)
-- Updated README.md Project Structure to include `.agents/agents/` folder (orchestrators)
-- Updated README.md Quick Start to mention agents are copied to `.agents/agents/`
-- Fixed broken reference in GUIDE.md to non-existent `pwrl-work/references/fallback-workflow.md`; now points to `pwrl-work/SKILL.md` (Monolithic Fallback Path section) and `pwrl-work/references/workflow-details.md`
+**Skill Reorganization:**
+- Sliced monolithic `pwrl-work` skill into 6 micro-skills with dedicated fallback logic
+- Refactored `pwrl-plan` into 4 micro-skills with routing orchestrator
+- Enhanced all micro-skills with standardized error handling and validation
+- Updated `pwrl-work/SKILL.md` with integrated fallback workflow documentation
+
+**Documentation Updates:**
+- Updated README.md Project Structure to include `agents/` folder for orchestrators
+- Updated README.md Quick Start to explain agent installation and fallback routing
+- Updated QUICKSTART.md "What happens", "Common Patterns", and workflow diagrams for 5-phase work execution
+- Updated GUIDE.md with comprehensive "Work Execution with pwrl-work" section covering:
+  - 5-phase orchestration (triage → prepare → execute → review → ship)
+  - Execution modes (inline, serial, parallel)
+  - Best practices and quality checklist
+- Updated INSTALLATION.md with agent setup and fallback routing guidance
+- Clarified relationship between `/pwrl-work` Phase 4 (internal review) and standalone `/pwrl-review` skill
+- Fixed all broken references to work skill documentation
+
+**Micro-Skill References:**
+- Added comprehensive reference sections to all planning skills:
+  - Edge case handling guides
+  - State schema documentation
+  - Workflow rendering details
+  - External research guidance
+  - Learnings gate logic
+  - U-ID generator documentation
+  - Mermaid diagram guides
+
+### Fixed
+
+- Fixed broken reference in GUIDE.md to non-existent `pwrl-work/references/fallback-workflow.md`
+- Standardized error handling across all pwrl-work micro-skills
+- Corrected path references in workflow documentation files
 
 ### Documentation
 
-- Aligned README.md, GUIDE.md, INSTALLATION.md, QUICKSTART.md, and CLI tools with the Work Agent's 5-phase orchestration model
-- Clarified the relationship between `/pwrl-work` Phase 4 (internal review) and the standalone `/pwrl-review` skill in QUICKSTART.md
+- Aligned all core documentation (README, GUIDE, QUICKSTART, INSTALLATION) with Work Agent orchestration model
+- Created comprehensive workflow examples demonstrating agent and fallback modes
+- Documented complete planning tier architecture with design patterns
+- Added structured task documentation with completion tracking
 
 ---
 

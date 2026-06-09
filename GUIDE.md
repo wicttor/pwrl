@@ -166,7 +166,7 @@ The work execution workflow can run in two modes:
 - All five phases run within `pwrl-work` when agents unavailable
 - Same checkpoints and logic, all inline
 - Guaranteed to work regardless of system configuration
-- See `pwrl-work/references/fallback-workflow.md` for complete Phase 1-5 logic
+- See `pwrl-work/SKILL.md` (Monolithic Fallback Path section) for complete Phase 1-5 logic and `pwrl-work/references/workflow-details.md` for execution modes and task status rules
 
 ### Execution Modes
 

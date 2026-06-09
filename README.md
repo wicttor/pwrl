@@ -16,6 +16,7 @@ npm install -g @wicttor/pwrl
 pwrl init
 
 # Skills will be copied to .agents/skills/ (or your custom location)
+# Agents will be copied to .agents/agents/ (orchestrators)
 # Configuration saved in .pwrlrc.json
 
 # Use in your AI assistant
@@ -224,7 +225,7 @@ pwrl init
 cd your-project
 npm install --save-dev @wicttor/pwrl
 npx @wicttor/pwrl init
-# This will copy bundled skills into .agents/skills/ in your project
+# This will copy bundled skills into .agents/skills/ and agents into .agents/agents/ in your project
 ```
 
 See [INSTALLATION.md](INSTALLATION.md) for platform-specific setup.
@@ -272,6 +273,9 @@ your-project/
       pwrl-review/
       pwrl-learnings/
       ...
+    agents/                   # PWRL agents (orchestrators, optional)
+      pwrl-planner.agent.md
+      pwrl-work.agent.md
   docs/
     plans/                    # Implementation plans
       2026-05-04-auth.md

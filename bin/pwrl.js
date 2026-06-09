@@ -207,7 +207,7 @@ async function initProject() {
     // Copy agents to .agents/agents/
     try {
       const agentsPath = path.join(cwd, '.agents', 'agents');
-      const bundledAgentsPath = path.join(PWRL_DIR, '.agents', 'agents');
+      const bundledAgentsPath = path.join(PWRL_DIR, 'agents');
 
       if (fs.existsSync(bundledAgentsPath)) {
         if (!fs.existsSync(agentsPath)) {

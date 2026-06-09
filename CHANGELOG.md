@@ -8,27 +8,23 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ### Added
 
-- Added PWRL Planner Agent (`.agents/agents/pwrl-planner.agent.md`) for orchestrating planning workflow with phase checkpoints
-- Added agent routing documentation in `pwrl-plan/references/agent-routing.md` with detection logic and troubleshooting
-- Added agent setup instructions to INSTALLATION.md for GitHub Copilot, Cursor, Claude, and custom frameworks
-- Added agent-based planning examples to QUICKSTART.md showing phase-by-phase workflow with checkpoints
-- Added "Agent Development" section to GUIDE.md with best practices, debugging, and examples
-- Added agents folder copying to `pwrl init` CLI command — agents now auto-copy to `.agents/agents/`
-- Enhanced postinstall.js and pwrl.js to include agent setup guidance in initialization output
+- Added PWRL Work Agent (`.agents/agents/pwrl-work.agent.md`) that orchestrates the 5-phase work execution workflow (triage → prepare → execute → review → ship) with phase-by-phase user feedback and inline/serial/parallel execution modes
+- Added `Work Execution with pwrl-work` section to GUIDE.md documenting the 5 phases, execution modes, best practices, and work quality checklist
+- Documented work agent orchestration in QUICKSTART.md and README.md core workflow diagrams
+- Added platform-specific agent setup guidance to `bin/postinstall.js` (GitHub Copilot, Cursor, Claude, others)
+- Enhanced `bin/pwrl.js` `help` and `info` output to list all micro-skills with phase numbers and explain agent-enhanced vs. fallback modes
 
 ### Changed
 
-- Updated README.md to clarify agent-enhanced planning flow and distinguish from fallback mode
-- Updated INSTALLATION.md directory structure to show `.agents/agents/` location
-- Enhanced `pwrl init` output to mention `.agents/agents/` folder and agent setup steps
-- Improved pwrl-plan documentation to emphasize agent routing with fallback guarantee
+- Updated QUICKSTART.md "What happens", "Common Patterns", and core workflow diagrams to mention the 5-phase `/pwrl-work` (triage → prepare → execute → review → ship) while keeping `/pwrl-review` as part of the main flow (Phase 4 of `/pwrl-work` runs an internal review; the dedicated `/pwrl-review` skill remains the explicit main-flow review)
+- Updated README.md Project Structure to include `.agents/agents/` folder (orchestrators)
+- Updated README.md Quick Start to mention agents are copied to `.agents/agents/`
+- Fixed broken reference in GUIDE.md to non-existent `pwrl-work/references/fallback-workflow.md`; now points to `pwrl-work/SKILL.md` (Monolithic Fallback Path section) and `pwrl-work/references/workflow-details.md`
 
 ### Documentation
 
-- Expanded planning documentation with clear explanation of agent orchestration
-- Added troubleshooting table for agent setup issues
-- Clarified when agents are enabled vs. when fallback runs
-- Added agent development guidelines for contributors
+- Aligned README.md, GUIDE.md, INSTALLATION.md, QUICKSTART.md, and CLI tools with the Work Agent's 5-phase orchestration model
+- Clarified the relationship between `/pwrl-work` Phase 4 (internal review) and the standalone `/pwrl-review` skill in QUICKSTART.md
 
 ---
 

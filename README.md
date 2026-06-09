@@ -48,16 +48,20 @@ pwrl init
 | ----------------------------- | --------------------------------- | -------------------------- |
 | **`/pwrl-plan`**              | Create implementation plans       | Before non-trivial work    |
 | **`/pwrl-tasks`**             | Slice plans into executable tasks | After planning, optional   |
-| **`/pwrl-work`**              | Execute with quality gates        | Implement features/fixes   |
+| **`/pwrl-work`**              | Execute with orchestrated phases  | Implement features/fixes   |
 | **`/pwrl-review`**            | Code quality checks               | After work, before merge   |
 | **`/pwrl-learnings`**         | Document solutions                | After solving problems     |
 | **`/pwrl-refresh-learnings`** | Maintain knowledge                | After refactors, quarterly |
 | **`/pwrl-update-learnings`**  | Sync learnings index              | After session commit       |
 | **`/pwrl-end-session`**       | Clean commits                     | End of every session       |
 
-### Planning Micro-Skills (Internal)
+### Agent-Orchestrated Workflows (Internal)
 
-When agents are enabled, `/pwrl-plan` delegates to the **PWRL Planner Agent**, which orchestrates four micro-skills in sequence with user feedback at each phase:
+When agents are enabled, PWRL uses agents to orchestrate multi-phase workflows with user feedback at each checkpoint.
+
+#### Planning Agent: `/pwrl-plan`
+
+Delegates to the **PWRL Planner Agent**, which orchestrates four micro-skills in sequence:
 
 | Micro-Skill              | Phase | Purpose                                   |
 | ------------------------ | ----- | ----------------------------------------- |
@@ -66,20 +70,49 @@ When agents are enabled, `/pwrl-plan` delegates to the **PWRL Planner Agent**, w
 | **`pwrl-plan-design`**   | S3    | Decompose into implementation units       |
 | **`pwrl-plan-generate`** | S4    | Select tier, render plan, save to docs    |
 
+#### Work Agent: `/pwrl-work`
+
+Delegates to the **PWRL Work Agent**, which orchestrates five micro-skills in sequence:
+
+| Micro-Skill             | Phase | Purpose                                    |
+| ----------------------- | ----- | ------------------------------------------ |
+| **`pwrl-work-triage`**  | W1    | Classify input and extract context         |
+| **`pwrl-work-prepare`** | W2    | Set up environment and create task lists   |
+| **`pwrl-work-execute`** | W3    | Implement tasks (inline, serial, parallel) |
+| **`pwrl-work-review`**  | W4    | Simplify code and consolidate changes      |
+| **`pwrl-work-ship`**    | W5    | Finalize, approve, and commit work         |
+
 **How it works:**
 
-- **With Agents Enabled:** `/pwrl-plan [task]` → PWRL Planner Agent orchestrates phases 1-4 automatically, collecting user approval at each checkpoint
-- **Without Agents (Fallback):** `/pwrl-plan [task]` → Runs all phases inline within the main workflow
+- **With Agents Enabled:** `/pwrl-plan [task]` or `/pwrl-work [file]` → Agent orchestrates phases automatically, collecting user approval at each checkpoint
+- **Without Agents (Fallback):** Runs all phases inline within the main workflow
 
 **Setup:** See [INSTALLATION.md](INSTALLATION.md#agent-setup) for enabling agents on your platform.
 
-**Note:** Micro-skills can also be called directly (e.g., `/pwrl-plan-scope`) if agents are unavailable or you need fine-grained control. However, most users invoke `/pwrl-plan` only, and agent routing happens automatically.
+**Note:** Micro-skills can also be called directly (e.g., `/pwrl-plan-scope`) if agents are unavailable or you need fine-grained control. However, most users invoke `/pwrl-plan` and `/pwrl-work` only, with agent routing happening automatically.
 
 ---
 
 ## Workflow
 
 ![created using ai](flow.png)
+
+**Agent-Orchestrated (Recommended):**
+```
+/pwrl-plan
+  ├─ pwrl-plan-scope → pwrl-plan-research → pwrl-plan-design → pwrl-plan-generate
+  └─ Output: docs/plans/YYYY-MM-DD-NNN-<name>.md
+
+/pwrl-work
+  ├─ pwrl-work-triage → pwrl-work-prepare → pwrl-work-execute → pwrl-work-review → pwrl-work-ship
+  └─ Output: Committed code with status updates
+
+Optional: /pwrl-review (for explicit review before merge)
+/pwrl-learnings
+/pwrl-end-session
+```
+
+**Without Agents (Fallback):** All phases run inline within `/pwrl-plan` and `/pwrl-work` automatically.
 
 **Task Status Flow:** `to-do` → `in-progress` → `for-review` → `done`
 
@@ -121,13 +154,11 @@ You can reconfigure at any time by running `pwrl init` again or editing `.pwrlrc
 # 1. Plan
 /pwrl-plan Add JWT authentication with refresh tokens
 
-# 2. Work - Execute plan directly
+# 2. Work - Execute with orchestrated phases
 /pwrl-work
+# Automatically runs: triage → prepare → execute → review → ship
 
-# 3. Review - Work moves to for-review
-/pwrl-review
-
-# 4. Learn & Commit
+# 3. Document and commit
 /pwrl-learnings
 /pwrl-end-session
 ```
@@ -151,29 +182,22 @@ You can reconfigure at any time by running `pwrl init` again or editing `.pwrlrc
 # - 2026-05-04-u3-auth-endpoints.md
 # If GitHub integration enabled: creates issues for each task
 
-# 3. Work on Task
+# 3. Work on First Task
 /pwrl-work docs/tasks/to-do/2026-05-04-u1-add-user-model.md
-# Executes task:
-# - Moves task: to-do → in-progress
-# - Creates tests first
-# - Implements user model
-# - Verifies tests pass
-# - Moves task: in-progress → for-review
-# - GitHub: Updates issue to "for-review" label
+# Executes orchestrated workflow:
+# - Triage: Classify task context
+# - Prepare: Set up environment, create subtasks
+# - Execute: Implement with tests (inline, serial, or parallel)
+# - Review: Simplify and consolidate changes
+# - Ship: Finalize and commit
+# - GitHub: Updates issue status if integration enabled
 
-# 4. Review Task
-/pwrl-review
-# Reviews code:
-# - Checks correctness, security, maintainability, testing
-# - If approved: moves task for-review → done, closes GitHub issue
-# - If changes needed: moves task for-review → in-progress, reopens issue
-
-# 5. Repeat for remaining tasks
+# 4. Continue with Remaining Tasks
 /pwrl-work docs/tasks/to-do/2026-05-04-u2-auth-middleware.md
-/pwrl-review
-# ... continue for U3, etc.
+/pwrl-work docs/tasks/to-do/2026-05-04-u3-auth-endpoints.md
+# Repeat workflow for each unit
 
-# 6. Learn & Commit
+# 5. Learn & Commit
 /pwrl-learnings
 # Documents in docs/learnings/:
 # - JWT token refresh pattern learned

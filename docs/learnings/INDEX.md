@@ -13,6 +13,7 @@ Canonical index of all learning documents.
 
 | Date | Category | Title | Path | Short Description |
 | ---- | -------- | ----- | ---- | ------------------- |
+| 2026-06-08 | workflow | PWRL Documentation Revised for Work Agent Orchestration | `workflow/pwrl-documentation-revised-for-work-agent-orchestration-2026-06-08.md` | Synchronized README, GUIDE, INSTALLATION, QUICKSTART, and CLI tools with Work Agent's 5-phase orchestration (triage→prepare→execute→review→ship) and platform-specific agent setup. |
 | 2026-06-08 | workflow | Compact After Every Unit — Task-Granular Commits | `workflow/compact-after-every-unit-2026-06-08.md` | Commit after each task unit completes with structured messages, creating clean reviewable history where each commit maps to exactly one task in the INDEX. |
 | 2026-06-05 | plan | PWL-Work Slicing Plan: Dual-Path Architecture | `plan/pwrl-work-slicing-plan-2026-06-05.md` | Decompose pwrl-work into 6 micro-skills with agent orchestration and monolithic fallback, supporting three execution modes (inline/serial/parallel) with safety gates and GitHub integration. |
 | 2026-06-05 | pattern | Planning Tier Architecture - Fast, Standard, Deep | `pattern/planning-tier-architecture-2026-06-05.md` | Three-level planning depth system where tier selection tunes investigation rigor and documentation depth within all 4 phases, not which phases run. |

@@ -20,49 +20,41 @@ console.log(`
 
 ${isGlobal ? 'Global Installation' : 'Local Installation'}
 
-PWRL skills are now available for your AI assistant.
+PWRL skills and agents are now available for your AI assistant.
 
 Next Steps:
   1. Initialize PWRL in your project:
      ${isGlobal ? '$ pwrl init' : '$ npx pwrl init'}
 
-  2. Configure your AI assistant:
-`);
+  2. Enable Agents in your AI platform (Recommended):
+     Agents provide orchestrated workflows with phase-by-phase checkpoints.
+     - GitHub Copilot: Enable "Agents" in VS Code settings
+     - Cursor: Agents auto-discovered in .agents/agents/
+     - Claude: Add .agents/agents/ to Claude Project
+     - Others: See INSTALLATION.md for your platform
 
-// Note: Running 'pwrl init' in a project will copy bundled skills into .agents/skills/
+  3. Start using PWRL in your AI assistant:
+     Planning:
+       /pwrl-plan <task>          Create implementation plan (4 phases with checkpoints)
+     
+     Work:
+       /pwrl-work                 Execute work (5 phases: triage → prepare → execute → review → ship)
 
-
-if (isGlobal) {
-  console.log(`     - GitHub Copilot: Skills auto-discovered
-     - Claude: Add skills from ${PWRL_DIR}
-     - Cursor: Skills auto-discovered
-     - Others: Reference skills from ${PWRL_DIR}
-`);
-} else {
-  const relPath = path.relative(process.cwd(), PWRL_DIR);
-  console.log(`     - GitHub Copilot: Skills discovered in node_modules/@wicttor/pwrl
-     - Claude: Add skills from ${relPath}
-     - Cursor: Skills discovered in node_modules/@wicttor/pwrl
-     - Others: Reference skills from ${relPath}
-`);
-}
-
-console.log(`  3. Start using skills in your AI assistant:
-     /pwrl-plan <task>      Create implementation plan
-     /pwrl-work            Execute the work
-     /pwrl-review          Review code quality
-     /pwrl-learnings       Document insights
-    /pwrl-update-learnings Sync learnings index
-     /pwrl-end-session     Clean commit
+     Other Skills:
+       /pwrl-review               Code review and quality checks
+       /pwrl-learnings            Document solutions and insights
+       /pwrl-tasks                Break plans into granular task files
+       /pwrl-update-learnings     Sync learnings index
+       /pwrl-end-session          Clean commit at session end
 
 Documentation:
   ${isGlobal ? '$ pwrl docs' : '$ npx pwrl docs'}          Show documentation paths
-  ${isGlobal ? '$ pwrl info' : '$ npx pwrl info'}          Show skill locations
+  ${isGlobal ? '$ pwrl info' : '$ npx pwrl info'}          Show skill locations and agents
   ${isGlobal ? '$ pwrl help' : '$ npx pwrl help'}          Show CLI help
 
-Agents (Optional):
-  PWRL includes pre-built agents for advanced orchestration. After initialization,
-  agents in .agents/agents/ will be auto-discovered by your AI platform.
+Agent Details:
+  Planner Agent: Orchestrates planning (pwrl-plan-scope, pwrl-plan-research, pwrl-plan-design, pwrl-plan-generate)
+  Work Agent: Orchestrates execution (pwrl-work-triage, pwrl-work-prepare, pwrl-work-execute, pwrl-work-review, pwrl-work-ship)
 
 Quick Start:
   See QUICKSTART.md for example workflows
@@ -73,3 +65,4 @@ For detailed setup instructions:
 
 Happy building with PWRL!
 `);
+

@@ -37,7 +37,7 @@ Transform plans or prompts into working code through systematic execution:
 ## Support Files
 
 - `references/workflow-details.md` — Execution modes, task status transitions, and sync rules
-- `agents/pwrl-work.agent.md` — Optional orchestrator agent (if agents enabled in system)
+- `.agents/agents/pwrl-work.agent.md` — Optional orchestrator agent (if agents enabled in system)
 
 ## Workflow
 
@@ -46,22 +46,26 @@ Transform plans or prompts into working code through systematic execution:
 Before processing input, check if agent delegation is available:
 
 1. **Check system configuration** — Are agents enabled in the platform?
-2. **Check agent file presence** — Does `agents/pwrl-work.agent.md` exist?
+2. **Check agent file presence** — Does `.agents/agents/pwrl-work.agent.md` exist?
 3. **Decision:**
 
    **If agents enabled AND agent file exists:**
+
    ```
    ℹ️  Agents detected — delegating to pwrl-work.agent.md
    ```
+
    - Call `/pwrl-work <input>` via the `pwrl-work.agent.md` orchestrator
    - The agent handles all phases: triage → prepare → execute → review → ship
    - Return agent results
    - Skill exits (delegation complete)
 
    **If agents disabled OR agent file missing OR agent call fails:**
+
    ```
    ℹ️  Agents not available — running monolithic workflow
    ```
+
    - Continue to Phase 1 below (monolithic fallback)
    - All phases run inline within this skill
    - Identical user experience and output
@@ -137,6 +141,7 @@ Input → Agent Detection → Agent Available? NO → Run Monolithic Fallback
 ## Operational Logging
 
 **Agent delegation:**
+
 ```
 [DETECT] Agents available → delegating to pwrl-work.agent.md
 [DELEGATE] Agent call successful
@@ -144,6 +149,7 @@ Input → Agent Detection → Agent Available? NO → Run Monolithic Fallback
 ```
 
 **Fallback:**
+
 ```
 [DETECT] Agents not available → running monolithic workflow
 [FALLBACK] Phase 1: Triage... Phase 2: Prepare... Phase 3: Execute... Phase 4: Ship...
@@ -154,13 +160,13 @@ Input → Agent Detection → Agent Available? NO → Run Monolithic Fallback
 
 ## Troubleshooting
 
-| Problem | Cause | Solution |
-|---|---|---|
-| Always runs fallback | Agent file missing | Create `agents/pwrl-work.agent.md` |
-| Always runs fallback | Agents disabled in config | Enable agents in platform settings |
-| Agent fails; fallback runs | Agent file has errors | Check agent file for bugs |
-| Agent times out | Subagent hangs | Retry; check subagent logs |
-| Both paths fail | Invalid input or system state | Check error logs; validate input |
+| Problem                    | Cause                         | Solution                                   |
+| -------------------------- | ----------------------------- | ------------------------------------------ |
+| Always runs fallback       | Agent file missing            | Create `.agents/agents/pwrl-work.agent.md` |
+| Always runs fallback       | Agents disabled in config     | Enable agents in platform settings         |
+| Agent fails; fallback runs | Agent file has errors         | Check agent file for bugs                  |
+| Agent times out            | Subagent hangs                | Retry; check subagent logs                 |
+| Both paths fail            | Invalid input or system state | Check error logs; validate input           |
 
 **To force fallback:** Temporarily disable agents or rename/remove agent file.
 **To force agent:** Ensure agent file exists and agents are enabled.

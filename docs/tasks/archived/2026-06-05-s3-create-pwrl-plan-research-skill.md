@@ -1,13 +1,30 @@
 ---
 unit-id: S3
 plan: docs/plans/2026-06-05-001-slice-pwrl-plan-skill.md
-status: for-review
+status: archived
+superseded-by: docs/plans/2026-06-10-002-fix-and-verify-pwrl-plan.md (Units U1-U8)
 created: 2026-06-05
+archived: 2026-06-10
 dependencies: [S1, S2]
 files:
   - skills/pwrl-plan-research/SKILL.md (new)
 learnings: []
 ---
+
+> ⚠️ **ARCHIVED & SUPERSEDED** — 2026-06-10
+> 
+> This task has been superseded by a comprehensive fix & verification plan:
+> **[Fix and Verify PWRL Plan Micro-Skills for Production Readiness](docs/plans/2026-06-10-002-fix-and-verify-pwrl-plan.md)**
+> 
+> The implementation from this task (pwrl-plan-research/SKILL.md) is complete and in use.
+> However, critical P0/P1 findings from code review require fixes to enable production deployment.
+> 
+> **Related work:** 
+> - Code review: `.context/pwrl-review/pwrl-plan-comprehensive-review/review.md`
+> - New plan: `docs/plans/2026-06-10-002-fix-and-verify-pwrl-plan.md`
+> - New tasks: `docs/tasks/to-do/2026-06-10-u*.md`
+> 
+> ---
 
 # S3: Create pwrl-plan-research Micro-Skill
 

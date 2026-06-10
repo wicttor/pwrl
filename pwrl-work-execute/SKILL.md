@@ -17,7 +17,7 @@ taskList:
   source: plan | task | prompt
   taskCount: 5
   tasks:
-    - unitId: S1
+    - unit-id: S1
       file: docs/tasks/in-progress/2026-06-05-s1-task.md
       dependencies: []
       status: in-progress
@@ -39,7 +39,7 @@ tasksFailed: 0
 testsPassed: true
 commitHash: abc1234
 results:
-  - unitId: S1
+  - unit-id: S1
     taskFile: docs/tasks/for-review/2026-06-05-s1-task.md
     status: for-review
     testsPassed: true
@@ -97,7 +97,7 @@ tasksCompleted: 1
 tasksFailed: 0
 testsPassed: true
 results:
-  - unitId: U1
+  - unit-id: U1
     status: for-review
     testsPassed: true
     summary: "Implemented email validation"
@@ -155,8 +155,8 @@ tasksFailed: 0
 testsPassed: true
 commitHash: abc1234
 results:
-  - unitId: S1, status: for-review, testsPassed: true
-  - unitId: S2, status: for-review, testsPassed: true
+  - unit-id: S1, status: for-review, testsPassed: true
+  - unit-id: S2, status: for-review, testsPassed: true
   - ...
 ```
 
@@ -176,45 +176,55 @@ Concurrent subagent execution for independent tasks.
 
 **Flow:**
 
-1. **Verify safety:**
+1. **Verify safety (pre-spawn):**
    - Re-check file-to-task map for conflicts
    - If any overlap found: log warning, fall back to serial mode
    - If safe: proceed to parallel spawning
 
-2. **Spawn all subagents in parallel:**
+2. **Runtime conflict detection (during spawn):**
+   - As subagents initialize, verify no file conflicts emerge
+   - If during spawn phase a conflict is detected:
+     - **Pause all spawning** — Do not start new subagents
+     - **Kill already-running subagents** — Clean termination with SIGTERM (5s timeout, then SIGKILL)
+     - **Log conflict details** — Which tasks share which files
+     - **Ask user:** "File conflicts detected during parallel execution. Retry in serial mode or abort?"
+     - **If user chooses serial:** Re-queue all tasks (including completed ones) for serial re-execution
+     - **If user chooses abort:** Mark all tasks as blocked, return partial results
+
+3. **Spawn all subagents in parallel:**
    - For each task: spawn subagent with task file and constraint flags
    - Pass flags: `--no-full-suite`, `--no-commit`
    - Track subagent process IDs
 
-3. **Wait for completion:**
+4. **Wait for completion:**
    - Poll subagent status
    - Timeout after suggested limit (e.g., 1 hour)
    - If timeout: kill subagent, mark task as failed
    - Collect results as each subagent finishes
 
-4. **Aggregate results:**
+5. **Aggregate results:**
 
 ```yaml
 parallelTasksSpawned: 4
 parallelTasksCompleted: 4
 parallelTasksFailed: 0
 tasks:
-  - unitId: U1, status: for-review, testsPassed: true
-  - unitId: U2, status: for-review, testsPassed: true
+  - unit-id: U1, status: for-review, testsPassed: true
+  - unit-id: U2, status: for-review, testsPassed: true
   - ...
 ```
 
-5. **Run full targeted test suite (orchestrator only):**
+6. **Run full targeted test suite (orchestrator only):**
    - All modified files are now in working directory
    - Run test suite covering all affected areas
    - Verify no integration issues between parallel work
    - If integration tests fail: identify which task(s) caused the issue
 
-6. **Stage and commit (orchestrator only):**
+7. **Stage and commit (orchestrator only):**
    - Same as serial mode finalization
    - Commit message includes all unit IDs
 
-7. **Return result:**
+8. **Return result:**
    - Same structure as serial mode result
 
 ---

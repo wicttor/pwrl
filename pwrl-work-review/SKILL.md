@@ -17,7 +17,7 @@ mode: serial
 taskCount: 5
 tasksCompleted: 5
 results:
-  - unitId: S1
+  - unit-id: S1
     taskFile: docs/tasks/for-review/...
     status: for-review
     testsPassed: true

@@ -257,6 +257,91 @@ error: "Issue #123 not found in repository wicttor/pwrl"
 
 ---
 
+## Testing with Mocks
+
+For unit testing without GitHub CLI or credentials, mock the `gh` CLI using stubs:
+
+### Approach 1: Mock Shell Commands
+
+If testing via shell scripts, create a mock `gh` wrapper:
+
+```bash
+# tests/mocks/gh-mock.sh
+#!/bin/bash
+# Mock GitHub CLI for testing
+case "$1" in
+  auth)
+    echo "Authenticated as test-user"
+    exit 0
+    ;;
+  issue)
+    if [[ "$3" == "123" ]]; then
+      echo '{"number": 123, "title": "Test Issue"}'
+    else
+      echo "HTTP 404: Issue not found" >&2
+      exit 1
+    fi
+    ;;
+  api)
+    echo '{"login": "test-user"}'
+    ;;
+  *)
+    echo "Unknown command: $1" >&2
+    exit 1
+    ;;
+esac
+```
+
+In test:
+```bash
+export PATH="./tests/mocks:$PATH"
+/pwrl-work-sync-status tests/fixtures/task-mock.md in-progress
+# Now uses mock-gh.sh instead of real gh CLI
+```
+
+### Approach 2: Mock Config Disable
+
+Simplest: Disable GitHub integration in test config:
+
+```json
+// tests/.pwrlrc.test.json
+{
+  "integrations": {
+    "githubIssues": false
+  }
+}
+```
+
+Skill will return `action: skipped` without any GitHub CLI calls.
+
+### Approach 3: Fake Issue in Real CLI (if installed)
+
+If testing with real `gh` CLI but no real repo:
+
+```bash
+# Create test issue in real repo
+gh issue create --title "Test sync issue" --body "For pwrl-work-sync-status tests"
+# Use returned issue number in test fixtures
+```
+
+Update test fixture:
+```yaml
+---
+unit-id: TEST-1
+github-issue: 9999  # Use real issue from your repo
+---
+```
+
+Clean up after test: `gh issue delete 9999`
+
+### Recommended Practice
+
+**For CI/CD environments:** Use Approach 2 (mock config disable) — requires no external dependencies, fastest
+**For local development:** Use Approach 1 (mock gh wrapper) — most realistic, covers error paths
+**For integration tests:** Use Approach 3 (real issue) — validates actual GitHub API behavior (but clean up after)
+
+---
+
 ## Dry-Run Mode
 
 When `dryRun: true`, preview changes without making API calls:

@@ -13,6 +13,7 @@ Canonical index of all learning documents.
 
 | Date | Category | Title | Path | Short Description |
 | ---- | -------- | ----- | ---- | ------------------- |
+| 2026-06-10 | decision | Code Review Fixes & Validation for Skill Decomposition | `decision/code-review-fixes-validation-2026-06-10.md` | Applied 3 P2 fixes to pwrl-work decomposition: explicit parallel mode fallback, GitHub CLI testing with mocks, and standardized unit-id naming across all state schemas. |
 | 2026-06-09 | technical-fix | pwrl init: Incorrect agent source path | `technical-fix/pwrl-init-incorrect-agent-path-2026-06-09.md` | Fixed pwrl init to copy agents from 'agents/' instead of '.agents/agents/', ensuring agents are correctly installed when users run init. |
 | 2026-06-08 | workflow | PWRL Documentation Revised for Work Agent Orchestration | `workflow/pwrl-documentation-revised-for-work-agent-orchestration-2026-06-08.md` | Synchronized README, GUIDE, INSTALLATION, QUICKSTART, and CLI tools with Work Agent's 5-phase orchestration (triage→prepare→execute→review→ship) and platform-specific agent setup. |
 | 2026-06-08 | workflow | Compact After Every Unit — Task-Granular Commits | `workflow/compact-after-every-unit-2026-06-08.md` | Commit after each task unit completes with structured messages, creating clean reviewable history where each commit maps to exactly one task in the INDEX. |

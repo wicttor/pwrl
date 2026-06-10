@@ -24,7 +24,7 @@ taskList:
   source: plan | task | prompt
   taskCount: 5
   tasks:
-    - unitId: S1
+    - unit-id: S1
       file: docs/tasks/in-progress/2026-06-05-s1-task.md
       dependencies: []
       status: in-progress

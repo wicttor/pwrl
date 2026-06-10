@@ -91,7 +91,7 @@ Extract these fields from the YAML frontmatter:
 ```yaml
 inputType: task
 taskFile: docs/tasks/to-do/2026-06-05-u1-task.md
-unitId: S1
+unit-id: S1
 plan: docs/plans/2026-06-05-002-plan.md
 status: to-do
 dependencies: [S2, S3]
@@ -139,11 +139,11 @@ planId: 2026-06-05-002
 tier: Standard
 planStatus: active
 units:
-  - unitId: U1
+  - unit-id: U1
     name: Input Triage
     files: [pwrl-work-triage/SKILL.md]
     approach: Extract Phase 0 logic
-  - unitId: U2
+  - unit-id: U2
     name: Environment Setup
     files: [pwrl-work-prepare/SKILL.md]
     approach: Extract Phase 1 logic

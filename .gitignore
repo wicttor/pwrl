@@ -2,3 +2,9 @@
 .context/
 .agents/
 .pwrlrc.json
+
+# PWRL intermediate plan state files (can be .gitignore'd; user keeps local archive)
+docs/plans/.scope/
+docs/plans/.research/
+docs/plans/.design/
+docs/plans/.archive/

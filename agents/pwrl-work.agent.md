@@ -156,6 +156,7 @@ Store state in memory between phases. Pass relevant context to each skill call.
 2. The skill executes tasks with quality gates, runs tests, updates task status, and syncs with GitHub.
 
 3. During execution, display progress:
+
    ```
    [1/5] Executing task S1...
    [2/5] Executing task S2...
@@ -241,10 +242,10 @@ Store state in memory between phases. Pass relevant context to each skill call.
 
    ```
    ✅ Work shipped successfully!
-     
+
    Commit: [hash]
    Branch: [branch-name]
-     
+
    Would you like to use /pwrl-end-session to create a summary commit?
    ```
 
@@ -262,15 +263,16 @@ Store state in memory between phases. Pass relevant context to each skill call.
 
 ## Error Handling
 
-| Scenario | Action |
-|---|---|
-| Skill call fails (error) | Log error, offer retry up to 3 times, then ask user to fix manually |
-| User cancels at checkpoint | Exit gracefully with current state preserved |
-| Phase has partial results | Document what's complete, offer to proceed or rollback |
-| Git state corrupted | Show error, ask user to resolve git state manually |
-| Network error on GitHub sync | Log warning, continue without sync (non-critical) |
+| Scenario                     | Action                                                              |
+| ---------------------------- | ------------------------------------------------------------------- |
+| Skill call fails (error)     | Log error, offer retry up to 3 times, then ask user to fix manually |
+| User cancels at checkpoint   | Exit gracefully with current state preserved                        |
+| Phase has partial results    | Document what's complete, offer to proceed or rollback              |
+| Git state corrupted          | Show error, ask user to resolve git state manually                  |
+| Network error on GitHub sync | Log warning, continue without sync (non-critical)                   |
 
 **Recovery options at any failure:**
+
 1. **Retry** — Re-run the failed phase
 2. **Skip** — Skip the failing phase (if non-critical)
 3. **Abort** — Cancel all work, rollback if possible
@@ -278,9 +280,43 @@ Store state in memory between phases. Pass relevant context to each skill call.
 
 ---
 
+## Error Recovery & Rollback
+
+**For detailed error recovery procedures, see:** [`pwrl-planner/references/error-recovery.md`](../pwrl-planner/references/error-recovery.md)
+
+Key principles:
+
+- **Fail fast:** Detect errors early; don't proceed with invalid state
+- **Preserve state:** Save intermediate work before cleanup
+- **Ask user:** Don't make recovery decisions unilaterally
+- **Retry capability:** Most operations can be retried after fixing root cause
+
+**At any phase, if an error occurs:**
+
+1. Log error details with timestamp
+2. Stash work (save modified files to temporary directory)
+3. Ask user: "Retry / Adjust / Cancel?"
+4. If retry: Attempt operation again (up to 3 times)
+5. If adjust: Allow user to fix and retry
+6. If cancel: Gracefully exit; offer recovery summary with backup location
+
+**Recovery checkpoints:**
+
+- Phase 1 (Triage): Input validation, plan discovery, circular dependency detection
+- Phase 2 (Prepare): Branch creation, task file generation, execution mode selection
+- Phase 3 (Execute): Subagent spawning, test suite execution, file conflict detection
+- Phase 4 (Review): Code analysis, pattern checking, system validation
+- Phase 5 (Ship): Git commit, push, GitHub sync
+
+**Emergency fallback:**
+If normal recovery fails, save all state to backup directory and prompt user for manual intervention.
+
+---
+
 ## Usage Examples
 
 ### Example 1: Execute from Plan File
+
 ```
 /pwrl-work docs/plans/2026-06-05-002-slice-pwrl-work-skill.md
 ```
@@ -288,6 +324,7 @@ Store state in memory between phases. Pass relevant context to each skill call.
 Flow: Triage → Prepare (11 tasks, serial) → Execute (all tasks) → Review (consolidate duplications) → Ship (commit and push)
 
 ### Example 2: Execute from Task File
+
 ```
 /pwrl-work docs/tasks/to-do/2026-06-05-s1-analyze-pwrl-work.md
 ```
@@ -295,6 +332,7 @@ Flow: Triage → Prepare (11 tasks, serial) → Execute (all tasks) → Review (
 Flow: Triage (task file) → Prepare (inline mode, 1 task) → Execute → Review → Ship
 
 ### Example 3: Execute from Bare Prompt
+
 ```
 /pwrl-work "Add email validation to user signup form"
 ```

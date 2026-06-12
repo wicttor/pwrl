@@ -112,6 +112,7 @@ describe('lib/github-integration: GitHub API & Git Operations', () => {
       // Structure test - actual API calls tested in integration tests
       const fn = githubIntegration.makeGitHubRequest;
       assert(typeof fn === 'function', 'Function should exist and be callable');
+    });
 
     it('should handle network errors', () => {
       // Structure: should be resilient to network issues

@@ -172,3 +172,6 @@ Content`;
 
       assert(typeof unitId === 'string' || typeof unitId === 'object',
         'Should return result');
+    });
+  });
+});

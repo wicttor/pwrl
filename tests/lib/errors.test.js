@@ -145,6 +145,8 @@ describe('lib/errors: Error Handling', () => {
 
       assert(typeof suggestion === 'string' || suggestion === undefined,
         'Should return string or undefined');
+    });
+  });
 
   describe('Error code constants', () => {
     it('should export ERROR_CODES object', () => {

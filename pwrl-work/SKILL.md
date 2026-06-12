@@ -29,31 +29,53 @@ Transform task files, plans, or prompts into completed working code through syst
 
 ## Architecture
 
-**Pure Skill Pipeline** — Direct sequence of 5 micro-skills with no routing logic:
+### Agent Detection and Routing
+
+The skill supports two execution paths:
+
+**Agent Delegation Path:** When invoked from CLI or programmatically with agent support:
+
+- Routes to PWRL Work Agent (`agents/pwrl-work.agent.md`)
+- Agent manages phase orchestration with user feedback loops
+- Agent provides interactive guidance and approval gates
+- Check system configuration: if running in VS Code with agent support available
+
+**Monolithic Fallback Path:** When agent unavailable or direct invocation:
+
+- Executes all 5 phases sequentially in pure skill pipeline
+- Self-contained execution without external routing
+- Direct artifact flow between phases
+- Suitable for automation, CI/CD, or headless environments
+
+Both paths produce identical work output; agent path adds interactive coordination.
+
+### Pure Skill Pipeline Architecture
+
+**Direct sequence of 5 micro-skills with deterministic artifact flow:**
 
 ```
 Input
   ↓
-Phase 1: pwrl-work-triage
+Phase 0: pwrl-work-triage
   ├ Input: task file, plan file, bare prompt, or empty
   ├ Output: triage artifact (unit_id, files, acceptance_criteria, dependencies)
   ↓
-Phase 2: pwrl-work-prepare
+Phase 1: pwrl-work-prepare
   ├ Input: triage artifact
   ├ Processing: repo verification, ambiguity resolution, branch strategy, verification commands
   ├ Output: prepare artifact (branch, verification_commands, environment state)
   ↓
-Phase 3: pwrl-work-execute
+Phase 2: pwrl-work-execute
   ├ Input: prepare artifact
   ├ Processing: scaffolding, test-first implementation, quality gates
   ├ Output: execute artifact (files changed, tests passing, build/lint status)
   ↓
-Phase 4: pwrl-work-review
+Phase 3: pwrl-work-review
   ├ Input: execute artifact
   ├ Processing: scope check, diff review, test review, documentation check
   ├ Output: review artifact (approval status, ready_to_ship)
   ↓
-Phase 5: pwrl-work-ship
+Phase 4: pwrl-work-ship
   ├ Input: review artifact
   ├ Processing: merge to main, update task status, optional end-session
   ├ Output: ship artifact (merge status, completion timestamp)
@@ -65,7 +87,7 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 
 ## Workflow
 
-### Phase 1: Triage Input
+### Phase 0: Triage Input
 
 **Purpose:** Classify input and extract task data
 
@@ -82,7 +104,7 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 
 **Output:** Triage artifact with unit_id, title, goal, files, acceptance_criteria, dependencies
 
-### Phase 2: Prepare Environment
+### Phase 1: Prepare Environment
 
 **Purpose:** Setup branch, verify repository state, identify verification commands
 
@@ -100,7 +122,7 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 
 **Output:** Prepare artifact with branch, verification_commands, environment state, ready_for_execution
 
-### Phase 3: Execute Implementation
+### Phase 2: Execute Implementation
 
 **Purpose:** Implement work with test-first discipline and incremental verification
 
@@ -126,7 +148,7 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 - ✓ No regressions (existing tests still pass)
 - ✓ Coverage acceptable (>50%)
 
-### Phase 4: Review & Verify
+### Phase 3: Review & Simplify
 
 **Purpose:** Final code quality check before shipping
 
@@ -143,7 +165,7 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 
 **Output:** Review artifact with scope_check, diff_review, approval status, ready_to_ship
 
-### Phase 5: Ship to Main
+### Phase 4: Ship to Main
 
 **Purpose:** Merge work to main branch, complete task, optionally chain to end-session
 

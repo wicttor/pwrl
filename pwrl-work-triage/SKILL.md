@@ -214,6 +214,33 @@ relatedPatterns:
 planningRecommended: false
 ```
 
+### 5. Select Interaction Mode
+
+After classifying input, ask user to choose interaction style:
+
+**Prompt:** "How would you like to proceed?"
+
+**Options:**
+
+- **Detailed (Step-by-Step):**
+  - Review and confirm at each phase (Prepare → Execute → Review → Finalize)
+  - Inspect generated artifacts
+  - Approval gates at each transition
+  - Slower but more control and visibility
+  - Best for: Complex work, unfamiliar codebases, learning
+
+- **Yolo (Full Automation):**
+  - Fully automated from Phase 1 through Phase 3
+  - Review and confirm only at the end
+  - Faster execution
+  - Best for: Straightforward tasks, well-understood scope, time-sensitive
+
+**Store selection in context:**
+
+```yaml
+interactionMode: detailed | yolo
+```
+
 ---
 
 ## Error Handling

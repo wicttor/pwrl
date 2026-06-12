@@ -114,13 +114,27 @@ files: [list from plan]
 
 When triage output is a single task file:
 
-1. Update task frontmatter: `status: to-do` → `status: in-progress`
-2. Move file: `docs/tasks/to-do/` → `docs/tasks/in-progress/`
-3. Verify dependencies:
+1. **CRITICAL: Move task file** `docs/tasks/to-do/` → `docs/tasks/in-progress/`
+   - Read the task file from `to-do/` folder
+   - Update frontmatter status: `status: to-do` → `status: in-progress`
+   - Write the updated file to `docs/tasks/in-progress/` with same filename
+   - Delete original from `to-do/`
+   - Log: `Task moved: docs/tasks/to-do/[file] → docs/tasks/in-progress/[file]`
+
+2. Verify dependencies:
    - Check `docs/tasks/INDEX.md` (or `INDEX-S*.md`) for each dependency's status
    - If any dependency is `to-do` or `in-progress`: warn user
    - Offer options: "Proceed anyway (manual dependency management) or wait?"
-4. Update `docs/tasks/INDEX.md` to reflect status change
+
+3. Update `docs/tasks/INDEX.md`:
+   - Update status table to reflect new location and status
+   - Update cross-references if needed
+
+**Status Transition:**
+
+```
+to-do/ (status: to-do) → in-progress/ (status: in-progress)
+```
 
 #### 2C. From Bare Prompt
 
@@ -224,11 +238,11 @@ if taskCount >= 3:
 2. If chain includes tasks from multiple plans → critical path spans plans
 3. Set flag: `criticalPathMultiPlan: true/false`
 
-**Parallel subagent constraints:**
+**Parallel execution constraints:**
 
-- Subagents must not run full test suite (only targeted tests)
-- Subagents must not stage or commit (orchestrator handles this)
-- Subagents report results to orchestrator for aggregation
+- Only targeted tests run during implementation (not full suite)
+- Staging and committing deferred to review phase
+- Results aggregated before final quality gates
 - **NEW**: For cross-plan parallel: sync points between groups (see step 5)
 
 **Output:**

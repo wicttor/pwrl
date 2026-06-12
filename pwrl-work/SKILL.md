@@ -12,11 +12,11 @@ Execute implementation work through a deterministic 5-phase pipeline: triage inp
 
 Transform task files, plans, or prompts into completed working code through systematic execution:
 
-- **Triage Input** — Classify and validate input (task file, plan file, bare prompt, or latest task)
-- **Prepare Environment** — Repository verification, ambiguity resolution, branch setup, verification commands
-- **Execute Implementation** — Test-first implementation with incremental verification and quality gates
-- **Review & Verify** — Code review, scope check, diff quality, documentation
-- **Ship to Main** — Merge, update status, optional end-session chaining
+- **Triage Input** — Classify and validate input (task file, plan file, bare prompt, or latest task), select interaction mode
+- **Prepare Environment** — Repository verification, ambiguity resolution, branch setup, move task to in-progress
+- **Execute Implementation** — Test-first implementation with incremental verification and quality gates, move task to for-review
+- **Review & Verify** — Code review, scope check, diff quality, documentation consolidation
+- **Finalize & Ready for PR** — Verify branch state, tasks marked for-review, display PR creation instructions
 
 ## Usage
 
@@ -29,28 +29,6 @@ Transform task files, plans, or prompts into completed working code through syst
 
 ## Architecture
 
-### Agent Detection and Routing
-
-The skill supports two execution paths:
-
-**Agent Delegation Path:** When invoked from CLI or programmatically with agent support:
-
-- Routes to PWRL Work Agent (`agents/pwrl-work.agent.md`)
-- Agent manages phase orchestration with user feedback loops
-- Agent provides interactive guidance and approval gates
-- Check system configuration: if running in VS Code with agent support available
-
-**Monolithic Fallback Path:** When agent unavailable or direct invocation:
-
-- Executes all 5 phases sequentially in pure skill pipeline
-- Self-contained execution without external routing
-- Direct artifact flow between phases
-- Suitable for automation, CI/CD, or headless environments
-
-Both paths produce identical work output; agent path adds interactive coordination.
-
-### Pure Skill Pipeline Architecture
-
 **Direct sequence of 5 micro-skills with deterministic artifact flow:**
 
 ```
@@ -58,29 +36,29 @@ Input
   ↓
 Phase 0: pwrl-work-triage
   ├ Input: task file, plan file, bare prompt, or empty
-  ├ Output: triage artifact (unit_id, files, acceptance_criteria, dependencies)
+  ├ Output: triage artifact (unit_id, files, acceptance_criteria, dependencies, interaction_mode)
   ↓
 Phase 1: pwrl-work-prepare
-  ├ Input: triage artifact
-  ├ Processing: repo verification, ambiguity resolution, branch strategy, verification commands
+  ├ Input: triage artifact (with interaction_mode)
+  ├ Processing: repo verification, branch strategy, move task to-do → in-progress
   ├ Output: prepare artifact (branch, verification_commands, environment state)
   ↓
 Phase 2: pwrl-work-execute
   ├ Input: prepare artifact
-  ├ Processing: scaffolding, test-first implementation, quality gates
-  ├ Output: execute artifact (files changed, tests passing, build/lint status)
+  ├ Processing: scaffolding, test-first implementation, quality gates, move in-progress → for-review
+  ├ Output: execute artifact (files changed, tests passing, tasks for-review)
   ↓
 Phase 3: pwrl-work-review
   ├ Input: execute artifact
-  ├ Processing: scope check, diff review, test review, documentation check
-  ├ Output: review artifact (approval status, ready_to_ship)
+  ├ Processing: scope check, diff review, test review, documentation, duplication consolidation
+  ├ Output: review artifact (approval status)
   ↓
 Phase 4: pwrl-work-ship
   ├ Input: review artifact
-  ├ Processing: merge to main, update task status, optional end-session
-  ├ Output: ship artifact (merge status, completion timestamp)
+  ├ Processing: verify all tasks for-review, branch confirmation, display PR instructions
+  ├ Output: finalization artifact (branch ready, PR creation steps)
   ↓
-COMPLETE
+COMPLETE (Branch ready for pull request)
 ```
 
 Each phase produces an explicit **artifact** (YAML frontmatter + structured data) consumed by the next phase. Enables resumability, traceability, and independent testing.
@@ -89,7 +67,7 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 
 ### Phase 0: Triage Input
 
-**Purpose:** Classify input and extract task data
+**Purpose:** Classify input, extract task data, and select interaction mode
 
 **Input:** Task file path, plan file path, bare prompt, or empty (defaults to latest task)
 
@@ -99,16 +77,19 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 2. Extract task data (unit_id, files, dependencies, acceptance_criteria)
 3. Validate required fields
 4. Detect conflicts with in-progress tasks
-5. Confirm with user
-6. Generate triage artifact
+5. **Ask interaction mode:**
+   - **Detailed:** Step-by-step interaction at each phase (review, confirm, adjust)
+   - **Yolo:** Full automation from Phase 0 through Phase 3, final confirmation only
+6. Confirm with user
+7. Generate triage artifact with interaction_mode
 
-**Output:** Triage artifact with unit_id, title, goal, files, acceptance_criteria, dependencies
+**Output:** Triage artifact with unit_id, title, goal, files, acceptance_criteria, dependencies, interaction_mode
 
 ### Phase 1: Prepare Environment
 
 **Purpose:** Setup branch, verify repository state, identify verification commands
 
-**Input:** Triage artifact
+**Input:** Triage artifact (includes interaction_mode)
 
 **Processing:** (See `pwrl-work-prepare/references/prepare-environment-protocol.md`)
 
@@ -117,10 +98,11 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 3. Establish branch strategy (create feature/U<N>, use existing, or continue on dev)
 4. Identify verification commands (build, test, lint, precommit)
 5. Check environment (Node, npm, dependencies, database, env vars)
-6. Update task status to in-progress
-7. Generate prepare artifact
+6. **Move task file:** `docs/tasks/to-do/` → `docs/tasks/in-progress/`
+7. Update task status to `in-progress` in frontmatter
+8. Generate prepare artifact
 
-**Output:** Prepare artifact with branch, verification_commands, environment state, ready_for_execution
+**Output:** Prepare artifact with branch, verification_commands, environment state, task moved and status updated
 
 ### Phase 2: Execute Implementation
 
@@ -135,10 +117,11 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 3. Verify all acceptance criteria
 4. Run quality gates: tests pass, lint clean, build succeeds, no regressions, coverage acceptable
 5. Prepare for review: clear commits, remove debug code, update docs
-6. Move task to for-review status
-7. Generate execute artifact
+6. **Move task file:** `docs/tasks/in-progress/` → `docs/tasks/for-review/`
+7. Update task status to `for-review` in frontmatter
+8. Generate execute artifact
 
-**Output:** Execute artifact with files changed, tests passing, build/lint status, coverage, ready_for_review
+**Output:** Execute artifact with files changed, tests passing, build/lint status, task moved and marked for-review
 
 **Quality Gates (all must pass):**
 
@@ -150,7 +133,7 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 
 ### Phase 3: Review & Simplify
 
-**Purpose:** Final code quality check before shipping
+**Purpose:** Final code quality check and consolidation
 
 **Input:** Execute artifact
 
@@ -160,28 +143,28 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 2. Review diff (code quality, security, style)
 3. Review tests (adequate coverage, meaningful tests)
 4. Check documentation (README, comments, types updated)
-5. Get user approval
-6. Generate review artifact
+5. Detect and consolidate duplication
+6. Get user approval
+7. Generate review artifact
 
-**Output:** Review artifact with scope_check, diff_review, approval status, ready_to_ship
+**Output:** Review artifact with scope_check, diff_review, approval status
 
-### Phase 4: Ship to Main
+### Phase 4: Finalize & Mark Ready
 
-**Purpose:** Merge work to main branch, complete task, optionally chain to end-session
+**Purpose:** Final confirmations and branch management
 
 **Input:** Review artifact
 
-**Processing:** (See `pwrl-work-ship/references/ship-delivery-protocol.md`)
+**Processing:**
 
-1. Merge feature branch to main (with conflict handling)
-2. Delete feature branch
-3. Move task to done status
-4. Update INDEX.md
-5. Display completion summary
-6. Optionally chain to `/pwrl-end-session`
-7. Generate ship artifact
+1. Verify all tasks marked `for-review` ✓
+2. Verify branch created and maintained ✓
+3. Display completion summary
+4. Branch remains active for pull request creation
+5. Optionally chain to `/pwrl-end-session` for learnings documentation
+6. Generate finalization artifact
 
-**Output:** Ship artifact with merge status, task completion, optional end-session chaining
+**Output:** Finalization artifact with completion status, branch info, PR instructions
 
 ---
 
@@ -196,12 +179,14 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 
 ## Rules
 
+- **Select interaction mode upfront** — Choose detailed or yolo mode before starting
 - **Clarify ambiguities upfront** — Don't proceed if approach is unclear
 - **Verify incrementally** — Run checks frequently, catch issues early
 - **Test-first discipline** — Write tests before implementing
-- **One scope at a time** — Complete and ship each unit separately
+- **One scope at a time** — Complete each unit and mark for-review separately
 - **No scope creep** — Get approval before expanding beyond task
-- **Quality gates** — All checks must pass before shipping
+- **Quality gates** — All checks must pass before marking for-review
+- **Branch stays active** — Keep feature branch for PR creation, don't merge to main
 
 ## Error Recovery
 
@@ -211,7 +196,7 @@ Each phase includes error detection and recovery:
 - **Prepare:** Uncommitted changes, wrong branch, missing dependencies → ask action
 - **Execute:** Build failure, test failure, regression, low coverage → recovery instructions
 - **Review:** Scope creep, quality issues, security concerns → request fix
-- **Ship:** Merge conflicts, permission denied, CI failure → recovery steps
+- **Finalize:** Tasks not marked for-review, dirty working directory → recovery steps
 
 All errors include user-facing explanation and recovery path (never silent failure).
 

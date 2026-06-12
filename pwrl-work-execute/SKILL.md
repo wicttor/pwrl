@@ -6,7 +6,7 @@ argument-hint: "[Task list context from pwrl-work-prepare, execution mode]"
 
 # pwrl-work-execute — Task Execution Engine
 
-**Purpose:** Core execution engine that coordinates task implementation across three modes (inline, serial, parallel), enforces quality gates, manages task status progression, and integrates GitHub status syncing. Orchestrator agents call this skill after preparation.
+**Purpose:** Core execution engine that coordinates task implementation across three modes (inline, serial, parallel), enforces quality gates, manages task status progression, and integrates GitHub status syncing. The main pwrl-work skill calls this skill after preparation.
 
 ## Input
 
@@ -84,9 +84,20 @@ Direct execution without subagents, suitable for small work.
 
 5. **Mark for-review on success:**
    - Update frontmatter: `status: for-review`
-   - Move `in-progress/` → `for-review/`
+   - **CRITICAL: Move file** `docs/tasks/in-progress/` → `docs/tasks/for-review/`
+     - Read the task file from `in-progress/` folder
+     - Update frontmatter status: `status: in-progress` → `status: for-review`
+     - Write the updated file to `docs/tasks/for-review/` with same filename
+     - Delete original from `in-progress/`
+     - Log: `Task ready for review: docs/tasks/in-progress/[file] → docs/tasks/for-review/[file]`
    - Update `docs/tasks/INDEX.md`
    - Call S4 for GitHub sync if enabled
+
+**Status Transition:**
+
+```
+in-progress/ (status: in-progress) → for-review/ (status: for-review)
+```
 
 6. **Return result:**
 
@@ -107,7 +118,7 @@ results:
 
 ### Serial Mode (3+ Dependent Tasks)
 
-Sequential subagent execution for tasks with dependencies.
+Sequential execution for tasks with dependencies.
 
 **When used:** 3+ tasks, dependencies exist between tasks, or file conflicts detected.
 
@@ -120,12 +131,14 @@ Sequential subagent execution for tasks with dependencies.
 
 2. **For each task (sequentially):**
 
-   **a) Spawn subagent:**
-   - Pass: task file path, task context, constraint flags
-   - Wait for subagent to complete
+   **a) Execute task:**
+   - Load task file and extract goal, implementation steps, test scenarios, acceptance criteria
+   - Implement following test-first discipline
+   - Run affected tests and quality gates
+   - Update task status to `for-review`
 
    **b) Collect results:**
-   - Read subagent execution result (test status, verification summaries)
+   - Capture test status, verification summaries, implementation summary
    - Verify task status is `for-review` or `blocked`
 
    **c) Check progress:**
@@ -134,12 +147,12 @@ Sequential subagent execution for tasks with dependencies.
 
 3. **After all tasks complete:**
 
-   **a) Run full targeted test suite (orchestrator):**
+   **a) Run full targeted test suite:**
    - Run test suite covering all files modified by all tasks
    - Verify no integration issues between sequentially executed tasks
    - If tests fail: investigate, mark affected tasks as blocked
 
-   **b) Stage and commit (orchestrator responsibility):**
+   **b) Stage and commit:**
    - Stage all changes
    - Create commit message with unit IDs and summary
    - Push to branch
@@ -164,9 +177,9 @@ results:
 
 ### Parallel Mode (3+ Independent Tasks)
 
-Concurrent subagent execution for independent tasks.
+Concurrent execution for independent tasks.
 
-**When used:** 3+ tasks, no dependencies, no file conflicts (verified by S3).
+**When used:** 3+ tasks, no dependencies, no file conflicts (verified by prepare phase).
 
 **Safety constraints (MUST verify before proceeding):**
 
@@ -176,55 +189,54 @@ Concurrent subagent execution for independent tasks.
 
 **Flow:**
 
-1. **Verify safety (pre-spawn):**
+1. **Verify safety (pre-execution):**
    - Re-check file-to-task map for conflicts
    - If any overlap found: log warning, fall back to serial mode
-   - If safe: proceed to parallel spawning
+   - If safe: proceed to parallel execution
 
-2. **Runtime conflict detection (during spawn):**
-   - As subagents initialize, verify no file conflicts emerge
-   - If during spawn phase a conflict is detected:
-     - **Pause all spawning** — Do not start new subagents
-     - **Kill already-running subagents** — Clean termination with SIGTERM (5s timeout, then SIGKILL)
+2. **Execute all tasks in parallel:**
+   - For each task: execute implementation independently
+   - Each task runs: load → implement → verify → status update
+   - Run targeted tests for each task (not full suite)
+   - Track execution progress and results
+
+3. **Runtime conflict detection (during execution):**
+   - Monitor file access for conflicts
+   - If conflicts detected:
+     - **Pause new task starts** — Do not begin new parallel tasks
+     - **Wait for in-flight tasks** — Allow running tasks to complete
      - **Log conflict details** — Which tasks share which files
      - **Ask user:** "File conflicts detected during parallel execution. Retry in serial mode or abort?"
-     - **If user chooses serial:** Re-queue all tasks (including completed ones) for serial re-execution
+     - **If user chooses serial:** Re-queue all tasks for serial re-execution
      - **If user chooses abort:** Mark all tasks as blocked, return partial results
 
-3. **Spawn all subagents in parallel:**
-   - For each task: spawn subagent with task file and constraint flags
-   - Pass flags: `--no-full-suite`, `--no-commit`
-   - Track subagent process IDs
-
-4. **Wait for completion:**
-   - Poll subagent status
-   - Timeout after suggested limit (e.g., 1 hour)
-   - If timeout: kill subagent, mark task as failed
-   - Collect results as each subagent finishes
-
-5. **Aggregate results:**
+4. **Collect results:**
+   - Aggregate all task results as execution completes
+   - Track completion time per task
 
 ```yaml
-parallelTasksSpawned: 4
+parallelTasksStarted: 4
 parallelTasksCompleted: 4
 parallelTasksFailed: 0
 tasks:
-  - unit-id: U1, status: for-review, testsPassed: true
-  - unit-id: U2, status: for-review, testsPassed: true
+  - unit-id: U1, status: for-review, testsPassed: true, duration: "5m"
+  - unit-id: U2, status: for-review, testsPassed: true, duration: "3m"
   - ...
 ```
 
-6. **Run full targeted test suite (orchestrator only):**
-   - All modified files are now in working directory
+5. **Run full targeted test suite:**
+   - All modified files collected from all tasks
    - Run test suite covering all affected areas
    - Verify no integration issues between parallel work
    - If integration tests fail: identify which task(s) caused the issue
 
-7. **Stage and commit (orchestrator only):**
-   - Same as serial mode finalization
-   - Commit message includes all unit IDs
+6. **Stage and commit:**
+   - Stage all changes from all completed tasks
+   - Create commit message with all unit IDs
+   - Push to branch
+   - Log commit hash
 
-8. **Return result:**
+7. **Return result:**
    - Same structure as serial mode result
 
 ---
@@ -242,17 +254,17 @@ tasks:
    - Verify all dependency constraints from previous groups are met
    - If any task status invalid (per state machine) → abort group, rollback
 
-2. **Spawn parallel subagents (group):**
-   - For each task in parallelGroup[N]: spawn subagent
-   - Pass: task file path, group ID, sync point ID
-   - Flag: `--cross-plan-group=N`, `--sync-point=N`
-   - Each subagent works independently
+2. **Execute all tasks in group in parallel:**
+   - For each task in parallelGroup[N]: execute implementation
+   - Each task works independently within the group
+   - Track group ID and sync point ID for each task
+   - Run targeted tests for each task
 
 3. **Wait for group completion:**
-   - Wait for all subagents in group to complete
+   - Wait for all tasks in group to complete
    - Collect individual task results
 
-4. **Sync point validation (orchestrator):**
+4. **Sync point validation:**
    - **File conflict check**: Scan all changed files across all tasks in group
      - If any file modified by 2+ tasks in same group → abort, rollback, error
    - **Git state check**: Verify working directory is clean (no uncommitted changes outside of this group)
@@ -271,9 +283,8 @@ tasks:
      - Flag as ready to execute in next group cycle
 
 7. **If group fails:**
-   - Kill all subagents in group (SIGTERM → SIGKILL)
-   - Rollback working directory to pre-group state
    - Mark all tasks in group as blocked
+   - Rollback working directory to pre-group state
    - Ask user: "Retry group, skip group, or abort workflow?"
 
 **Cross-group atomicity guarantee:**

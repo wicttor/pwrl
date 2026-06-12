@@ -1,12 +1,12 @@
 ---
 name: pwrl-work-ship
-description: Finalize, approve, and ship completed work
+description: Finalize, approve, and keep branch ready for pull request
 argument-hint: "[Reviewed tasks from pwrl-work-review]"
 ---
 
-# pwrl-work-ship — Finalization & Shipping
+# pwrl-work-ship — Finalization & Branch Readiness
 
-**Purpose:** Terminal phase of the work execution workflow. Runs final quality checks (targeted tests, linting, formatting), reviews the diff for regressions and scope drift, obtains user approval, creates the final commit, and offers the end-session workflow.
+**Purpose:** Terminal phase of the work execution workflow. Confirms all work is complete, verifies tasks marked for-review, keeps the feature branch active for pull request creation, and optionally chains to end-session workflow.
 
 ## Input
 
@@ -26,15 +26,14 @@ recommendations:
   - "Add 2 integration tests for mock coverage"
 ```
 
-## Output: Shipping Result
+## Output: Finalization Result
 
 ```yaml
 success: true
-status: shipped
-branch: feat/pwrl-work-agent
+status: ready-for-pr
+branch: feat/email-validation
 commitHash: a1b2c3d4
-commitMessage: "feat(pwrl-work): slice skill into micro-skills"
-tasksShipped: 11
+tasksForReview: 3
 testResults:
   testsPassed: 127
   testsFailed: 0
@@ -43,9 +42,10 @@ qualityChecks:
   linting: pass
   formatting: pass
   diffReview: pass
-endSessionOffered: true
+branchKept: true
+readyForPullRequest: true
 nextSteps:
-  - "Create pull request at [URL]"
+  - "Create pull request at: https://github.com/.../compare/main...feat/email-validation"
   - "Document learnings with /pwrl-learnings"
 ```
 
@@ -53,16 +53,42 @@ nextSteps:
 
 ## Workflow
 
-### 1. Run Final Targeted Test Suite
+### 1. Verify All Tasks Marked for-review
+
+**Check task status:**
+
+```bash
+grep -r "status: for-review" docs/tasks/for-review/
+```
+
+**Collect results:**
+
+- Count tasks with `status: for-review`
+- List task files ready for review
+- Confirm none are still in `in-progress/`
+
+**Output:**
+
+```yaml
+tasksForReview: 3
+tasksList:
+  - docs/tasks/for-review/2026-06-05-u1-task.md (status: for-review)
+  - docs/tasks/for-review/2026-06-05-u2-task.md (status: for-review)
+  - docs/tasks/for-review/2026-06-05-u3-task.md (status: for-review)
+```
+
+### 2. Run Final Targeted Test Suite
 
 Run tests only for affected areas (not full suite):
 
 **Identify affected test files:**
+
 1. From `git diff --name-only <base>...HEAD`, find changed source files
 2. Map each to its corresponding test file (e.g., `src/utils.ts` → `src/utils.spec.ts`)
 3. Build minimal test file list
 
 **Run targeted suite:**
+
 ```bash
 # If using npm:
 npm test -- <test-files-1> <test-files-2> ...
@@ -72,6 +98,7 @@ npx jest <test-files> --coverage
 ```
 
 **Evaluate results:**
+
 - ❌ If any test fails: show failure output, stop shipping, ask user to fix
 - ✅ If all tests pass: log results and continue
 
@@ -90,11 +117,13 @@ Final Test Suite:
 Check code quality per project configuration:
 
 **Detect config:**
+
 - ESLint: `.eslintrc.*` or `eslintConfig` in `package.json`
 - Prettier: `.prettierrc*` or `prettier` in `package.json`
 - If neither: skip this step (log "No lint/format config found")
 
 **Run linting:**
+
 ```bash
 # If ESLint configured:
 npx eslint . --max-warnings 0
@@ -104,12 +133,14 @@ npx eslint . --max-warnings 0
 ```
 
 **Run formatting check (read-only, no auto-fix):**
+
 ```bash
 # If Prettier configured:
 npx prettier --check .
 ```
 
 **Handle violations:**
+
 - If violations found:
   - Show formatted list: file, line, rule, message
   - Ask: "Auto-fix formatting violations? (yes/no)"
@@ -128,12 +159,14 @@ Linting & Formatting:
 ### 3. Review Diff for Regressions & Scope Drift
 
 **Get diff:**
+
 ```bash
 git diff --stat <base-branch>...HEAD
 git diff <base-branch>...HEAD
 ```
 
 **Check scope drift:**
+
 - Expected files: collected from all tasks' `files` fields
 - Unexpected files: those in diff but not in any task's file list
 - If unexpected files found: ask user "File [path] was modified but isn't in any task. Was this intentional?"
@@ -141,11 +174,13 @@ git diff <base-branch>...HEAD
   - If yes: log as scope exception
 
 **Check for regressions:**
+
 - Deleted production code: is this intentional?
 - Modified/deleted tests: are tests being weakened? (warning)
 - API contract changes: new required params, removed fields
 
 **Present summary:**
+
 ```
 Diff Summary:
   Files modified: 12
@@ -171,101 +206,97 @@ Present final summary and ask for confirmation:
 
 ```
 ═══════════════════════════════════════════════════════════
-READY TO SHIP
+READY FOR PULL REQUEST
 ═══════════════════════════════════════════════════════════
 
-Tasks: 11 (S1-S11)
-Branch: feat/pwrl-work
+Tasks: 3 (U1-U3) → All marked for-review ✓
+Branch: feat/email-validation (active)
 Tests: 127 passed (92% coverage) ✓
 Linting: No errors ✓
 Formatting: No violations ✓
 Diff: 12 files, +450/-120 LOC, no regressions ✓
 
-Commit Message:
-  Implement S1-S7: Slice pwrl-work into micro-skills
-  - S1: Analyze pwrl-work structure
-  - S2: Extract triage logic
-  - S3: Extract prepare logic
-  - S4: Create GitHub sync utility
-  - S5: Extract execute logic
-  - S6: Extract review logic
-  - S7: Extract ship logic
+Commits on branch:
+  • a1b2c3d - feat(users): add email validation
+  • b2c3d4e - test: email validation tests
 ═══════════════════════════════════════════════════════════
 
-Ready to commit and push?
+Ready to keep this branch and create a pull request?
 
 Options:
-  ✅ Yes, ship it
+  ✅ Yes, confirm
   🔄 Review diff again
-  📋 Review/edit commit message
-  ❌ Cancel
+  ❌ Cancel & fix issues
 ```
 
 **Handle each option:**
-- **Yes:** Proceed to staging and committing
+
+- **Yes:** Proceed to confirmation
 - **Review diff:** Show diff, then ask approval again
-- **Review commit message:** Show/edit message, then ask approval again
-- **Cancel:** Exit gracefully, offer to save work as draft
+- **Cancel:** Exit gracefully, keep branch for manual resolution
 
-### 5. Stage and Commit
+### 5. Confirm Branch is Ready
 
-**Stage all changes:**
+**Verify branch status:**
+
 ```bash
-git add .
-# Verify:
+git branch --show-current
+git log --oneline -n 5
+git status
+```
+
+**Ensure working directory is clean:**
+
+```bash
 git status --short
+# Should be empty (no uncommitted changes)
 ```
 
-**Create commit message:**
-- Format: Conventional commits (`feat/`/`fix/`/`docs/`/`refactor/`/...)
-- Short description: `feat(pwrl-work): slice skill into micro-skills`
-- Body: List of unit IDs with brief descriptions
-- Include: "Closes #[issue]" if linked in plan
+**Log confirmation:**
 
-**Commit:**
-```bash
-git commit -m "feat(pwrl-work): slice skill into micro-skills
-
-Implement S1-S7: [summary]
-- S1: Analyze pwrl-work structure
-- S2: Extract triage logic
-..."
+```
+✓ Branch: feat/email-validation
+✓ Commits: 12 new commits
+✓ Changes staged & committed
+✓ Working directory clean
+✓ Ready for pull request
 ```
 
-**Capture:**
-- Commit hash: `git rev-parse HEAD`
-- Log: `Created commit [hash]`
+### 6. Display Pull Request Instructions
 
-**Error handling:**
-- Commit fails → show error output
-- Pre-commit hooks fail → show violations, ask user to fix
-- Offer retry after resolving
+Show user how to create a pull request:
 
-### 6. Push and Branch Management
+---
 
-**Push to remote:**
-```bash
-git push origin <branch-name>
 ```
+═══════════════════════════════════════════════════════════
+NEXT STEPS
+═══════════════════════════════════════════════════════════
 
-**Verify push:**
-```bash
-git log --oneline -n 1            # local
-git log --oneline origin/<branch> -n 1  # remote
+Your branch is ready for review:
+
+  Branch: feat/email-validation
+  Base: main
+  Commits: 12 new
+  Tasks marked for-review: 3
+
+Create a pull request:
+
+  📱 Option 1: Use GitHub UI
+     https://github.com/<owner>/<repo>/compare/main...feat/email-validation
+
+  💻 Option 2: Use GitHub CLI
+     gh pr create --base main --title "feat: email validation" \
+       --body "Implements U1, U2, U3..."
+
+  📝 Option 3: Create manually from your Git provider
+
+═══════════════════════════════════════════════════════════
 ```
-
-**Offer next steps:**
-- If PR/MR workflow: "Create pull request: [URL template]"
-- If direct merge workflow: "Merge to main: `git merge <branch>`"
-
-**Error handling:**
-- Push fails (network) → offer retry
-- Push fails (permissions) → show error, suggest manual push
-- Branch protection violated → show violation, ask user to resolve
 
 ### 7. Offer End-Session Workflow
 
-After successful shipping:
+After branch confirmation:
 
 ---
 
@@ -274,25 +305,22 @@ After successful shipping:
 SESSION SUMMARY
 ═══════════════════════════════════════════════════════════
 
-Plan: 2026-06-05-002-slice-pwrl-work-skill.md
-Tasks Completed: 11 (S1-S11)
+Plan: 2026-06-05-002-user-email-validation.md
+Tasks Ready for Review: 3 (U1-U3)
 
 Deliverables:
-  ✓ 6 new micro-skills (triage, prepare, execute, review, ship, sync)
-  ✓ 1 new agent (pwrl-work.agent.md)
-  ✓ Updated fallback logic in pwrl-work skill
-  ✓ Documentation and examples
+  ✓ Email validation service
+  ✓ User signup form updates
+  ✓ Integration tests
+  ✓ Documentation updated
 
 Tests: 127 passed (92% coverage) ✓
 Code Quality: No lint/format violations ✓
-
-Commit: a1b2c3d - feat(pwrl-work): slice skill into micro-skills
-Branch: feat/pwrl-work
-Status: ✓ Pushed to remote
+Branch: feat/email-validation (active, ready for PR)
 ═══════════════════════════════════════════════════════════
 
-Would you like to use /pwrl-end-session to create a summary commit
-and document learnings from this work?
+Would you like to use /pwrl-end-session to document learnings and
+create a summary of this work session?
 
 Options:
   ✅ Yes, run end-session
@@ -301,6 +329,7 @@ Options:
 
 **If yes:** Call `/pwrl-end-session` skill with session summary.
 **If no:** Offer alternatives:
+
 - `/pwrl-learnings` to document discoveries
 - `/pwrl-plan` for next planning session
 
@@ -308,18 +337,19 @@ Options:
 
 ## Error Handling
 
-| Scenario | Handling |
-|---|---|
-| Final test fails | Stop shipping, show failures, ask user to fix |
-| Lint errors found | Show violations, ask user to fix or accept |
-| Formatting violations | Offer auto-fix, or ask user to fix manually |
-| Scope drift detected | Ask user to explain or revert unrelated changes |
-| Git commit fails | Show error, ask user to resolve git state, retry |
-| Git push fails | Show error, offer retry or manual push |
-| User cancels at approval | Exit gracefully, offer to save as draft |
+| Scenario                    | Handling                                             |
+| --------------------------- | ---------------------------------------------------- |
+| Final test fails            | Stop finalization, show failures, ask user to fix    |
+| Lint errors found           | Show violations, ask user to fix or accept           |
+| Formatting violations       | Offer auto-fix, or ask user to fix manually          |
+| Scope drift detected        | Ask user to explain or revert unrelated changes      |
+| Tasks not marked for-review | Error: confirm all tasks moved and marked for-review |
+| Working directory dirty     | Error: commit or stash changes before finalizing     |
+| User cancels at approval    | Exit gracefully, keep branch for manual resolution   |
 
 **Recovery options:**
-- Fix issues and retry shipping (re-run from Step 1)
+
+- Fix issues and retry finalization (re-run from Step 1)
 - Accept minor issues with explicit confirmation
 - Cancel and continue working on branch
 
@@ -327,12 +357,13 @@ Options:
 
 ## Quality Gates
 
+- ✅ All tasks in `docs/tasks/for-review/` with `status: for-review`
 - ✅ Tests pass for all affected areas
 - ✅ Linting/formatting clean (or explicitly accepted)
 - ✅ No regressions or scope drift detected
-- ✅ User explicitly approves commit
-- ✅ Commit created and pushed successfully
-- ✅ End-session workflow offered
+- ✅ Working directory clean (no uncommitted changes)
+- ✅ User explicitly approves finalization
+- ✅ Branch confirmed ready for pull request
 
 ---
 

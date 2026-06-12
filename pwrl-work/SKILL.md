@@ -1,194 +1,209 @@
 ---
 name: pwrl-work
-description: Execute implementation work efficiently (delegates to agent when available, falls back to monolithic workflow)
+description: Execute implementation work efficiently through 5-phase micro-skill pipeline
 argument-hint: "[Task file, plan doc path, or work description. Leave blank to use latest plan/task]"
-dual-path: true
-agent-optional: agents/pwrl-work.agent.md
-fallback-available: true
 ---
 
 # PWRL Work
 
-Execute implementation work from a plan or prompt with fast feedback loops and clear quality checks. Automatically delegates to `pwrl-work.agent.md` when agents are available; otherwise runs the monolithic workflow inline.
+Execute implementation work through a deterministic 5-phase pipeline: triage input, prepare environment, implement with test-first discipline, review code quality, and ship to main branch.
 
 ## Purpose
 
-Transform plans or prompts into working code through systematic execution:
+Transform task files, plans, or prompts into completed working code through systematic execution:
 
-- Test-first discipline ensures correctness
-- Incremental verification catches issues early
-- Clear quality gates prevent scope drift
-- Supports inline, serial, or parallel execution modes based on task complexity
-- Agent delegation when available; seamless fallback when not
+- **Triage Input** — Classify and validate input (task file, plan file, bare prompt, or latest task)
+- **Prepare Environment** — Repository verification, ambiguity resolution, branch setup, verification commands
+- **Execute Implementation** — Test-first implementation with incremental verification and quality gates
+- **Review & Verify** — Code review, scope check, diff quality, documentation
+- **Ship to Main** — Merge, update status, optional end-session chaining
 
 ## Usage
 
 ```bash
 /pwrl-work
-/pwrl-work docs/tasks/to-do/2026-05-04-u1-add-validation.md
-/pwrl-work docs/plans/2026-05-01-001-auth.md
-/pwrl-work "fix flaky test in auth middleware"
+/pwrl-work docs/tasks/to-do/2026-06-11-U2-email-validation.md
+/pwrl-work docs/plans/2026-06-11-003-skill-architecture.md
+/pwrl-work "add email validation to user signup"
 ```
 
-## Input
+## Architecture
 
-<input_document> #$ARGUMENTS </input_document>
+**Pure Skill Pipeline** — Direct sequence of 5 micro-skills with no routing logic:
 
-## Support Files
+```
+Input
+  ↓
+Phase 1: pwrl-work-triage
+  ├ Input: task file, plan file, bare prompt, or empty
+  ├ Output: triage artifact (unit_id, files, acceptance_criteria, dependencies)
+  ↓
+Phase 2: pwrl-work-prepare
+  ├ Input: triage artifact
+  ├ Processing: repo verification, ambiguity resolution, branch strategy, verification commands
+  ├ Output: prepare artifact (branch, verification_commands, environment state)
+  ↓
+Phase 3: pwrl-work-execute
+  ├ Input: prepare artifact
+  ├ Processing: scaffolding, test-first implementation, quality gates
+  ├ Output: execute artifact (files changed, tests passing, build/lint status)
+  ↓
+Phase 4: pwrl-work-review
+  ├ Input: execute artifact
+  ├ Processing: scope check, diff review, test review, documentation check
+  ├ Output: review artifact (approval status, ready_to_ship)
+  ↓
+Phase 5: pwrl-work-ship
+  ├ Input: review artifact
+  ├ Processing: merge to main, update task status, optional end-session
+  ├ Output: ship artifact (merge status, completion timestamp)
+  ↓
+COMPLETE
+```
 
-- `references/workflow-details.md` — Execution modes, task status transitions, and sync rules
-- `.agents/agents/pwrl-work.agent.md` — Optional orchestrator agent (if agents enabled in system)
+Each phase produces an explicit **artifact** (YAML frontmatter + structured data) consumed by the next phase. Enables resumability, traceability, and independent testing.
 
 ## Workflow
 
-### Phase 0: Agent Detection
-
-Before processing input, check if agent delegation is available:
-
-1. **Check system configuration** — Are agents enabled in the platform?
-2. **Check agent file presence** — Does `.agents/agents/pwrl-work.agent.md` exist?
-3. **Decision:**
-
-   **If agents enabled AND agent file exists:**
-
-   ```
-   ℹ️  Agents detected — delegating to pwrl-work.agent.md
-   ```
-
-   - Call `/pwrl-work <input>` via the `pwrl-work.agent.md` orchestrator
-   - The agent handles all phases: triage → prepare → execute → review → ship
-   - Return agent results
-   - Skill exits (delegation complete)
-
-   **If agents disabled OR agent file missing OR agent call fails:**
-
-   ```
-   ℹ️  Agents not available — running monolithic workflow
-   ```
-
-   - Continue to Phase 1 below (monolithic fallback)
-   - All phases run inline within this skill
-   - Identical user experience and output
-
 ### Phase 1: Triage Input
 
-1. If input is a task file, read frontmatter + body (unit id, files, dependencies, acceptance).
-2. If input is a plan file, identify implementation units and convert to a short task list.
-3. If input is a bare prompt, determine scope and create a minimal task list for anything non-trivial.
+**Purpose:** Classify input and extract task data
 
-### Phase 2: Prepare to Execute
+**Input:** Task file path, plan file path, bare prompt, or empty (defaults to latest task)
 
-1. Clarify ambiguities that materially affect implementation.
-2. Confirm branch strategy and environment checks (tests/build commands, fixtures, seeds).
-3. For task files, move status to `in-progress` and keep `docs/tasks/INDEX.md` consistent (details in `references/workflow-details.md`).
+**Processing:** (See `pwrl-work-triage/references/triage-input-protocol.md`)
 
-### Phase 3: Implement and Verify
+1. Identify input type
+2. Extract task data (unit_id, files, dependencies, acceptance_criteria)
+3. Validate required fields
+4. Detect conflicts with in-progress tasks
+5. Confirm with user
+6. Generate triage artifact
 
-For each task:
+**Output:** Triage artifact with unit_id, title, goal, files, acceptance_criteria, dependencies
 
-1. Implement the smallest correct slice first.
-2. Update or add tests for touched behavior.
-3. Run relevant checks early and often (prefer targeted over full-suite).
-4. Mark the task `for-review` only after verification passes.
+### Phase 2: Prepare Environment
 
-### Phase 4: Review and Ship
+**Purpose:** Setup branch, verify repository state, identify verification commands
 
-1. Do a scope check (no unrelated changes).
-2. Run final targeted checks and review the diff.
-3. Request user approval and optionally chain into `/pwrl-end-session`.
+**Input:** Triage artifact
 
----
+**Processing:** (See `pwrl-work-prepare/references/prepare-environment-protocol.md`)
 
-## Dual-Path Architecture
+1. Verify repository clean, pulled, correct branch
+2. Clarify ambiguities (file creation vs. extension, vague approach, test scenarios, dependency location)
+3. Establish branch strategy (create feature/U<N>, use existing, or continue on dev)
+4. Identify verification commands (build, test, lint, precommit)
+5. Check environment (Node, npm, dependencies, database, env vars)
+6. Update task status to in-progress
+7. Generate prepare artifact
 
-### Agent Delegation Path (when agents enabled)
+**Output:** Prepare artifact with branch, verification_commands, environment state, ready_for_execution
 
-```
-Input → Agent Detection → Agent Available? YES → Call pwrl-work.agent.md
-  │
-  └─ Agent orchestrates:
-       Phase 1: pwrl-work-triage    — Classify input
-       Phase 2: pwrl-work-prepare   — Setup environment, choose mode
-       Phase 3: pwrl-work-execute   — Implement tasks (inline/serial/parallel)
-       Phase 4: pwrl-work-review    — Simplify, system checks
-       Phase 5: pwrl-work-ship      — Final checks, commit, push
-  │
-  └─ Agent returns results → Skill exits
-```
+### Phase 3: Execute Implementation
 
-**Advantages:** Clean separation of concerns, each skill independently testable, parallel execution support, decoupled GitHub integration.
+**Purpose:** Implement work with test-first discipline and incremental verification
 
-### Monolithic Fallback Path (when agents unavailable)
+**Input:** Prepare artifact
 
-```
-Input → Agent Detection → Agent Available? NO → Run Monolithic Fallback
-  │
-  └─ Inline execution within this skill:
-       Phase 1: Triage Input
-       Phase 2: Prepare to Execute
-       Phase 3: Implement and Verify
-       Phase 4: Review and Ship
-  │
-  └─ Skill returns results
-```
+**Processing:** (See `pwrl-work-execute/references/execute-implementation-protocol.md`)
 
-**Advantages:** No external dependencies, entirely self-contained, identical functionality to agent path.
+1. Scaffold directory structure
+2. For each test scenario: write test → implement → refactor → verify
+3. Verify all acceptance criteria
+4. Run quality gates: tests pass, lint clean, build succeeds, no regressions, coverage acceptable
+5. Prepare for review: clear commits, remove debug code, update docs
+6. Move task to for-review status
+7. Generate execute artifact
 
-**Both paths produce equivalent output.** No breaking changes.
+**Output:** Execute artifact with files changed, tests passing, build/lint status, coverage, ready_for_review
 
----
+**Quality Gates (all must pass):**
 
-## Operational Logging
+- ✓ All tests pass (0 failures)
+- ✓ Linting passes (0 errors)
+- ✓ Build succeeds (0 errors)
+- ✓ No regressions (existing tests still pass)
+- ✓ Coverage acceptable (>50%)
 
-**Agent delegation:**
+### Phase 4: Review & Verify
 
-```
-[DETECT] Agents available → delegating to pwrl-work.agent.md
-[DELEGATE] Agent call successful
-[COMPLETE] Work shipped via agent
-```
+**Purpose:** Final code quality check before shipping
 
-**Fallback:**
+**Input:** Execute artifact
 
-```
-[DETECT] Agents not available → running monolithic workflow
-[FALLBACK] Phase 1: Triage... Phase 2: Prepare... Phase 3: Execute... Phase 4: Ship...
-[COMPLETE] Work shipped via monolithic workflow
-```
+**Processing:** (See `pwrl-work-review/references/review-quality-protocol.md`)
 
----
+1. Verify scope (no unrelated changes)
+2. Review diff (code quality, security, style)
+3. Review tests (adequate coverage, meaningful tests)
+4. Check documentation (README, comments, types updated)
+5. Get user approval
+6. Generate review artifact
 
-## Troubleshooting
+**Output:** Review artifact with scope_check, diff_review, approval status, ready_to_ship
 
-| Problem                    | Cause                         | Solution                                   |
-| -------------------------- | ----------------------------- | ------------------------------------------ |
-| Always runs fallback       | Agent file missing            | Create `.agents/agents/pwrl-work.agent.md` |
-| Always runs fallback       | Agents disabled in config     | Enable agents in platform settings         |
-| Agent fails; fallback runs | Agent file has errors         | Check agent file for bugs                  |
-| Agent times out            | Subagent hangs                | Retry; check subagent logs                 |
-| Both paths fail            | Invalid input or system state | Check error logs; validate input           |
+### Phase 5: Ship to Main
 
-**To force fallback:** Temporarily disable agents or rename/remove agent file.
-**To force agent:** Ensure agent file exists and agents are enabled.
+**Purpose:** Merge work to main branch, complete task, optionally chain to end-session
+
+**Input:** Review artifact
+
+**Processing:** (See `pwrl-work-ship/references/ship-delivery-protocol.md`)
+
+1. Merge feature branch to main (with conflict handling)
+2. Delete feature branch
+3. Move task to done status
+4. Update INDEX.md
+5. Display completion summary
+6. Optionally chain to `/pwrl-end-session`
+7. Generate ship artifact
+
+**Output:** Ship artifact with merge status, task completion, optional end-session chaining
 
 ---
 
 ## Quality Criteria
 
-- Requirements from prompt or plan are fully implemented.
-- Behavior changes are covered by tests.
-- Relevant tests pass after each logical unit.
-- Code follows local patterns and conventions.
-- No unresolved blockers or ambiguous TODOs left behind.
+- Requirements from task/plan fully implemented
+- Behavior changes covered by tests
+- Tests pass after each logical unit
+- Code follows project patterns and conventions
+- No debug code, console.logs, or commented code left behind
+- Scope stayed tight (no unrelated changes)
 
 ## Rules
 
-- Clarify material ambiguities before coding; don't over-plan trivial work.
-- Verify incrementally; don't defer all testing to the end.
-- Ship only complete behavior slices (or create explicit follow-up tasks).
-- Keep scope tight; get explicit approval before expanding beyond the plan.
+- **Clarify ambiguities upfront** — Don't proceed if approach is unclear
+- **Verify incrementally** — Run checks frequently, catch issues early
+- **Test-first discipline** — Write tests before implementing
+- **One scope at a time** — Complete and ship each unit separately
+- **No scope creep** — Get approval before expanding beyond task
+- **Quality gates** — All checks must pass before shipping
+
+## Error Recovery
+
+Each phase includes error detection and recovery:
+
+- **Triage:** File not found, missing fields, conflicts with in-progress → suggest fix
+- **Prepare:** Uncommitted changes, wrong branch, missing dependencies → ask action
+- **Execute:** Build failure, test failure, regression, low coverage → recovery instructions
+- **Review:** Scope creep, quality issues, security concerns → request fix
+- **Ship:** Merge conflicts, permission denied, CI failure → recovery steps
+
+All errors include user-facing explanation and recovery path (never silent failure).
+
+## Support Files
+
+- `pwrl-work-triage/references/triage-input-protocol.md` — Phase 1 specification
+- `pwrl-work-prepare/references/prepare-environment-protocol.md` — Phase 2 specification
+- `pwrl-work-execute/references/execute-implementation-protocol.md` — Phase 3 specification
+- `pwrl-work-review/references/review-quality-protocol.md` — Phase 4 specification
+- `pwrl-work-ship/references/ship-delivery-protocol.md` — Phase 5 specification
 
 ## When to Use
 
-- Use when you want disciplined execution from a plan, a task file, or a prompt.
-- Prefer `/pwrl-plan` first for large or high-risk work without a clear path.
+- Use when executing a clear task from a task file
+- Use when extracting and executing units from a plan
+- Use for well-defined work with clear acceptance criteria
+- For exploratory work without clear requirements, use `/pwrl-plan` first

@@ -6,7 +6,7 @@ argument-hint: "[Task list context from pwrl-work-prepare, execution mode]"
 
 # pwrl-work-execute — Task Execution Engine
 
-**Purpose:** Core execution engine that coordinates task implementation across three modes (inline, serial, parallel), enforces quality gates, manages task status progression, and integrates GitHub status syncing. The main pwrl-work skill calls this skill after preparation.
+**Purpose:** Core execution engine that coordinates task implementation across three modes (inline, serial, parallel), enforces quality gates, manages task status progression, and integrates GitHub status syncing.
 
 ## Input
 

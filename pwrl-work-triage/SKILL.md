@@ -22,7 +22,7 @@ argument-hint: "[Task file path, plan path, or bare prompt. Leave blank to use l
 
 ## Output: Classified Context
 
-After triage, produce a context object (in agent memory or as markdown) with fields varying by input type:
+After triage, produce a context object with fields varying by input type:
 
 ```yaml
 inputType: task | plan | prompt

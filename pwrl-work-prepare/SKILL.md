@@ -140,7 +140,7 @@ to-do/ (status: to-do) → in-progress/ (status: in-progress)
 
 When triage output is a bare prompt:
 
-1. Create a minimal inline task list (in agent memory, no files)
+1. Create a minimal inline task list (structured locally, no files)
 2. For 1-2 tasks: structure as simple checklist
 3. For 3+ tasks or non-trivial: recommend creating task files
 4. Present to user for approval before proceeding

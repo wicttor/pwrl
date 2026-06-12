@@ -337,19 +337,19 @@ Options:
 
 ## Error Handling
 
-| Scenario                    | Handling                                             |
-| --------------------------- | ---------------------------------------------------- |
-| Final test fails            | Stop finalization, show failures, ask user to fix    |
-| Lint errors found           | Show violations, ask user to fix or accept           |
-| Formatting violations       | Offer auto-fix, or ask user to fix manually          |
-| Scope drift detected        | Ask user to explain or revert unrelated changes      |
-| Tasks not marked for-review | Error: confirm all tasks moved and marked for-review |
-| Working directory dirty     | Error: commit or stash changes before finalizing     |
-| User cancels at approval    | Exit gracefully, keep branch for manual resolution   |
+| Scenario                 | Handling                                         |
+| ------------------------ | ------------------------------------------------ |
+| Final test fails         | Stop shipping, show failures, ask user to fix    |
+| Lint errors found        | Show violations, ask user to fix or accept       |
+| Formatting violations    | Offer auto-fix, or ask user to fix manually      |
+| Scope drift detected     | Ask user to explain or revert unrelated changes  |
+| Git commit fails         | Show error, ask user to resolve git state, retry |
+| Git push fails           | Show error, offer retry or manual push           |
+| User cancels at approval | Exit gracefully, offer to save as draft          |
 
 **Recovery options:**
 
-- Fix issues and retry finalization (re-run from Step 1)
+- Fix issues and retry shipping (re-run from Step 1)
 - Accept minor issues with explicit confirmation
 - Cancel and continue working on branch
 
@@ -357,13 +357,12 @@ Options:
 
 ## Quality Gates
 
-- ✅ All tasks in `docs/tasks/for-review/` with `status: for-review`
 - ✅ Tests pass for all affected areas
 - ✅ Linting/formatting clean (or explicitly accepted)
 - ✅ No regressions or scope drift detected
-- ✅ Working directory clean (no uncommitted changes)
-- ✅ User explicitly approves finalization
-- ✅ Branch confirmed ready for pull request
+- ✅ User explicitly approves commit
+- ✅ Commit created and pushed successfully
+- ✅ End-session workflow offered
 
 ---
 

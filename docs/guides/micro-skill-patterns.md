@@ -428,25 +428,25 @@ describe('pwrl-plan-scope: Scope Extraction', () => {
   it('should parse task input correctly', () => {
     const input = 'Add email validation';
     const result = extractScope(input);
-    
+
     assert(result.problem_frame);
     assert(result.success_criteria);
   });
-  
+
   it('should handle edge cases', () => {
     // Empty input
     assert.throws(() => extractScope(''));
-    
+
     // Very long input
     const longInput = 'x'.repeat(2000);
     const result = extractScope(longInput);
     assert(result);
   });
-  
+
   it('should detect existing plans', () => {
     // Mock filesystem
     mockFs({ 'docs/plans/2026-06-01-001.md': 'existing' });
-    
+
     const result = extractScope('validation');
     assert(result.existing_plan);
   });
@@ -461,24 +461,24 @@ describe('Plan Workflow Orchestration', () => {
     // Start with user input
     const scope = await phaseScope('Add validation');
     assert(scope.id);
-    
+
     // Pass to research
     const research = await phaseResearch(scope);
     assert(research.patterns);
-    
+
     // Pass to design
     const design = await phaseDesign(research);
     assert(design.units);
-    
+
     // Generate final artifact
     const plan = await phaseGenerate(design);
     assert(plan.path); // File written
   });
-  
+
   it('should recover from phase resumption', async () => {
     // Load existing plan from disk
     const existing = await loadArtifact('2026-06-12-001-design.md');
-    
+
     // Jump to final phase
     const plan = await phaseGenerate(existing);
     assert(plan);
@@ -492,20 +492,20 @@ describe('Plan Workflow Orchestration', () => {
 describe('Performance Benchmarks', () => {
   it('should complete plan workflow in <2 minutes', async () => {
     const start = Date.now();
-    
+
     const result = await executeWorkflow('Add feature');
-    
+
     const duration = Date.now() - start;
     assert(duration < 2 * 60 * 1000, `Took ${duration}ms`);
   });
-  
+
   it('should scale linearly with task size', () => {
     const results = [10, 50, 100].map(size => {
       const start = Date.now();
       executeWorkflow('x'.repeat(size));
       return Date.now() - start;
     });
-    
+
     // Time should scale roughly linearly
     const ratio = results[1] / results[0];
     assert(ratio < 6, 'Should scale linearly');

@@ -78,14 +78,14 @@ A step-by-step checklist for migrating to the new micro-skill pipeline architect
   - } else {
   -   // fallback path
   - }
-  
+
   + // Just use micro-skills directly
   ```
 
 - [ ] **Remove agent invocation**
   ```diff
   - const result = await invokeAgent('pwrl-*.agent', input);
-  
+
   + const phase1 = await invokeSkill('pwrl-*-phase1', input);
   + const phase2 = await invokeSkill('pwrl-*-phase2', phase1);
   ```
@@ -106,7 +106,7 @@ A step-by-step checklist for migrating to the new micro-skill pipeline architect
 - [ ] **Use error-specific classes**
   ```diff
   - if (err.code === 'ENOENT') { /* ... */ }
-  
+
   + const { FileSystemError } = require('../../lib/errors');
   + const err = new FileSystemError('File not found', 'ENOENT');
   + const suggestion = getRecoverySuggestion(err);
@@ -115,7 +115,7 @@ A step-by-step checklist for migrating to the new micro-skill pipeline architect
 - [ ] **Update error logging**
   ```diff
   - console.error('Error:', err.message);
-  
+
   + const { logError } = require('../../lib/errors');
   + logError(err, 'In orchestrator phase execution');
   ```
@@ -166,7 +166,7 @@ A step-by-step checklist for migrating to the new micro-skill pipeline architect
   -   files: fs.readdirSync(dir),
   -   content: fs.readFileSync(file)
   - };
-  
+
   + const { extractFileContext } = require('../../lib/context-extraction');
   + const context = extractFileContext(file);
   ```
@@ -175,7 +175,7 @@ A step-by-step checklist for migrating to the new micro-skill pipeline architect
   ```diff
   - const fs = require('fs');
   - fs.writeFileSync(path, content);
-  
+
   + const { writeArtifact } = require('../../lib/artifact-io');
   + writeArtifact(path, frontmatter, body);
   ```
@@ -184,7 +184,7 @@ A step-by-step checklist for migrating to the new micro-skill pipeline architect
   ```diff
   - // Custom GitHub API calls
   - const response = await fetch(`https://api.github.com/...`);
-  
+
   + const { makeGitHubRequest } = require('../../lib/github-integration');
   + const response = await makeGitHubRequest('/repos/...');
   ```
@@ -192,12 +192,12 @@ A step-by-step checklist for migrating to the new micro-skill pipeline architect
 #### Step 2: Standardize Error Handling
 - [ ] **Use lib/errors for all errors**
   ```javascript
-  const { 
-    PWRLError, 
-    ValidationError, 
+  const {
+    PWRLError,
+    ValidationError,
     FileSystemError,
     GitHubError,
-    getRecoverySuggestion 
+    getRecoverySuggestion
   } = require('../../lib/errors');
   ```
 
@@ -256,7 +256,7 @@ For each micro-skill, create tests in `tests/[workflow]/[skill].test.js`:
     const result = executeSkill('');
     // Should either process or error gracefully
   });
-  
+
   it('should handle maximum input', () => {
     const large = 'x'.repeat(10000);
     const result = executeSkill(large);
@@ -397,24 +397,24 @@ For each workflow, create tests in `tests/[workflow]/orchestration.test.js`:
 - [ ] **Document migration**
   ```markdown
   ## [1.2.0] - 2026-06-12
-  
+
   ### Changed
   - Migrated from agent-based routing to micro-skill pipelines
   - Consolidated error handling to lib/errors.js
   - Standardized artifact format across all workflows
   - Updated all SKILL.md files to remove agent references
-  
+
   ### Added
   - lib/context-extraction.js shared utility
   - lib/github-integration.js shared utility
   - Comprehensive test suite (129 tests, 95%+ pass rate)
   - Migration documentation and guides
-  
+
   ### Removed
   - Agent routing conditionals
   - Duplicated error handling code
   - Custom artifact formats
-  
+
   ### Deprecated
   - pwrl-*.agent.md patterns (use pwrl-*-[phase] instead)
   ```
@@ -565,7 +565,7 @@ git checkout main
 ## Common Issues & Solutions
 
 ### Issue: Tests failing after changes
-**Solution:** 
+**Solution:**
 1. Run `npm test` to see failures
 2. Update tests for new format if needed
 3. Verify artifact schema matches documentation
@@ -574,7 +574,7 @@ git checkout main
 **Solution:**
 1. Check lib/*.js for export statement
 2. Verify require path is correct
-3. Test import with: `node -e "require('./lib/...')"` 
+3. Test import with: `node -e "require('./lib/...')"`
 
 ### Issue: Performance regression
 **Solution:**

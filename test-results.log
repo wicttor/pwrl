@@ -1,0 +1,918 @@
+
+> @wicttor/pwrl@1.1.3 test
+> node --test tests/**/*.test.js
+
+▶ Workflow Orchestration: End-to-End Integration
+  ▶ Plan Workflow Orchestration
+    ✔ should execute plan phases in sequence: scope → research → design → generate (1.340175ms)
+    ✔ should allow resuming from any phase (0.364779ms)
+    ✔ should error isolation: phase failures do not cascade (1.099958ms)
+    ✔ should track artifact chain: scope → research → design → plan (0.305837ms)
+  ✔ Plan Workflow Orchestration (3.732657ms)
+  ▶ Work Workflow Orchestration
+    ✔ should execute work phases: triage → prepare → execute → review → ship (0.340069ms)
+    ✔ should track work artifact progression (0.284197ms)
+  ✔ Work Workflow Orchestration (0.76168ms)
+  ▶ Review Workflow Orchestration
+    ✔ should execute review phases: scope → prepare → analyze → report (0.327748ms)
+    ✔ should generate findings with severity classification (0.263886ms)
+  ✔ Review Workflow Orchestration (0.723709ms)
+  ▶ Learnings Workflow Orchestration
+    ✔ should execute learnings phases: extract → classify → structure → dedup → save (0.260496ms)
+    ✔ should extract learnings from multiple sources (0.268897ms)
+    ✔ should classify learnings by domain and priority (0.222275ms)
+  ✔ Learnings Workflow Orchestration (0.859202ms)
+  ▶ Cross-Workflow Integration
+    ✔ should support plan → work flow: plan informs work (0.218445ms)
+    ✔ should support work → review flow: work output becomes review input (0.183495ms)
+    ✔ should support learnings extraction from all workflows (0.198685ms)
+  ✔ Cross-Workflow Integration (0.700808ms)
+  ▶ Consolidation Audit
+    ✔ should measure duplication reduction across utilities (0.226486ms)
+    ✔ should verify shared utilities are used consistently (0.211915ms)
+    ✔ should validate backward compatibility (0.176104ms)
+    ✔ should measure performance impact <5% (0.196815ms)
+  ✔ Consolidation Audit (0.926324ms)
+  ▶ Error Handling & Recovery
+    ✔ should handle error in one phase without stopping other phases (0.280797ms)
+    ✔ should provide recovery suggestions for errors (0.231786ms)
+    ✔ should support retry logic with exponential backoff (1.14868ms)
+  ✔ Error Handling & Recovery (1.801867ms)
+  ▶ Performance Benchmarks
+    ✔ should complete plan workflow in <2 minutes (0.273297ms)
+    ✔ should process work tasks in linear time (0.323549ms)
+    ✖ should handle 100+ learnings without significant slowdown (0.971825ms)
+  ✖ Performance Benchmarks (1.757415ms)
+✖ Workflow Orchestration: End-to-End Integration (12.202166ms)
+Error reading artifact from /tmp/pwrl-test-KtzWSj/missing.md: Artifact file not found: /tmp/pwrl-test-KtzWSj/missing.md
+▶ lib/artifact-io: Artifact Input/Output
+  ▶ parseYamlFrontmatter
+    ✖ should parse valid YAML frontmatter (2.356931ms)
+    ✖ should return null for missing frontmatter (1.240382ms)
+    ✖ should handle empty body after frontmatter (0.312159ms)
+  ✖ parseYamlFrontmatter (5.248817ms)
+  ▶ writeArtifact
+    ✖ should write artifact with frontmatter and body (1.009596ms)
+    ✔ should create backup directory if it does not exist (0.456622ms)
+    ✔ should create backup of existing artifact (0.39635ms)
+  ✖ writeArtifact (2.149415ms)
+  ▶ readArtifact
+    ✔ should read and parse artifact from file (0.452772ms)
+    ✖ should throw error for missing file (1.491049ms)
+  ✖ readArtifact (2.191277ms)
+  ▶ validateArtifactSchema
+    ✖ should validate required frontmatter fields (0.601096ms)
+    ✖ should fail validation if required field missing (0.455432ms)
+    ✖ should validate empty body is allowed (0.354569ms)
+  ✖ validateArtifactSchema (1.651263ms)
+  ▶ generateUniqueFilename
+    ✖ should generate YYYY-MM-DD-NNN-suffix format (0.448751ms)
+    ✖ should create numbered sequence (0.427862ms)
+  ✖ generateUniqueFilename (1.002686ms)
+  ▶ listArtifacts
+    ✔ should list all artifacts in directory (0.39752ms)
+    ✔ should filter by pattern (0.40049ms)
+  ✔ listArtifacts (0.944395ms)
+  ▶ hashArtifactContent
+    ✔ should generate consistent hash for content (0.290898ms)
+    ✔ should produce different hash for different content (0.207215ms)
+  ✔ hashArtifactContent (0.630886ms)
+  ▶ createBackup
+    ✔ should create versioned backup (0.645976ms)
+    ✔ should create .backups directory if missing (0.40108ms)
+  ✔ createBackup (1.207841ms)
+✖ lib/artifact-io: Artifact Input/Output (16.337624ms)
+▶ lib/context-extraction: Context Gathering
+  ▶ extractFileContext
+    ✖ should extract context from markdown file with frontmatter (3.08082ms)
+    ✖ should handle file not found gracefully (0.615926ms)
+    ✖ should extract requirements from markdown headers (0.501863ms)
+  ✖ extractFileContext (5.00249ms)
+  ▶ extractExistingPlans
+    ✖ should find existing plans in docs/plans directory (2.257769ms)
+    ✖ should return empty array when no plans found (0.438372ms)
+    ✖ should extract plan metadata from filenames (1.15534ms)
+  ✖ extractExistingPlans (4.127337ms)
+  ▶ gatherComprehensiveContext
+    ✖ should gather context from multiple sources (1.51697ms)
+    ✖ should handle missing directories gracefully (2.125085ms)
+  ✖ gatherComprehensiveContext (6.585551ms)
+  ▶ extractTitleFromMarkdown
+    ✔ should extract first H1 header as title (1.057327ms)
+    ✔ should return empty string if no header found (0.262817ms)
+  ✔ extractTitleFromMarkdown (1.902829ms)
+  ▶ extractBranchContext
+    ✖ should parse branch name with feature prefix (0.444121ms)
+    ✔ should handle bugfix branches (0.238357ms)
+    ✔ should handle refactoring branches (0.183605ms)
+  ✖ extractBranchContext (1.005606ms)
+  ▶ extractUnitId
+    ✖ should extract unit ID from formatted artifact ID (0.292688ms)
+    ✔ should handle sequential numbering (0.217636ms)
+  ✖ extractUnitId (0.608296ms)
+✖ lib/context-extraction: Context Gathering (20.602165ms)
+ℹ Error: Test "should handle file not found gracefully" at tests/lib/context-extraction.test.js:46:5 generated asynchronous activity after the test ended. This activity created the error "Error: File not found: /tmp/pwrl-test-YyiEQD/nonexistent.md" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+❌ PWRLError: Test
+   Code: GENERIC_ERROR
+
+▶ lib/errors: Error Handling
+  ▶ Error classes
+    ✔ should export PWRLError class (1.295073ms)
+    ✔ should export ValidationError class (0.194345ms)
+    ✔ should export FileSystemError class (0.141384ms)
+    ✔ should export GitHubError class (0.105583ms)
+    ✔ should export GitError class (0.124073ms)
+    ✔ should export ArtifactError class (0.138404ms)
+    ✔ should export SkillExecutionError class (0.166734ms)
+    ✔ should export RateLimitError class (0.119744ms)
+  ✔ Error classes (4.765263ms)
+  ▶ PWRLError base class
+    ✔ should create error with message (0.812851ms)
+    ✔ should support error code (0.250677ms)
+    ✖ should support context object (0.477712ms)
+  ✖ PWRLError base class (1.856458ms)
+  ▶ Specialized error classes
+    ✔ should create ValidationError for invalid input (0.38252ms)
+    ✖ should create FileSystemError for file operations (1.747355ms)
+    ✔ should create GitHubError for API issues (0.194905ms)
+    ✖ should create GitError for git operations (0.325039ms)
+    ✖ should create ArtifactError for artifact issues (0.317788ms)
+    ✔ should create SkillExecutionError for skill failures (0.190715ms)
+    ✔ should create RateLimitError for API rate limits (0.201195ms)
+  ✖ Specialized error classes (3.697656ms)
+  ▶ Recovery suggestions
+    ✔ should provide recovery suggestion for error (0.240676ms)
+    ✖ should suggest checking file path for ENOENT (0.203425ms)
+    ✔ should provide validation-specific recovery suggestion (0.149104ms)
+    ✖ should provide rate limit recovery suggestion (0.228276ms)
+  ✖ Recovery suggestions (1.043247ms)
+  ▶ Error code constants
+    ✔ should export ERROR_CODES object (0.139674ms)
+    ✔ should have standard error codes defined (0.140953ms)
+  ✔ Error code constants (0.418791ms)
+  ▶ Error formatting
+    ✔ should format error for user display (0.444701ms)
+    ✔ should include recovery suggestion in formatted output (0.135934ms)
+    ✔ should handle nested error information (0.145833ms)
+  ✔ Error formatting (0.878422ms)
+  ▶ Error logging
+    ✔ should have logError function (0.118083ms)
+    ✔ should accept error and optional message (1.224641ms)
+  ✔ Error logging (1.447308ms)
+  ▶ Error reporting
+    ✔ should have createErrorReport function (0.200625ms)
+    ✔ should generate detailed error report (0.281587ms)
+  ✔ Error reporting (0.612716ms)
+  ▶ Error chain/cause support
+    ✔ should support error cause for chaining (0.201925ms)
+  ✔ Error chain/cause support (0.312948ms)
+✖ lib/errors: Error Handling (16.760135ms)
+▶ lib/github-integration: GitHub API & Git Operations
+  ▶ checkRateLimit
+    ✔ should return rate limit status (1.399447ms)
+    ✔ should track rate limit calls (0.464192ms)
+  ✔ checkRateLimit (2.667439ms)
+  ▶ getCurrentBranch
+    ✔ should return branch name as string or error (0.502414ms)
+  ✔ getCurrentBranch (0.680387ms)
+  ▶ getRepositoryInfo
+    ✔ should have repository info extraction method (0.352969ms)
+    ✔ should extract repo from git remote (0.290398ms)
+  ✔ getRepositoryInfo (0.868663ms)
+  ▶ getCommits
+    ✔ should have commit fetching method (0.307108ms)
+  ✔ getCommits (0.445892ms)
+  ▶ getPullRequest
+    ✔ should have PR fetching method (0.223676ms)
+  ✔ getPullRequest (0.324018ms)
+  ▶ getModifiedFiles
+    ✔ should have modified files detection method (0.229956ms)
+  ✔ getModifiedFiles (0.332499ms)
+  ▶ getDiffStats
+    ✔ should have diff stats method (0.164284ms)
+  ✔ getDiffStats (0.228926ms)
+  ▶ makeGitHubRequest
+    ✔ should have GitHub API request method (0.36839ms)
+    ✔ should require GitHub token or handle missing token (0.245116ms)
+    ✔ should format requests properly (0.274287ms)
+  ✔ makeGitHubRequest (1.039497ms)
+  ▶ Error handling
+    ✖ should handle API errors (2.169547ms)
+    ✖ should handle rate limiting (0.211806ms)
+    ✔ should handle network errors (3.345717ms)
+  ✖ Error handling (5.948405ms)
+  ▶ Git operations
+    ✔ should have getCurrentCommitHash method (0.286717ms)
+    ✔ should support branch operations (0.154014ms)
+  ✔ Git operations (0.578995ms)
+✖ lib/github-integration: GitHub API & Git Operations (14.6348ms)
+▶ pwrl-plan-scope
+  ✔ SKILL.md exists (0.902853ms)
+  ✔ has valid YAML frontmatter (1.089438ms)
+  ✔ has Purpose section (0.132914ms)
+  ✔ has Workflow section (0.112903ms)
+  ✔ references files exist (0.154514ms)
+  ✔ references are linked correctly in SKILL.md (0.136284ms)
+  ✔ Edge Cases section references edge-cases.md (0.171464ms)
+  ✔ State Passing section references state-schema.md (0.151354ms)
+✔ pwrl-plan-scope (4.398314ms)
+▶ pwrl-plan-research
+  ✔ SKILL.md exists (0.174975ms)
+  ✔ has valid YAML frontmatter (0.195285ms)
+  ✔ has Workflow section (0.158124ms)
+  ✔ has State Passing section (0.126263ms)
+✔ pwrl-plan-research (0.882713ms)
+▶ pwrl-plan-design
+  ✔ SKILL.md exists (0.138543ms)
+  ✔ has valid YAML frontmatter (0.128603ms)
+  ✔ has unit decomposition logic (0.136844ms)
+  ✔ has State Passing section (0.132624ms)
+✔ pwrl-plan-design (0.666198ms)
+▶ pwrl-plan-generate
+  ✔ SKILL.md exists (0.123773ms)
+  ✔ has valid YAML frontmatter (0.111673ms)
+  ✔ has tier selection logic (0.117923ms)
+  ✔ has template rendering section (0.131854ms)
+  ✔ has filename generation section (0.155604ms)
+  ✔ references plan-templates.md (0.123583ms)
+✔ pwrl-plan-generate (0.917944ms)
+▶ agents/pwrl-planner.agent.md
+  ✔ agent file exists (0.188405ms)
+  ✔ has valid YAML frontmatter (0.248427ms)
+  ✔ describes all 4 phases (0.158264ms)
+  ✔ has state management section (0.132064ms)
+  ✔ has error handling table (0.124644ms)
+  ✔ has usage examples (0.101513ms)
+  ✔ references all 4 micro-skills (0.116593ms)
+✔ agents/pwrl-planner.agent.md (1.293604ms)
+▶ agents/pwrl-work.agent.md
+  ✔ agent file exists (0.112813ms)
+  ✔ has valid YAML frontmatter (0.808031ms)
+  ✔ describes all 5 phases (0.155804ms)
+  ✔ has state management (0.113483ms)
+  ✔ has error handling (0.120203ms)
+✔ agents/pwrl-work.agent.md (1.458508ms)
+▶ pwrl-plan references
+  ✔ agent-routing.md exists (0.129394ms)
+  ✔ fallback-workflow.md exists (0.072702ms)
+  ✔ planning-tiers.md exists (0.070601ms)
+  ✔ plan-templates.md exists (0.074752ms)
+✔ pwrl-plan references (0.455151ms)
+▶ docs/examples/ (plan-related)
+  ✔ planner-workflow.md exists (0.115323ms)
+  ✔ pwrl-planner-agent-example.md exists (0.150664ms)
+✔ docs/examples/ (plan-related) (0.337359ms)
+▶ docs/tasks/for-review/ (plan-related)
+  ✔ plan-related tasks reference pwrl-plan plan (1.133649ms)
+✔ docs/tasks/for-review/ (plan-related) (1.208832ms)
+▶ pwrl-work-triage
+  ✔ SKILL.md exists (0.857742ms)
+  ✔ has valid YAML frontmatter (0.952675ms)
+  ✔ has input classification logic (0.148244ms)
+  ✔ has complexity estimation (0.173084ms)
+  ✔ has dependency resolution (0.130554ms)
+✔ pwrl-work-triage (3.327827ms)
+▶ pwrl-work-prepare
+  ✔ SKILL.md exists (0.186225ms)
+  ✔ has valid YAML frontmatter (0.240477ms)
+  ✔ has branch strategy section (0.241916ms)
+  ✔ has execution mode selection (0.177205ms)
+  ✔ has task creation logic (0.257696ms)
+✔ pwrl-work-prepare (1.432467ms)
+▶ pwrl-work-sync-status
+  ✔ SKILL.md exists (0.142024ms)
+  ✔ has valid YAML frontmatter (0.125633ms)
+  ✔ has GitHub integration logic (0.106893ms)
+  ✔ has status update logic (to-do → in-progress → for-review → done) (0.101833ms)
+✔ pwrl-work-sync-status (0.640637ms)
+▶ pwrl-work-execute
+  ✔ SKILL.md exists (0.103783ms)
+  ✔ has valid YAML frontmatter (0.191065ms)
+  ✔ has execution modes (inline/serial/parallel) (0.119883ms)
+  ✔ has quality gates (0.116203ms)
+  ✔ has task completion logic (update status, sync GitHub) (0.112033ms)
+✔ pwrl-work-execute (0.776781ms)
+▶ pwrl-work-review
+  ✔ SKILL.md exists (0.136304ms)
+  ✔ has valid YAML frontmatter (0.161504ms)
+  ✔ has duplication consolidation logic (0.125514ms)
+  ✔ has system checks (0.155674ms)
+✔ pwrl-work-review (0.722879ms)
+▶ pwrl-work-ship
+  ✔ SKILL.md exists (0.130824ms)
+  ✔ has valid YAML frontmatter (0.128693ms)
+  ✔ has final quality checks (0.113693ms)
+  ✔ has user approval step (0.827672ms)
+  ✔ has commit/push logic (0.117303ms)
+  ✔ offers end-session (0.136734ms)
+✔ pwrl-work-ship (1.626472ms)
+▶ pwrl-work/SKILL.md (main)
+  ✔ SKILL.md exists (0.179464ms)
+  ✔ has valid YAML frontmatter (0.171934ms)
+  ✖ has agent detection and routing logic (0.664017ms)
+  ✖ has agent path and fallback path (0.146304ms)
+  ✖ has all 5 workflow phases (0.136554ms)
+  ✔ has Quality Criteria section (0.110063ms)
+  ✔ has Rules section (0.119483ms)
+  ✔ references pwrl-work-triage micro-skill (0.117653ms)
+✖ pwrl-work/SKILL.md (main) (1.910239ms)
+▶ cross-skill references
+  ✔ pwrl-work skills reference each other correctly (0.164904ms)
+  ✔ pwrl-work.agent.md references all micro-skills (0.138453ms)
+✔ cross-skill references (0.389621ms)
+▶ docs/examples/ (work-related)
+  ✔ work-workflow.md exists (0.156334ms)
+  ✔ pwrl-work-agent-example.md exists (0.161634ms)
+  ✔ github-integration-example.md exists (0.113883ms)
+✔ docs/examples/ (work-related) (0.550145ms)
+ℹ tests 190
+ℹ suites 64
+ℹ pass 158
+ℹ fail 32
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 167.957072
+
+✖ failing tests:
+
+test at tests/integration/orchestration.test.js:411:5
+✖ should handle 100+ learnings without significant slowdown (0.971825ms)
+  AssertionError [ERR_ASSERTION]: Processing 10 learnings should be fast
+      at /home/wicttor/Projects/pwrl/tests/integration/orchestration.test.js:417:9
+      at Array.forEach (<anonymous>)
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/integration/orchestration.test.js:416:13)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/lib/artifact-io.test.js:24:5
+✖ should parse valid YAML frontmatter (2.356931ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '\n# Test Content\nBody content here.'
+  - '# Test Content\nBody content here.'
+  
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/artifact-io.test.js:40:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1619:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1619:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '\n# Test Content\nBody content here.',
+    expected: '# Test Content\nBody content here.',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lib/artifact-io.test.js:43:5
+✖ should return null for missing frontmatter (1.240382ms)
+  AssertionError [ERR_ASSERTION]: Should return null for missing frontmatter
+  + actual - expected
+  
+  + {
+  +   body: '# Just a heading\nNo frontmatter here.',
+  +   frontmatter: null
+  + }
+  - null
+  
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/artifact-io.test.js:48:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { frontmatter: null, body: '# Just a heading\nNo frontmatter here.' },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lib/artifact-io.test.js:51:5
+✖ should handle empty body after frontmatter (0.312159ms)
+  AssertionError [ERR_ASSERTION]: Body should be empty
+  + actual - expected
+  
+  + '---\nformat: test\nid: 001\n---'
+  - ''
+  
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/artifact-io.test.js:60:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '---\nformat: test\nid: 001\n---',
+    expected: '',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lib/artifact-io.test.js:65:5
+✖ should write artifact with frontmatter and body (1.009596ms)
+  AssertionError [ERR_ASSERTION]: Should contain frontmatter
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/artifact-io.test.js:80:7)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1619:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/lib/artifact-io.test.js:138:5
+✖ should throw error for missing file (1.491049ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception: Should throw ENOENT
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/artifact-io.test.js:141:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: { code: 'ENOENT' },
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at tests/lib/artifact-io.test.js:150:5
+✖ should validate required frontmatter fields (0.601096ms)
+  AssertionError [ERR_ASSERTION]: Should be valid
+  + actual - expected
+  
+  + {
+  +   errors: [],
+  +   valid: true
+  + }
+  - true
+  
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/artifact-io.test.js:162:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1619:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { valid: true, errors: [] },
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lib/artifact-io.test.js:165:5
+✖ should fail validation if required field missing (0.455432ms)
+  AssertionError [ERR_ASSERTION]: Should be invalid
+  + actual - expected
+  
+  + {
+  +   errors: [],
+  +   valid: true
+  + }
+  - false
+  
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/artifact-io.test.js:173:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { valid: true, errors: [] },
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lib/artifact-io.test.js:176:5
+✖ should validate empty body is allowed (0.354569ms)
+  AssertionError [ERR_ASSERTION]: Empty body should be valid
+  + actual - expected
+  
+  + {
+  +   errors: [],
+  +   valid: true
+  + }
+  - true
+  
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/artifact-io.test.js:184:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { valid: true, errors: [] },
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lib/artifact-io.test.js:189:5
+✖ should generate YYYY-MM-DD-NNN-suffix format (0.448751ms)
+  AssertionError [ERR_ASSERTION]: Should match format
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/artifact-io.test.js:193:7)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1619:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/lib/artifact-io.test.js:196:5
+✖ should create numbered sequence (0.427862ms)
+  AssertionError [ERR_ASSERTION]: Should generate different filenames
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/artifact-io.test.js:205:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'test.md',
+    expected: 'test.md',
+    operator: 'notStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lib/context-extraction.test.js:25:5
+✖ should extract context from markdown file with frontmatter (3.08082ms)
+  AssertionError [ERR_ASSERTION]: Should have content
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/context-extraction.test.js:42:7)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1619:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1619:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/lib/context-extraction.test.js:46:5
+✖ should handle file not found gracefully (0.615926ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception: Should throw file not found error
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/context-extraction.test.js:49:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: { code: 'ENOENT' },
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at tests/lib/context-extraction.test.js:56:5
+✖ should extract requirements from markdown headers (0.501863ms)
+  TypeError: Cannot read properties of undefined (reading 'includes')
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/context-extraction.test.js:68:30)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7)
+
+test at tests/lib/context-extraction.test.js:73:5
+✖ should find existing plans in docs/plans directory (2.257769ms)
+  AssertionError [ERR_ASSERTION]: Should return array
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/context-extraction.test.js:82:7)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1619:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/lib/context-extraction.test.js:86:5
+✖ should return empty array when no plans found (0.438372ms)
+  AssertionError [ERR_ASSERTION]: Should return array
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/context-extraction.test.js:92:7)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/lib/context-extraction.test.js:96:5
+✖ should extract plan metadata from filenames (1.15534ms)
+  AssertionError [ERR_ASSERTION]: Should find plan
+  
+  undefined !== 1
+  
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/context-extraction.test.js:111:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lib/context-extraction.test.js:117:5
+✖ should gather context from multiple sources (1.51697ms)
+  AssertionError [ERR_ASSERTION]: Should include task description
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/context-extraction.test.js:136:7)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1619:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/lib/context-extraction.test.js:139:5
+✖ should handle missing directories gracefully (2.125085ms)
+  AssertionError [ERR_ASSERTION]: Should preserve input
+  + actual - expected
+  
+  + undefined
+  - 'Test'
+  
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/context-extraction.test.js:146:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'Test',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lib/context-extraction.test.js:171:5
+✖ should parse branch name with feature prefix (0.444121ms)
+  AssertionError [ERR_ASSERTION]: Should have description
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/context-extraction.test.js:178:7)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1619:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/lib/context-extraction.test.js:199:5
+✖ should extract unit ID from formatted artifact ID (0.292688ms)
+  TypeError: Cannot read properties of null (reading 'includes')
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/context-extraction.test.js:204:21)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1619:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7)
+
+test at tests/lib/errors.test.js:63:5
+✖ should support context object (0.477712ms)
+  TypeError: Cannot read properties of undefined (reading 'file')
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/errors.test.js:67:38)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7)
+
+test at tests/lib/errors.test.js:79:5
+✖ should create FileSystemError for file operations (1.747355ms)
+  AssertionError [ERR_ASSERTION]: Should have error code
+  + actual - expected
+  
+  + 'FILESYSTEM_ERROR'
+  - 'ENOENT'
+  
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/errors.test.js:83:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1619:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'FILESYSTEM_ERROR',
+    expected: 'ENOENT',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lib/errors.test.js:93:5
+✖ should create GitError for git operations (0.325039ms)
+  AssertionError [ERR_ASSERTION]: Should store ref name
+  + actual - expected
+  
+  + undefined
+  - 'feature/test'
+  
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/errors.test.js:97:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'feature/test',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lib/errors.test.js:100:5
+✖ should create ArtifactError for artifact issues (0.317788ms)
+  AssertionError [ERR_ASSERTION]: Should store artifact path
+  + actual - expected
+  
+  + undefined
+  - 'test.md'
+  
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/errors.test.js:104:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'test.md',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lib/errors.test.js:133:5
+✖ should suggest checking file path for ENOENT (0.203425ms)
+  AssertionError [ERR_ASSERTION]: Should suggest checking file path
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/errors.test.js:138:7)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1619:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/lib/errors.test.js:152:5
+✖ should provide rate limit recovery suggestion (0.228276ms)
+  AssertionError [ERR_ASSERTION]: Should suggest waiting/retrying
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/errors.test.js:158:7)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/lib/github-integration.test.js:111:5
+✖ should handle API errors (2.169547ms)
+  AssertionError [ERR_ASSERTION]: Should have error handling
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/github-integration.test.js:117:7)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1619:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/lib/github-integration.test.js:120:5
+✖ should handle rate limiting (0.211806ms)
+  AssertionError [ERR_ASSERTION]: Should handle rate limiting
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/lib/github-integration.test.js:123:7)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/pwrl-work/skills.test.js:247:3
+✖ has agent detection and routing logic (0.664017ms)
+  AssertionError [ERR_ASSERTION]: Must have agent detection
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/pwrl-work/skills.test.js:249:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/pwrl-work/skills.test.js:253:3
+✖ has agent path and fallback path (0.146304ms)
+  AssertionError [ERR_ASSERTION]: Must describe both paths
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/pwrl-work/skills.test.js:255:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/pwrl-work/skills.test.js:259:3
+✖ has all 5 workflow phases (0.136554ms)
+  AssertionError [ERR_ASSERTION]: Must have Phase 0: Triage
+      at TestContext.<anonymous> (/home/wicttor/Projects/pwrl/tests/pwrl-work/skills.test.js:261:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

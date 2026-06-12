@@ -119,27 +119,27 @@ sequenceDiagram
     participant Fs as File System
 
     User->>Planner: User calls /pwrl-plan
-    
+
     Planner->>Scope: Phase 1: Extract scope
     Scope->>Libs: Use lib/context-extraction
     Scope->>Fs: Read existing plans
     Scope-->>Planner: scope artifact
-    
+
     Planner->>Research: Phase 2: Research patterns
     Research->>Libs: Use lib/github-integration
     Research->>Libs: Use lib/errors for errors
     Research-->>Planner: research artifact
-    
+
     Planner->>Design: Phase 3: Design units
     Design->>Libs: Use lib/artifact-io
     Design->>Libs: Use lib/errors for errors
     Design-->>Planner: design artifact
-    
+
     Planner->>Generate: Phase 4: Generate plan
     Generate->>Libs: Use lib/artifact-io
     Generate->>Fs: Write final plan
     Generate-->>Planner: plan artifact
-    
+
     Planner-->>User: Return output
 ```
 

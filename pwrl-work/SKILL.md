@@ -12,11 +12,11 @@ Execute implementation work through a deterministic 5-phase pipeline: triage inp
 
 Transform task files, plans, or prompts into completed working code through systematic execution:
 
-- **Triage Input** — Classify and validate input (task file, plan file, bare prompt, or latest task), select interaction mode
-- **Prepare Environment** — Repository verification, ambiguity resolution, branch setup, move task to in-progress
-- **Execute Implementation** — Test-first implementation with incremental verification and quality gates, move task to for-review
-- **Review & Verify** — Code review, scope check, diff quality, documentation consolidation
-- **Finalize & Ready for PR** — Verify branch state, tasks marked for-review, display PR creation instructions
+- **Triage Input** — Classify and validate input (task file, plan file, bare prompt, or latest task)
+- **Prepare Environment** — Repository verification, ambiguity resolution, branch setup, verification commands
+- **Execute Implementation** — Test-first implementation with incremental verification and quality gates
+- **Review & Verify** — Code review, scope check, diff quality, documentation
+- **Ship to Main** — Merge, update status, optional end-session chaining
 
 ## Usage
 
@@ -36,29 +36,29 @@ Input
   ↓
 Phase 0: pwrl-work-triage
   ├ Input: task file, plan file, bare prompt, or empty
-  ├ Output: triage artifact (unit_id, files, acceptance_criteria, dependencies, interaction_mode)
+  ├ Output: triage artifact (unit_id, files, acceptance_criteria, dependencies)
   ↓
 Phase 1: pwrl-work-prepare
-  ├ Input: triage artifact (with interaction_mode)
-  ├ Processing: repo verification, branch strategy, move task to-do → in-progress
+  ├ Input: triage artifact
+  ├ Processing: repo verification, ambiguity resolution, branch strategy, verification commands
   ├ Output: prepare artifact (branch, verification_commands, environment state)
   ↓
 Phase 2: pwrl-work-execute
   ├ Input: prepare artifact
-  ├ Processing: scaffolding, test-first implementation, quality gates, move in-progress → for-review
-  ├ Output: execute artifact (files changed, tests passing, tasks for-review)
+  ├ Processing: scaffolding, test-first implementation, quality gates
+  ├ Output: execute artifact (files changed, tests passing, build/lint status)
   ↓
 Phase 3: pwrl-work-review
   ├ Input: execute artifact
-  ├ Processing: scope check, diff review, test review, documentation, duplication consolidation
-  ├ Output: review artifact (approval status)
+  ├ Processing: scope check, diff review, test review, documentation check
+  ├ Output: review artifact (approval status, ready_to_ship)
   ↓
 Phase 4: pwrl-work-ship
   ├ Input: review artifact
-  ├ Processing: verify all tasks for-review, branch confirmation, display PR instructions
-  ├ Output: finalization artifact (branch ready, PR creation steps)
+  ├ Processing: merge to main, update task status, optional end-session
+  ├ Output: ship artifact (merge status, completion timestamp)
   ↓
-COMPLETE (Branch ready for pull request)
+COMPLETE
 ```
 
 Each phase produces an explicit **artifact** (YAML frontmatter + structured data) consumed by the next phase. Enables resumability, traceability, and independent testing.
@@ -179,14 +179,12 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 
 ## Rules
 
-- **Select interaction mode upfront** — Choose detailed or yolo mode before starting
 - **Clarify ambiguities upfront** — Don't proceed if approach is unclear
 - **Verify incrementally** — Run checks frequently, catch issues early
 - **Test-first discipline** — Write tests before implementing
-- **One scope at a time** — Complete each unit and mark for-review separately
+- **One scope at a time** — Complete and ship each unit separately
 - **No scope creep** — Get approval before expanding beyond task
-- **Quality gates** — All checks must pass before marking for-review
-- **Branch stays active** — Keep feature branch for PR creation, don't merge to main
+- **Quality gates** — All checks must pass before shipping
 
 ## Error Recovery
 
@@ -196,7 +194,7 @@ Each phase includes error detection and recovery:
 - **Prepare:** Uncommitted changes, wrong branch, missing dependencies → ask action
 - **Execute:** Build failure, test failure, regression, low coverage → recovery instructions
 - **Review:** Scope creep, quality issues, security concerns → request fix
-- **Finalize:** Tasks not marked for-review, dirty working directory → recovery steps
+- **Ship:** Merge conflicts, permission denied, CI failure → recovery steps
 
 All errors include user-facing explanation and recovery path (never silent failure).
 

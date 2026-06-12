@@ -1,103 +1,238 @@
 ---
 name: pwrl-learnings
-description: Document a recently solved problem or insight while context is fresh
-argument-hint: "[Optional: brief context about what was learned]"
+description: Extract, classify, deduplicate, structure, and save learnings from code, commits, tasks, and documentation
+argument-hint: "[Optional: source material to extract from]"
 ---
 
-# PWRL Learnings
+# PWRL Learnings Orchestrator
 
-Capture learnings, problems solved, and insights in a structured format for future reference.
+Complete learning lifecycle management through 5-phase micro-skill pipeline.
 
-## Purpose
+## Architecture
 
-Document solutions, patterns, and insights while context is fresh. Creates structured documentation in `docs/learnings/` with frontmatter for searchability and keeps `docs/learnings/INDEX.md` updated.
+```
+Input (code/commit/task/documentation)
+  ↓
+Phase 1: pwrl-learnings-extract
+  ├ Extract learnings from source
+  ├ Identify candidates (gotcha, pattern, decision, technical_fix, workflow)
+  ├ Output: extraction artifact
+  ↓
+Phase 2: pwrl-learnings-classify
+  ├ Refine classification and priority
+  ├ Assign domains and tags
+  ├ Detect duplicates
+  ├ Output: classification artifact
+  ↓
+Phase 3: pwrl-learnings-structure
+  ├ Normalize format
+  ├ Generate metadata and storage paths
+  ├ Create indexes
+  ├ Output: structured artifact
+  ↓
+Phase 4: pwrl-learnings-dedup
+  ├ Identify and merge duplicates
+  ├ Manage archived learnings
+  ├ Preserve lineage
+  ├ Output: deduplicated artifact
+  ↓
+Phase 5: pwrl-learnings-save
+  ├ Create backups
+  ├ Write to persistent storage
+  ├ Generate indexes
+  ├ Git commit changes
+  ├ Output: saved artifact (ready for access)
+  ↓
+COMPLETE
+```
 
-**Why document learnings?** The first time you solve a problem takes research. Document it, and the next occurrence takes minutes. Knowledge compounds.
+## 5 Micro-Skills
+
+### U4.1: pwrl-learnings-extract
+
+**Extracts learnings** from various sources (code, commits, tasks, documentation, errors, reviews).
+
+- Input: Source content and type
+- Output: Extraction artifact with candidates
+- Tests: 50 cases
+- See: [README](../pwrl-learnings-extract/README.md)
+
+### U4.2: pwrl-learnings-classify
+
+**Classifies and prioritizes** learnings by type, domain, severity, and applicability.
+
+- Input: Extraction artifact (extracted learnings)
+- Output: Classification artifact (refined, prioritized)
+- Tests: 50 cases
+- See: [README](../pwrl-learnings-classify/README.md)
+
+### U4.3: pwrl-learnings-structure
+
+**Structures learnings** for persistent storage with metadata and indexes.
+
+- Input: Classification artifact
+- Output: Structure artifact (formatted, indexed, ready to save)
+- Tests: 45 cases
+- See: [README](../pwrl-learnings-structure/README.md)
+
+### U4.4: pwrl-learnings-dedup
+
+**Deduplicates and merges** identical or very similar learnings.
+
+- Input: Structure artifact
+- Output: Deduplicated artifact (with archive mapping)
+- Tests: 50 cases
+- See: [README](../pwrl-learnings-dedup/README.md)
+
+### U4.5: pwrl-learnings-save
+
+**Saves learnings** to permanent storage with backups and git versioning.
+
+- Input: Deduplicated artifact
+- Output: Saved artifact (persistent, indexed, accessible)
+- Tests: 45 cases
+- See: [README](../pwrl-learnings-save/README.md)
+
+## Test Coverage
+
+- **Total:** 240+ tests across 5 micro-skills
+- **Format:** GIVEN-WHEN-THEN
+- **Coverage:** Happy path, error cases, edge cases, full workflows
+
+## Key Protocols
+
+- [Extract Learnings Protocol](../pwrl-learnings-extract/references/extract-learnings-protocol.md)
+- [Classify Learnings Protocol](../pwrl-learnings-classify/references/classify-learnings-protocol.md)
+- [Structure Learnings Protocol](../pwrl-learnings-structure/references/structure-learnings-protocol.md)
+- [Deduplicate Learnings Protocol](../pwrl-learnings-dedup/references/dedup-learnings-protocol.md)
+- [Save Learnings Protocol](../pwrl-learnings-save/references/save-learnings-protocol.md)
 
 ## Usage
 
 ```bash
-/pwrl-learnings                    # Document the current solution/insight
-/pwrl-learnings [brief context]    # Provide additional context hint
+/pwrl-learnings                              # Extract from current context
+/pwrl-learnings code                         # Extract from code
+/pwrl-learnings commit                       # Extract from git commit
+/pwrl-learnings task                         # Extract from task description
+/pwrl-learnings documentation                # Extract from docs
+/pwrl-learnings error                        # Extract from error trace
 ```
 
-## Support Files
+## Learning Categories
 
-- `references/schema.yaml` — frontmatter fields and valid categories
-- `references/categories.md` — category descriptions and when to use each
-- `assets/templates.md` — markdown templates for different learning types
-- `docs/learnings/INDEX.md` — canonical index of all learnings with short descriptions
+| Type              | Definition                                 | Example                                   |
+| ----------------- | ------------------------------------------ | ----------------------------------------- |
+| **gotcha**        | Unexpected behavior, trap, surprise        | JavaScript type coercion, closure scope   |
+| **pattern**       | Reusable solution, best practice, idiom    | Error handling pattern, caching strategy  |
+| **decision**      | Why something was chosen over alternatives | Technology choice, architectural decision |
+| **technical_fix** | Solution to specific problem               | Debugging steps, workaround, bug fix      |
+| **workflow**      | Process improvement, efficiency gain       | Git workflow, code review technique       |
 
-## Workflow
+## Quality Criteria
 
-### 1. Extract from Conversation
+**EXTRACTED:**
 
-Review the conversation history to identify:
+- ✓ Candidates identified from source
+- ✓ Type classifications assigned
+- ✓ Source references tracked
 
-- What problem was solved or insight gained
-- The approach taken and what worked
-- What didn't work and why
-- Key code examples or patterns
+**CLASSIFIED:**
 
-### 2. Classify the Learning
+- ✓ Types refined and confirmed
+- ✓ Severity/priority assessed
+- ✓ Domains and tags assigned
+- ✓ Duplicates detected
 
-Read `references/schema.yaml` and `references/categories.md` to determine:
+**STRUCTURED:**
 
-- **Learning type**: Which category fits this learning? (technical-fix, pattern, workflow, gotcha, concept, decision)
-- **Severity/Impact**: How significant is this learning? (high, medium, low)
+- ✓ Normalized format
+- ✓ Metadata generated
+- ✓ Storage paths determined
+- ✓ Indexes created
 
-### 3. Structure the Content
+**DEDUPLICATED:**
 
-Read `assets/templates.md` and choose the appropriate template based on the learning type.
+- ✓ Exact duplicates merged
+- ✓ High similarity flagged
+- ✓ Archive mapping created
+- ✓ Lineage preserved
 
-- Template structure varies by category (technical-fix, pattern, workflow, etc.)
-- Follow template sections for chosen category
-- Include code examples and concrete details
+**SAVED:**
 
-### 4. Generate Metadata
+- ✓ Persisted to disk
+- ✓ Backup created
+- ✓ Indexes updated
+- ✓ Git history maintained
+- ✓ Ready for search/retrieval
 
-Create YAML frontmatter with:
+## Integration Points
 
-- `title` — Clear, descriptive title (50 chars or less)
-- `date` — Today's date (YYYY-MM-DD)
-- `category` — One of the types from step 2
-- `tags` — 3-5 searchable keywords
-- `severity` — Impact level (high/medium/low)
+### Input From
 
-Read `references/schema.yaml` for validation rules.
+- pwrl-work (code changes, execution context)
+- pwrl-plan (planning context, decisions)
+- pwrl-review (code review insights)
+- GitHub (issues, PRs, discussions)
+- Error logs and debugging sessions
+- Manual input from user
 
-### 5. Suggest Filename
+### Output To
 
-Pattern: `[sanitized-slug]-[YYYY-MM-DD].md`
+- `docs/learnings/` directory (persistent knowledge base)
+- Git repository (with version history)
+- Search indexes (for retrieval)
+- Other PWRL phases (as reference material)
 
-- Lowercase, hyphenated
-- Date suffix helps with chronology
-- Example: `async-state-race-condition-2026-04-30.md`
+## Patterns Established
 
-### 6. Check for Existing Docs
+1. **Pure Skill Pipeline** — 5 micro-skills in sequence, no branching
+2. **Explicit Artifacts** — Each phase produces typed output for next phase
+3. **Comprehensive Testing** — 240+ tests covering all scenarios
+4. **Error Recovery** — Every error has user-facing explanation + fix
+5. **Documentation** — README for each micro-skill + protocols
+6. **Traceability** — UUID tracking from extraction through saving
 
-Search `docs/learnings/` for related content:
+## Output Structure
 
-- Use grep/search tools to find similar titles, tags, or topics
-- If a very similar learning exists, consider updating it instead of creating a new one
-- Note any related learnings to cross-reference
+After successful save, learnings available in:
 
-### 7. Update Learnings Index
+```
+docs/learnings/
+├── INDEX.md                 (all learnings)
+├── BY_TYPE.md              (organized by type)
+├── BY_DOMAIN.md            (organized by domain)
+├── BY_SEVERITY.md          (organized by severity)
+├── RECENT.md               (latest 20)
+├── .index.json             (machine-readable)
+├── .backups/               (recovery backups)
+│   └── 2026-06-12-14-58-00.tar.gz
+├── gotcha/                 (type-based folders)
+│   ├── async-race-condition.md
+│   └── closure-scope-trap.md
+├── pattern/
+├── decision/
+├── technical_fix/
+├── workflow/
+└── archived/               (merged/deprecated)
+```
 
-Update `docs/learnings/INDEX.md` as part of the same workflow.
+## Performance Expectations
 
-- If index does not exist, create it using the standard table format
-- Add one row for the learning with: date, category, title, path, and short description
-- **Short description requirement**: 1 sentence, concrete, and searchable (target 80-140 chars)
-- If learning already exists in index, update the existing row instead of duplicating
-- Keep entries sorted newest-first by date
+- **Extract:** <5 seconds for typical code files
+- **Classify:** <2 seconds per 100 learnings
+- **Structure:** <3 seconds per 100 learnings
+- **Dedup:** <5 seconds per 100 learnings
+- **Save:** <10 seconds for 100+ learnings (includes git commit)
+- **Full Pipeline:** <30 seconds for complete workflow
 
-### 8. Write the File
+## Next Phase
 
-- Create directory if needed: `mkdir -p docs/learnings/[category]/`
-- Write the complete markdown file
-- Validate YAML frontmatter
-- Confirm file path with user
+Phase 5: Consolidation utilities (4 micro-skills)
+
+- Learning search and retrieval
+- Analytics and reporting
+- Learning export/import
+- Integration with other PWRL phases
 
 ### 9. Completion Summary
 

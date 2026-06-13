@@ -77,16 +77,9 @@ Comprehensive testing for sliced pwrl-work micro-skills (S2-S7), orchestrator ag
 | T5.4 | System check: idempotency | Delete operation | Retry safe, cleanup verified | Check passes |
 | T5.5 | Scope control | Unrelated file in diff | Warn user about scope drift | Scope enforced |
 
-### pwrl-work-ship (6 tests)
+### pwrl-work-ship - REMOVED
 
-| # | Test | Input | Expected | Acceptance |
-|---|---|---|---|---|
-| T6.1 | All checks pass | Ready tasks | Final tests pass, commit created | Shipping succeeds |
-| T6.2 | Test failure | Failing test | Shipping stopped, error shown | Test blocks ship |
-| T6.3 | Lint violations | Non-linted code | Violations detected, auto-fix offered | Quality check works |
-| T6.4 | Scope drift | Unrelated file | Warning, user can remove | Scope enforced |
-| T6.5 | User cancels | Cancel at approval | No commit, work preserved | Graceful cancel |
-| T6.6 | End-session offered | Successful ship | End-session offered | Workflow complete |
+This skill has been removed. The workflow now ends at Phase 4 (Review).
 
 ---
 

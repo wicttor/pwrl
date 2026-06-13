@@ -85,17 +85,14 @@ Problem → /pwrl-plan
   ├─ Phase 4: Review (pwrl-work-review)
   │           ↓ [User confirms readiness]
   │
-  ├─ Phase 5: Ship (pwrl-work-ship)
-  │           ↓ [Work committed]
-  │
-  └─ Output: Committed code with GitHub Issues updates
+  └─ Output: Ready for pull request (branch preserved)
 
 → /pwrl-learnings → /pwrl-end-session
 ```
 
-**Without Agents (Fallback):**
+**Direct Skill Calls (Simple/Solo):**
 
-If agents aren't available, `/pwrl-plan` runs all phases inline (same output, no agent orchestration).
+If you prefer direct invocation, call `/pwrl-work` or individual skills (same execution, no agent orchestration).
 
 **Task-Based (Complex/Team):**
 

@@ -137,36 +137,31 @@ When you call `/pwrl-work [task/plan/prompt]`, the workflow proceeds in five pha
 - Simplify and consolidate code
 - Check for duplication and clarity
 - Verify edge cases handled
-- Prepare for shipping
+- Finalize code changes and prepare branch for pull request
 
-**Phase 5: Ship** (`pwrl-work-ship`)
+The work execution workflow runs through these four phases:
 
-- Finalize all changes
-- Approve work quality
-- Create commit
-- Update task status (if using task-based workflow)
-- Optionally update GitHub Issues if integration enabled
+**Triage** → **Prepare** → **Execute** → **Review**
 
 Each phase has a user checkpoint for review and adjustment before proceeding.
 
-### Agent-Enhanced vs. Fallback
+### Execution with Agents
 
-The work execution workflow can run in two modes:
+The work execution workflow can optionally use the agent-based orchestrator:
 
 **Agent-Enhanced (Recommended):**
 
-- `.agents/agents/pwrl-work.agent.md` orchestrates all five phases
+- `.agents/agents/pwrl-work.agent.md` orchestrates all four phases
 - Clear phase boundaries with checkpoints
 - Can iterate within each phase before moving forward
 - Better user experience with staged feedback
 - Supports parallel execution mode for concurrent subtasks
 
-**Monolithic Fallback:**
+**Skill-Based (Direct):**
 
-- All five phases run within `pwrl-work` when agents unavailable
-- Same checkpoints and logic, all inline
-- Guaranteed to work regardless of system configuration
-- See `pwrl-work/SKILL.md` (Monolithic Fallback Path section) for complete Phase 1-5 logic and `pwrl-work/references/workflow-details.md` for execution modes and task status rules
+- Call `pwrl-work` or individual skills directly
+- Same logic, direct invocation
+- See `pwrl-work/SKILL.md` for complete Phase 0-3 logic and `pwrl-work/references/workflow-details.md` for execution modes and task status rules
 
 ### Execution Modes
 
@@ -1002,9 +997,8 @@ Orchestrates the work execution workflow:
 2. Prepare → `pwrl-work-prepare`
 3. Execute → `pwrl-work-execute`
 4. Review → `pwrl-work-review`
-5. Ship → `pwrl-work-ship`
 
-Each phase has a user checkpoint for review/adjustment before proceeding. Supports inline, serial, and parallel execution modes.
+Each phase has a user checkpoint for review/adjustment before proceeding. Supports inline, serial, and parallel execution modes. After Phase 4, work is ready for pull request creation.
 
 **Usage:**
 ```bash

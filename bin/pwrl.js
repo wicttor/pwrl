@@ -84,7 +84,6 @@ Micro-Skills (usually called by agents):
   - pwrl-work-prepare      Phase 2: Set up environment and create task lists
   - pwrl-work-execute      Phase 3: Implement tasks (inline, serial, or parallel)
   - pwrl-work-review       Phase 4: Simplify and consolidate code
-  - pwrl-work-ship         Phase 5: Finalize and commit work
 
   Other:
   - pwrl-tasks             Break plans into granular executable task files

@@ -1,12 +1,12 @@
 ---
 name: pwrl-work
-description: Execute implementation work efficiently through 5-phase micro-skill pipeline
+description: Execute implementation work efficiently through 4-phase micro-skill pipeline
 argument-hint: "[Task file, plan doc path, or work description. Leave blank to use latest plan/task]"
 ---
 
 # PWRL Work
 
-Execute implementation work through a deterministic 5-phase pipeline: triage input, prepare environment, implement with test-first discipline, review code quality, and ship to main branch.
+Execute implementation work through a deterministic 4-phase pipeline: triage input, prepare environment, implement with test-first discipline, and review code quality.
 
 ## Purpose
 
@@ -16,7 +16,6 @@ Transform task files, plans, or prompts into completed working code through syst
 - **Prepare Environment** — Repository verification, ambiguity resolution, branch setup, verification commands
 - **Execute Implementation** — Test-first implementation with incremental verification and quality gates
 - **Review & Verify** — Code review, scope check, diff quality, documentation
-- **Ship to Main** — Merge, update status, optional end-session chaining
 
 ## Usage
 
@@ -29,7 +28,7 @@ Transform task files, plans, or prompts into completed working code through syst
 
 ## Architecture
 
-**Direct sequence of 5 micro-skills with deterministic artifact flow:**
+**Direct sequence of 4 micro-skills with deterministic artifact flow:**
 
 ```
 Input
@@ -53,11 +52,6 @@ Phase 3: pwrl-work-review
   ├ Processing: scope check, diff review, test review, documentation check
   ├ Output: review artifact (approval status, ready_to_ship)
   ↓
-Phase 4: pwrl-work-ship
-  ├ Input: review artifact
-  ├ Processing: merge to main, update task status, optional end-session
-  ├ Output: ship artifact (merge status, completion timestamp)
-  ↓
 COMPLETE
 ```
 
@@ -67,7 +61,7 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 
 ### Phase 0: Triage Input
 
-**Purpose:** Classify input, extract task data, and select interaction mode
+**Purpose:** Classify input, extract task data, and validate requirements
 
 **Input:** Task file path, plan file path, bare prompt, or empty (defaults to latest task)
 
@@ -147,24 +141,9 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 6. Get user approval
 7. Generate review artifact
 
-**Output:** Review artifact with scope_check, diff_review, approval status
+**Output:** Review artifact with scope_check, diff_review, approval status, branch info, PR instructions
 
-### Phase 4: Finalize & Mark Ready
-
-**Purpose:** Final confirmations and branch management
-
-**Input:** Review artifact
-
-**Processing:**
-
-1. Verify all tasks marked `for-review` ✓
-2. Verify branch created and maintained ✓
-3. Display completion summary
-4. Branch remains active for pull request creation
-5. Optionally chain to `/pwrl-end-session` for learnings documentation
-6. Generate finalization artifact
-
-**Output:** Finalization artifact with completion status, branch info, PR instructions
+After approval, branch remains active for pull request creation and can optionally chain to `/pwrl-end-session` for learnings documentation.
 
 ---
 
@@ -182,9 +161,9 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 - **Clarify ambiguities upfront** — Don't proceed if approach is unclear
 - **Verify incrementally** — Run checks frequently, catch issues early
 - **Test-first discipline** — Write tests before implementing
-- **One scope at a time** — Complete and ship each unit separately
+- **One scope at a time** — Complete and review each unit separately
 - **No scope creep** — Get approval before expanding beyond task
-- **Quality gates** — All checks must pass before shipping
+- **Quality gates** — All checks must pass before marking ready
 
 ## Error Recovery
 
@@ -194,17 +173,15 @@ Each phase includes error detection and recovery:
 - **Prepare:** Uncommitted changes, wrong branch, missing dependencies → ask action
 - **Execute:** Build failure, test failure, regression, low coverage → recovery instructions
 - **Review:** Scope creep, quality issues, security concerns → request fix
-- **Ship:** Merge conflicts, permission denied, CI failure → recovery steps
 
 All errors include user-facing explanation and recovery path (never silent failure).
 
 ## Support Files
 
-- `pwrl-work-triage/references/triage-input-protocol.md` — Phase 1 specification
-- `pwrl-work-prepare/references/prepare-environment-protocol.md` — Phase 2 specification
-- `pwrl-work-execute/references/execute-implementation-protocol.md` — Phase 3 specification
-- `pwrl-work-review/references/review-quality-protocol.md` — Phase 4 specification
-- `pwrl-work-ship/references/ship-delivery-protocol.md` — Phase 5 specification
+- `pwrl-work-triage/references/triage-input-protocol.md` — Phase 0 specification
+- `pwrl-work-prepare/references/prepare-environment-protocol.md` — Phase 1 specification
+- `pwrl-work-execute/references/execute-implementation-protocol.md` — Phase 2 specification
+- `pwrl-work-review/references/review-quality-protocol.md` — Phase 3 specification
 
 ## When to Use
 

@@ -36,7 +36,7 @@ Next Steps:
   3. Start using PWRL in your AI assistant:
      Planning:
        /pwrl-plan <task>          Create implementation plan (4 phases with checkpoints)
-     
+
      Work:
        /pwrl-work                 Execute work (5 phases: triage → prepare → execute → review → ship)
 
@@ -54,7 +54,7 @@ Documentation:
 
 Agent Details:
   Planner Agent: Orchestrates planning (pwrl-plan-scope, pwrl-plan-research, pwrl-plan-design, pwrl-plan-generate)
-  Work Agent: Orchestrates execution (pwrl-work-triage, pwrl-work-prepare, pwrl-work-execute, pwrl-work-review, pwrl-work-ship)
+  Work Agent: Orchestrates execution (pwrl-work-triage, pwrl-work-prepare, pwrl-work-execute, pwrl-work-review)
 
 Quick Start:
   See QUICKSTART.md for example workflows

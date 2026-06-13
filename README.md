@@ -73,7 +73,7 @@ Delegates to the **PWRL Planner Agent**, which orchestrates four micro-skills in
 
 #### Work Agent: `/pwrl-work`
 
-Delegates to the **PWRL Work Agent**, which orchestrates five micro-skills in sequence:
+Delegates to the **PWRL Work Agent**, which orchestrates four micro-skills in sequence:
 
 | Micro-Skill             | Phase | Purpose                                    |
 | ----------------------- | ----- | ------------------------------------------ |
@@ -81,7 +81,6 @@ Delegates to the **PWRL Work Agent**, which orchestrates five micro-skills in se
 | **`pwrl-work-prepare`** | W2    | Set up environment and create task lists   |
 | **`pwrl-work-execute`** | W3    | Implement tasks (inline, serial, parallel) |
 | **`pwrl-work-review`**  | W4    | Simplify code and consolidate changes      |
-| **`pwrl-work-ship`**    | W5    | Finalize, approve, and commit work         |
 
 **How it works:**
 
@@ -105,8 +104,8 @@ Delegates to the **PWRL Work Agent**, which orchestrates five micro-skills in se
   └─ Output: docs/plans/YYYY-MM-DD-NNN-<name>.md
 
 /pwrl-work
-  ├─ pwrl-work-triage → pwrl-work-prepare → pwrl-work-execute → pwrl-work-review → pwrl-work-ship
-  └─ Output: Committed code with status updates
+  ├─ pwrl-work-triage → pwrl-work-prepare → pwrl-work-execute → pwrl-work-review
+  └─ Output: Ready for pull request (branch preserved)
 
 Optional: /pwrl-review (for explicit review before merge)
 /pwrl-learnings

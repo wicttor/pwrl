@@ -6,6 +6,11 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+### Removed
+
+- Removed `pwrl-work-ship` micro-skill (Phase 5) - workflow now ends at Phase 4 (Review) with branch kept ready for pull request instead of automatic merge
+- Removed Phase 5 references from agent orchestrator and documentation (updated to 4-phase workflow)
+
 ## [1.1.3] - 2026-06-09
 
 ### Fixed

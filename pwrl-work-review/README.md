@@ -71,4 +71,4 @@ See `tests/pwrl-work/review-quality.test.ts` (30+ tests):
 
 ## Next Phase
 
-Passes review artifact to `pwrl-work-ship` for merge and completion.
+If approved, the work is ready for pull request creation. The feature branch is kept active for the user to create a pull request manually.

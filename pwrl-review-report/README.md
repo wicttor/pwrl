@@ -111,7 +111,7 @@ See `tests/pwrl-review/report-generation.test.ts` (25-30 tests):
 
 When used after `pwrl-work-execute`:
 
-- If **APPROVED** → Proceed to `pwrl-work-ship`
+- If **APPROVED** → Work is ready for pull request creation
 - If **REQUEST CHANGES** → Return to `pwrl-work-execute` to fix
 - If **REJECTED** → Significant rework in `pwrl-work-execute`
 

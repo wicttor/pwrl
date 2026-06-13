@@ -228,7 +228,7 @@ recommendations:
   - "Add 2 integration tests with real DB for user module"
 ```
 
-If `readyForShipping` is true, pass to S7 (pwrl-work-ship).
+If `readyForShipping` is true, work is ready for pull request creation.
 
 ---
 
@@ -266,7 +266,6 @@ For detailed analysis, use the dedicated `/pwrl-review` skill.
 ## Dependencies
 
 - **pwrl-work-execute (S5)** — Consumes executed task results
-- **pwrl-work-ship (S7)** — Produces review summary for shipping
 - **Git** — For diff analysis
 - **File system** — For reading/writing modified files
 - **Test framework** — For verifying helpers and consolidations
@@ -275,4 +274,3 @@ For detailed analysis, use the dedicated `/pwrl-review` skill.
 
 - **S1 Analysis:** `docs/analysis/2026-06-05-pwrl-work-structure-analysis.md`
 - **Source Phase 3:** Installed `pwrl-work` skill (Phase 3: Simplify & Review, lines 173-185)
-- **Next Skill:** `pwrl-work-ship` (S7)

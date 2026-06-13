@@ -63,40 +63,16 @@ Updated the pwrl-work 5-phase pipeline to implement the following key changes:
 - Added visual representation of status transition
 - Made it clear this is a required operation (not optional)
 
-### 5. `/home/wicttor/Projects/pwrl/pwrl-work-ship/SKILL.md`
+### 5. `/home/wicttor/Projects/pwrl/pwrl-work-ship/` - REMOVED
 
-**Major Changes:**
+**Removal Rationale:**
 
-- Renamed from "Ship Completed Work" to "Finalize & Branch Readiness"
-- Updated description to "keep branch ready for pull request"
-- Changed Output artifact from `status: shipped` to `status: ready-for-pr`
-- Completely rewrote workflow:
-  - **Phase 1 (NEW):** Verify all tasks marked for-review (instead of shipping to main)
-  - **Phase 2:** Run final targeted test suite (unchanged)
-  - **Phase 3:** Verify linting & formatting (unchanged)
-  - **Phase 4:** Review diff for regressions (unchanged)
-  - **Phase 5 (RENAMED):** User approval checkpoint (now asks "Ready to keep branch and create PR?" instead of "Ready to ship?")
-  - **Phase 6 (NEW):** Confirm branch is ready (verify git status, working directory clean)
-  - **Phase 7 (NEW):** Display PR creation instructions (GitHub UI, GitHub CLI, or manual options)
-  - **Phase 8 (UPDATED):** Offer end-session workflow (changed from "create summary commit" to "document learnings")
-- Updated Error Handling section to reflect new workflow (no commit/push errors, focus on branch verification)
-- Updated Quality Gates to reflect new end-state (tasks for-review, branch ready for PR)
+- The workflow now ends at Phase 4 (Review) instead of Phase 5 (Ship)
+- Branch remains ready for pull request rather than automatically merging to main
+- Users manually create pull requests from the feature branch
+- pwrl-work-ship functionality is no longer needed
 
-## Task Lifecycle Changes
-
-### Before
-
-```
-docs/tasks/to-do/task.md (status: to-do)
-         ↓
-docs/tasks/in-progress/task.md (status: in-progress)
-         ↓
-docs/tasks/done/task.md (status: done)
-         ↓
-[Shipped to main branch]
-```
-
-### After
+## Task Lifecycle
 
 ```
 docs/tasks/to-do/task.md (status: to-do)
@@ -104,9 +80,11 @@ docs/tasks/to-do/task.md (status: to-do)
 docs/tasks/in-progress/task.md (status: in-progress)
          ↓ [Phase 2: Execute]
 docs/tasks/for-review/task.md (status: for-review)
-         ↓ [Awaits PR review]
+         ↓ [Awaits PR review and merge]
 [User creates PR manually from feature branch]
 ```
+
+Tasks stay in `for-review/` until the PR is merged to main. Manual PR workflow gives users control over timing and review process.
 
 ## Interaction Modes
 

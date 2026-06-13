@@ -1,6 +1,7 @@
 ---
 name: pwrl-plan-scope
 description: "Gather context, check learnings, validate domain, and bootstrap requirements for planning workflow."
+version: 1.2.0-dev.2
 argument-hint: "[task description, requirements doc, or goal to plan]"
 ---
 

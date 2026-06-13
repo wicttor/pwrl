@@ -1,6 +1,7 @@
 ---
 name: pwrl-work-sync-status
 description: Synchronize task status with GitHub Issues when integration is enabled
+version: 1.2.0-dev.2
 argument-hint: "[Task file path, new status, summary message (optional)]"
 ---
 
@@ -10,14 +11,14 @@ argument-hint: "[Task file path, new status, summary message (optional)]"
 
 ## Input
 
-| Argument | Required | Description |
-|---|---|---|
-| `taskFile` | Yes | Path to task file (e.g., `docs/tasks/in-progress/u1-task.md`) |
-| `newStatus` | Yes | New status value: `to-do`, `in-progress`, `for-review`, `done`, `blocked` |
-| `summaryMessage` | No | Brief summary to include in comment |
-| `commitHash` | No | Commit hash to reference in comment |
-| `blockedReason` | No | Reason for blocked status |
-| `dryRun` | No | Boolean flag (`true`) to preview without making changes |
+| Argument         | Required | Description                                                               |
+| ---------------- | -------- | ------------------------------------------------------------------------- |
+| `taskFile`       | Yes      | Path to task file (e.g., `docs/tasks/in-progress/u1-task.md`)             |
+| `newStatus`      | Yes      | New status value: `to-do`, `in-progress`, `for-review`, `done`, `blocked` |
+| `summaryMessage` | No       | Brief summary to include in comment                                       |
+| `commitHash`     | No       | Commit hash to reference in comment                                       |
+| `blockedReason`  | No       | Reason for blocked status                                                 |
+| `dryRun`         | No       | Boolean flag (`true`) to preview without making changes                   |
 
 ## Output
 
@@ -52,16 +53,19 @@ Read `.pwrlrc.json` to determine if GitHub Issues integration is enabled:
 ```
 
 **If `githubIssues` is `false` or missing:**
+
 - Log: "GitHub integration disabled; skipping sync"
 - Return: `{ success: true, action: "skipped", error: null }`
 - Exit early — no GitHub API calls made
 
 **If `githubIssues` is `true` but no `github.owner`/`github.repo`:**
+
 - Log: "GitHub owner/repo not configured in .pwrlrc.json"
 - Return: `{ success: false, action: "failed", error: "Missing owner/repo config" }`
 - Exit early
 
 **If enabled and configured:**
+
 - Proceed to Step 2
 
 ### 2. Validate GitHub CLI Availability
@@ -73,12 +77,14 @@ gh auth status 2>/dev/null
 ```
 
 **If command fails:**
+
 - Log: "GitHub CLI not available or not authenticated"
 - Suggest: "Run `gh auth login` to authenticate"
 - Return: `{ success: false, action: "failed", error: "GitHub CLI not authenticated" }`
 - Exit early
 
 **If successful:**
+
 - Extract current username from `gh api user --jq .login`
 - Proceed to Step 3
 
@@ -94,10 +100,12 @@ github-issue: 123
 ```
 
 **If `github-issue` is missing or empty:**
+
 - Log: "Task [unitId] has no linked GitHub issue; skipping sync"
 - Return: `{ success: true, action: "skipped", error: null }`
 
 **If `github-issue` is present:**
+
 - Validate it's a numeric value
 - Parse as issue number
 - Proceed to Step 4
@@ -108,13 +116,13 @@ Manage issue labels based on task status:
 
 **Status-to-label mapping:**
 
-| Status | Labels to Add | Labels to Remove |
-|---|---|---|
-| `to-do` | `pwrl-task`, `to-do` | `in-progress`, `for-review`, `done`, `blocked` |
-| `in-progress` | `pwrl-task`, `in-progress` | `to-do`, `for-review`, `done`, `blocked` |
-| `for-review` | `pwrl-task`, `for-review` | `to-do`, `in-progress`, `done`, `blocked` |
-| `done` | `pwrl-task`, `done` | `to-do`, `in-progress`, `for-review`, `blocked` |
-| `blocked` | `pwrl-task`, `blocked` | `to-do`, `in-progress`, `for-review`, `done` |
+| Status        | Labels to Add              | Labels to Remove                                |
+| ------------- | -------------------------- | ----------------------------------------------- |
+| `to-do`       | `pwrl-task`, `to-do`       | `in-progress`, `for-review`, `done`, `blocked`  |
+| `in-progress` | `pwrl-task`, `in-progress` | `to-do`, `for-review`, `done`, `blocked`        |
+| `for-review`  | `pwrl-task`, `for-review`  | `to-do`, `in-progress`, `done`, `blocked`       |
+| `done`        | `pwrl-task`, `done`        | `to-do`, `in-progress`, `for-review`, `blocked` |
+| `blocked`     | `pwrl-task`, `blocked`     | `to-do`, `in-progress`, `for-review`, `done`    |
 
 **Implementation:**
 
@@ -129,6 +137,7 @@ gh issue edit <issue> \
 ```
 
 **In dry-run mode:**
+
 ```
 [DRY-RUN] Would update issue #123:
   Add labels: in-progress
@@ -136,6 +145,7 @@ gh issue edit <issue> \
 ```
 
 **Error handling:**
+
 - Issue not found (`404`): Log warning, return `action: "failed"`
 - API error: Log error, return `action: "failed"` with error message
 
@@ -144,6 +154,7 @@ gh issue edit <issue> \
 Post an informative comment to the issue based on the new status:
 
 **Status: `in-progress`**
+
 ```
 🚀 Started work on this task
 - **Task file:** `docs/tasks/in-progress/2026-06-05-u1-task.md`
@@ -153,6 +164,7 @@ Post an informative comment to the issue based on the new status:
 ```
 
 **Status: `for-review`**
+
 ```
 🔍 Ready for review
 - **Implementation summary:** [optional summaryMessage]
@@ -161,6 +173,7 @@ Post an informative comment to the issue based on the new status:
 ```
 
 **Status: `done`**
+
 ```
 ✅ Task complete
 - **Completed:** 2026-06-05T14:00:00Z
@@ -169,6 +182,7 @@ Post an informative comment to the issue based on the new status:
 ```
 
 **Status: `blocked`**
+
 ```
 🚫 Task blocked
 - **Reason:** [blockedReason or "Unknown"]
@@ -183,6 +197,7 @@ gh issue comment <issue> -b "<formatted markdown>"
 ```
 
 **Error handling:**
+
 - API error: Log warning ("Comment posting failed: [error]"), continue
 - Comment failure is non-critical; labels are the primary sync mechanism
 
@@ -191,13 +206,16 @@ gh issue comment <issue> -b "<formatted markdown>"
 For certain status transitions:
 
 **When status → `in-progress`:**
+
 - Add current user as assignee: `gh issue edit <issue> --add-assignee @me`
 
 **When status → `done`:**
+
 - Close the issue: `gh issue close <issue>`
 - Remove assignee: `gh issue edit <issue> --remove-assignee <user>`
 
 **When status → `to-do` or `blocked`:**
+
 - Reopen if currently closed: `gh issue reopen <issue>` (for `to-do`)
 - Keep assignee (work still pending)
 
@@ -238,18 +256,19 @@ error: "Issue #123 not found in repository wicttor/pwrl"
 
 ## Error Handling
 
-| Scenario | Handling |
-|---|---|
-| GitHub disabled in config | Skip silently, return `action: skipped` |
-| GitHub CLI not installed | Log warning, return `action: failed`, ask to install |
+| Scenario                      | Handling                                                      |
+| ----------------------------- | ------------------------------------------------------------- |
+| GitHub disabled in config     | Skip silently, return `action: skipped`                       |
+| GitHub CLI not installed      | Log warning, return `action: failed`, ask to install          |
 | Credentials not authenticated | Log warning, return `action: failed`, ask for `gh auth login` |
-| Issue not found (404) | Log warning, return `action: failed` |
-| API rate limit exceeded | Log error, return `action: failed`, suggest retry later |
-| Network/API error | Log error, return `action: failed` with error message |
-| Invalid issue number | Log error, return `action: failed`, ask to fix frontmatter |
-| Comment posting fails | Log warning, continue (non-critical) |
+| Issue not found (404)         | Log warning, return `action: failed`                          |
+| API rate limit exceeded       | Log error, return `action: failed`, suggest retry later       |
+| Network/API error             | Log error, return `action: failed` with error message         |
+| Invalid issue number          | Log error, return `action: failed`, ask to fix frontmatter    |
+| Comment posting fails         | Log warning, continue (non-critical)                          |
 
 **Retry guidance:**
+
 - Network errors: Retry immediately (may recover)
 - Rate limit (403): Wait 60 seconds before retry
 - Authentication (401): Run `gh auth login` and retry
@@ -293,6 +312,7 @@ esac
 ```
 
 In test:
+
 ```bash
 export PATH="./tests/mocks:$PATH"
 /pwrl-work-sync-status tests/fixtures/task-mock.md in-progress
@@ -325,10 +345,11 @@ gh issue create --title "Test sync issue" --body "For pwrl-work-sync-status test
 ```
 
 Update test fixture:
+
 ```yaml
 ---
 unit-id: TEST-1
-github-issue: 9999  # Use real issue from your repo
+github-issue: 9999 # Use real issue from your repo
 ---
 ```
 
@@ -351,6 +372,7 @@ When `dryRun: true`, preview changes without making API calls:
 ```
 
 Output:
+
 ```
 [DRY-RUN] Would sync task U1 to GitHub issue #123:
   - Add labels: in-progress
@@ -364,15 +386,18 @@ Output:
 ## Quality Gates
 
 **✅ Success if:**
+
 - Labels updated correctly
 - Comment posted (if applicable)
 - All errors logged and handled gracefully
 
 **⚠️ Partial success if:**
+
 - Labels updated but comment failed (labels are primary sync)
 - GitHub disabled (informed skip)
 
 **❌ Fail if:**
+
 - Invalid issue number format
 - GitHub CLI not available (cannot proceed)
 - Authentication fails

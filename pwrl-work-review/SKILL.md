@@ -1,6 +1,7 @@
 ---
 name: pwrl-work-review
 description: Review, simplify, and consolidate code after execution
+version: 1.2.0-dev.2
 argument-hint: "[Executed tasks from pwrl-work-execute, design specs (optional)]"
 ---
 
@@ -91,6 +92,7 @@ Found duplication between src/user.ts:45 and src/signup.ts:72:
 ```
 
 **Decision:**
+
 - Ask user: "Extract helper? (yes/no/skip)"
 - If yes: proceed to Step 3 (Helper Extraction)
 - If no or skip: log as noted for future refactoring
@@ -100,11 +102,13 @@ Found duplication between src/user.ts:45 and src/signup.ts:72:
 For confirmed candidates, extract shared logic:
 
 **When to extract:**
+
 - Code appears 2+ times across modified files
 - Extraction improves readability (function name self-documents)
 - Extraction improves testability
 
 **When NOT to extract (YAGNI):**
+
 - Code appears only once
 - Extract adds indirection without benefit
 - Extract would create complex API (too many parameters)
@@ -138,23 +142,27 @@ For confirmed candidates, extract shared logic:
 After simplifying, verify system consistency:
 
 **Check 1: Event/Observer/Callback Triggering**
+
 - Are events emitted correctly? (e.g., `user.created` after signup)
 - Are listeners registered and invoked?
 - ✅ **Pass if:** Tests cover real event flow (not just mock assertions)
 - ⚠️ **Warn if:** All event tests use mocks (real listener not tested)
 
 **Check 2: Mock vs. Real Interaction Balance**
+
 - What proportion of tests use mocked dependencies vs. real implementations?
 - ✅ **Pass if:** ≥1 integration test per feature covers real interactions
 - ⚠️ **Warn if:** All tests use mocks (no integration coverage)
 
 **Check 3: Idempotency & Cleanup Safety**
+
 - Can operations be retried safely?
 - Are resources cleaned up after failure? (finally blocks, teardown)
 - ✅ **Pass if:** Retry doesn't cause double effects; cleanup always runs
 - ⚠️ **Warn if:** Failure leaves partial state or resource leaks
 
 **Check 4: Alternate Entry Points**
+
 - Is behavior consistent across different access methods?
 - ✅ **Pass if:** All entry points tested with same behavior expectations
 - ⚠️ **Warn if:** Only one entry point tested, or behavior diverges
@@ -174,17 +182,19 @@ System Check Results:
 For tasks involving UI/component changes:
 
 **If design specs exist:**
+
 - Read from `docs/design/` or linked Figma file
 - Compare: layout, spacing, colors, typography, responsive behavior
 - Classify each delta:
 
-| Severity | Meaning | Action |
-|---|---|---|
-| Minor | Within 2px, slightly different shade | Acceptable, note |
-| Moderate | Wrong component variant, minor layout shift | Should fix |
-| Critical | Completely wrong layout, broken responsive | Must fix |
+| Severity | Meaning                                     | Action           |
+| -------- | ------------------------------------------- | ---------------- |
+| Minor    | Within 2px, slightly different shade        | Acceptable, note |
+| Moderate | Wrong component variant, minor layout shift | Should fix       |
+| Critical | Completely wrong layout, broken responsive  | Must fix         |
 
 **If no design specs:**
+
 - Skip this step entirely
 - Log: "No design specs found; skipping visual comparison"
 
@@ -193,17 +203,20 @@ For tasks involving UI/component changes:
 **Golden Rule: Only simplify code that was changed by executed tasks.**
 
 **Do:**
+
 - Simplify code you just wrote
 - Extract helpers from duplications you introduced
 - Fix obvious bugs in modified code
 - Improve tests for changed behavior
 
 **Do NOT:**
+
 - Refactor unrelated modules
 - Do "while we're here" cleanup
 - Change naming/style for consistency in untouched code
 
 **Enforcement:**
+
 - Build list of affected files from task execution results
 - If scope check finds a change to an unrelated file:
   - Warn: "File [path] was modified but is not in any task's files list"
@@ -241,6 +254,7 @@ For complex or high-risk changes, offer deep review:
 ```
 
 Deep review adds:
+
 - **Performance:** Any obvious regressions? (N+1 queries, memory leaks)
 - **Security:** New vulnerabilities? (XSS, injection, auth bypass)
 - **Accessibility:** UI changes only (ARIA labels, keyboard nav, contrast)
@@ -253,13 +267,13 @@ For detailed analysis, use the dedicated `/pwrl-review` skill.
 
 ## Error Handling
 
-| Scenario | Handling |
-|---|---|
-| No duplications found | Log "No duplications detected" (normal) |
-| Git diff parsing fails | Log error, ask user to verify git state, retry |
-| Design spec not found | Skip design comparison, continue |
+| Scenario                       | Handling                                           |
+| ------------------------------ | -------------------------------------------------- |
+| No duplications found          | Log "No duplications detected" (normal)            |
+| Git diff parsing fails         | Log error, ask user to verify git state, retry     |
+| Design spec not found          | Skip design comparison, continue                   |
 | Tests fail after consolidation | Revert consolidation, mark as blocked, investigate |
-| Unrelated changes in diff | Warn user, ask to remove or explain |
+| Unrelated changes in diff      | Warn user, ask to remove or explain                |
 
 ---
 

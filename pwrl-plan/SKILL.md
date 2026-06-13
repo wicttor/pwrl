@@ -1,6 +1,7 @@
 ---
 name: pwrl-plan
 description: "Create structured implementation plans with three tiers (Fast/Standard/Deep). Pure skill pipeline orchestrator—no agent routing."
+version: 1.2.0-dev.2
 argument-hint: "[task description, requirements doc, or goal to plan]"
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: pwrl-testing
-version: "1.0"
+version: 1.2.0-dev.2
 status: specification
 created: "2026-06-12"
 phases_covered: "6"

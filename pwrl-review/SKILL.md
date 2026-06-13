@@ -1,6 +1,7 @@
 ---
 name: pwrl-review
 description: Review code changes through 4-phase micro-skill pipeline (scope, prepare, analyze, report)
+version: 1.2.0-dev.2
 argument-hint: "[branch, PR number, or empty for current branch]"
 ---
 

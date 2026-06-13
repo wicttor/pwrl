@@ -1,6 +1,7 @@
 ---
 name: pwrl-work-prepare
 description: Set up execution environment, create task lists, and select execution mode
+version: 1.2.0-dev.2
 argument-hint: "[Classified context from pwrl-work-triage]"
 ---
 

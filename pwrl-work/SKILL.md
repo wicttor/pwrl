@@ -1,6 +1,7 @@
 ---
 name: pwrl-work
 description: Execute implementation work efficiently through 4-phase micro-skill pipeline
+version: 1.2.0-dev.2
 argument-hint: "[Task file, plan doc path, or work description. Leave blank to use latest plan/task]"
 ---
 

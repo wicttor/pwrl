@@ -1,6 +1,6 @@
 {
   "name": "@wicttor/pwrl",
-  "version": "1.2.0-dev.2",
+  "version": "1.2.0-dev.4",
   "description": "Plan. Work. Review. Learn. — A disciplined agentic development framework",
   "keywords": [
     "ai",
@@ -51,5 +51,6 @@
   },
   "engines": {
     "node": ">=14.0.0"
-  }
+  },
+  "packageManager": "npm@11.0.0"
 }

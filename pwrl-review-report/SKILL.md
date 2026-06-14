@@ -1,7 +1,7 @@
 ---
 name: pwrl-review-report
 description: "Generate comprehensive review report and determine final approval status."
-version: 1.2.0-dev.2
+version: 1.2.0-dev.4
 argument-hint: "[analyze artifact from pwrl-review-analyze]"
 ---
 

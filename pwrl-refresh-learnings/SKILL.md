@@ -1,7 +1,7 @@
 ---
 name: pwrl-refresh-learnings
 description: Review and update existing learnings to keep knowledge current
-version: 1.2.0-dev.2
+version: 1.2.0-dev.4
 argument-hint: "[scope like category, tag, date range, or file:path]"
 ---
 

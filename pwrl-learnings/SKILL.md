@@ -1,7 +1,7 @@
 ---
 name: pwrl-learnings
 description: Extract, classify, deduplicate, structure, and save learnings from code, commits, tasks, and documentation
-version: 1.2.0-dev.2
+version: 1.2.0-dev.4
 argument-hint: "[Optional: source material to extract from]"
 ---
 

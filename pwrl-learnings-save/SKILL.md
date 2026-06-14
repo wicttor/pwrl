@@ -1,7 +1,7 @@
 ---
 name: pwrl-learnings-save
 description: "Persist deduplicated learnings to permanent storage with backups and version control."
-version: 1.2.0-dev.2
+version: 1.2.0-dev.4
 argument-hint: "[dedup artifact from pwrl-learnings-dedup]"
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: pwrl-learnings-dedup
 description: "Identify and merge duplicate or redundant learnings while preserving historical lineage."
-version: 1.2.0-dev.2
+version: 1.2.0-dev.4
 argument-hint: "[structure artifact from pwrl-learnings-structure]"
 ---
 

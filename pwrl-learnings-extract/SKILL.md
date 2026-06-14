@@ -1,7 +1,7 @@
 ---
 name: pwrl-learnings-extract
 description: "Extract actionable learnings from code, commits, tasks, documentation, errors, and reviews."
-version: 1.2.0-dev.2
+version: 1.2.0-dev.4
 argument-hint: "[source type: code|commit|task|documentation|error|review, and source content]"
 ---
 

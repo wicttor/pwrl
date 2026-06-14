@@ -1,7 +1,7 @@
 ---
 name: pwrl-review-scope
 description: "Validate that reviewed code matches requirements and detects scope creep."
-version: 1.2.0-dev.2
+version: 1.2.0-dev.4
 argument-hint: "[branch name, unit ID, or PR number]"
 ---
 

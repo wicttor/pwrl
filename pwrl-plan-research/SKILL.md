@@ -1,7 +1,7 @@
 ---
 name: pwrl-plan-research
 description: "Perform local and external research to inform technical design decisions during planning."
-version: 1.2.0-dev.2
+version: 1.2.0-dev.4
 argument-hint: "[scoped context from pwrl-plan-scope]"
 ---
 

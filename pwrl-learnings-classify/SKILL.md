@@ -1,7 +1,7 @@
 ---
 name: pwrl-learnings-classify
 description: "Classify and prioritize learnings by type, domain, severity, and applicability."
-version: 1.2.0-dev.2
+version: 1.2.0-dev.4
 argument-hint: "[extraction artifact from pwrl-learnings-extract]"
 ---
 

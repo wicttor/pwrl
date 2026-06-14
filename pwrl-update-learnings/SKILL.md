@@ -1,7 +1,7 @@
 ---
 name: pwrl-update-learnings
 description: Update docs/learnings/INDEX.md from current learning documents, typically after pwrl-end-session.
-version: 1.2.0-dev.2
+version: 1.2.0-dev.4
 argument-hint: "[Optional: scope such as changed-only, full, or category]"
 ---
 

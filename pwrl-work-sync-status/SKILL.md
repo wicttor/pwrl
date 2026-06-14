@@ -1,7 +1,7 @@
 ---
 name: pwrl-work-sync-status
 description: Synchronize task status with GitHub Issues when integration is enabled
-version: 1.2.0-dev.2
+version: 1.2.0-dev.4
 argument-hint: "[Task file path, new status, summary message (optional)]"
 ---
 

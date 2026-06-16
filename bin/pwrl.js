@@ -185,18 +185,6 @@ async function initProject() {
         }
       }
 
-      function extractVersionFromSkill(skillPath) {
-        const skillFile = path.join(skillPath, 'SKILL.md');
-        if (fs.existsSync(skillFile)) {
-          const content = fs.readFileSync(skillFile, 'utf8');
-          const versionMatch = content.match(/^version:\s*(.+?)$/m);
-          if (versionMatch) {
-            return versionMatch[1].trim();
-          }
-        }
-        return '0.0.0';
-      }
-
       function compareVersions(v1, v2) {
         // Parse versions: "1.2.3" or "1.2.3-dev.2"
         const parse = (v) => {
@@ -221,28 +209,40 @@ async function initProject() {
         return 0; // Versions are equal
       }
 
+      // Get repo version from package.json
+      const packageJson = require(path.join(PWRL_DIR, 'package.json'));
+      const repoVersion = packageJson.version;
+
+      // Load existing config to get previously installed version
+      let previousVersion = '0.0.0';
+      if (fs.existsSync(configPath)) {
+        try {
+          const existingConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+          previousVersion = existingConfig.pwrlVersion || '0.0.0';
+        } catch (e) {
+          // Config file exists but is invalid, proceed with default
+        }
+      }
+
+      const versionCmp = compareVersions(previousVersion, repoVersion);
+
       bundledSkills.forEach(skill => {
         const src = path.join(PWRL_DIR, skill);
         const dest = path.join(fullSkillsPath, skill);
         if (fs.existsSync(dest)) {
-          const localVersion = extractVersionFromSkill(dest);
-          const newVersion = extractVersionFromSkill(src);
-          const cmp = compareVersions(localVersion, newVersion);
-
-          if (cmp < 0) {
-            // New version is newer, update it
+          if (versionCmp < 0) {
+            // New version is newer, update the skill
             removeRecursiveSync(dest);
             copyRecursiveSync(src, dest);
-            console.log(`✓ Updated skill: ${skill} (${localVersion} → ${newVersion})`);
-          } else if (cmp === 0) {
-            console.log(`  - Skill already up-to-date: ${skill} (v${localVersion})`);
+            console.log(`✓ Updated skill: ${skill}`);
+          } else if (versionCmp === 0) {
+            console.log(`  - Skill already up-to-date: ${skill}`);
           } else {
-            console.log(`  - Local skill is newer: ${skill} (local: v${localVersion} > bundled: v${newVersion})`);
+            console.log(`  - Local skills are newer than bundled version`);
           }
         } else {
           copyRecursiveSync(src, dest);
-          const newVersion = extractVersionFromSkill(src);
-          console.log(`✓ Copied skill: ${skill} (v${newVersion}) -> ${path.join(skillsPath, skill)}`);
+          console.log(`✓ Copied skill: ${skill} -> ${path.join(skillsPath, skill)}`);
         }
       });
     } catch (err) {
@@ -252,6 +252,7 @@ async function initProject() {
     // Save configuration
     const config = {
       version: '1.0',
+      pwrlVersion: repoVersion,
       skillsPath: skillsPath,
       integrations: {
         githubIssues: enableGitHubIssues

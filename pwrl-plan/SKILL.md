@@ -1,7 +1,6 @@
 ---
 name: pwrl-plan
 description: "Create structured implementation plans with three tiers (Fast/Standard/Deep). Pure skill pipeline orchestrator—no agent routing."
-version: 1.2.0-dev.4
 argument-hint: "[task description, requirements doc, or goal to plan]"
 ---
 
@@ -64,6 +63,10 @@ OUTPUT (plan file ready for execution)
 4. Search `docs/learnings/INDEX.md` for related learnings
 5. Search `docs/requirements/` and `docs/brainstorms/` for matching docs
 6. Confirm context with user
+7. **Ask interaction mode:**
+   - **Detailed:** Step-by-step interaction at each phase (review, confirm, adjust)
+   - **Yolo:** Full automation from Phase 1 through Phase 4, final confirmation only
+8. Generate scope artifact with interaction_mode
 
 **Output:** Scoped context artifact with:
 
@@ -71,6 +74,7 @@ OUTPUT (plan file ready for execution)
 - Related learnings (HIGH-relevance)
 - Learning gaps identified
 - Requirements found
+- interaction_mode (detailed or yolo)
 
 **See:** [pwrl-plan-scope/SKILL.md](../pwrl-plan-scope/SKILL.md) for detailed workflow
 

@@ -1,7 +1,6 @@
 ---
 name: pwrl-tasks
 description: "Slice implementation plans into granular, executable task files. Use when: breaking down plans from pwrl-plan; creating actionable tasks for pwrl-work; need detailed task files in docs/tasks/to-do."
-version: 1.2.0-dev.4
 argument-hint: "[Path to plan file, or leave blank to find latest plan]"
 ---
 

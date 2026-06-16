@@ -1,7 +1,6 @@
 ---
 name: pwrl-plan-generate
 description: "Choose tier, render plan from templates, embed learnings, and save to docs/plans/."
-version: 1.2.0-dev.4
 argument-hint: "[scoped context + research findings + implementation units]"
 ---
 

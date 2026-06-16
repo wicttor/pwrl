@@ -1,7 +1,6 @@
 ---
 name: pwrl-review
 description: Review code changes through 4-phase micro-skill pipeline (scope, prepare, analyze, report)
-version: 1.2.0-dev.4
 argument-hint: "[branch, PR number, or empty for current branch]"
 ---
 
@@ -69,8 +68,12 @@ COMPLETE
 2. Compare to actual files modified
 3. Detect scope creep (unrelated file changes)
 4. Get user approval if justified
+5. **Ask interaction mode:**
+   - **Detailed:** Step-by-step interaction at each phase (review, confirm, adjust)
+   - **Yolo:** Full automation from Phase 1 through Phase 4, final confirmation only
+6. Generate scope artifact with interaction_mode
 
-**Output:** Scope artifact with scope_verdict (on-target/justified/creep-detected)
+**Output:** Scope artifact with scope_verdict (on-target/justified/creep-detected), interaction_mode
 
 ### Phase 2: Prepare Review
 

@@ -1,7 +1,6 @@
 ---
 name: pwrl-plan-design
 description: "Create technical design and implementation unit decomposition for planning workflow."
-version: 1.2.0-dev.4
 argument-hint: "[scoped context + research findings]"
 ---
 

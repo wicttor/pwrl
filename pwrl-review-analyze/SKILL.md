@@ -1,7 +1,6 @@
 ---
 name: pwrl-review-analyze
 description: "Analyze code for quality, security, tests, documentation, and integration issues."
-version: 1.2.0-dev.4
 argument-hint: "[prepare artifact from pwrl-review-prepare]"
 ---
 

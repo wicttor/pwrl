@@ -1,7 +1,6 @@
 ---
 name: pwrl-work-triage
 description: Classify work input and extract foundational context for execution
-version: 1.2.0-dev.4
 argument-hint: "[Task file path, plan path, or bare prompt. Leave blank to use latest task]"
 ---
 

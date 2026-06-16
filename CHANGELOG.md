@@ -6,6 +6,11 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+### Changed
+
+- Simplified skill versioning to use repo-level version comparison (from package.json) instead of per-skill SKILL.md version reads
+- Added `pwrlVersion` field to saved config for tracking previously installed version
+
 ### Removed
 
 - Removed `pwrl-work-ship` micro-skill (Phase 5) - workflow now ends at Phase 4 (Review) with branch kept ready for pull request instead of automatic merge

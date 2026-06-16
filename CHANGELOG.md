@@ -8,6 +8,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ### Changed
 
+- Bumped development version to 1.2.0-dev.6
 - Simplified skill versioning to use repo-level version comparison (from package.json) instead of per-skill SKILL.md version reads
 - Added `pwrlVersion` field to saved config for tracking previously installed version
 

@@ -1,5 +1,6 @@
 ---
 name: pwrl-testing
+description: Comprehensive testing framework for micro-skill pipeline architecture validation, including unit, integration, compatibility tests, and consolidation audit.
 status: specification
 created: "2026-06-12"
 phases_covered: "6"
@@ -7,7 +8,7 @@ phases_covered: "6"
 
 # pwrl-testing Orchestrator
 
-**Phase 6 of PWRL Architecture Refactoring**
+**Phase 6: Testing & Validation**
 
 Comprehensive testing and validation framework for micro-skill pipeline architecture.
 

@@ -1,6 +1,6 @@
 # pwrl-review Orchestrator
 
-**Phase 3 of PWRL Architecture Refactoring**
+**Orchestrator: Code Review Solution**
 
 Complete code review solution through 4-phase micro-skill pipeline.
 

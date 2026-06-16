@@ -1,6 +1,6 @@
 # pwrl-learnings Orchestrator
 
-**Phase 4 of PWRL Architecture Refactoring**
+**Orchestrator: Learning Lifecycle Management**
 
 Complete learning lifecycle management through 5-phase micro-skill pipeline.
 

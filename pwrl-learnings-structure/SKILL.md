@@ -1,7 +1,6 @@
 ---
 name: pwrl-learnings-structure
 description: "Structure classified learnings for persistent storage with metadata, indexing, and navigation."
-version: 1.2.0-dev.4
 argument-hint: "[classification artifact from pwrl-learnings-classify]"
 ---
 

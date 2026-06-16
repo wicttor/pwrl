@@ -1,7 +1,6 @@
 ---
 name: pwrl-work-execute
 description: Execute tasks with quality gates (inline, serial, or parallel modes)
-version: 1.2.0-dev.4
 argument-hint: "[Task list context from pwrl-work-prepare, execution mode]"
 ---
 

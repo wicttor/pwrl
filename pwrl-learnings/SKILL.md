@@ -1,7 +1,6 @@
 ---
 name: pwrl-learnings
 description: Extract, classify, deduplicate, structure, and save learnings from code, commits, tasks, and documentation
-version: 1.2.0-dev.4
 argument-hint: "[Optional: source material to extract from]"
 ---
 
@@ -165,6 +164,115 @@ COMPLETE
 - ✓ Indexes updated
 - ✓ Git history maintained
 - ✓ Ready for search/retrieval
+
+## Workflow
+
+### Phase 1: Extract Learnings
+
+**Purpose:** Entry point to learning lifecycle. Identifies learning candidates and asks for interaction mode.
+
+**Micro-Skill:** `pwrl-learnings-extract`
+
+**Input:** Source material (code, commit, task, documentation, error, or manual input)
+
+**Processing:** (See `pwrl-learnings-extract/references/extract-learnings-protocol.md`)
+
+1. Identify source type and content
+2. Extract learning candidates from source
+3. Identify candidate types (gotcha, pattern, decision, technical_fix, workflow)
+4. Validate extracted candidates
+5. **Ask interaction mode:**
+   - **Detailed:** Step-by-step interaction at each phase (review, confirm, adjust)
+   - **Yolo:** Full automation from Phase 1 through Phase 5, final confirmation only
+6. Generate extraction artifact with interaction_mode
+
+**Output:** Extraction artifact with:
+- Learning candidates identified
+- Candidate types assigned
+- Source references tracked
+- interaction_mode (detailed or yolo)
+
+**See:** [pwrl-learnings-extract/SKILL.md](../pwrl-learnings-extract/SKILL.md) for detailed workflow
+
+### Phase 2: Classify Learnings
+
+**Purpose:** Refine classification and priority
+
+**Micro-Skill:** `pwrl-learnings-classify`
+
+**Input:** Extraction artifact (includes interaction_mode)
+
+**Processing:** (See `pwrl-learnings-classify/references/classify-learnings-protocol.md`)
+
+1. Refine type classifications
+2. Assess severity and priority
+3. Assign domains and tags
+4. Detect potential duplicates
+5. Generate classification artifact
+
+**Output:** Classification artifact with refined, prioritized learnings
+
+**See:** [pwrl-learnings-classify/SKILL.md](../pwrl-learnings-classify/SKILL.md) for detailed workflow
+
+### Phase 3: Structure Learnings
+
+**Purpose:** Normalize format and prepare for storage
+
+**Micro-Skill:** `pwrl-learnings-structure`
+
+**Input:** Classification artifact
+
+**Processing:** (See `pwrl-learnings-structure/references/structure-learnings-protocol.md`)
+
+1. Normalize format and structure
+2. Generate metadata
+3. Determine storage paths
+4. Create indexes
+5. Generate structure artifact
+
+**Output:** Structure artifact with normalized, indexed learnings
+
+**See:** [pwrl-learnings-structure/SKILL.md](../pwrl-learnings-structure/SKILL.md) for detailed workflow
+
+### Phase 4: Deduplicate Learnings
+
+**Purpose:** Merge identical/similar learnings and maintain lineage
+
+**Micro-Skill:** `pwrl-learnings-dedup`
+
+**Input:** Structure artifact
+
+**Processing:** (See `pwrl-learnings-dedup/references/dedup-learnings-protocol.md`)
+
+1. Identify exact duplicates
+2. Flag high-similarity learnings
+3. Merge duplicates with lineage
+4. Create archive mapping
+5. Generate dedup artifact
+
+**Output:** Deduplicated artifact with merged learnings and archive mapping
+
+**See:** [pwrl-learnings-dedup/SKILL.md](../pwrl-learnings-dedup/SKILL.md) for detailed workflow
+
+### Phase 5: Save Learnings
+
+**Purpose:** Persist to disk with backups and git versioning
+
+**Micro-Skill:** `pwrl-learnings-save`
+
+**Input:** Deduplicated artifact
+
+**Processing:** (See `pwrl-learnings-save/references/save-learnings-protocol.md`)
+
+1. Create backup of existing learnings
+2. Write learnings to persistent storage
+3. Update indexes
+4. Git commit changes
+5. Generate save artifact
+
+**Output:** Saved artifact (persistent, indexed, accessible)
+
+**See:** [pwrl-learnings-save/SKILL.md](../pwrl-learnings-save/SKILL.md) for detailed workflow
 
 ## Integration Points
 

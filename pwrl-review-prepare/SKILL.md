@@ -1,7 +1,6 @@
 ---
 name: pwrl-review-prepare
 description: "Prepare code review environment, gather artifacts, and configure analysis tools."
-version: 1.2.0-dev.4
 argument-hint: "[scope artifact from pwrl-review-scope]"
 ---
 

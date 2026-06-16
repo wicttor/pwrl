@@ -1,7 +1,6 @@
 ---
 name: pwrl-work-review
 description: Review, simplify, and consolidate code after execution
-version: 1.2.0-dev.4
 argument-hint: "[Executed tasks from pwrl-work-execute, design specs (optional)]"
 ---
 

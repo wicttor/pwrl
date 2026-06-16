@@ -2,7 +2,7 @@
 
 **Phase 6: Testing & Validation**
 
-Comprehensive testing and quality assurance framework for PWRL architecture refactoring.
+Comprehensive testing and quality assurance framework for micro-skill pipeline validation.
 
 ## Overview
 

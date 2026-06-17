@@ -117,7 +117,7 @@ PWRL orchestrates work through composable skills that run in sequence:
 
 - **Direct invocation:** `/pwrl-plan [task]` → Runs all four phases in sequence
 - **Or call skills individually:** `/pwrl-plan-scope`, `/pwrl-plan-research`, etc. (for fine-grained control)
-- Same with `/pwrl-work` — runs all five phases or call individual skills
+- Same with `/pwrl-work` — runs all four phases or call individual micro-skills
 
 **All workflows run inline** — No external orchestrators needed.
 

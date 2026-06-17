@@ -6,6 +6,12 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+## [1.2.4] - 2026-06-16
+
+### Changed
+
+- Bumped package version to 1.2.4 for maintenance release
+
 ## [1.2.2] - 2026-06-16
 
 ### Fixed

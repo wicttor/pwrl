@@ -61,26 +61,57 @@ PWRL orchestrates work through composable skills that run in sequence:
 
 **Planning Workflow:**
 
-`/pwrl-plan` orchestrates four phases in sequence:
+`/pwrl-plan` orchestrates four micro-skills in sequence:
 
 | Phase | Skill                    | Purpose                                   |
 | ----- | ------------------------ | ----------------------------------------- |
-| S1    | **`pwrl-plan-scope`**    | Gather context, validate domain           |
-| S2    | **`pwrl-plan-research`** | Discover patterns, detect high-risk areas |
-| S3    | **`pwrl-plan-design`**   | Decompose into implementation units       |
-| S4    | **`pwrl-plan-generate`** | Select tier, render plan, save to docs    |
+| 1     | **`pwrl-plan-scope`**    | Gather context, validate domain           |
+| 2     | **`pwrl-plan-research`** | Discover patterns, detect high-risk areas |
+| 3     | **`pwrl-plan-design`**   | Decompose into implementation units       |
+| 4     | **`pwrl-plan-generate`** | Select tier, render plan, save to docs    |
 
 **Execution Workflow:**
 
-`/pwrl-work` orchestrates five phases in sequence:
+`/pwrl-work` orchestrates four micro-skills in sequence:
 
-| Phase | Skill                    | Purpose                                    |
-| ----- | ------------------------ | ------------------------------------------ |
-| W0    | **`pwrl-work-triage`**   | Classify input and extract context         |
-| W1    | **`pwrl-work-prepare`**  | Set up environment and create task lists   |
-| W2    | **`pwrl-work-execute`**  | Implement tasks (inline, serial, parallel) |
-| W3    | **`pwrl-work-review`**   | Simplify code and consolidate changes      |
-| W4    | **`pwrl-work-finalize`** | Prepare branch for PR                      |
+| Phase | Skill                   | Purpose                                   |
+| ----- | ----------------------- | ----------------------------------------- |
+| 0     | **`pwrl-work-triage`**  | Classify input and extract context        |
+| 1     | **`pwrl-work-prepare`** | Set up environment, move task to progress |
+| 2     | **`pwrl-work-execute`** | Implement with test-first discipline      |
+| 3     | **`pwrl-work-review`**  | Code review, quality gates, move to done  |
+
+**Review Workflow:**
+
+`/pwrl-review` orchestrates four micro-skills in sequence:
+
+| Phase | Skill                    | Purpose                                   |
+| ----- | ------------------------ | ----------------------------------------- |
+| 1     | **`pwrl-review-scope`**  | Classify input and scope review           |
+| 2     | **`pwrl-review-prepare`**| Set up review environment                 |
+| 3     | **`pwrl-review-analyze`**| Execute code review, find issues          |
+| 4     | **`pwrl-review-report`** | Report verdict (APPROVED/CHANGES/REJECT)  |
+
+**Learning Capture Workflow:**
+
+`/pwrl-learnings` orchestrates five micro-skills in sequence:
+
+| Phase | Skill                        | Purpose                                   |
+| ----- | ---------------------------- | ----------------------------------------- |
+| 1     | **`pwrl-learnings-extract`** | Extract patterns from work                |
+| 2     | **`pwrl-learnings-classify`**| Categorize learning type                  |
+| 3     | **`pwrl-learnings-dedup`**   | Check for duplicates                      |
+| 4     | **`pwrl-learnings-save`**    | Save to persistent storage                |
+| 5     | **`pwrl-learnings-structure`**| Update learnings INDEX                    |
+
+**Session Finalization Workflow:**
+
+`/pwrl-end-session` orchestrates two micro-skills in sequence:
+
+| Phase | Skill                        | Purpose                                   |
+| ----- | ---------------------------- | ----------------------------------------- |
+| 1     | **`pwrl-end-session-checkpoint`** | Save checkpoint state                |
+| 2     | **`pwrl-end-session-commit`**| Create clean commit with learnings        |
 
 **How it works:**
 
@@ -100,19 +131,27 @@ PWRL orchestrates work through composable skills that run in sequence:
 
 ```
 /pwrl-plan
-  ├─ pwrl-plan-scope → pwrl-plan-research → pwrl-plan-design → pwrl-plan-generate
-  └─ Output: docs/plans/YYYY-MM-DD-NNN-<name>.md
+  └─ Orchestrates: scope → research → design → generate
+     Output: docs/plans/YYYY-MM-DD-NNN-<name>.md
 
 /pwrl-work
-  ├─ pwrl-work-triage → pwrl-work-prepare → pwrl-work-execute → pwrl-work-review → pwrl-work-finalize
-  └─ Output: Feature branch ready for manual PR creation
+  └─ Orchestrates: triage → prepare → execute → review
+     Output: Feature branch ready for manual PR creation
 
 /pwrl-review (for explicit review before PR)
+  └─ Orchestrates: scope → prepare → analyze → report
+     Output: Verdict (APPROVED/REQUEST CHANGES/REJECTED)
+
 /pwrl-learnings
+  └─ Orchestrates: extract → classify → dedup → save → structure
+     Output: docs/learnings/YYYY-MM-DD-<category>-<title>.md
+
 /pwrl-end-session
+  └─ Orchestrates: checkpoint → commit
+     Output: Clean commit with learnings captured
 ```
 
-Skills execute sequentially — Complete workflows from planning through commit with phase-based interactions and status tracking.
+Each orchestrator runs a deterministic sequence of micro-skills, with phase-based interactions and status tracking.
 
 **Task Status Flow:** `to-do` → `in-progress` → `for-review` (awaits PR merge)
 
@@ -156,7 +195,7 @@ You can reconfigure at any time by running `pwrl init` again or editing `.pwrlrc
 
 # 2. Work - Execute with orchestrated phases
 /pwrl-work
-# Automatically runs: triage → prepare → execute → review → ship
+# Automatically runs: triage → prepare → execute → review
 
 # 3. Document and commit
 /pwrl-learnings
@@ -187,15 +226,16 @@ You can reconfigure at any time by running `pwrl init` again or editing `.pwrlrc
 # Executes orchestrated workflow (choose interaction mode: Detailed or Yolo):
 # - Triage: Classify task context, select interaction mode
 # - Prepare: Set up environment, move task to in-progress/
-# - Execute: Implement with tests (inline, serial, or parallel), move task to for-review/
+# - Execute: Implement with tests, move task to for-review/
 # - Review: Simplify and consolidate changes
-# - Finalize: Prepare branch for PR (stays on feature branch)
-# - GitHub: Updates issue status if integration enabled
+# Task now in for-review/ awaiting explicit /pwrl-review verdict
 
 # 4. Review and Approve Tasks
 /pwrl-review
-# Approved: Move to next task or create PR
-# Changes needed: Mark for-review/ task back to in-progress/ for revision
+# Reviews code quality, finds issues, returns verdict:
+# - APPROVED: Task approved, ready for PR
+# - REQUEST CHANGES: Task needs revision, moved back to in-progress/
+# - REJECTED: Task rejected, kept in for-review/
 
 # 5. Continue with Remaining Tasks
 /pwrl-work docs/tasks/to-do/2026-05-04-u2-auth-middleware.md
@@ -203,7 +243,7 @@ You can reconfigure at any time by running `pwrl init` again or editing `.pwrlrc
 # Repeat workflow for each unit
 
 # 6. Create Pull Request
-# When all tasks are approved and in for-review/:
+# When all tasks are approved:
 git push origin feature-branch
 # Open PR via GitHub or `gh pr create`
 

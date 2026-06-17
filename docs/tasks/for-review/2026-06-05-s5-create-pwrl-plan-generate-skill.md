@@ -1,7 +1,7 @@
 ---
 unit-id: S5
 plan: docs/plans/2026-06-05-001-slice-pwrl-plan-skill.md
-status: for-review
+status: done
 created: 2026-06-05
 dependencies: [S1, S2, S3, S4]
 files:

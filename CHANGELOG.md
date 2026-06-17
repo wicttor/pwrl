@@ -6,6 +6,40 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-06-16
+
+### Fixed
+
+- Moved `repoVersion` extraction before skills directory setup in `initProject()` so version is available for comparison before skills are copied
+
+## [1.2.1] - 2026-06-16
+
+### Removed
+
+- Removed all PWRL agent infrastructure: agent orchestrator files and routing documentation (`pwrl-plan/references/agent-routing.md`, `pwrl-planner/references/error-recovery.md`, `pwrl-work-execute/references/cross-plan-task-coordination.md`)
+- Removed mandatory `[AGENT: ...]` attribution trailer from end-session commit protocol
+
+### Changed
+
+- Rebranded PWRL from "agentic" to "skill-based" development framework across all core documentation (README, GUIDE, QUICKSTART, INSTALLATION)
+- Updated `pwrl-review` skill with explicit verdict flow: APPROVED, REQUEST CHANGES, REJECTED including task file management
+- Removed agent setup sections from installation and quickstart guides
+- Added interaction modes (Detailed/Yolo) to work execution workflow documentation
+- Bumped package version to 1.2.1
+
+## [1.2.0] - 2026-06-16
+
+### Changed
+
+- Bumped development version to 1.2.0-dev.6
+- Simplified skill versioning to use repo-level version comparison (from package.json) instead of per-skill SKILL.md version reads
+- Added `pwrlVersion` field to saved config for tracking previously installed version
+
+### Removed
+
+- Removed `pwrl-work-ship` micro-skill (Phase 5) - workflow now ends at Phase 4 (Review) with branch kept ready for pull request instead of automatic merge
+- Removed Phase 5 references from agent orchestrator and documentation (updated to 4-phase workflow)
+
 ## [1.1.3] - 2026-06-09
 
 ### Fixed

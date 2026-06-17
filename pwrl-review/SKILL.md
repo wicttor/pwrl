@@ -1,53 +1,181 @@
 ---
 name: pwrl-review
-description: "Standard code review focusing on correctness, maintainability, security, and testing. Returns findings in a simple checklist format."
-argument-hint: "[branch/PR or tokens like depth:fast, subagents:on]"
+description: Review code changes through 4-phase micro-skill pipeline (scope, prepare, analyze, report)
+argument-hint: "[branch, PR number, or empty for current branch]"
 ---
 
 # PWRL Review
 
-Reviews code changes against quality standards, identifying issues in logic, security, maintainability, testing, performance, and API contracts.
+Review code changes through a deterministic 4-phase pipeline: validate scope, prepare for review, analyze code quality/security/tests, and generate approval decision.
 
 ## Purpose
 
-Provide actionable code review feedback before merge to catch correctness, security, testing, performance, maintainability, and API contract issues.
+Provide comprehensive code review through systematic analysis:
+
+- **Validate Scope** — Ensure changes match requirements, detect scope creep
+- **Prepare Review** — Gather artifacts, establish baselines, configure analysis
+- **Analyze Code** — Review quality, security, tests, documentation, integration
+- **Generate Report** — Compile findings, determine approval status
 
 ## Usage
 
 ```bash
 /pwrl-review
-/pwrl-review depth:fast
-/pwrl-review depth:deep subagents:on
-/pwrl-review feature/new-api
-/pwrl-review 123
+/pwrl-review feature/U2-email-validation
+/pwrl-review origin/dev
 ```
 
-## When to Use
+## Architecture
 
-- Before creating a PR
-- When reviewing someone else's changes
-- After completing implementation work
-- When you need feedback on code quality
-- After completing a task from `pwrl-tasks` (task-based workflow)
+**Pure Skill Pipeline** — Direct sequence of 4 micro-skills:
 
-## Support Files
+```
+Input (branch/PR)
+  ↓
+Phase 1: pwrl-review-scope
+  ├ Input: Source branch, requirements
+  ├ Output: Scope artifact (scope_verdict, files_analyzed)
+  ↓
+Phase 2: pwrl-review-prepare
+  ├ Input: Scope artifact
+  ├ Processing: Diff gathering, baseline setup, tool configuration
+  ├ Output: Prepare artifact (review_scope, tools_configured)
+  ↓
+Phase 3: pwrl-review-analyze
+  ├ Input: Prepare artifact
+  ├ Processing: Code quality, security, tests, docs, integration checks
+  ├ Output: Analyze artifact (findings, issues_found by severity, integration_check)
+  ↓
+Phase 4: pwrl-review-report
+  ├ Input: Analyze artifact
+  ├ Processing: Format report, calculate verdict, get user approval
+  ├ Output: Report artifact (verdict: approved/request-changes/rejected)
+  ↓
+COMPLETE
+```
 
-- `references/severity-guide.md` — P0-P3 definitions, severity assessment guidelines, and examples
-- `references/subagent-protocol.md` — Parallel reviewer orchestration, JSON schemas, error handling
-- `references/validator-template.md` — Validation prompt for deep mode findings
+## Workflow
+
+### Phase 1: Validate Scope
+
+**Purpose:** Ensure code changes match requirements without scope creep
+
+**Input:** Source branch/PR, requirements context
+
+**Processing:** (See `pwrl-review-scope/references/scope-validation-protocol.md`)
+
+1. Extract requirements from task/plan
+2. Compare to actual files modified
+3. Detect scope creep (unrelated file changes)
+4. Get user approval if justified
+5. **Ask interaction mode:**
+   - **Detailed:** Step-by-step interaction at each phase (review, confirm, adjust)
+   - **Yolo:** Full automation from Phase 1 through Phase 4, final confirmation only
+6. Generate scope artifact with interaction_mode
+
+**Output:** Scope artifact with scope_verdict (on-target/justified/creep-detected), interaction_mode
+
+### Phase 2: Prepare Review
+
+**Purpose:** Setup review environment and configure analysis tools
+
+**Input:** Scope artifact (approved)
+
+**Processing:** (See `pwrl-review-prepare/references/prepare-review-protocol.md`)
+
+1. Gather diff, LOC changes, file types
+2. Establish baseline for comparison
+3. Identify review scope (code quality, security, tests, docs)
+4. Configure analysis tools (linter, test framework, coverage)
+
+**Output:** Prepare artifact with tools_configured and review_scope
+
+### Phase 3: Analyze Code
+
+**Purpose:** Review code quality, security, tests, documentation, and integration
+
+**Input:** Prepare artifact
+
+**Processing:** (See `pwrl-review-analyze/references/analyze-code-protocol.md`)
+
+1. **Code Quality:** Logic, complexity, style, error handling, dead code
+2. **Security:** Input validation, injection risks, auth/authz, secrets, dependencies
+3. **Tests:** Coverage, scenarios, assertions, speed, isolation
+4. **Documentation:** README updates, comments, types, changelog
+5. **Integration:** Build success, test pass, no regressions, no broken imports
+
+**Output:** Analyze artifact with findings organized by category and severity
+
+### Phase 4: Generate Report
+
+**Purpose:** Compile findings and determine approval status
+
+**Input:** Analyze artifact
+
+**Processing:** (See `pwrl-review-report/references/report-generation-protocol.md`)
+
+1. Format findings into readable report
+2. Calculate approval verdict based on issues:
+   - **APPROVED:** 0 critical issues, <5 major, all checks pass
+   - **REQUEST CHANGES:** 1-2 critical or 5-10 major (fixable)
+   - **REJECTED:** >2 critical or >10 major (unfixable)
+3. Get user approval
+4. Generate report artifact
+
+**Output:** Report artifact with verdict (approved/request-changes/rejected)
+
+---
+
+## Quality Assessment
+
+**Code is APPROVED when:**
+
+- ✓ Scope matches requirements (no creep)
+- ✓ Code logic is correct
+- ✓ No security vulnerabilities
+- ✓ Tests are adequate (>50% coverage)
+- ✓ Documentation updated
+- ✓ Build passes, tests pass
+- ✓ No regressions
+
+**REQUEST CHANGES when:**
+
+- ⚠ 1-2 critical issues (fixable)
+- ⚠ 5-10 major issues (fixable)
+- ⚠ Some tests failing (fixable)
+- ⚠ Build warnings
+
+**REJECT when:**
+
+- ✗ >2 critical issues (unfixable)
+- ✗ >10 major issues
+- ✗ Build fails
+- ✗ Core tests fail
+- ✗ Significant scope creep
 
 ## Review Lenses
 
-- **Correctness**: Logic errors, edge cases, state bugs, error handling
-- **Maintainability**: Code clarity, complexity, naming, duplication, abstraction
-- **Security**: Input validation, auth checks, data exposure, injection risks
-- **Testing**: Coverage gaps, test quality, missing edge cases
-- **Performance**: Inefficient patterns, unnecessary work, resource usage
-- **API Contracts**: Breaking changes, versioning, backward compatibility
+- **Correctness** — Logic errors, edge cases, error handling
+- **Security** — Input validation, injection, auth, secrets
+- **Maintainability** — Clarity, complexity, duplication, abstraction
+- **Testing** — Coverage, scenarios, assertions, isolation
+- **Performance** — Efficiency, resource usage, slow operations
+- **Integration** — No broken imports, circular deps, regressions
 
-## Severity Levels
+## Support Files
 
-Use P0-P3 severity. See `references/severity-guide.md` for definitions and calibration examples.
+- `pwrl-review-scope/references/scope-validation-protocol.md` — Phase 1 specification
+- `pwrl-review-prepare/references/prepare-review-protocol.md` — Phase 2 specification
+- `pwrl-review-analyze/references/analyze-code-protocol.md` — Phase 3 specification
+- `pwrl-review-report/references/report-generation-protocol.md` — Phase 4 specification
+
+## When to Use
+
+- After completing implementation work
+- Before creating a pull request
+- To review someone else's code changes
+- When you need confidence before merging
+- After completing a task from pwrl-work
 
 ## Control Tokens
 
@@ -160,8 +288,21 @@ Present results as checklist format:
 
 If review is based on a task file:
 
-1. If verdict is **Ready to merge**: mark task `done` and move it to `docs/tasks/done/`.
-2. If verdict is **Ready with fixes / Not ready**: move task back to `in-progress` and add required fixes (P0/P1) to the task body.
+1. If verdict is **APPROVED** (no bugs, issues, or remaining tasks found):
+   - Move task from `for-review/` to `done/`
+   - Update frontmatter: `status: for-review` → `status: done`
+   - Update GitHub Issue status to "Done" (if integration enabled)
+
+2. If verdict is **REQUEST CHANGES** (fixable issues found):
+   - Move task back from `for-review/` to `in-progress/`
+   - Update frontmatter: `status: for-review` → `status: in-progress`
+   - Add review findings (P0/P1 issues) to task body as required fixes
+   - Update GitHub Issue status to "In Progress" (if integration enabled)
+
+3. If verdict is **REJECTED** (unfixable issues or scope creep):
+   - Leave task in `for-review/`
+   - Add findings to task body with explanation
+   - Request clarification from user before proceeding
 
 ## Output
 

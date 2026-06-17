@@ -1,7 +1,7 @@
 ---
 unit-id: S4
 plan: docs/plans/2026-06-05-002-slice-pwrl-work-skill.md
-status: done
+status: for-review
 created: 2026-06-05
 dependencies: [S1]
 files:

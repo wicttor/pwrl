@@ -10,7 +10,10 @@ tags:
   - pwrl
 severity: high
 context: PWRL planning workflow refactor (v1.0.7); agent infrastructure optional
+superseded_by: decision/remove-agent-infrastructure-2026-06-16.md
 ---
+
+> **⚠️ SUPERSEDED:** This decision is no longer applicable. As of v1.2.1, PWRL has removed all agent infrastructure and adopted a pure skill-based framework. The fallback architecture (agent path + fallback path) has been replaced with single-path skill chaining. See [Remove Agent Infrastructure](../decision/remove-agent-infrastructure-2026-06-16.md) for the current approach.
 
 # Fallback Architecture Design for System Resilience
 

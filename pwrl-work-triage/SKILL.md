@@ -14,15 +14,15 @@ argument-hint: "[Task file path, plan path, or bare prompt. Leave blank to use l
 
 ### Supported Input Types
 
-| Type | Detection | Example |
-|---|---|---|
-| **Task file** | Contains `unit-id` in YAML frontmatter | `docs/tasks/to-do/2026-06-05-u1-task.md` |
-| **Plan file** | No `unit-id` in frontmatter, points to `docs/plans/` | `docs/plans/2026-06-05-001-plan.md` |
-| **Bare prompt** | Neither of the above | `"Add email validation to user signup"` |
+| Type            | Detection                                            | Example                                  |
+| --------------- | ---------------------------------------------------- | ---------------------------------------- |
+| **Task file**   | Contains `unit-id` in YAML frontmatter               | `docs/tasks/to-do/2026-06-05-u1-task.md` |
+| **Plan file**   | No `unit-id` in frontmatter, points to `docs/plans/` | `docs/plans/2026-06-05-001-plan.md`      |
+| **Bare prompt** | Neither of the above                                 | `"Add email validation to user signup"`  |
 
 ## Output: Classified Context
 
-After triage, produce a context object (in agent memory or as markdown) with fields varying by input type:
+After triage, produce a context object with fields varying by input type:
 
 ```yaml
 inputType: task | plan | prompt
@@ -53,15 +53,15 @@ When input is a task file path:
 
 Extract these fields from the YAML frontmatter:
 
-| Field | Required | Description |
-|---|---|---|
-| `unit-id` | Yes | Stable task identifier (e.g., `S1`, `U1`) |
-| `plan` | Yes | Relative path to linked plan file |
-| `status` | Yes | Current status: `to-do`, `in-progress`, `for-review`, `done` |
-| `dependencies` | No | List of task unit-ids this depends on |
-| `files` | No | List of primary files affected by this task |
-| `github-issue` | No | GitHub issue number (if linked to an issue) |
-| `created` | No | Creation date |
+| Field          | Required | Description                                                  |
+| -------------- | -------- | ------------------------------------------------------------ |
+| `unit-id`      | Yes      | Stable task identifier (e.g., `S1`, `U1`)                    |
+| `plan`         | Yes      | Relative path to linked plan file                            |
+| `status`       | Yes      | Current status: `to-do`, `in-progress`, `for-review`, `done` |
+| `dependencies` | No       | List of task unit-ids this depends on                        |
+| `files`        | No       | List of primary files affected by this task                  |
+| `github-issue` | No       | GitHub issue number (if linked to an issue)                  |
+| `created`      | No       | Creation date                                                |
 
 **Step 2 — Load linked plan file:**
 
@@ -80,26 +80,45 @@ Extract these fields from the YAML frontmatter:
 4. Check for circular dependencies: if A depends on B and B depends on A → fail
 
 **Step 4 — Estimate complexity (from task scope):**
+
 - Based on `files` count and task body length
 - 1 file, no behavior change → `trivial`
 - 1-2 files, bounded scope → `small`
 - 3-5 files, moderate logic → `medium`
 - 6+ files or cross-cutting → `large`
 
+**Step 5 — Discover cross-plan dependencies (NEW):**
+
+1. Scan `docs/plans/*.md` for all active plan files
+2. For each plan, extract all task unit-ids and their dependencies
+3. Build a global dependency graph (union of all per-plan graphs)
+4. **Detect global unit-id duplicates**: If the same unit-id appears in multiple plans → error "Duplicate unit-id: S1 found in plan-A and plan-B"
+5. Annotate cross-plan dependencies: "S1 (plan-A) depends on U2 (plan-B)"
+6. Return: Complete dependency graph with cross-plan edges marked
+
+**Step 6 — Check for circular dependencies (multi-plan scope, UPDATED):**
+
+1. Build DFS stack for cycle detection
+2. Walk the global dependency graph (including cross-plan edges)
+3. If cycle detected: report path (e.g., "S1 (plan-A) → U2 (plan-B) → S1")
+4. Fail with clear error; ask user to resolve
+
 **Output context:**
 
 ```yaml
 inputType: task
 taskFile: docs/tasks/to-do/2026-06-05-u1-task.md
-unitId: S1
+unit-id: S1
 plan: docs/plans/2026-06-05-002-plan.md
 status: to-do
 dependencies: [S2, S3]
 files: [src/utils.ts, src/api.ts]
-githubIssue: 123  # or null if absent
+githubIssue: 123 # or null if absent
 complexity: medium
 blockedBy: []
 dependencyChain: [S2 → S3 → S4]
+globalDependencyGraph: { S1: [S2, S3], S2: [U1], U1: [] }
+crossPlanDeps: [{ from: S2, fromPlan: plan-002, to: U1, toPlan: plan-001 }]
 ```
 
 ### 3. Classify Plan File
@@ -108,13 +127,13 @@ When input is a plan file path (no `unit-id`):
 
 **Step 1 — Read plan frontmatter:**
 
-| Field | Description |
-|---|---|
-| `id` | Plan identifier (e.g., `2026-06-05-002`) |
-| `tier` | Planning tier: `Fast`, `Standard`, `Deep` |
-| `status` | `active`, `draft`, `archived` |
-| `created` | Creation date |
-| `updated` | Last update date |
+| Field     | Description                               |
+| --------- | ----------------------------------------- |
+| `id`      | Plan identifier (e.g., `2026-06-05-002`)  |
+| `tier`    | Planning tier: `Fast`, `Standard`, `Deep` |
+| `status`  | `active`, `draft`, `archived`             |
+| `created` | Creation date                             |
+| `updated` | Last update date                          |
 
 **Step 2 — Extract implementation units:**
 
@@ -124,11 +143,11 @@ When input is a plan file path (no `unit-id`):
 
 **Step 3 — Estimate complexity from unit count:**
 
-| Units | Complexity | Expected Mode |
-|---|---|---|
-| 1-2 | `trivial` / `small` | Inline execution |
-| 3-5 | `medium` | Serial execution |
-| 6+ | `large` | Serial with possible parallel subsets |
+| Units | Complexity          | Expected Mode                         |
+| ----- | ------------------- | ------------------------------------- |
+| 1-2   | `trivial` / `small` | Inline execution                      |
+| 3-5   | `medium`            | Serial execution                      |
+| 6+    | `large`             | Serial with possible parallel subsets |
 
 **Output context:**
 
@@ -139,11 +158,11 @@ planId: 2026-06-05-002
 tier: Standard
 planStatus: active
 units:
-  - unitId: U1
+  - unit-id: U1
     name: Input Triage
     files: [pwrl-work-triage/SKILL.md]
     approach: Extract Phase 0 logic
-  - unitId: U2
+  - unit-id: U2
     name: Environment Setup
     files: [pwrl-work-prepare/SKILL.md]
     approach: Extract Phase 1 logic
@@ -159,12 +178,12 @@ When input is a freeform text description:
 
 Apply rules in order:
 
-| Signal | Complexity |
-|---|---|
-| Single file, no behavior change (rename, config, styling) | `trivial` |
-| 1-2 files, clear bounded scope, no cross-cutting concerns | `small` |
-| 3-5 files, moderate logic, behavior change, tests needed | `medium` |
-| 6+ files, architectural work, security, payments, auth, core systems | `large` |
+| Signal                                                               | Complexity |
+| -------------------------------------------------------------------- | ---------- |
+| Single file, no behavior change (rename, config, styling)            | `trivial`  |
+| 1-2 files, clear bounded scope, no cross-cutting concerns            | `small`    |
+| 3-5 files, moderate logic, behavior change, tests needed             | `medium`   |
+| 6+ files, architectural work, security, payments, auth, core systems | `large`    |
 
 **Step 2 — Scan codebase for context:**
 
@@ -175,6 +194,7 @@ Apply rules in order:
 **Step 3 — Warn if complexity is large:**
 
 If complexity is `large`:
+
 - Recommend planning with `/pwrl-plan` workflow first
 - Ask user: "This work appears large/complex. Understanding risks and tradeoffs, do you want to proceed without formal planning?"
 - Only proceed if user expressly confirms
@@ -190,25 +210,52 @@ complexitySignals:
   - "Behavior changes to existing logic"
   - "Multiple test scenarios needed"
 relatedPatterns:
-  - "src/validators/phone.ts"  # similar validation pattern
+  - "src/validators/phone.ts" # similar validation pattern
 planningRecommended: false
+```
+
+### 5. Select Interaction Mode
+
+After classifying input, ask user to choose interaction style:
+
+**Prompt:** "How would you like to proceed?"
+
+**Options:**
+
+- **Detailed (Step-by-Step):**
+  - Review and confirm at each phase (Prepare → Execute → Review → Finalize)
+  - Inspect generated artifacts
+  - Approval gates at each transition
+  - Slower but more control and visibility
+  - Best for: Complex work, unfamiliar codebases, learning
+
+- **Yolo (Full Automation):**
+  - Fully automated from Phase 1 through Phase 3
+  - Review and confirm only at the end
+  - Faster execution
+  - Best for: Straightforward tasks, well-understood scope, time-sensitive
+
+**Store selection in context:**
+
+```yaml
+interactionMode: detailed | yolo
 ```
 
 ---
 
 ## Error Handling
 
-| Scenario | Handling |
-|---|---|
-| Task file not found | Log path; ask user: "Provide a different path or create a new task?" |
-| Plan file not found | Log path; ask user: "Provide a different path or use /pwrl-plan?" |
-| Circular dependencies | Walk dep tree; fail with `Circular: [A→B→C→A]`; ask user to resolve |
-| Missing dependencies | Log; add to `blockedBy`; warn: "Not found in INDEX. Proceeding may cause ordering issues." |
-| Input is empty | Ask user: "What would you like to work on?" |
-| File unreadable | Log error; ask user: "Cannot read file. Retry or provide different path?" |
-| Malformed frontmatter | Log details; ask user to fix frontmatter and retry |
-| Complexity is `large` (bare prompt) | Warn; require user confirmation before proceeding |
-| Task references non-existent plan | Warn; proceed with caution |
+| Scenario                            | Handling                                                                                   |
+| ----------------------------------- | ------------------------------------------------------------------------------------------ |
+| Task file not found                 | Log path; ask user: "Provide a different path or create a new task?"                       |
+| Plan file not found                 | Log path; ask user: "Provide a different path or use /pwrl-plan?"                          |
+| Circular dependencies               | Walk dep tree; fail with `Circular: [A→B→C→A]`; ask user to resolve                        |
+| Missing dependencies                | Log; add to `blockedBy`; warn: "Not found in INDEX. Proceeding may cause ordering issues." |
+| Input is empty                      | Ask user: "What would you like to work on?"                                                |
+| File unreadable                     | Log error; ask user: "Cannot read file. Retry or provide different path?"                  |
+| Malformed frontmatter               | Log details; ask user to fix frontmatter and retry                                         |
+| Complexity is `large` (bare prompt) | Warn; require user confirmation before proceeding                                          |
+| Task references non-existent plan   | Warn; proceed with caution                                                                 |
 
 **Retry limit:** 3 attempts per operation, then ask user to fix manually.
 

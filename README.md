@@ -1,4 +1,4 @@
-![created using ai](thumbnail.png)
+![created using ai](thumbnail.png?t=20260616)
 
 **Plan. Work. Review. Learn.** — A disciplined skill-based development framework.
 

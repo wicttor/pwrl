@@ -288,8 +288,21 @@ Present results as checklist format:
 
 If review is based on a task file:
 
-1. If verdict is **Ready to merge**: mark task `done` and move it to `docs/tasks/done/`.
-2. If verdict is **Ready with fixes / Not ready**: move task back to `in-progress` and add required fixes (P0/P1) to the task body.
+1. If verdict is **APPROVED** (no bugs, issues, or remaining tasks found):
+   - Move task from `for-review/` to `done/`
+   - Update frontmatter: `status: for-review` → `status: done`
+   - Update GitHub Issue status to "Done" (if integration enabled)
+
+2. If verdict is **REQUEST CHANGES** (fixable issues found):
+   - Move task back from `for-review/` to `in-progress/`
+   - Update frontmatter: `status: for-review` → `status: in-progress`
+   - Add review findings (P0/P1 issues) to task body as required fixes
+   - Update GitHub Issue status to "In Progress" (if integration enabled)
+
+3. If verdict is **REJECTED** (unfixable issues or scope creep):
+   - Leave task in `for-review/`
+   - Add findings to task body with explanation
+   - Request clarification from user before proceeding
 
 ## Output
 

@@ -12,6 +12,8 @@ severity: high
 context: PWRL planning workflow refactor (v1.0.7)
 ---
 
+> **📌 UPDATED:** As of v1.2.1, PWRL has removed agent orchestrators. The **skill decomposition** part of this pattern remains fully valid — micro-skills with phase boundaries, state passing, and independent testability. The **agent orchestration** part has been superseded by pure skill chaining where orchestrator skills directly invoke micro-skills in sequence. See [Remove Agent Infrastructure](../decision/remove-agent-infrastructure-2026-06-16.md) for details.
+
 # Skill Decomposition & Agent Orchestration Pattern
 
 ## What It Is

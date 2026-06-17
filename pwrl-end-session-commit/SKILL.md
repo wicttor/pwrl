@@ -11,12 +11,11 @@ Draft a descriptive commit message and create the session commit with proper att
 
 ## Purpose
 
-Commit is the second phase of session cleanup. It takes the checkpoint artifact from Phase 1, crafts a meaningful commit message that explains the session's work and next steps, detects version changes, and creates the commit with mandatory agent attribution:
+Commit is the second phase of session cleanup. It takes the checkpoint artifact from Phase 1, crafts a meaningful commit message that explains the session's work and next steps, detects version changes, and creates the commit:
 
 - Draft commit subject (imperative mood, ≤50 chars)
 - Write commit body with decisions, blockers, and next steps
 - Detect version bumps and update `CHANGELOG.md` if needed
-- Append mandatory `[AGENT: ...]` attribution trailer
 - Get user approval, stage files, and create commit
 - Capture commit SHA for logging and learnings chaining
 
@@ -53,8 +52,7 @@ This is the second phase of `/pwrl-end-session` orchestrator, executed after Pha
    - **What:** Key changes and decisions
    - **Blockers:** Any unresolved issues or incomplete work
    - **Next:** Specific next steps (from checkpoint)
-3. Append `[AGENT: <agent-name>]` trailer (mandatory, last line)
-4. Validate message (subject ≤50, body readable, trailer present)
+3. Validate message (subject ≤50, body readable)
 
 **Output:** Draft commit message (subject + body + trailer)
 
@@ -120,7 +118,6 @@ timestamp: "ISO 8601 timestamp"
 ## Rules
 
 - ✓ Commit subject must be ≤50 chars, imperative mood
-- ✓ Agent trailer mandatory: `[AGENT: <agent-name>]` on last line
 - ✓ User approval required before staging/committing
 - ✓ No automatic push (user controls push timing)
 - ✓ Version bump detection automatic, CHANGELOG.md auto-staged if needed

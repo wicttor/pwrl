@@ -19,90 +19,32 @@ pwrl init
 # - GitHub Issues integration (optional)
 ```
 
-### Enable Agents (Recommended)
-
-For advanced orchestration with agent-based planning:
-
-**GitHub Copilot (VS Code):**
-
-1. Enable "GitHub Copilot: Agents" in VS Code settings
-2. Restart VS Code
-3. Agents in `.agents/agents/` will auto-discover
-
-**Cursor:**
-
-1. Cursor auto-discovers agents in `.agents/agents/`
-
-**Claude (Desktop/Web):**
-
-1. Create a Claude Project including `.agents/agents/` folder
-2. Agents will be available in that project
-
-See [INSTALLATION.md](INSTALLATION.md#agent-setup) for complete setup instructions.
-
 ## Core Workflow
 
-**Simple (Direct):**
+**Standard Workflow:**
 
 ```
 Problem → /pwrl-plan → /pwrl-work → /pwrl-review → /pwrl-learnings → /pwrl-end-session
 ```
 
-`/pwrl-work` orchestrates 5 phases (triage → prepare → execute → review → ship) including an internal review in Phase 4. The standalone `/pwrl-review` skill remains part of the main flow for an explicit, dedicated review pass before marking work done.
+- `/pwrl-plan` orchestrates 4 phases: scope → research → design → generate
+- `/pwrl-work` orchestrates 5 phases: triage → prepare → execute → review → finalize
+- `/pwrl-review` does explicit code review and moves tasks based on verdict
 
-**Agent-Based Planning & Work (Recommended):**
-
-When agents are enabled, `/pwrl-plan` automatically delegates to the PWRL Planner Agent:
-
-```
-Problem → /pwrl-plan
-  │
-  ├─ Phase 1: Scope Gathering (pwrl-plan-scope)
-  │           ↓ [User confirms scope]
-  │
-  ├─ Phase 2: Research & Findings (pwrl-plan-research)
-  │           ↓ [User confirms research]
-  │
-  ├─ Phase 3: Design & Units (pwrl-plan-design)
-  │           ↓ [User confirms units]
-  │
-  ├─ Phase 4: Plan Generation (pwrl-plan-generate)
-  │           ↓ [User approves plan]
-  │
-  └─ Output: docs/plans/YYYY-MM-DD-NNN-<name>.md
-
-→ /pwrl-work
-  │
-  ├─ Phase 1: Triage (pwrl-work-triage)
-  │           ↓ [User confirms classification]
-  │
-  ├─ Phase 2: Prepare (pwrl-work-prepare)
-  │           ↓ [User confirms environment]
-  │
-  ├─ Phase 3: Execute (pwrl-work-execute)
-  │           ↓ [User reviews results]
-  │
-  ├─ Phase 4: Review (pwrl-work-review)
-  │           ↓ [User confirms readiness]
-  │
-  └─ Output: Ready for pull request (branch preserved)
-
-→ /pwrl-learnings → /pwrl-end-session
-```
-
-**Direct Skill Calls (Simple/Solo):**
-
-If you prefer direct invocation, call `/pwrl-work` or individual skills (same execution, no agent orchestration).
-
-**Task-Based (Complex/Team):**
+**Task-Based Workflow (Complex/Team):**
 
 ```
 Problem → /pwrl-plan → /pwrl-tasks → /pwrl-work [task] → /pwrl-review → repeat → /pwrl-learnings → /pwrl-end-session
 ```
 
-Each `/pwrl-work [task]` invocation runs the 5-phase orchestration (triage → prepare → execute → review → ship), with `/pwrl-review` providing the dedicated review pass before moving the task to `done`.
+Each `/pwrl-work [task]` invocation runs the 5-phase orchestration (triage → prepare → execute → review → finalize) with interaction mode selection at Phase 0.
 
-**Task Status:** `to-do` → `in-progress` → `for-review` → `done`
+**Task Status:** `to-do` → `in-progress` → `for-review` → `done` (after /pwrl-review approves)
+
+**Interaction Modes (for /pwrl-work):**
+
+- **Detailed (Step-by-Step):** Review and confirm at each phase
+- **Yolo (Full Automation):** Automated through Phase 3, final confirmation at Phase 4
 
 ---
 
@@ -113,16 +55,11 @@ Each `/pwrl-work [task]` invocation runs the 5-phase orchestration (triage → p
 ```bash
 # 1. Plan the work
 /pwrl-plan Add user profile editing with validation
-
-# With agents enabled: Planner Agent orchestrates 4 phases with user checkpoints
-# Without agents: Runs inline in fallback mode
-# Either way: Creates docs/plans/YYYY-MM-DD-NNN-add-user-profile-editing.md
+# Creates docs/plans/YYYY-MM-DD-NNN-add-user-profile-editing.md
 
 # 2. Execute the plan
 /pwrl-work
-# With agents enabled: Work Agent orchestrates 5 phases (triage → prepare → execute → review → ship)
-# Without agents: Runs all phases inline in fallback mode
-# Either way: Work completed, committed, and status updated
+# Work completed on feature branch, status updated
 
 # 3. Document any insights
 /pwrl-learnings
@@ -134,14 +71,12 @@ Each `/pwrl-work [task]` invocation runs the 5-phase orchestration (triage → p
 **What happens:**
 
 - **Plan** creates structured implementation plan in `docs/plans/`
-  - If agents enabled: PWRL Planner Agent guides you through scope → research → design → generate phases
-  - If agents disabled: All phases run inline automatically
-- **Work** runs 5 orchestrated phases with test-first discipline (triage → prepare → execute → review → ship) and commits the work
-  - If using task files: status moves `to-do` → `in-progress` → `for-review`
-- **Review** checks correctness, security, quality; approves (done) or requests changes (back to in-progress)
-  - This is the dedicated `/pwrl-review` step (Phase 4 of `/pwrl-work` runs an internal review, but `/pwrl-review` is the explicit main-flow review)
+  - Orchestrates 4 phases: scope → research → design → generate
+- **Work** runs 5 orchestrated phases with test-first discipline (triage → prepare → execute → review → finalize) on a feature branch
+- **Review** checks correctness, security, quality; approves or requests changes
+  - This is the dedicated `/pwrl-review` step (Phase 3 of `/pwrl-work` runs an internal review, but `/pwrl-review` is the explicit main-flow review)
 - **Learnings** documents solutions while context is fresh
-- **End-session** creates clean commit with context
+- **End-session** creates clean commit with learnings captured
 
 ### Complex Feature (Task-Based)
 
@@ -160,18 +95,25 @@ Each `/pwrl-work [task]` invocation runs the 5-phase orchestration (triage → p
 # 3. Work on first task
 /pwrl-work docs/tasks/to-do/2026-05-04-u1-profile-model.md
 # Status: to-do → in-progress → for-review
+# Task auto-moves through folders at Prepare and Execute phases
 
 # 4. Review first task
 /pwrl-review
-# If approved: for-review → done
-# If changes needed: for-review → in-progress
+# If approved (no issues found): for-review/ → done/
+# If changes needed: Return task to in-progress/ and re-run /pwrl-work
 
 # 5. Continue with remaining tasks
 /pwrl-work docs/tasks/to-do/2026-05-04-u2-edit-endpoint.md
 /pwrl-review
+# Each approved task moves to done/
 # Repeat for U3, U4...
 
-# 6. Document and commit
+# 6. Create pull request
+# When all tasks are in done/ (approved by review):
+git push origin feature-branch
+# Create PR via GitHub or `gh pr create`
+
+# 7. Document and commit
 /pwrl-learnings
 /pwrl-end-session
 ```
@@ -190,20 +132,23 @@ Each `/pwrl-work [task]` invocation runs the 5-phase orchestration (triage → p
 ```bash
 # 1. Quick plan or dive straight to work
 /pwrl-work Fix null reference error in user controller
-# Status: Creates inline task, completes work, moves to for-review
+# Status: Inline task created, completed, in for-review/
 
 # 2. Review the fix
 /pwrl-review
-# Approves fix: for-review → done
+# If approved (no issues): for-review/ → done/
 
 # 3. Document the bug and solution
 /pwrl-learnings
 
-# 4. Commit
+# 4. Create PR and commit
+git push origin feature-branch
+# Create PR via GitHub or `gh pr create`
+
 /pwrl-end-session Bug fix for null reference
 ```
 
-**For trivial fixes**, skip planning and go straight to work. The review step still validates quality before marking done.
+**For trivial fixes**, skip planning and go straight to work. The review step still validates quality before creating a PR.
 
 ---
 
@@ -222,7 +167,7 @@ Each `/pwrl-work [task]` invocation runs the 5-phase orchestration (triage → p
 
 # 4. Verify no regressions
 /pwrl-review
-# Approves: for-review → done
+# Approves: Ready for PR creation
 
 # 5. Document patterns learned
 /pwrl-learnings
@@ -248,11 +193,19 @@ Each `/pwrl-work [task]` invocation runs the 5-phase orchestration (triage → p
 /pwrl-work [task-file-if-using-tasks]
 # Status: to-do → in-progress → for-review
 
+# 4. Review and approve
+/pwrl-review
+# If approved: for-review → done
+
 # 4. Review coverage and assertions
 /pwrl-review
-# Approves: for-review → done
+# Approves: Ready for PR creation
 
-# 5. Commit
+# 5. Create pull request and commit
+git push origin feature-branch
+# Create PR via GitHub or `gh pr create`
+
+/pwrl-learnings
 /pwrl-end-session
 ```
 
@@ -292,7 +245,7 @@ Choose the right planning depth based on scope and risk. Planning runs through a
 3. **Design** — Decompose work into implementation units
 4. **Generate** — Select tier and render final plan
 
-When agents are available, planning uses [pwrl-planner.agent.md](.agents/agents/pwrl-planner.agent.md) for checkpoints at each phase. Otherwise, planning runs a monolithic fallback workflow.
+Each phase collects user input before proceeding to the next.
 
 ### Fast Tier (1-3 files, LOW risk)
 

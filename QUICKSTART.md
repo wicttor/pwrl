@@ -27,9 +27,9 @@ pwrl init
 Problem → /pwrl-plan → /pwrl-work → /pwrl-review → /pwrl-learnings → /pwrl-end-session
 ```
 
-- `/pwrl-plan` orchestrates 4 phases: scope → research → design → generate
-- `/pwrl-work` orchestrates 5 phases: triage → prepare → execute → review → finalize
-- `/pwrl-review` does explicit code review and moves tasks based on verdict
+- `/pwrl-plan` orchestrates 4 micro-skills: scope → research → design → generate
+- `/pwrl-work` orchestrates 4 micro-skills: triage → prepare → execute → review
+- `/pwrl-review` orchestrates 4 micro-skills: scope → prepare → analyze → report (returns verdict)
 
 **Task-Based Workflow (Complex/Team):**
 
@@ -37,14 +37,14 @@ Problem → /pwrl-plan → /pwrl-work → /pwrl-review → /pwrl-learnings → /
 Problem → /pwrl-plan → /pwrl-tasks → /pwrl-work [task] → /pwrl-review → repeat → /pwrl-learnings → /pwrl-end-session
 ```
 
-Each `/pwrl-work [task]` invocation runs the 5-phase orchestration (triage → prepare → execute → review → finalize) with interaction mode selection at Phase 0.
+Each `/pwrl-work [task]` invocation runs the 4-phase orchestration (triage → prepare → execute → review) with interaction mode selection at Phase 0 (Triage).
 
-**Task Status:** `to-do` → `in-progress` → `for-review` → `done` (after /pwrl-review approves)
+**Task Status:** `to-do` → `in-progress` → `for-review` (awaits /pwrl-review verdict)
 
-**Interaction Modes (for /pwrl-work):**
+**Interaction Modes (for /pwrl-work and /pwrl-plan):**
 
 - **Detailed (Step-by-Step):** Review and confirm at each phase
-- **Yolo (Full Automation):** Automated through Phase 3, final confirmation at Phase 4
+- **Yolo (Full Automation):** Automated through phases, final confirmation at end
 
 ---
 
@@ -71,10 +71,10 @@ Each `/pwrl-work [task]` invocation runs the 5-phase orchestration (triage → p
 **What happens:**
 
 - **Plan** creates structured implementation plan in `docs/plans/`
-  - Orchestrates 4 phases: scope → research → design → generate
-- **Work** runs 5 orchestrated phases with test-first discipline (triage → prepare → execute → review → finalize) on a feature branch
-- **Review** checks correctness, security, quality; approves or requests changes
-  - This is the dedicated `/pwrl-review` step (Phase 3 of `/pwrl-work` runs an internal review, but `/pwrl-review` is the explicit main-flow review)
+  - Orchestrates 4 micro-skills: scope → research → design → generate
+- **Work** runs 4 orchestrated micro-skills with test-first discipline (triage → prepare → execute → review) on a feature branch
+- **Review** (optional explicit step) checks correctness, security, quality; returns verdict
+  - This is the dedicated `/pwrl-review` step (/pwrl-work includes internal review at Phase 3)
 - **Learnings** documents solutions while context is fresh
 - **End-session** creates clean commit with learnings captured
 
@@ -95,21 +95,24 @@ Each `/pwrl-work [task]` invocation runs the 5-phase orchestration (triage → p
 # 3. Work on first task
 /pwrl-work docs/tasks/to-do/2026-05-04-u1-profile-model.md
 # Status: to-do → in-progress → for-review
+# Orchestrates: triage → prepare → execute → review
 # Task auto-moves through folders at Prepare and Execute phases
 
 # 4. Review first task
 /pwrl-review
-# If approved (no issues found): for-review/ → done/
-# If changes needed: Return task to in-progress/ and re-run /pwrl-work
+# Returns verdict:
+# - APPROVED: Task approved, ready for PR
+# - REQUEST CHANGES: Task needs revision, moved back to in-progress/
+# - REJECTED: Task rejected
 
 # 5. Continue with remaining tasks
 /pwrl-work docs/tasks/to-do/2026-05-04-u2-edit-endpoint.md
 /pwrl-review
-# Each approved task moves to done/
+# Each approved task moves to next step
 # Repeat for U3, U4...
 
 # 6. Create pull request
-# When all tasks are in done/ (approved by review):
+# When all tasks are approved:
 git push origin feature-branch
 # Create PR via GitHub or `gh pr create`
 
@@ -464,47 +467,95 @@ Skills used: pwrl-plan, pwrl-work, pwrl-review, pwrl-learnings
 
 ---
 
-## Understanding Skill Support Files
+## Skill Reference: Orchestrators and Micro-Skills
 
-Many skills include detailed reference material in subdirectories:
+Each main workflow orchestrates multiple micro-skills that run in sequence. Here's the complete reference:
 
-### pwrl-plan (Main Planning Orchestrator)
+### `/pwrl-plan` — Planning Orchestrator
 
-- **Main workflow** ([SKILL.md](pwrl-plan/SKILL.md)): Planning entry point, routes to agent or monolithic fallback
-- **Planning tiers** ([references/planning-tiers.md](pwrl-plan/references/planning-tiers.md)): Tier selection heuristic, detailed tier descriptions, decision tree
-- **Plan templates** ([references/plan-templates.md](pwrl-plan/references/plan-templates.md)): Fast/Standard/Deep plan templates with real-world examples
-- **Agent routing** ([references/agent-routing.md](pwrl-plan/references/agent-routing.md)): Agent detection logic, enabling agent-enhanced path, troubleshooting
-- **Fallback workflow** ([references/fallback-workflow.md](pwrl-plan/references/fallback-workflow.md)): Complete 4-phase monolithic workflow (backup when agents unavailable)
+**Micro-Skills (4 phases):**
 
-### pwrl-plan Micro-Skills (Phase-Specific)
+| Phase | Skill                    | Purpose |
+| ----- | ------------------------ | ------- |
+| 1     | `pwrl-plan-scope`        | Gather context, validate domain, bootstrap requirements |
+| 2     | `pwrl-plan-research`     | Discover local patterns, detect high-risk areas |
+| 3     | `pwrl-plan-design`       | Decompose into implementation units, assess complexity |
+| 4     | `pwrl-plan-generate`     | Select tier, render plan, save to docs/plans/ |
 
-When `/pwrl-plan` routes through the agent, it calls these micro-skills automatically:
+**Reference Material:**
+- `pwrl-plan/SKILL.md` — Planning workflow and tier selection
+- `pwrl-plan/references/planning-tiers.md` — Tier selection heuristic
+- `pwrl-plan/references/plan-templates.md` — Fast/Standard/Deep templates
 
-- **pwrl-plan-scope** ([SKILL.md](pwrl-plan-scope/SKILL.md)): Phase 1 — Gather context and scope requirements
-- **pwrl-plan-research** ([SKILL.md](pwrl-plan-research/SKILL.md)): Phase 2 — Research patterns and high-risk areas
-- **pwrl-plan-design** ([SKILL.md](pwrl-plan-design/SKILL.md)): Phase 3 — Design decomposition and implementation units
-- **pwrl-plan-generate** ([SKILL.md](pwrl-plan-generate/SKILL.md)): Phase 4 — Generate final plan from templates
+### `/pwrl-work` — Execution Orchestrator
 
-**Note:** You don't call micro-skills directly. They're invoked automatically by `/pwrl-plan` through the agent orchestrator or fallback workflow.
+**Micro-Skills (4 phases):**
 
-### pwrl-learnings
+| Phase | Skill                   | Purpose |
+| ----- | ----------------------- | ------- |
+| 0     | `pwrl-work-triage`      | Classify input, extract task data, select interaction mode |
+| 1     | `pwrl-work-prepare`     | Setup branch, verify repo, resolve ambiguities |
+| 2     | `pwrl-work-execute`     | Implement with test-first discipline, move task to for-review |
+| 3     | `pwrl-work-review`      | Code review, quality gates, verify completion |
+| —     | `pwrl-work-sync-status` | (Utility) GitHub integration and status tracking |
 
-- **Main workflow** ([SKILL.md](pwrl-learnings/SKILL.md)): 135 lines covering 9-phase documentation process
-- **Schema** ([references/schema.yaml](pwrl-learnings/references/schema.yaml)): Frontmatter field definitions
-- **Categories** ([references/categories.md](pwrl-learnings/references/categories.md)): When to use each category (pattern, technical-fix, gotcha, decision, gotcha, workflow)
+**Reference Material:**
+- `pwrl-work/SKILL.md` — Execution workflow
+- `pwrl-work/references/triage-input-protocol.md` — Input classification
+- `pwrl-work/references/prepare-environment-protocol.md` — Setup procedures
 
-### pwrl-refresh-learnings
+### `/pwrl-review` — Review Orchestrator
 
-- **Main workflow** ([SKILL.md](pwrl-refresh-learnings/SKILL.md)): 184 lines covering refresh workflow
-- **Assessment criteria** ([references/assessment-criteria.md](pwrl-refresh-learnings/references/assessment-criteria.md)): Detailed assessment methodology and update procedures
+**Micro-Skills (4 phases):**
 
-### pwrl-review
+| Phase | Skill                    | Purpose |
+| ----- | ------------------------ | ------- |
+| 1     | `pwrl-review-scope`      | Classify input, scope review depth |
+| 2     | `pwrl-review-prepare`    | Setup review environment |
+| 3     | `pwrl-review-analyze`    | Execute code review, find issues |
+| 4     | `pwrl-review-report`     | Report verdict (APPROVED/REQUEST CHANGES/REJECTED) |
 
-- **Main workflow** ([SKILL.md](pwrl-review/SKILL.md)): 142 lines covering review workflow and depth control
-- **Severity guide** ([references/severity-guide.md](pwrl-review/references/severity-guide.md)): P0-P3 definitions with calibration examples
-- **Subagent protocol** ([references/subagent-protocol.md](pwrl-review/references/subagent-protocol.md)): Parallel reviewer orchestration details
+**Reference Material:**
+- `pwrl-review/SKILL.md` — Review workflow and verdict flow
+- `pwrl-review/references/severity-guide.md` — P0-P3 issue severity definitions
 
-**Tip:** Start with the main `SKILL.md` file for any skill. Consult `references/` files when you need deep detail or examples.
+### `/pwrl-learnings` — Learning Capture Orchestrator
+
+**Micro-Skills (5 phases):**
+
+| Phase | Skill                        | Purpose |
+| ----- | ---------------------------- | ------- |
+| 1     | `pwrl-learnings-extract`     | Extract patterns from work |
+| 2     | `pwrl-learnings-classify`    | Categorize learning type (pattern/technical-fix/gotcha/decision/workflow) |
+| 3     | `pwrl-learnings-dedup`       | Check for duplicates |
+| 4     | `pwrl-learnings-save`        | Save to persistent storage |
+| 5     | `pwrl-learnings-structure`   | Update learnings INDEX |
+
+**Reference Material:**
+- `pwrl-learnings/SKILL.md` — Learning capture workflow
+- `pwrl-learnings/references/categories.md` — Learning category reference
+- `pwrl-learnings/references/schema.yaml` — Frontmatter field definitions
+
+### `/pwrl-end-session` — Session Finalization Orchestrator
+
+**Micro-Skills (2 phases):**
+
+| Phase | Skill                            | Purpose |
+| ----- | -------------------------------- | ------- |
+| 1     | `pwrl-end-session-checkpoint`    | Save checkpoint state |
+| 2     | `pwrl-end-session-commit`        | Create clean commit with learnings |
+
+**Reference Material:**
+- `pwrl-end-session/SKILL.md` — Session finalization workflow
+
+### Standalone Skills
+
+- **`/pwrl-tasks`** — Break plans into granular task files with optional GitHub Issues integration
+- **`/pwrl-refresh-learnings`** — Maintain learnings (refresh, dedup, update after refactors)
+- **`/pwrl-update-learnings`** — Sync learnings INDEX after session commits
+- **`/pwrl-testing`** — Testing and validation utilities
+
+**Tip:** Start with the main `SKILL.md` file for any skill. Consult `references/` subdirectories when you need deep detail or examples.
 
 ---
 

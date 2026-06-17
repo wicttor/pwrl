@@ -107,74 +107,49 @@ When you need deeper guidance:
 
 The work execution workflow is orchestrated by agents when available, or runs in monolithic mode as a fallback. Understanding both modes helps you execute effectively.
 
-### Execution Workflow (Five Phases)
+### Execution Workflow (Four Phases)
 
-When you call `/pwrl-work [task/plan/prompt]`, the workflow proceeds in five phases:
+When you call `/pwrl-work [task/plan/prompt]`, the workflow proceeds through four phases (plus Phase 0 for triage):
 
-**Phase 1: Triage** (`pwrl-work-triage`)
+**Phase 0: Triage** (`pwrl-work-triage`)
 
 - Classify work input (task file, plan, or bare prompt)
 - Extract context and requirements
-- Bootstrap implementation approach
+- Select interaction mode (Detailed or Yolo)
 - Set up initial work state
 
-**Phase 2: Prepare** (`pwrl-work-prepare`)
+**Phase 1: Prepare** (`pwrl-work-prepare`)
 
 - Set up execution environment
-- Create subtask lists if needed
-- Choose execution mode (inline, serial, parallel)
-- Review environment readiness
+- Verify repository state
+- Resolve ambiguities
+- Move task file from `to-do/` to `in-progress/`
 
-**Phase 3: Execute** (`pwrl-work-execute`)
+**Phase 2: Execute** (`pwrl-work-execute`)
 
-- Implement work according to selected mode
-- Write tests first (TDD discipline)
+- Implement work with test-first discipline
+- Write tests first (TDD)
 - Build features incrementally
-- Verify tests pass after each change
+- Verify tests pass
+- Move task file from `in-progress/` to `for-review/` on success
 
-**Phase 4: Review** (`pwrl-work-review`)
+**Phase 3: Review** (`pwrl-work-review`)
 
+- Code review and quality checks
 - Simplify and consolidate code
-- Check for duplication and clarity
 - Verify edge cases handled
-- Finalize code changes and prepare branch for pull request
+- Confirm readiness for PR
 
-The work execution workflow runs through these five phases:
+The work execution workflow runs through these four phases:
 
-**Triage** → **Prepare** → **Execute** → **Review** → **Finalize**
+**Triage** → **Prepare** → **Execute** → **Review**
 
-Each phase has a user checkpoint for review and adjustment before proceeding. You select your interaction mode during Phase 0 (Triage):
+Each phase has checkpoints. You select your interaction mode during Phase 0 (Triage):
 
-- **Detailed Mode:** Review and confirm at each phase
-- **Yolo Mode:** Automated through Phase 3, final confirmation at Phase 4
+- **Detailed Mode:** Review and confirm at each phase transition
+- **Yolo Mode:** Automated through Phase 2, final confirmation at Phase 3
 
-See `pwrl-work/SKILL.md` for complete Phase 0-4 logic and `pwrl-work/references/workflow-details.md` for execution modes and task status rules.
-
-### Execution Modes
-
-During Phase 1 (Prepare), you select an execution mode for your work:
-
-**Inline Mode:**
-
-- Single focused task
-- Implement directly without subtasks
-- Best for small, straightforward work
-- Fastest for 1-3 file changes
-
-**Serial Mode:**
-
-- Multiple subtasks executed one-by-one
-- Dependencies handled automatically
-- Best for linear workflows with clear order
-- Default for complex work
-
-**Parallel Mode (Agent-Enhanced Only):**
-
-- Multiple independent subtasks run concurrently
-- Requires agent orchestration
-- Best for team collaboration or large features
-- Each subtask has isolated context and execution
-- Results consolidated in Phase 3 (Review)
+See `pwrl-work/SKILL.md` for complete Phase 0-3 logic and `pwrl-work/references/` for execution modes and task status rules.
 
 ### Interaction Modes
 
@@ -184,14 +159,14 @@ During Phase 0 (Triage), you select an interaction mode:
 
 - Review and confirm at each phase transition
 - Inspection of generated artifacts
-- Approval gates at Prepare → Execute → Review → Finalize
+- Approval gates at Prepare → Execute → Review
 - Slower but maximum control and visibility
 - Best for: Complex work, unfamiliar codebases, learning
 
 **Yolo Mode (Full Automation):**
 
-- Fully automated from Phase 1 through Phase 3
-- Review and confirm only at Phase 4 finalization
+- Fully automated from Phase 1 through Phase 2
+- Review and confirm only at Phase 3 review
 - Faster execution
 - Best for: Straightforward tasks, well-understood scope, time-sensitive work
 

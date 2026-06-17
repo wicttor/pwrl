@@ -6,6 +6,12 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-06-16
+
+### Fixed
+
+- Moved `repoVersion` extraction before skills directory setup in `initProject()` so version is available for comparison before skills are copied
+
 ## [1.2.1] - 2026-06-16
 
 ### Removed

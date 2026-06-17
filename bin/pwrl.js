@@ -139,6 +139,10 @@ async function initProject() {
     console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     console.log('Setting up PWRL...\n');
 
+    // Get repo version from package.json (before trying to copy skills)
+    const packageJson = require(path.join(PWRL_DIR, 'package.json'));
+    const repoVersion = packageJson.version;
+
     // Create skills directory and copy bundled skills into project
     try {
       const fullSkillsPath = path.join(cwd, skillsPath);
@@ -208,10 +212,6 @@ async function initProject() {
 
         return 0; // Versions are equal
       }
-
-      // Get repo version from package.json
-      const packageJson = require(path.join(PWRL_DIR, 'package.json'));
-      const repoVersion = packageJson.version;
 
       // Load existing config to get previously installed version
       let previousVersion = '0.0.0';

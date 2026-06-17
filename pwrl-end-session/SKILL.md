@@ -1,83 +1,129 @@
 ---
 name: pwrl-end-session
-description: Create a single clear commit at session end capturing state and next steps.
+description: Create a clear session commit with state and next steps. Orchestrates checkpoint and commit micro-skills, optionally chains to pwrl-learnings.
 argument-hint: "[Optional: reason for ending session or switching tasks]"
 ---
 
 # PWRL End Session
 
-Create a single well-documented commit when a work session ends, capturing state and next steps.
+Preserve session context with a well-documented commit capturing state, decisions, and next steps.
 
 ## Purpose
 
-- Preserve context for the next session (what changed, why, and what’s next)
-- Ensure attribution via an `[AGENT: ...]` trailer
-- Keep release metadata consistent when a version is bumped
+End a work session cleanly by creating a single, clear commit that captures progress and context for the next session:
+
+- Verify repository state and summarize changes
+- Draft a descriptive commit message with decisions and next steps
+- Create commit with mandatory `[AGENT: ...]` attribution
+- Optionally extract learnings from the session work
 
 ## Usage
 
 ```bash
 /pwrl-end-session                           # End current session
-/pwrl-end-session "switching to bugfix"     # End with context note
+/pwrl-end-session "switching to bugfix"     # End with reason note
 ```
 
-After a successful commit, this skill should chain into `/pwrl-update-learnings` to keep `docs/learnings/INDEX.md` synchronized.
+After commit succeeds, optionally chain to `/pwrl-learnings` to capture session insights.
 
 ## Support Files
 
-- `references/commit-message-examples.md` — Example commit messages for common scenarios
+- `references/commit-message-examples.md` — Example messages for common scenarios
+
+## Architecture
+
+**Pure Skill Pipeline** — Direct sequence of 2 micro-skills (checkpoint and commit), optionally followed by learnings extraction:
+
+```
+Input
+  ↓
+Phase 1: pwrl-end-session-checkpoint (micro-skill)
+  ├ Input: Reason (optional)
+  ├ Processing: Verify state, confirm completion
+  ├ Output: Checkpoint artifact (approved_files, session_summary)
+  ↓
+Phase 2: pwrl-end-session-commit (micro-skill)
+  ├ Input: Checkpoint artifact
+  ├ Processing: Draft message, create commit
+  ├ Output: Commit artifact (commit_sha, message)
+  ↓
+Phase 3 (Optional): Chain to pwrl-learnings
+  ├ Input: Commit SHA and session context
+  ├ Processing: Extract and save session learnings
+  ├ Output: Learning documents saved
+  ↓
+COMPLETE
+```
 
 ## Workflow
 
-### Phase 1: Pre-flight Check
+### Phase 1: Checkpoint (pwrl-end-session-checkpoint)
 
-1. Check working tree state (e.g., `git status` or platform changed-files tool).
-2. If there are no changes, inform the user and exit.
-3. Review changed files and confirm what will be included in the commit.
+**Purpose:** Verify repository state and get session completion confirmation
 
-### Phase 2: Confirm Completion
+**Input:** Optional reason/context from user
 
-1. Ask the user to confirm the session is ready to be closed.
-2. If not, summarize incomplete work and exit without committing.
+**Processing:** (See `pwrl-end-session-checkpoint/references/checkpoint-protocol.md`)
 
-### Phase 3: Prepare Commit Message
+1. Check working tree state (git status, changed files tool)
+2. If no changes, inform user and exit
+3. Review changed files and ask for confirmation
+4. Confirm session is ready to close (incomplete work → show next steps)
+5. Generate checkpoint artifact with approved files and summary
 
-1. Draft a commit subject (imperative mood, ≤50 chars).
-2. Write a body that explains why, highlights key decisions, and lists next steps if work is partial.
-3. Append `[AGENT: <agent name>]` as the last line (mandatory).
-4. Show the full message to the user and apply any edits they request.
+**Output:** Checkpoint artifact with approved_files, session_summary, user_confirmation
 
-### Phase 4: Create Commit
+### Phase 2: Create Commit (pwrl-end-session-commit)
 
-1. Stage approved files and verify staging state.
-2. Create the commit and capture the commit SHA.
-3. If a version bump is detected, update `CHANGELOG.md` and (optionally) create an annotated tag `v<version>`.
-4. Remind the user that pushing is manual and controlled by them.
+**Purpose:** Prepare commit message and create commit with proper attribution
 
-### Phase 5: Post-Commit Learnings Index Sync
+**Input:** Checkpoint artifact
 
-1. If possible, invoke `/pwrl-update-learnings` (default scope: `changed-only`).
-2. If automatic chaining isn’t available, instruct the user to run `/pwrl-update-learnings`.
-3. Include the commit SHA and index sync result in the final summary.
+**Processing:** (See `pwrl-end-session-commit/references/commit-protocol.md`)
+
+1. Draft commit subject (imperative, ≤50 chars)
+2. Write body: explain why, highlight key decisions, list next steps if partial
+3. Append `[AGENT: <agent-name>]` trailer (mandatory)
+4. Show full message and apply user edits
+5. Detect version bump and update `CHANGELOG.md` if needed
+6. Stage files and create commit
+7. Generate commit artifact with commit SHA
+
+**Output:** Commit artifact with commit_sha, message, version_bumped
+
+### Phase 3: Document Learnings (Optional Chain)
+
+**Purpose:** Capture session insights and learnings
+
+**Input:** Commit SHA and session context
+
+**Processing:** Chain to `/pwrl-learnings` with changed files from commit
+
+- User can opt in or skip
+- pwrl-learnings handles extraction, classification, dedup, and save
+- All learnings automatically include commit SHA as reference
+
+**Output:** Learning documents saved in docs/learnings/
 
 ## Rules
 
-- **Verify working tree** before starting (check for changes)
-- **Agent trailer mandatory**: Every commit must include `[AGENT: ...]` on last line
-- **No automatic push**: Never push to remote automatically; user controls when to push
-- **User approval required**: Always present commit message for user confirmation before committing
-- **Changelog on version bump**: If the version changed, stage a changelog entry in the commit
-- **Index sync**: Run `/pwrl-update-learnings` after commit (or provide manual fallback)
+- ✓ Verify working tree before starting
+- ✓ Agent trailer mandatory: `[AGENT: ...]` on last line
+- ✓ No automatic push (user controls push timing)
+- ✓ User approval required for commit message
+- ✓ Changelog updated on version bump
+- ✓ Learnings extraction is optional, user decides
 
 ## Best Practices
 
-- If work is partial, make next steps explicit and actionable in the commit body.
-- Link to the plan/task file that guided the session when applicable.
-- Keep the commit message readable (wrap at ~72 chars).
+- Make incomplete work actionable: list specific next steps in body
+- Link to task/plan file if applicable (e.g., "Completed: `docs/tasks/...`")
+- Keep message readable (wrap at ~72 chars)
+- Include context about why work ended here (partial, blocked, switching focus)
 
 ## Acceptance Criteria
 
-- **Input**: User confirms session completion and there are changes to commit
-- **Output**: Created commit containing `[AGENT: ...]` trailer and descriptive body
-- **Version bump**: If version changed, updated `CHANGELOG.md` is staged in the commit
-- **Verification**: Commit SHA returned and displayed; learnings index sync executed (or manual fallback provided)
+- Input: User confirms session completion and there are changes
+- Output: Created commit with `[AGENT: ...]` trailer and descriptive body
+- Version bump: Updated `CHANGELOG.md` staged in commit if version changed
+- Verification: Commit SHA displayed; learnings extraction offered as optional next step

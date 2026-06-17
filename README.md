@@ -1,8 +1,8 @@
-![created using ai](thumbnail.png)
+![created using ai](thumbnail.png?t=20260616)
 
-**Plan. Work. Review. Learn.** — A disciplined agentic development framework.
+**Plan. Work. Review. Learn.** — A disciplined skill-based development framework.
 
-Stop vibing, start shipping. PWRL turns chaotic AI-assisted coding into predictable, high-quality software delivery.
+Stop vibing, start shipping. PWRL turns chaotic AI-assisted coding into predictable, high-quality software delivery using composable, reusable skills.
 
 ---
 
@@ -16,7 +16,6 @@ npm install -g @wicttor/pwrl
 pwrl init
 
 # Skills will be copied to .agents/skills/ (or your custom location)
-# Agents will be copied to .agents/agents/ (orchestrators)
 # Configuration saved in .pwrlrc.json
 
 # Use in your AI assistant
@@ -56,41 +55,40 @@ pwrl init
 | **`/pwrl-update-learnings`**  | Sync learnings index              | After session commit       |
 | **`/pwrl-end-session`**       | Clean commits                     | End of every session       |
 
-### Agent-Orchestrated Workflows (Internal)
+### Skill-Based Workflows
 
-When agents are enabled, PWRL uses agents to orchestrate multi-phase workflows with user feedback at each checkpoint.
+PWRL orchestrates work through composable skills that run in sequence:
 
-#### Planning Agent: `/pwrl-plan`
+**Planning Workflow:**
 
-Delegates to the **PWRL Planner Agent**, which orchestrates four micro-skills in sequence:
+`/pwrl-plan` orchestrates four phases in sequence:
 
-| Micro-Skill              | Phase | Purpose                                   |
-| ------------------------ | ----- | ----------------------------------------- |
-| **`pwrl-plan-scope`**    | S1    | Gather context, validate domain           |
-| **`pwrl-plan-research`** | S2    | Discover patterns, detect high-risk areas |
-| **`pwrl-plan-design`**   | S3    | Decompose into implementation units       |
-| **`pwrl-plan-generate`** | S4    | Select tier, render plan, save to docs    |
+| Phase | Skill                    | Purpose                                   |
+| ----- | ------------------------ | ----------------------------------------- |
+| S1    | **`pwrl-plan-scope`**    | Gather context, validate domain           |
+| S2    | **`pwrl-plan-research`** | Discover patterns, detect high-risk areas |
+| S3    | **`pwrl-plan-design`**   | Decompose into implementation units       |
+| S4    | **`pwrl-plan-generate`** | Select tier, render plan, save to docs    |
 
-#### Work Agent: `/pwrl-work`
+**Execution Workflow:**
 
-Delegates to the **PWRL Work Agent**, which orchestrates five micro-skills in sequence:
+`/pwrl-work` orchestrates five phases in sequence:
 
-| Micro-Skill             | Phase | Purpose                                    |
-| ----------------------- | ----- | ------------------------------------------ |
-| **`pwrl-work-triage`**  | W1    | Classify input and extract context         |
-| **`pwrl-work-prepare`** | W2    | Set up environment and create task lists   |
-| **`pwrl-work-execute`** | W3    | Implement tasks (inline, serial, parallel) |
-| **`pwrl-work-review`**  | W4    | Simplify code and consolidate changes      |
-| **`pwrl-work-ship`**    | W5    | Finalize, approve, and commit work         |
+| Phase | Skill                    | Purpose                                    |
+| ----- | ------------------------ | ------------------------------------------ |
+| W0    | **`pwrl-work-triage`**   | Classify input and extract context         |
+| W1    | **`pwrl-work-prepare`**  | Set up environment and create task lists   |
+| W2    | **`pwrl-work-execute`**  | Implement tasks (inline, serial, parallel) |
+| W3    | **`pwrl-work-review`**   | Simplify code and consolidate changes      |
+| W4    | **`pwrl-work-finalize`** | Prepare branch for PR                      |
 
 **How it works:**
 
-- **With Agents Enabled:** `/pwrl-plan [task]` or `/pwrl-work [file]` → Agent orchestrates phases automatically, collecting user approval at each checkpoint
-- **Without Agents (Fallback):** Runs all phases inline within the main workflow
+- **Direct invocation:** `/pwrl-plan [task]` → Runs all four phases in sequence
+- **Or call skills individually:** `/pwrl-plan-scope`, `/pwrl-plan-research`, etc. (for fine-grained control)
+- Same with `/pwrl-work` — runs all five phases or call individual skills
 
-**Setup:** See [INSTALLATION.md](INSTALLATION.md#agent-setup) for enabling agents on your platform.
-
-**Note:** Micro-skills can also be called directly (e.g., `/pwrl-plan-scope`) if agents are unavailable or you need fine-grained control. However, most users invoke `/pwrl-plan` and `/pwrl-work` only, with agent routing happening automatically.
+**All workflows run inline** — No external orchestrators needed.
 
 ---
 
@@ -98,24 +96,25 @@ Delegates to the **PWRL Work Agent**, which orchestrates five micro-skills in se
 
 ![created using ai](flow.png)
 
-**Agent-Orchestrated (Recommended):**
+**Skill Execution Flow:**
+
 ```
 /pwrl-plan
   ├─ pwrl-plan-scope → pwrl-plan-research → pwrl-plan-design → pwrl-plan-generate
   └─ Output: docs/plans/YYYY-MM-DD-NNN-<name>.md
 
 /pwrl-work
-  ├─ pwrl-work-triage → pwrl-work-prepare → pwrl-work-execute → pwrl-work-review → pwrl-work-ship
-  └─ Output: Committed code with status updates
+  ├─ pwrl-work-triage → pwrl-work-prepare → pwrl-work-execute → pwrl-work-review → pwrl-work-finalize
+  └─ Output: Feature branch ready for manual PR creation
 
-Optional: /pwrl-review (for explicit review before merge)
+/pwrl-review (for explicit review before PR)
 /pwrl-learnings
 /pwrl-end-session
 ```
 
-**Without Agents (Fallback):** All phases run inline within `/pwrl-plan` and `/pwrl-work` automatically.
+Skills execute sequentially — Complete workflows from planning through commit with phase-based interactions and status tracking.
 
-**Task Status Flow:** `to-do` → `in-progress` → `for-review` → `done`
+**Task Status Flow:** `to-do` → `in-progress` → `for-review` (awaits PR merge)
 
 **Optional:** Use `/pwrl-tasks` to break plans into granular task files with GitHub Issues integration.
 
@@ -185,20 +184,30 @@ You can reconfigure at any time by running `pwrl init` again or editing `.pwrlrc
 
 # 3. Work on First Task
 /pwrl-work docs/tasks/to-do/2026-05-04-u1-add-user-model.md
-# Executes orchestrated workflow:
-# - Triage: Classify task context
-# - Prepare: Set up environment, create subtasks
-# - Execute: Implement with tests (inline, serial, or parallel)
+# Executes orchestrated workflow (choose interaction mode: Detailed or Yolo):
+# - Triage: Classify task context, select interaction mode
+# - Prepare: Set up environment, move task to in-progress/
+# - Execute: Implement with tests (inline, serial, or parallel), move task to for-review/
 # - Review: Simplify and consolidate changes
-# - Ship: Finalize and commit
+# - Finalize: Prepare branch for PR (stays on feature branch)
 # - GitHub: Updates issue status if integration enabled
 
-# 4. Continue with Remaining Tasks
+# 4. Review and Approve Tasks
+/pwrl-review
+# Approved: Move to next task or create PR
+# Changes needed: Mark for-review/ task back to in-progress/ for revision
+
+# 5. Continue with Remaining Tasks
 /pwrl-work docs/tasks/to-do/2026-05-04-u2-auth-middleware.md
 /pwrl-work docs/tasks/to-do/2026-05-04-u3-auth-endpoints.md
 # Repeat workflow for each unit
 
-# 5. Learn & Commit
+# 6. Create Pull Request
+# When all tasks are approved and in for-review/:
+git push origin feature-branch
+# Open PR via GitHub or `gh pr create`
+
+# 7. Learn & Commit
 /pwrl-learnings
 # Documents in docs/learnings/:
 # - JWT token refresh pattern learned
@@ -206,7 +215,7 @@ You can reconfigure at any time by running `pwrl init` again or editing `.pwrlrc
 # - Test strategy for async auth flows
 
 /pwrl-end-session
-# Creates clean commit with all tasks completed
+# Creates clean commit with learnings captured
 ```
 
 **Time saved vs vibe coding:** ~50%
@@ -225,7 +234,7 @@ pwrl init
 cd your-project
 npm install --save-dev @wicttor/pwrl
 npx @wicttor/pwrl init
-# This will copy bundled skills into .agents/skills/ and agents into .agents/agents/ in your project
+# This will copy bundled skills into .agents/skills/ in your project
 ```
 
 See [INSTALLATION.md](INSTALLATION.md) for platform-specific setup.
@@ -272,10 +281,7 @@ your-project/
       pwrl-work/
       pwrl-review/
       pwrl-learnings/
-      ...
-    agents/                   # PWRL agents (orchestrators, optional)
-      pwrl-planner.agent.md
-      pwrl-work.agent.md
+      ....
   docs/
     plans/                    # Implementation plans
       2026-05-04-auth.md
@@ -283,8 +289,8 @@ your-project/
       INDEX.md                # Task overview and dependencies
       to-do/                  # Ready to implement
       in-progress/            # Currently being worked
-      for-review/             # Awaiting review
-      done/                   # Completed and approved
+      for-review/             # Awaiting code review
+      done/                   # Approved by /pwrl-review, ready for PR
     learnings/                # Knowledge base
       technical-fix/
       pattern/

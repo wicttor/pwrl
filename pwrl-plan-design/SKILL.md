@@ -28,7 +28,7 @@ If inputs are missing, search for recent `.scope` and `.research` files in `docs
 
 After completing the workflow, produce an implementation units block:
 
-```yaml
+````yaml
 design-id: YYYY-MM-DD-NNN-design
 status: complete
 
@@ -40,7 +40,8 @@ status: complete
 ```mermaid
 sequenceDiagram
     ...
-```
+````
+
 ```
 
 ## Units
@@ -109,6 +110,7 @@ Present the completed unit to the user for confirmation before creating the next
 ### Step 5: Assign Dependencies
 
 After all units are defined:
+
 1. Review dependency chain.
 2. If user specified custom dependencies, validate they form a DAG (no circular dependencies).
 3. If cycles found, ask user to resolve.
@@ -118,13 +120,13 @@ After all units are defined:
 
 Determine the tier hint based on unit count and complexity:
 
-| Unit Count | Risk Level | Tier Hint  |
-| ---------- | ---------- | ---------- |
-| 1-3        | LOW        | Fast       |
-| 1-3        | HIGH       | Standard   |
-| 4-8        | any        | Standard   |
-| 9+         | any        | Deep       |
-| any        | HIGH + 9+  | Deep       |
+| Unit Count | Risk Level | Tier Hint |
+| ---------- | ---------- | --------- |
+| 1-3        | LOW        | Fast      |
+| 1-3        | HIGH       | Standard  |
+| 4-8        | any        | Standard  |
+| 9+         | any        | Deep      |
+| any        | HIGH + 9+  | Deep      |
 
 The hint is advisory. The generate skill (S5) uses it for template selection. The user can override in S5.
 

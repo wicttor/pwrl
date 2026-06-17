@@ -30,22 +30,6 @@ Skills:
   The PWRL skills (pwrl-plan, pwrl-work, pwrl-review, etc.) are invoked
   through your AI assistant, not via this CLI.
 
-  Agent-Enhanced (Recommended):
-    When agents are enabled, /pwrl-plan and /pwrl-work orchestrate multi-phase
-    workflows with user checkpoints for better control and feedback.
-
-    Planning: /pwrl-plan → Planner Agent → 4 phases
-    Work: /pwrl-work → Work Agent → 5 phases
-
-  Fallback Mode:
-    Without agents, all workflows run inline automatically with same logic.
-
-  Platform Examples:
-    - GitHub Copilot: Agents auto-discovered in .agents/agents/
-    - Cursor: Agents auto-discovered in .agents/agents/
-    - Claude: Add .agents/agents/ to Claude Project
-    - Others: Reference skill workflows in context
-
 Documentation:
   - README.md         Quick overview
   - INSTALLATION.md   Setup for different AI assistants
@@ -72,7 +56,7 @@ Available Skills:
   - pwrl-update-learnings  Sync learnings index
   - pwrl-end-session       Clean commit at session end
 
-Micro-Skills (usually called by agents):
+Micro-Skills:
   Planning:
   - pwrl-plan-scope        Phase 1: Gather context and validate domain
   - pwrl-plan-research     Phase 2: Discover patterns and high-risk areas
@@ -84,7 +68,6 @@ Micro-Skills (usually called by agents):
   - pwrl-work-prepare      Phase 2: Set up environment and create task lists
   - pwrl-work-execute      Phase 3: Implement tasks (inline, serial, or parallel)
   - pwrl-work-review       Phase 4: Simplify and consolidate code
-  - pwrl-work-ship         Phase 5: Finalize and commit work
 
   Other:
   - pwrl-tasks             Break plans into granular executable task files
@@ -156,6 +139,10 @@ async function initProject() {
     console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     console.log('Setting up PWRL...\n');
 
+    // Get repo version from package.json (before trying to copy skills)
+    const packageJson = require(path.join(PWRL_DIR, 'package.json'));
+    const repoVersion = packageJson.version;
+
     // Create skills directory and copy bundled skills into project
     try {
       const fullSkillsPath = path.join(cwd, skillsPath);
@@ -190,11 +177,69 @@ async function initProject() {
         }
       }
 
+      function removeRecursiveSync(dir) {
+        const stat = fs.statSync(dir);
+        if (stat.isDirectory()) {
+          fs.readdirSync(dir).forEach(child => {
+            removeRecursiveSync(path.join(dir, child));
+          });
+          fs.rmdirSync(dir);
+        } else {
+          fs.unlinkSync(dir);
+        }
+      }
+
+      function compareVersions(v1, v2) {
+        // Parse versions: "1.2.3" or "1.2.3-dev.2"
+        const parse = (v) => {
+          const parts = v.split('-');
+          const nums = parts[0].split('.').map(n => parseInt(n, 10));
+          const prerelease = parts.slice(1).join('-');
+          return { major: nums[0] || 0, minor: nums[1] || 0, patch: nums[2] || 0, prerelease };
+        };
+
+        const parsed1 = parse(v1);
+        const parsed2 = parse(v2);
+
+        // Compare major.minor.patch
+        if (parsed2.major !== parsed1.major) return parsed2.major > parsed1.major ? 1 : -1;
+        if (parsed2.minor !== parsed1.minor) return parsed2.minor > parsed1.minor ? 1 : -1;
+        if (parsed2.patch !== parsed1.patch) return parsed2.patch > parsed1.patch ? 1 : -1;
+
+        // If base versions are same, prerelease versions are older
+        if (!parsed1.prerelease && parsed2.prerelease) return 1; // v1 is newer (stable)
+        if (parsed1.prerelease && !parsed2.prerelease) return -1; // v2 is newer (stable)
+
+        return 0; // Versions are equal
+      }
+
+      // Load existing config to get previously installed version
+      let previousVersion = '0.0.0';
+      if (fs.existsSync(configPath)) {
+        try {
+          const existingConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+          previousVersion = existingConfig.pwrlVersion || '0.0.0';
+        } catch (e) {
+          // Config file exists but is invalid, proceed with default
+        }
+      }
+
+      const versionCmp = compareVersions(previousVersion, repoVersion);
+
       bundledSkills.forEach(skill => {
         const src = path.join(PWRL_DIR, skill);
         const dest = path.join(fullSkillsPath, skill);
         if (fs.existsSync(dest)) {
-          console.log(`  - Skill already exists: ${path.join(skillsPath, skill)}`);
+          if (versionCmp < 0) {
+            // New version is newer, update the skill
+            removeRecursiveSync(dest);
+            copyRecursiveSync(src, dest);
+            console.log(`✓ Updated skill: ${skill}`);
+          } else if (versionCmp === 0) {
+            console.log(`  - Skill already up-to-date: ${skill}`);
+          } else {
+            console.log(`  - Local skills are newer than bundled version`);
+          }
         } else {
           copyRecursiveSync(src, dest);
           console.log(`✓ Copied skill: ${skill} -> ${path.join(skillsPath, skill)}`);
@@ -204,39 +249,10 @@ async function initProject() {
       console.error(`✗ Failed to copy skills to ${skillsPath}/:`, err.message);
     }
 
-    // Copy agents to .agents/agents/
-    try {
-      const agentsPath = path.join(cwd, '.agents', 'agents');
-      const bundledAgentsPath = path.join(PWRL_DIR, 'agents');
-
-      if (fs.existsSync(bundledAgentsPath)) {
-        if (!fs.existsSync(agentsPath)) {
-          fs.mkdirSync(agentsPath, { recursive: true });
-          console.log('✓ Created .agents/agents/');
-        }
-
-        function copyRecursiveSync(src, dest) {
-          const stat = fs.statSync(src);
-          if (stat.isDirectory()) {
-            if (!fs.existsSync(dest)) fs.mkdirSync(dest);
-            fs.readdirSync(src).forEach(child => {
-              copyRecursiveSync(path.join(src, child), path.join(dest, child));
-            });
-          } else {
-            fs.copyFileSync(src, dest);
-          }
-        }
-
-        copyRecursiveSync(bundledAgentsPath, agentsPath);
-        console.log('✓ Copied agents to .agents/agents/');
-      }
-    } catch (err) {
-      console.error(`✗ Failed to copy agents:`, err.message);
-    }
-
     // Save configuration
     const config = {
       version: '1.0',
+      pwrlVersion: repoVersion,
       skillsPath: skillsPath,
       integrations: {
         githubIssues: enableGitHubIssues
@@ -274,11 +290,9 @@ async function initProject() {
     console.log(`  GitHub Issues:   ${enableGitHubIssues ? 'Enabled' : 'Disabled'}\n`);
     console.log('Project structure:');
     console.log(`  ${skillsPath}/        (PWRL skills)`);
-    console.log('  .agents/agents/         (PWRL agents - orchestrators)\n');
     console.log('Next steps:');
-    console.log('  1. Enable agents in your AI assistant (see INSTALLATION.md)');
-    console.log('  2. Start using PWRL skills: /pwrl-plan <your task description>');
-    console.log('  3. See QUICKSTART.md for example workflows\n');
+    console.log('  1. Start using PWRL skills: /pwrl-plan <your task description>');
+    console.log('  2. See QUICKSTART.md for example workflows\n');
     console.log('Documentation:');
     console.log('  pwrl docs    Open documentation');
     console.log('  pwrl info    Show skill locations\n');

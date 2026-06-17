@@ -189,45 +189,6 @@ describe('pwrl-work-review', () => {
   });
 });
 
-describe('pwrl-work-ship', () => {
-  const SKILL = path.join(ROOT, 'pwrl-work-ship', 'SKILL.md');
-
-  it('SKILL.md exists', () => {
-    assert.ok(fileExists(SKILL), 'pwrl-work-ship/SKILL.md must exist');
-  });
-
-  it('has valid YAML frontmatter', () => {
-    const content = fs.readFileSync(SKILL, 'utf-8');
-    const fm = parseFrontmatter(content);
-    assert.ok(fm, 'Must have YAML frontmatter');
-    assert.equal(fm.name, 'pwrl-work-ship');
-  });
-
-  it('has final quality checks', () => {
-    const content = fs.readFileSync(SKILL, 'utf-8');
-    assert.ok(content.includes('test') || content.includes('lint') || content.includes('check'),
-      'Must have final quality checks');
-  });
-
-  it('has user approval step', () => {
-    const content = fs.readFileSync(SKILL, 'utf-8');
-    assert.ok(content.includes('approv') || content.includes('Approv') || content.includes('confirm'),
-      'Must require user approval');
-  });
-
-  it('has commit/push logic', () => {
-    const content = fs.readFileSync(SKILL, 'utf-8');
-    assert.ok(content.includes('commit') || content.includes('Commit') || content.includes('push'),
-      'Must handle commits');
-  });
-
-  it('offers end-session', () => {
-    const content = fs.readFileSync(SKILL, 'utf-8');
-    assert.ok(content.includes('end-session') || content.includes('/pwrl-end-session'),
-      'Must offer end-session workflow');
-  });
-});
-
 // ---- pwrl-work main skill ----
 
 describe('pwrl-work/SKILL.md (main)', () => {
@@ -290,7 +251,6 @@ describe('cross-skill references', () => {
       'pwrl-work-prepare',
       'pwrl-work-execute',
       'pwrl-work-review',
-      'pwrl-work-ship',
       'pwrl-work-sync-status',
     ];
 
@@ -306,7 +266,6 @@ describe('cross-skill references', () => {
     assert.ok(content.includes('pwrl-work-prepare'), 'Must reference pwrl-work-prepare');
     assert.ok(content.includes('pwrl-work-execute'), 'Must reference pwrl-work-execute');
     assert.ok(content.includes('pwrl-work-review'), 'Must reference pwrl-work-review');
-    assert.ok(content.includes('pwrl-work-ship'), 'Must reference pwrl-work-ship');
   });
 });
 

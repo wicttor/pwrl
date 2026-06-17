@@ -4,7 +4,7 @@ Detailed rules for drafting commit messages, handling version bumps, and creatin
 
 ## Overview
 
-The commit phase takes the checkpoint artifact and creates a meaningful commit message that explains the session's work, decisions, and next steps. It detects version bumps, updates `CHANGELOG.md`, and creates the commit with mandatory agent attribution.
+The commit phase takes the checkpoint artifact and creates a meaningful commit message that explains the session's work, decisions, and next steps. It detects version bumps and updates `CHANGELOG.md` if needed.
 
 ## Phase 1: Draft Commit Message
 
@@ -50,10 +50,6 @@ Common verbs by session type:
 [Blank line]
 
 [Body paragraphs, wrapped at ~72 chars]
-
-[Blank line (if agent trailer follows)]
-
-[AGENT: agent-name]
 ```
 
 **Body Structure:**
@@ -96,24 +92,7 @@ Why: Prevent invalid email signups and duplicate account creation
 What: Added EmailValidator service, integrated into signup workflow
 Blockers: SMTP service integration pending in operations team
 Next: Frontend validation UI, email confirmation flow
-
-[AGENT: GitHub Copilot]
 ```
-
-### Agent Trailer
-
-**Mandatory:**
-
-- Always present
-- Always on last line
-- Format: `[AGENT: <agent-name>]`
-
-**Agent Names:**
-
-- `GitHub Copilot` — if using GitHub Copilot
-- `Claude` — if using Claude
-- User's name — if manual commit
-- Orchestrator name — if chained from another skill
 
 ## Phase 2: Handle Version Bump
 
@@ -181,7 +160,6 @@ Add email validation to user signup
 
 Version bumped: 1.1.0 → 1.2.0
 
-[AGENT: GitHub Copilot]
 ```
 
 ## Phase 3: User Approval
@@ -201,7 +179,6 @@ Validates email format and checks for existing accounts...
 
 Version bumped: 1.1.0 → 1.2.0
 
-[AGENT: GitHub Copilot]
 
 Files to commit:
   • src/validators/email.js
@@ -232,7 +209,7 @@ Approve this commit? (yes/edit/cancel)
 If user edits message:
 
 1. Validate subject ≤50 chars
-2. Validate agent trailer present and last line
+2. Validate last line
 3. Validate body structure (why/what/next)
 4. Re-show updated message
 5. Re-ask approval
@@ -325,7 +302,7 @@ Before returning artifact:
 
 - ✓ `commit_sha` matches git log
 - ✓ `message` contains both subject and body
-- ✓ `message` ends with agent trailer
+- ✓ `message` properly formatted
 - ✓ `version_bumped` is boolean
 - ✓ `files_committed` matches staged files
 - ✓ `timestamp` is ISO format
@@ -339,7 +316,7 @@ Commit succeeds when:
 - ✓ Files staged correctly
 - ✓ Commit created with git
 - ✓ Commit SHA captured
-- ✓ Agent trailer present and on last line
+- ✓ Commit message present and on last line
 - ✓ Artifact generated with all required fields
 
 ## Next: Phase 3 (Optional: Learnings)

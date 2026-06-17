@@ -29,7 +29,7 @@ Before a session commit, there's always a verification step (what changed? is it
 
 1. **Checkpoint as gate:** Commit doesn't happen without explicit user confirmation after reviewing changes
 2. **Structured commit messages:** Drafting is separated from verification, allowing focus on message quality
-3. **Agent attribution:** `[AGENT: ...]` trailer is enforced as a mandatory commit message component
+3. **Structured commit messages:** Drafting is separated from verification, allowing focus on message quality
 4. **Clean history:** Each commit represents a deliberate session boundary
 
 ## When to Use
@@ -65,7 +65,7 @@ Phase 3 (Learnings):
 
 1. **Pure pipeline, no branching** — Each phase has one input and one output; no conditional paths within phases
 2. **Explicit artifacts** — Each phase produces a typed artifact that serves as both output and input contract
-3. **Commit message template** — Imperative subject (≤50 chars), body with why/decisions/next steps, mandatory `[AGENT: ...]` trailer
+3. **Commit message template** — Imperative subject (≤50 chars), body with why/decisions/next steps (no mandatory attribution trailer)
 4. **No automatic push** — User retains control over when to push; commit is local only
 5. **Optional learnings chain** — Not forced; user decides after commit succeeds
 

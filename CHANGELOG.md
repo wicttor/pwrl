@@ -6,6 +6,21 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-06-16
+
+### Removed
+
+- Removed all PWRL agent infrastructure: agent orchestrator files and routing documentation (`pwrl-plan/references/agent-routing.md`, `pwrl-planner/references/error-recovery.md`, `pwrl-work-execute/references/cross-plan-task-coordination.md`)
+- Removed mandatory `[AGENT: ...]` attribution trailer from end-session commit protocol
+
+### Changed
+
+- Rebranded PWRL from "agentic" to "skill-based" development framework across all core documentation (README, GUIDE, QUICKSTART, INSTALLATION)
+- Updated `pwrl-review` skill with explicit verdict flow: APPROVED, REQUEST CHANGES, REJECTED including task file management
+- Removed agent setup sections from installation and quickstart guides
+- Added interaction modes (Detailed/Yolo) to work execution workflow documentation
+- Bumped package version to 1.2.1
+
 ## [1.2.0] - 2026-06-16
 
 ### Changed

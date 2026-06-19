@@ -10,7 +10,7 @@ argument-hint: "[branch name, unit ID, or PR number]"
 
 ## Interaction Method
 
-- Use the platform's `ask_user` tool for all user-facing decisions.
+- Use the platform's `ask_user_questions` extension for all user-facing decisions.
 - Ask one question at a time.
 - Show file categorization and scope verdict clearly before requesting approval.
 - If input is empty, ask: "What branch or PR would you like to review?"

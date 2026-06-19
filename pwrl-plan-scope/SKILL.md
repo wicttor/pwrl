@@ -10,7 +10,7 @@ argument-hint: "[task description, requirements doc, or goal to plan]"
 
 ## Interaction Method
 
-- Use the platform's `ask_user` tool for all user-facing decisions.
+- Use the platform's `ask_user_questions` extension for all user-facing decisions.
 - Ask one question at a time. Use follow-up questions to refine scope.
 - Use multiple-choice questions when possible (e.g., "Is this a new feature, a bug fix, or a refactor?").
 - If the input is empty, ask: "What would you like to plan? Describe the task or project."
@@ -63,7 +63,7 @@ This context is passed to `pwrl-plan-research` (S3) for the research phase.
 1. Search `docs/plans/` for existing plans related to the task.
 2. **If an existing plan is found:**
    - Read the plan to understand its title and goal.
-   - Ask the user via `ask_user` (multiple choice):
+   - Ask the user via `ask_user_questions` (multiple choice):
      ```
      An existing plan was found: "[Plan Title]"
      What would you like to do?
@@ -99,7 +99,7 @@ If no existing context was found (no plan, no brainstorms/requirements), bootstr
 2. **Intended Behavior:** Ask "What should happen after this is implemented? Describe the desired outcome."
 3. **Success Criteria:** Ask "How will we know this is complete? What specific outcomes define success?" Collect 1-3 criteria.
 
-If the user already provided rich context in the initial input, extract these from the input text and confirm with the user via `ask_user`.
+If the user already provided rich context in the initial input, extract these from the input text and confirm with the user via `ask_user_questions`.
 
 ### Step 4: Learnings Index Gate
 
@@ -119,7 +119,7 @@ Search project learnings (in `docs/learnings/INDEX.md`) for entries matching the
 
 ### Step 6: Confirm and Return Scoped Context
 
-1. Present the assembled scoped context to the user via `ask_user` for confirmation.
+1. Present the assembled scoped context to the user via `ask_user_questions` for confirmation.
 2. Ask: "Is this context correct? Should I proceed to the research phase?"
 3. **If confirmed:** Return the scoped context (markdown block as defined above).
 4. **If corrections needed:** Iterate through Steps 2-5 as needed based on user feedback.
@@ -137,7 +137,7 @@ The scoped context object is passed to `pwrl-plan-research` in markdown format w
 
 - **Source:** Phase 1 of `pwrl-plan/SKILL.md`
 - **Downstream:** `pwrl-plan-research` (S3) — receives scoped context
-- **Integration:** `ask_user` tool for all user decisions
+- **Integration:** `ask_user_questions` extension for all user decisions
 - **Learnings Index:** `docs/learnings/INDEX.md`
 - **Plan storage:** `docs/plans/`
 - **Brainstorms:** `docs/brainstorms/` (optional)

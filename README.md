@@ -27,6 +27,10 @@ pwrl init
 /pwrl-end-session
 ```
 
+### Recommended Extension (Optional)
+
+For the best experience, install the [`rpiv-ask-user-question`](https://pi.dev/packages/@juicesharp/rpiv-ask-user-question) extension. It powers the interactive confirmations used throughout PWRL's plan and review workflows (scope, research, design, generate, review). **Not required** — PWRL works without it, but interactive prompts will be less ergonomic. Install it through your agent's extension manager before running the skills above.
+
 **Result:** Complete, tested, documented feature with clean commit.
 
 ---

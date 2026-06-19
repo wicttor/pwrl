@@ -9,7 +9,7 @@ This file documents seven edge cases encountered during the scope-gathering phas
 **Handling:**
 
 1. Show a summary of the plan: title, date created, status, goal
-2. Ask via `ask_user`: "This plan was created on [date]. Is it still relevant, or should we create a new plan?"
+2. Ask via `ask_user_questions`: "This plan was created on [date]. Is it still relevant, or should we create a new plan?"
 3. Offer options:
    - **Resume:** Accept the old plan as-is and proceed
    - **Update:** Keep the plan but refresh context (learnings, requirements, tech stack)
@@ -29,7 +29,7 @@ This file documents seven edge cases encountered during the scope-gathering phas
 **Handling:**
 
 1. List all found plans with titles and dates
-2. Ask via `ask_user`: "Multiple plans found. Which one should I use, or create new?"
+2. Ask via `ask_user_questions`: "Multiple plans found. Which one should I use, or create new?"
 3. Offer options:
    - List each plan name (user selects one)
    - **None of these — create new**

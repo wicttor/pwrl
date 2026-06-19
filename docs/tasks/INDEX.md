@@ -18,15 +18,15 @@ plan: docs/plans/2026-06-05-001-slice-pwrl-plan-skill.md
 
 | Unit   | Task                            | Status | Dependencies           | Duration | Priority     |
 | ------ | ------------------------------- | ------ | ---------------------- | -------- | ------------ |
-| **S1** | Extract Templates Module        | done | —                   | 1-2h     | 🔴 Critical  |
-| **S2** | Create pwrl-plan-scope Skill    | done | S1                | 2-3h     | 🔴 Critical  |
-| **S3** | Create pwrl-plan-research Skill | done | S1, S2          | 2-3h     | 🔴 Critical  |
-| **S4** | Create pwrl-plan-design Skill   | done | S1, S2, S3      | 2-3h     | 🔴 Critical  |
-| **S5** | Create pwrl-plan-generate Skill | done | S1, S2, S3, S4      | 2-3h     | 🔴 Critical  |
-| **S6** | Create pwrl-planner.agent.md    | done | S2, S3, S4, S5         | 2-3h     | 🟡 Important |
-| **S7** | Update pwrl-plan Fallback       | done | S1, S2, S3, S4, S5     | 1-2h     | 🔴 Critical  |
-| **S8** | Update Documentation            | done | S2, S3, S4, S5, S6, S7 | 2-3h     | 🟡 Important |
-| **S9** | Integration Testing             | done | S1-S8               | 3-4h     | 🔴 Critical  |
+| **S1** | Extract Templates Module        | done   | —                      | 1-2h     | 🔴 Critical  |
+| **S2** | Create pwrl-plan-scope Skill    | done   | S1                     | 2-3h     | 🔴 Critical  |
+| **S3** | Create pwrl-plan-research Skill | done   | S1, S2                 | 2-3h     | 🔴 Critical  |
+| **S4** | Create pwrl-plan-design Skill   | done   | S1, S2, S3             | 2-3h     | 🔴 Critical  |
+| **S5** | Create pwrl-plan-generate Skill | done   | S1, S2, S3, S4         | 2-3h     | 🔴 Critical  |
+| **S6** | Create pwrl-planner.agent.md    | done   | S2, S3, S4, S5         | 2-3h     | 🟡 Important |
+| **S7** | Update pwrl-plan Fallback       | done   | S1, S2, S3, S4, S5     | 1-2h     | 🔴 Critical  |
+| **S8** | Update Documentation            | done   | S2, S3, S4, S5, S6, S7 | 2-3h     | 🟡 Important |
+| **S9** | Integration Testing             | done   | S1-S8                  | 3-4h     | 🔴 Critical  |
 
 **Estimated Total Time:** 17-26 hours (2-3 days for one developer)
 
@@ -227,7 +227,7 @@ Check dependency graph above. Cannot start task X until task Y is complete? Look
 1. Re-read the relevant task file and plan
 2. Check Related Learnings (if any exist)
 3. Check Acceptance Criteria (what must be true at end?)
-4. Ask clarifying questions (use `ask_user` tool)
+4. Ask clarifying questions (use `ask_user_questions` extension)
 
 ---
 

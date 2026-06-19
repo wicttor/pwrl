@@ -10,7 +10,7 @@ argument-hint: "[scoped context + research findings + implementation units]"
 
 ## Interaction Method
 
-- Use the platform's `ask_user` tool for confirmations and overrides.
+- Use the platform's `ask_user_questions` extension for confirmations and overrides.
 - Present tier selection and plan preview before saving.
 - Ask one question at a time. Use multiple-choice for tier override.
 
@@ -174,7 +174,7 @@ Before saving, validate:
 
 ### Step 7: Confirm and Save
 
-1. Present the plan preview to the user via `ask_user`:
+1. Present the plan preview to the user via `ask_user_questions`:
    - Show: tier selected, filename, first 500 characters of the plan
 2. Ask: "Shall I save this plan to `[filename]`?"
    - Options: Yes, Edit (iterate on sections), Cancel

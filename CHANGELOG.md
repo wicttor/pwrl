@@ -6,6 +6,13 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+## [1.2.5] - 2026-06-19
+
+### Changed
+
+- Renamed `ask_user` tool references to `ask_user_questions` extension across plan and review skill documentation (`pwrl-plan`, `pwrl-plan-scope`, `pwrl-plan-research`, `pwrl-plan-design`, `pwrl-plan-generate`, `pwrl-review-scope`, `pwrl-standards/SCHEMA.md`, `docs/tasks/INDEX.md`)
+- Bumped package version to 1.2.5
+
 ## [1.2.4] - 2026-06-16
 
 ### Changed

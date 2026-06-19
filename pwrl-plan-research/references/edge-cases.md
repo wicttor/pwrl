@@ -7,6 +7,7 @@ This file documents seven edge cases encountered during the research phase (S3) 
 **Condition:** The codebase search finds no existing implementations or patterns matching the task.
 
 **Handling:**
+
 1. Set confidence to LOW
 2. Document: "No local patterns found; design will be from first principles"
 3. If the task is high-risk: strongly recommend external research
@@ -22,9 +23,10 @@ This file documents seven edge cases encountered during the research phase (S3) 
 **Condition:** Two or more different approaches exist in the codebase for the same concept (e.g., `auth/jwt.ts` and `auth/session.ts` both in production).
 
 **Handling:**
+
 1. Document both patterns
 2. Identify the differences (trade-offs, contexts, versions)
-3. Ask user via `ask_user`: "Two different auth approaches exist in the codebase. Which should this task follow, or should we unify them?"
+3. Ask user via `ask_user_questions`: "Two different auth approaches exist in the codebase. Which should this task follow, or should we unify them?"
 4. Options:
    - **Follow JWT approach:** Document rationale
    - **Follow session approach:** Document rationale
@@ -40,11 +42,12 @@ This file documents seven edge cases encountered during the research phase (S3) 
 **Condition:** The codebase has no config files (`package.json`, `composer.json`, `requirements.txt`, `go.mod`, etc.) from which to detect frameworks, languages, or versions.
 
 **Handling:**
+
 1. Document: "Tech stack auto-detection failed. Tech stack unverified."
 2. Use alternative detection methods:
    - Inspect directory structure for clues (src/, app/, lib/, etc.)
-   - Examine file extensions (*.py → Python, *.go → Go, *.js → Node.js)
-   - Ask user via `ask_user`: "What's your tech stack? (e.g., Node.js v18, Express, PostgreSQL)"
+   - Examine file extensions (_.py → Python, _.go → Go, \*.js → Node.js)
+   - Ask user via `ask_user_questions`: "What's your tech stack? (e.g., Node.js v18, Express, PostgreSQL)"
 3. Collect tech stack info from user if available
 4. Pass to downstream skills with note: "Tech stack manually verified" or "Auto-detected"
 
@@ -55,6 +58,7 @@ This file documents seven edge cases encountered during the research phase (S3) 
 **Condition:** External research is recommended (high-risk + few patterns), but user declines.
 
 **Handling:**
+
 1. Proceed with local findings only
 2. Add a risk note to research findings: "External research was declined. Task involves high-risk area(s): [areas]. Proceed with caution."
 3. Pass this note to downstream skills (especially S5: generate)
@@ -70,6 +74,7 @@ This file documents seven edge cases encountered during the research phase (S3) 
 **Condition:** The task involves multiple high-risk areas simultaneously (e.g., "migrate payment system" = migrations + payments = 2 critical areas).
 
 **Handling:**
+
 1. Set risk level to HIGH (multiple high-risk areas)
 2. For each high-risk area, generate separate external research queries:
    - Query 1: "Payments migration patterns..."
@@ -87,8 +92,10 @@ This file documents seven edge cases encountered during the research phase (S3) 
 **Condition:** The librarian skill is not available, and user cannot perform manual web search.
 
 **Handling:**
+
 1. Document: "Automated external research unavailable"
 2. Provide the suggested query as plain text:
+
    ```
    Suggested external research query:
    [query]
@@ -99,6 +106,7 @@ This file documents seven edge cases encountered during the research phase (S3) 
    - Blog posts and articles
    - Stack Overflow
    ```
+
 3. Offer to store the query in a file for later research
 4. Proceed with local findings; note that external research is pending
 5. Pass to downstream skills with note: "External research pending"
@@ -110,6 +118,7 @@ This file documents seven edge cases encountered during the research phase (S3) 
 **Condition:** Many patterns found (10+ examples), making the research findings overwhelming.
 
 **Handling:**
+
 1. Summarize the top 5-7 most relevant patterns
 2. Document: "[total] patterns found; showing most relevant [count]"
 3. Criteria for "most relevant":
@@ -125,15 +134,15 @@ This file documents seven edge cases encountered during the research phase (S3) 
 
 ## Summary
 
-| Edge Case                              | Key Decision                           | Blocker? |
-| -------------------------------------- | -------------------------------------- | -------- |
-| No local patterns                      | Rely on external research or principles| No       |
-| Conflicting local patterns             | Choose one or unify; add gap           | No       |
-| Missing tech stack info                | Auto-detect or ask user                | No       |
-| User declines external research        | Proceed; document risk                 | No       |
-| Multiple high-risk areas               | Research each separately               | No       |
-| Librarian/search unavailable           | Provide manual research guidance       | No       |
-| Too many patterns found                | Summarize top 5-7; offer full review  | No       |
+| Edge Case                       | Key Decision                            | Blocker? |
+| ------------------------------- | --------------------------------------- | -------- |
+| No local patterns               | Rely on external research or principles | No       |
+| Conflicting local patterns      | Choose one or unify; add gap            | No       |
+| Missing tech stack info         | Auto-detect or ask user                 | No       |
+| User declines external research | Proceed; document risk                  | No       |
+| Multiple high-risk areas        | Research each separately                | No       |
+| Librarian/search unavailable    | Provide manual research guidance        | No       |
+| Too many patterns found         | Summarize top 5-7; offer full review    | No       |
 
 ---
 

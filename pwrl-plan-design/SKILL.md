@@ -10,7 +10,7 @@ argument-hint: "[scoped context + research findings]"
 
 ## Interaction Method
 
-- Use the platform's `ask_user` tool for guiding unit decomposition.
+- Use the platform's `ask_user_questions` extension for guiding unit decomposition.
 - Ask one question at a time. Present each unit for confirmation before proceeding.
 - Use multiple-choice questions when possible (e.g., "How many phases does this work involve?").
 - If input is missing context or research, ask: "Please provide scoped context (from pwrl-plan-scope) and research findings (from pwrl-plan-research) first."
@@ -94,7 +94,7 @@ Assign stable, sequential Unit Identifiers (U1, U2, U3, ...) to each unit. For t
 
 ### Step 4: Create Each Unit
 
-For each unit, guide the user through definition. Use `ask_user` to collect:
+For each unit, guide the user through definition. Use `ask_user_questions` to collect:
 
 1. **Name:** "What's a short name for unit U{N}?"
 2. **Scope:** "What does this unit accomplish?"
@@ -136,7 +136,7 @@ Detect if a diagram would add clarity (5+ units, complex interdependencies, high
 
 ### Step 8: Present and Confirm
 
-1. Present the complete units object to the user via `ask_user`.
+1. Present the complete units object to the user via `ask_user_questions`.
 2. Ask: "Does this design look correct? Should I proceed to plan generation?"
 3. If confirmed: Return the units object.
 4. If corrections needed: Allow user to add, remove, or modify units.
@@ -156,5 +156,5 @@ Implementation units are passed to `pwrl-plan-generate` in markdown format with 
 - **Source:** Phase 3 of `pwrl-plan/SKILL.md`
 - **Input:** Scoped context from `pwrl-plan-scope` (S2) + Research findings from `pwrl-plan-research` (S3)
 - **Downstream:** `pwrl-plan-generate` (S5) — receives units and complexity hint
-- **Integration:** `ask_user` tool for all unit definition steps
+- **Integration:** `ask_user_questions` extension for all unit definition steps
 - **Unit template:** See inline examples in this file; no separate reference file needed

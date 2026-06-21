@@ -8,6 +8,14 @@ argument-hint: "[Optional: source material to extract from]"
 
 Complete learning lifecycle management through 5-phase micro-skill pipeline.
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "What would you like to extract learnings from? Provide source material (code, commit, docs) or describe the topic."
+- Provide clear recovery suggestions when errors occur
+
 ## Architecture
 
 ```
@@ -187,6 +195,7 @@ COMPLETE
 6. Generate extraction artifact with interaction_mode
 
 **Output:** Extraction artifact with:
+
 - Learning candidates identified
 - Candidate types assigned
 - Source references tracked

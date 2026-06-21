@@ -8,6 +8,14 @@ argument-hint: "[branch, PR number, or empty for current branch]"
 
 Review code changes through a deterministic 4-phase pipeline: validate scope, prepare for review, analyze code quality/security/tests, and generate approval decision.
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "What code would you like to review? Provide a branch name, PR number, or leave blank for the current branch."
+- Provide clear recovery suggestions when errors occur
+
 ## Purpose
 
 Provide comprehensive code review through systematic analysis:

@@ -6,6 +6,14 @@ argument-hint: "[Executed tasks from pwrl-work-execute, design specs (optional)]
 
 # pwrl-work-review — Code Simplification & System Review
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "Should the implementation be reviewed? Confirm scope match, test coverage, and code quality."
+- Provide clear recovery suggestions when errors occur
+
 **Purpose:** Review code after execution to consolidate duplication, extract shared helpers, run system-wide consistency checks, compare UI implementations to design specs (when applicable), and determine readiness for shipping.
 
 ## Input

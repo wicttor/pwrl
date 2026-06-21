@@ -8,6 +8,14 @@ argument-hint: "[Optional: reason for ending session or switching tasks]"
 
 Preserve session context with a well-documented commit capturing state, decisions, and next steps.
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "Would you like to end this session? Optionally provide a reason or context for why this session is ending."
+- Provide clear recovery suggestions when errors occur
+
 ## Purpose
 
 End a work session cleanly by creating a single, clear commit that captures progress and context for the next session:

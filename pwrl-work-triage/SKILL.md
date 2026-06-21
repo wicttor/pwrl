@@ -6,6 +6,14 @@ argument-hint: "[Task file path, plan path, or bare prompt. Leave blank to use l
 
 # pwrl-work-triage — Input Classification & Context Extraction
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "What work should be triaged? Provide a task file path, plan file, or describe the work to be categorized."
+- Provide clear recovery suggestions when errors occur
+
 **Purpose:** Entry point to the work execution workflow. Classifies the input (task file, plan file, or bare prompt), extracts relevant context, estimates complexity, resolves dependencies, and returns a structured context object for downstream skills.
 
 ## Input

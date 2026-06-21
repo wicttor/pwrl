@@ -6,6 +6,14 @@ argument-hint: "[Task list context from pwrl-work-prepare, execution mode]"
 
 # pwrl-work-execute — Task Execution Engine
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "What tasks should be executed? Confirm the execution parameters and verify the environment is ready."
+- Provide clear recovery suggestions when errors occur
+
 **Purpose:** Core execution engine that coordinates task implementation across three modes (inline, serial, parallel), enforces quality gates, manages task status progression, and integrates GitHub status syncing.
 
 ## Input

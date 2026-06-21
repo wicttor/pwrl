@@ -6,6 +6,14 @@ argument-hint: "[Task file path, new status, summary message (optional)]"
 
 # pwrl-work-sync-status — GitHub Issues Status Sync
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "Should task statuses be synchronized with GitHub? Review pending synchronizations before confirming."
+- Provide clear recovery suggestions when errors occur
+
 **Purpose:** A reusable utility that synchronizes task status with GitHub Issues. Called by other micro-skills (pwrl-work-prepare, pwrl-work-execute) when GitHub integration is enabled. Gracefully skips if integration is disabled.
 
 ## Input

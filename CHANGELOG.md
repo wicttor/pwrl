@@ -6,6 +6,21 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+## [1.2.6] - 2026-06-21
+
+### Fixed
+
+- Checkpoint and commit phases: improved protocol validation and error handling
+- Learnings extraction: enhanced classification and deduplication logic
+- Plan and design phases: refined research and scope validation
+- Work execution phases: improved task orchestration and sync handling
+- Review pipeline: streamlined artifact preparation and analysis
+- Testing framework: enhanced validation across all phases
+
+### Changed
+
+- Bumped package version to 1.2.6
+
 ## [1.2.5] - 2026-06-19
 
 ### Changed

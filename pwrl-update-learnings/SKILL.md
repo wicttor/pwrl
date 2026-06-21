@@ -8,6 +8,14 @@ argument-hint: "[Optional: scope such as changed-only, full, or category]"
 
 Keep `docs/learnings/INDEX.md` synchronized with the current learning documents.
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "Should the learnings index be updated? Default is to sync recently changed learnings only."
+- Provide clear recovery suggestions when errors occur
+
 ## Purpose
 
 This skill ensures every learning document is represented in the index with a short description.

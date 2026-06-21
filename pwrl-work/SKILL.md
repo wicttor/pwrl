@@ -8,6 +8,14 @@ argument-hint: "[Task file, plan doc path, or work description. Leave blank to u
 
 Execute implementation work through a deterministic 4-phase pipeline: triage input, prepare environment, implement with test-first discipline, and review code quality.
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "What work would you like to execute? Provide a task file path, plan file, or describe the work to be done."
+- Provide clear recovery suggestions when errors occur
+
 ## Purpose
 
 Transform task files, plans, or prompts into completed working code through systematic execution:

@@ -8,6 +8,14 @@ argument-hint: "[Optional: reason/context and/or list of files to include]"
 
 Verify repository state and get explicit user confirmation that the session is ready to end.
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "Is the repository state ready to be checkpointed? Review any pending changes before confirmation."
+- Provide clear recovery suggestions when errors occur
+
 ## Purpose
 
 Checkpoint is the first phase of session cleanup. It verifies that the repository has changes to commit, reviews what will be included, and confirms with the user that work is complete and ready to finalize:

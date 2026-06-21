@@ -8,6 +8,14 @@ argument-hint: "[Path to plan file, or leave blank to find latest plan]"
 
 Slice a plan into granular, executable task files for `/pwrl-work`.
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "What plan would you like to slice into tasks? Provide a plan file path or leave blank to auto-discover the latest plan."
+- Provide clear recovery suggestions when errors occur
+
 ## Purpose
 
 - Create ready-to-execute work items in `docs/tasks/to-do/`

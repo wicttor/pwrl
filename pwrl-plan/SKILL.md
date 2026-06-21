@@ -235,7 +235,7 @@ Each plan includes (tier-dependent):
 
 ## Interaction Method
 
-- Use platform's `ask_user_questions` extension for all decisions
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
 - Ask one question at a time
 - Use multiple-choice questions when possible
 - If input is empty, ask: "What would you like to plan? Describe the task or project."

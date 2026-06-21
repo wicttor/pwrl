@@ -8,6 +8,14 @@ argument-hint: "[scope like category, tag, date range, or file:path]"
 
 Review existing learnings for staleness, consolidation opportunities, or needed updates.
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "What learnings would you like to refresh? Provide a category, tag, file path, or scope to review."
+- Provide clear recovery suggestions when errors occur
+
 ## Purpose
 
 - Keep `docs/learnings/` accurate, current, and non-duplicative

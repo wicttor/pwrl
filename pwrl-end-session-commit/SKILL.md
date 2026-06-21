@@ -9,6 +9,14 @@ user-invocable: false
 
 Draft a descriptive commit message and create the session commit with proper attribution.
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "What summarizes this session's work? Provide context and key decisions for the commit message."
+- Provide clear recovery suggestions when errors occur
+
 ## Purpose
 
 Commit is the second phase of session cleanup. It takes the checkpoint artifact from Phase 1, crafts a meaningful commit message that explains the session's work and next steps, detects version changes, and creates the commit:

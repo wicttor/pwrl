@@ -6,6 +6,14 @@ argument-hint: "[Classified context from pwrl-work-triage]"
 
 # pwrl-work-prepare — Environment Setup & Mode Selection
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "Is the work environment ready? Review and confirm the repository state, branch setup, and dependencies."
+- Provide clear recovery suggestions when errors occur
+
 **Purpose:** Bridges triage output and task execution. Confirms branch strategy, creates or updates task lists, detects the appropriate execution mode (inline/serial/parallel), checks GitHub integration readiness, and produces a prepared context ready for execution.
 
 ## Input

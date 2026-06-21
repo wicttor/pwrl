@@ -12,6 +12,14 @@ phases_covered: "6"
 
 Comprehensive testing and validation framework for micro-skill pipeline architecture.
 
+## Interaction Method
+
+- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Ask one question at a time
+- Use multiple-choice questions when possible
+- If input is empty, ask: "What should be tested? Provide a test scope, files to test, or a skill to validate."
+- Provide clear recovery suggestions when errors occur
+
 ## Overview
 
 Phase 6 ensures quality of the entire refactored architecture through:

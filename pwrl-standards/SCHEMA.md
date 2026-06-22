@@ -40,11 +40,13 @@ Balance detail with brevity. Main SKILL.md files should be readable in one scrol
 
 **Requirements:**
 
-- **Target:** 100-150 lines for main SKILL.md
-- **Acceptable range:** 80-170 lines (±20 from target)
+- **Target:** 100-250 lines for main SKILL.md
+- **Acceptable range:** 80-300 lines (temporarily relaxed from 170; see note below)
 - **Extract to references/**: Schemas, detailed templates, complex decision trees, validation rules
 - Simple skills (like pwrl-end-session) can be shorter (~80-120 lines)
-- Complex skills (like pwrl-review) can approach upper bound (~140-170 lines)
+- Complex skills (like pwrl-work) can approach upper bound (~250-300 lines)
+
+> **Note:** The upper bound was relaxed from 170 to 300 on 2026-06-21 to enable incremental right-sizing across the skill family. A future plan will tighten toward 170 incrementally (e.g., 300 → 250 → 200 → 170). Skills exceeding 300 lines MUST extract content to `references/`.
 
 ### 4. Complete & Verifiable
 

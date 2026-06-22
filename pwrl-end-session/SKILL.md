@@ -81,6 +81,8 @@ COMPLETE
 
 **Output:** Checkpoint artifact with approved_files, session_summary, user_confirmation
 
+**Quality Gate Validation:** If you have incomplete work from pwrl-review or pwrl-work, run `/pwrl-phase-checkpoint [workflow] [phase] [artifact-path]` to verify phase status before ending session. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
+
 ### Phase 2: Create Commit (pwrl-end-session-commit)
 
 **Purpose:** Prepare commit message and create commit with proper attribution

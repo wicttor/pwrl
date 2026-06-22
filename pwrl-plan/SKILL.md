@@ -76,6 +76,8 @@ OUTPUT (plan file ready for execution)
 - Requirements found
 - interaction_mode (detailed or yolo)
 
+**Quality Gate Validation:** Run `/pwrl-phase-checkpoint plan 1 [artifact-path]` to validate phase completion before proceeding to Phase 2. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
+
 **See:** [pwrl-plan-scope/SKILL.md](../pwrl-plan-scope/SKILL.md) for detailed workflow
 
 ### Phase 2: Research (pwrl-plan-research)
@@ -102,6 +104,8 @@ OUTPUT (plan file ready for execution)
 - Risk areas with recommendations
 - External research findings (if performed)
 - Learnings integration notes
+
+**Quality Gate Validation:** Run `/pwrl-phase-checkpoint plan 2 [artifact-path]` to validate phase completion before proceeding to Phase 3. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 
 **See:** [pwrl-plan-research/SKILL.md](../pwrl-plan-research/SKILL.md) for detailed workflow
 
@@ -131,6 +135,8 @@ OUTPUT (plan file ready for execution)
 - Risk mitigations
 - Mermaid diagrams (if complex)
 - Complexity assessment and effort estimate
+
+**Quality Gate Validation:** Run `/pwrl-phase-checkpoint plan 3 [artifact-path]` to validate phase completion before proceeding to Phase 4. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 
 **See:** [pwrl-plan-design/SKILL.md](../pwrl-plan-design/SKILL.md) for detailed workflow
 
@@ -163,6 +169,8 @@ OUTPUT (plan file ready for execution)
 - Related learnings (STANDARD/DEEP)
 - Learning gaps (DEEP)
 - Rollout notes (STANDARD/DEEP)
+
+**Quality Gate Validation:** Run `/pwrl-phase-checkpoint plan 4 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 
 **See:** [pwrl-plan-generate/SKILL.md](../pwrl-plan-generate/SKILL.md) for detailed workflow
 

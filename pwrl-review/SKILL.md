@@ -83,6 +83,8 @@ COMPLETE
 
 **Output:** Scope artifact with scope_verdict (on-target/justified/creep-detected), interaction_mode
 
+**Quality Gate Validation:** Run `/pwrl-phase-checkpoint review 1 [artifact-path]` to validate phase completion before proceeding to Phase 2. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
+
 ### Phase 2: Prepare Review
 
 **Purpose:** Setup review environment and configure analysis tools
@@ -97,6 +99,8 @@ COMPLETE
 4. Configure analysis tools (linter, test framework, coverage)
 
 **Output:** Prepare artifact with tools_configured and review_scope
+
+**Quality Gate Validation:** Run `/pwrl-phase-checkpoint review 2 [artifact-path]` to validate phase completion before proceeding to Phase 3. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 
 ### Phase 3: Analyze Code
 
@@ -113,6 +117,8 @@ COMPLETE
 5. **Integration:** Build success, test pass, no regressions, no broken imports
 
 **Output:** Analyze artifact with findings organized by category and severity
+
+**Quality Gate Validation:** Run `/pwrl-phase-checkpoint review 3 [artifact-path]` to validate phase completion before proceeding to Phase 4. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 
 ### Phase 4: Generate Report
 
@@ -131,6 +137,8 @@ COMPLETE
 4. Generate report artifact
 
 **Output:** Report artifact with verdict (approved/request-changes/rejected)
+
+**Quality Gate Validation:** Run `/pwrl-phase-checkpoint review 4 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 
 ---
 

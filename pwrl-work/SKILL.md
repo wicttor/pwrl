@@ -87,6 +87,8 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 
 **Output:** Triage artifact with unit_id, title, goal, files, acceptance_criteria, dependencies, interaction_mode
 
+**Quality Gate Validation:** Run `/pwrl-phase-checkpoint work 0 [artifact-path]` to validate phase completion before proceeding to Phase 1. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
+
 ### Phase 1: Prepare Environment
 
 **Purpose:** Setup branch, verify repository state, identify verification commands
@@ -106,6 +108,8 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 
 **Output:** Prepare artifact with branch, verification_commands, environment state, task moved and status updated
 
+**Quality Gate Validation:** Run `/pwrl-phase-checkpoint work 1 [artifact-path]` to validate phase completion before proceeding to Phase 2. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
+
 ### Phase 2: Execute Implementation
 
 **Purpose:** Implement work with test-first discipline and incremental verification
@@ -124,6 +128,8 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 8. Generate execute artifact
 
 **Output:** Execute artifact with files changed, tests passing, build/lint status, task moved and marked for-review
+
+**Quality Gate Validation:** Run `/pwrl-phase-checkpoint work 2 [artifact-path]` to validate phase completion before proceeding to Phase 3. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 
 **Quality Gates (all must pass):**
 
@@ -150,6 +156,8 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 7. Generate review artifact
 
 **Output:** Review artifact with scope_check, diff_review, approval status, branch info, PR instructions
+
+**Quality Gate Validation:** Run `/pwrl-phase-checkpoint work 3 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 
 After approval, branch remains active for pull request creation and can optionally chain to `/pwrl-end-session` for learnings documentation.
 

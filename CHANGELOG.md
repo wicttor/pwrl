@@ -6,6 +6,21 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-06-21
+
+### Added
+
+- New `pwrl-phase-checkpoint` skill: enforces deterministic phase completion across all PWRL workflows (review, work, plan, tasks, learnings) by validating artifacts and quality gates before allowing progression
+- Phase schemas reference (`pwrl-phase-checkpoint/references/phase-schemas.md`) defining required artifact fields per phase
+- Quality gates reference (`pwrl-phase-checkpoint/references/quality-gates.md`) defining acceptance criteria per phase
+- Standards mapping reference (`pwrl-phase-checkpoint/references/standards-mapping.md`) linking validation rules to PWRL foundational standards (SCHEMA, TEMPLATE, AUDIT)
+- Checklists and worked examples reference (`pwrl-phase-checkpoint/references/checklists-examples.md`)
+- Quality gate validation cross-links in `pwrl-end-session`, `pwrl-learnings`, `pwrl-plan`, `pwrl-review`, `pwrl-tasks`, and `pwrl-work` skill files
+
+### Changed
+
+- Bumped package version to 1.3.0
+
 ## [1.2.6] - 2026-06-21
 
 ### Fixed

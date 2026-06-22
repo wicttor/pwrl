@@ -81,6 +81,8 @@ Plan document path, or blank to auto-discover the latest plan in `docs/plans/`.
 - Task files created under `docs/tasks/to-do/`
 - A task index at `docs/tasks/INDEX.md` reflecting statuses and dependencies
 
+**Quality Gate Validation:** Run `/pwrl-phase-checkpoint tasks 3 [artifact-path]` to validate all tasks generated and dependencies resolved. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
+
 ## Best Practices
 
 - Keep each task independently executable (with dependencies noted)

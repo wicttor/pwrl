@@ -1,245 +1,178 @@
----
-created: 2026-06-05
-updated: 2026-06-05
-status: active
-plan: docs/plans/2026-06-05-001-slice-pwrl-plan-skill.md
----
+# Task Index
 
-# Task Index: Slice pwrl-plan Skill into Micro-Skills
+**Generated:** 2026-06-21
+**Source Plan:** [PWRL Skills Standards Remediation & Phase-Step Enforcement](../plans/2026-06-21-001-skills-standards-remediation.md)
+**Total Tasks:** 20
+**Tier:** DEEP
 
-**Plan:** `docs/plans/2026-06-05-001-slice-pwrl-plan-skill.md`
-**Status:** Ready for execution
-**Total Tasks:** 9
-**Critical Path:** S1 → S2 → S3 → S4 → S5 → S7 → S8 → S9
+## Quick Stats
 
----
+- **To Do:** 20 tasks
+- **In Progress:** 0 tasks
+- **Done:** 0 tasks
+- **Blocked:** 0 tasks
 
-## Task Summary
+## Execution Roadmap
 
-| Unit   | Task                            | Status | Dependencies           | Duration | Priority     |
-| ------ | ------------------------------- | ------ | ---------------------- | -------- | ------------ |
-| **S1** | Extract Templates Module        | done   | —                      | 1-2h     | 🔴 Critical  |
-| **S2** | Create pwrl-plan-scope Skill    | done   | S1                     | 2-3h     | 🔴 Critical  |
-| **S3** | Create pwrl-plan-research Skill | done   | S1, S2                 | 2-3h     | 🔴 Critical  |
-| **S4** | Create pwrl-plan-design Skill   | done   | S1, S2, S3             | 2-3h     | 🔴 Critical  |
-| **S5** | Create pwrl-plan-generate Skill | done   | S1, S2, S3, S4         | 2-3h     | 🔴 Critical  |
-| **S6** | Create pwrl-planner.agent.md    | done   | S2, S3, S4, S5         | 2-3h     | 🟡 Important |
-| **S7** | Update pwrl-plan Fallback       | done   | S1, S2, S3, S4, S5     | 1-2h     | 🔴 Critical  |
-| **S8** | Update Documentation            | done   | S2, S3, S4, S5, S6, S7 | 2-3h     | 🟡 Important |
-| **S9** | Integration Testing             | done   | S1-S8                  | 3-4h     | 🔴 Critical  |
+### Critical Path
 
-**Estimated Total Time:** 17-26 hours (2-3 days for one developer)
+```
+U2 → U3 → U9..U19 → U8 → U20
+```
 
----
+The extraction wave (U9–U19) is the long tail; U5/U6/U7 (manifest enforcement) can run in parallel with extractions.
 
-## All Tasks Complete ✅
+### Recommended Starting Tasks
 
-All 9 tasks are in `for-review` status. Ready for final review and sign-off.
+No dependencies — can start immediately:
+
+- [U1 - Remove orphaned pwrl-extension/](to-do/2026-06-21-u1-rm-pwrl-extension.md)
+- [U2 - TDD validator tests (RED)](to-do/2026-06-21-u2-tdd-validator-tests.md)
+- [U5 - Phase manifest schema](to-do/2026-06-21-u5-phase-manifest-schema.md)
+
+### Parallel Execution Groups
+
+**Group 1** (Start immediately): U1, U2, U5
+- [U1 - rm pwrl-extension](to-do/2026-06-21-u1-rm-pwrl-extension.md)
+- [U2 - TDD validator tests RED](to-do/2026-06-21-u2-tdd-validator-tests.md)
+- [U5 - phase manifest schema](to-do/2026-06-21-u5-phase-manifest-schema.md)
+
+**Group 2** (After Group 1): U3, U4 (need U2); U6 (needs U5)
+- [U3 - relax header/H1 regex](to-do/2026-06-21-u3-relax-header-h1-regex.md) — needs U2
+- [U4 - relax line-count gate](to-do/2026-06-21-u4-relax-line-count-gate.md) — needs U2
+- [U6 - add phase manifests to 5 core skills](to-do/2026-06-21-u6-add-phase-manifests-core-skills.md) — needs U5
+
+**Group 3** (After Group 2): U7 (needs U2+U5+U6) ∥ U9–U19 (need U3+U4; all independent of each other)
+- [U7 - enforce phase manifest in validator](to-do/2026-06-21-u7-enforce-phase-manifest-validator.md)
+- [U9–U19 - extract 11 over-length skills](#all-tasks) (independent; split across sessions)
+
+**Group 4** (After Group 3): U8 (needs U1+U3+U4+U7+U9–U19)
+- [U8 - regression test: validate exits 0](to-do/2026-06-21-u8-regression-test-validate-exits-zero.md)
+
+**Group 5** (After Group 4): U20
+- [U20 - final verify + version bump](to-do/2026-06-21-u20-final-verify-version-bump.md)
+
+## All Tasks
+
+### To Do
+
+| Unit ID | Task | Dependencies | Files |
+|---------|------|--------------|-------|
+| U1 | [Remove orphaned pwrl-extension/](to-do/2026-06-21-u1-rm-pwrl-extension.md) | None | `pwrl-extension/` |
+| U2 | [TDD validator tests (RED)](to-do/2026-06-21-u2-tdd-validator-tests.md) | None | `tests/pwrl-standards/validate-skills.test.js` |
+| U3 | [Relax header/H1 regex](to-do/2026-06-21-u3-relax-header-h1-regex.md) | U2 | `pwrl-standards/scripts/validate-skills.js` |
+| U4 | [Relax line-count gate 80-300](to-do/2026-06-21-u4-relax-line-count-gate.md) | U2 | `pwrl-standards/scripts/validate-skills.js`, `pwrl-standards/SCHEMA.md` |
+| U5 | [Phase manifest schema](to-do/2026-06-21-u5-phase-manifest-schema.md) | None | `pwrl-standards/references/phase-manifest-schema.md`, `pwrl-standards/SCHEMA.md` |
+| U6 | [Add phase manifests to 5 core skills](to-do/2026-06-21-u6-add-phase-manifests-core-skills.md) | U5 | `pwrl-{review,work,plan,tasks,learnings}/references/phases.yaml` |
+| U7 | [Enforce phase manifest in validator](to-do/2026-06-21-u7-enforce-phase-manifest-validator.md) | U2, U5, U6 | `pwrl-standards/scripts/validate-skills.js`, `tests/pwrl-standards/validate-skills.test.js` |
+| U8 | [Regression test: validate exits 0](to-do/2026-06-21-u8-regression-test-validate-exits-zero.md) | U1, U3, U4, U7, U9–U19 | `tests/pwrl-standards/validate-skills.test.js` |
+| U9 | [Extract pwrl-learnings-structure](to-do/2026-06-21-u9-extract-pwrl-learnings-structure.md) | U3, U4 | `pwrl-learnings-structure/SKILL.md`, `pwrl-learnings-structure/references/` |
+| U10 | [Extract pwrl-work-execute](to-do/2026-06-21-u10-extract-pwrl-work-execute.md) | U3, U4 | `pwrl-work-execute/SKILL.md`, `pwrl-work-execute/references/` |
+| U11 | [Extract pwrl-work-prepare](to-do/2026-06-21-u11-extract-pwrl-work-prepare.md) | U3, U4 | `pwrl-work-prepare/SKILL.md`, `pwrl-work-prepare/references/` |
+| U12 | [Extract pwrl-work-sync-status](to-do/2026-06-21-u12-extract-pwrl-work-sync-status.md) | U3, U4 | `pwrl-work-sync-status/SKILL.md`, `pwrl-work-sync-status/references/` |
+| U13 | [Extract pwrl-learnings](to-do/2026-06-21-u13-extract-pwrl-learnings.md) | U3, U4 | `pwrl-learnings/SKILL.md`, `pwrl-learnings/references/` |
+| U14 | [Extract pwrl-review-report](to-do/2026-06-21-u14-extract-pwrl-review-report.md) | U3, U4 | `pwrl-review-report/SKILL.md`, `pwrl-review-report/references/` |
+| U15 | [Extract pwrl-learnings-extract](to-do/2026-06-21-u15-extract-pwrl-learnings-extract.md) | U3, U4 | `pwrl-learnings-extract/SKILL.md`, `pwrl-learnings-extract/references/` |
+| U16 | [Extract pwrl-learnings-classify](to-do/2026-06-21-u16-extract-pwrl-learnings-classify.md) | U3, U4 | `pwrl-learnings-classify/SKILL.md`, `pwrl-learnings-classify/references/` |
+| U17 | [Extract pwrl-plan](to-do/2026-06-21-u17-extract-pwrl-plan.md) | U3, U4 | `pwrl-plan/SKILL.md`, `pwrl-plan/references/` |
+| U18 | [Extract pwrl-review](to-do/2026-06-21-u18-extract-pwrl-review.md) | U3, U4 | `pwrl-review/SKILL.md`, `pwrl-review/references/` |
+| U19 | [Extract pwrl-review-analyze](to-do/2026-06-21-u19-extract-pwrl-review-analyze.md) | U3, U4 | `pwrl-review-analyze/SKILL.md`, `pwrl-review-analyze/references/` |
+| U20 | [Final verify + version bump](to-do/2026-06-21-u20-final-verify-version-bump.md) | U8, U9–U19 | `package.json`, `CHANGELOG.md` |
+
+### In Progress
+
+*(Empty on initial generation)*
+
+### Done
+
+*(Empty on initial generation)*
+
+### Blocked
+
+*(Empty on initial generation)*
 
 ## Dependency Graph
 
+```mermaid
+graph TD
+    U1[U1: rm pwrl-extension]
+    U2[U2: TDD validator tests RED]
+    U3[U3: relax header/H1 regex]
+    U4[U4: relax line-count gate]
+    U5[U5: phase manifest schema]
+    U6[U6: add manifests to 5 core skills]
+    U7[U7: enforce manifest in validator]
+    U8[U8: regression test - validate exits 0]
+    U9[U9: extract pwrl-learnings-structure]
+    U10[U10: extract pwrl-work-execute]
+    U11[U11: extract pwrl-work-prepare]
+    U12[U12: extract pwrl-work-sync-status]
+    U13[U13: extract pwrl-learnings]
+    U14[U14: extract pwrl-review-report]
+    U15[U15: extract pwrl-learnings-extract]
+    U16[U16: extract pwrl-learnings-classify]
+    U17[U17: extract pwrl-plan]
+    U18[U18: extract pwrl-review]
+    U19[U19: extract pwrl-review-analyze]
+    U20[U20: final verify + version bump]
+
+    U2 --> U3
+    U2 --> U4
+    U5 --> U6
+    U2 --> U7
+    U5 --> U7
+    U6 --> U7
+    U3 --> U9
+    U4 --> U9
+    U3 --> U10
+    U4 --> U10
+    U3 --> U11
+    U4 --> U11
+    U3 --> U12
+    U4 --> U12
+    U3 --> U13
+    U4 --> U13
+    U3 --> U14
+    U4 --> U14
+    U3 --> U15
+    U4 --> U15
+    U3 --> U16
+    U4 --> U16
+    U3 --> U17
+    U4 --> U17
+    U3 --> U18
+    U4 --> U18
+    U3 --> U19
+    U4 --> U19
+    U1 --> U8
+    U3 --> U8
+    U4 --> U8
+    U7 --> U8
+    U9 --> U8
+    U10 --> U8
+    U11 --> U8
+    U12 --> U8
+    U13 --> U8
+    U14 --> U8
+    U15 --> U8
+    U16 --> U8
+    U17 --> U8
+    U18 --> U8
+    U19 --> U8
+    U8 --> U20
 ```
-S1 (Templates)
-  ├─→ S2 (Scope)
-  │     └─→ S3 (Research)
-  │           └─→ S4 (Design)
-  │                 └─→ S5 (Generate)
-  │                       ├─→ S6 (Agent)
-  │                       │     └─→ S8 (Docs) ← parallel with S7
-  │                       └─→ S7 (Fallback)
-  │                             └─→ S9 (Testing)
-```
 
-**Critical Path (Red):** S1 → S2 → S3 → S4 → S5 → S7 → S9 (13-14 hours)
-**Important Parallel:** S6 (Agent) and S8 (Docs) can run while S7 is in progress
+## Task Status
+
+Tasks are tracked by file location (`to-do/` → `in-progress/` → `for-review/` → `done/`) and by the `status` frontmatter field. Update both when moving a task.
+
+## Notes
+
+- **Old index preserved:** the prior `INDEX.md` (for the 2026-06-05 plan-slice work) was backed up to `docs/tasks/INDEX-2026-06-05-plan-slice.md` before this index was written.
+- **Stale tasks:** 8 tasks from `2026-06-10-u1..u8-*` remain in `to-do/` from a prior superseded effort (the 2026-06-16 agent-removal refactor obsoleted them). They are unrelated to this plan; left untouched per the "never delete without confirmation" rule. Consider archiving them in a separate cleanup.
+- **Session boundaries:** the extraction wave (U9–U19) splits naturally across ~4 sessions (3 skills per session). U1–U8 form a single "validator + enforcement" session.
+- **TDD discipline:** U2 (RED) must precede U3/U4/U7 (GREEN). U8 is the final acceptance gate.
 
 ---
 
-## Execution Order (Recommended)
-
-### Phase 1: Foundation (Day 1 morning)
-
-1. **[S1] Extract Templates Module** (1-2h)
-   - Verify/complete plan templates
-   - No dependencies; start immediately
-   - Unblocks S2-S5
-
-### Phase 2: Core Micro-Skills (Day 1)
-
-2. **[S2] Create pwrl-plan-scope Skill** (2-3h)
-   - After S1
-   - Entry point to planning workflow
-   - Unblocks S3
-
-3. **[S3] Create pwrl-plan-research Skill** (2-3h)
-   - After S2
-   - Depends on scoped context from S2
-   - Unblocks S4
-
-4. **[S4] Create pwrl-plan-design Skill** (2-3h)
-   - After S3
-   - Depends on research findings
-   - Unblocks S5
-
-### Phase 3: Final Generation & Outputs (Day 2 morning)
-
-5. **[S5] Create pwrl-plan-generate Skill** (2-3h)
-   - After S4
-   - Final plan generation
-   - Unblocks S6, S7
-
-### Phase 4: Agent & Fallback (Day 2 afternoon, parallelized)
-
-6. **[S6] Create pwrl-planner.agent.md** (2-3h)
-   - After S5
-   - Optional path; low priority
-   - Can run in parallel with S7
-   - Unblocks S8
-
-7. **[S7] Update pwrl-plan Fallback** (1-2h)
-   - After S5
-   - Critical for backward compatibility
-   - Unblocks S9
-
-### Phase 5: Documentation & Testing (Day 3)
-
-8. **[S8] Update Documentation** (2-3h)
-   - After S6, S7 (or parallel with S9)
-   - Not critical path; can be last
-   - Improves adoption
-
-9. **[S9] Integration Testing** (3-4h)
-   - After all (S1-S8)
-   - Final validation gate
-   - Must pass before release
-
----
-
-## Task Files
-
-| File                                               | Purpose                                   |
-| -------------------------------------------------- | ----------------------------------------- |
-| `2026-06-05-s1-extract-templates-module.md`        | Extract/verify templates; no dependencies |
-| `2026-06-05-s2-create-pwrl-plan-scope-skill.md`    | Scope gathering micro-skill               |
-| `2026-06-05-s3-create-pwrl-plan-research-skill.md` | Research micro-skill                      |
-| `2026-06-05-s4-create-pwrl-plan-design-skill.md`   | Design & unit decomposition micro-skill   |
-| `2026-06-05-s5-create-pwrl-plan-generate-skill.md` | Plan generation micro-skill               |
-| `2026-06-05-s6-create-pwrl-planner-agent.md`       | Agent orchestrator (optional)             |
-| `2026-06-05-s7-update-pwrl-plan-fallback.md`       | Fallback routing logic (required)         |
-| `2026-06-05-s8-update-documentation.md`            | Documentation & examples                  |
-| `2026-06-05-s9-integration-testing.md`             | Integration testing suite                 |
-
----
-
-## Start Here
-
-### To Begin Work
-
-1. **Read the plan:** `docs/plans/2026-06-05-001-slice-pwrl-plan-skill.md`
-2. **Start first task:** `docs/tasks/to-do/2026-06-05-s1-extract-templates-module.md`
-3. **Use pwrl-work:** `/pwrl-work docs/tasks/to-do/2026-06-05-s1-extract-templates-module.md`
-
-### To Review All Tasks
-
-- Open this file (you're reading it!)
-- Scroll through task files to understand full scope
-- Reference dependency graph above
-
-### To Update Task Status
-
-1. Edit task frontmatter: `status: in-progress` → work on task
-2. After completing: `status: for-review` → request code review
-3. After review approval: `status: done` → mark complete
-
-### To Track Progress
-
-- Running count: [9/9 complete] → All tasks are for-review, ready for verification
-- **Critical path progress:** ✅ Full critical path complete (S1→S2→S3→S4→S5→S7→S9)
-  - ✅ S1 complete → Templates module extracted
-  - ✅ S2 complete → Scope skill created
-  - ✅ S3 complete → Research skill created
-  - ✅ S4 complete → Design skill created
-  - ✅ S5 complete → Generate skill created
-  - ✅ S6 complete → Agent orchestrator created
-  - ✅ S7 complete → Fallback updated with agent detection
-  - ✅ S8 complete → Documentation and examples created
-  - ✅ S9 complete → Integration testing passed
-- **Parallel work:** S6 & S8 can progress while S7 is being worked on
-
----
-
-## Key Learning Gaps (To Document)
-
-These learning gaps are identified in the plan and should be captured via `/pwrl-learnings` as tasks are completed:
-
-- [ ] **Fallback Strategy & Agent Detection** — Document after S7 completes
-- [ ] **Heuristic-Based Tier Selection** — Document after S5 completes
-- [ ] **Planning Workflow Documentation** — Document after S8 completes
-- [ ] **Planning Workflow Testing** — Document after S9 completes
-
----
-
-## Acceptance & Sign-Off
-
-### Pre-Work Checklist
-
-- [x] Plan reviewed and approved
-- [x] All 9 task files created and readable
-- [x] Dependencies understood
-- [x] Development environment ready
-- [x] Templates module (S1) available
-
-### Post-Work Checklist (Before Release)
-
-- [x] All tasks completed and marked `for-review`
-- [x] S9 integration testing passed (all 10 test suites)
-- [ ] Code review approved (via `/pwrl-review`)
-- [x] Documentation complete and tested
-- [ ] Learning gaps documented (via `/pwrl-learnings`)
-- [x] Backward compatibility verified
-- [ ] Final commit with `/pwrl-end-session`
-- [ ] Learning gaps documented (via `/pwrl-learnings`)
-- [ ] Backward compatibility verified
-- [ ] Final commit with `/pwrl-end-session`
-
----
-
-## Troubleshooting
-
-### Task Unclear?
-
-Read the task file fully. Each includes:
-
-- Goal, Context, Related Learnings
-- Detailed Implementation Steps
-- Code Patterns (examples)
-- Edge Cases
-- Testing scenarios
-- Acceptance Criteria
-- References
-
-### Stuck on Dependencies?
-
-Check dependency graph above. Cannot start task X until task Y is complete? Look at Y's status in this INDEX.
-
-### How to Get Help?
-
-1. Re-read the relevant task file and plan
-2. Check Related Learnings (if any exist)
-3. Check Acceptance Criteria (what must be true at end?)
-4. Ask clarifying questions (use `ask_user_questions` extension)
-
----
-
-## Next Steps After All Tasks Complete
-
-1. **Review Session:** Use `/pwrl-review` to audit all work
-2. **Learning Capture:** Use `/pwrl-learnings` to document insights
-3. **End Session:** Use `/pwrl-end-session` to create final commit
-4. **Update Learnings Index:** Use `/pwrl-update-learnings` to refresh INDEX.md
-
----
-
-**Created:** 2026-06-05
-**Last Updated:** 2026-06-05
-**Status:** Ready for execution
+**Last Updated:** 2026-06-21

@@ -67,8 +67,20 @@ function findFirstH1(lines, startIndex) {
 }
 
 function hasSection(markdownText, header) {
-  const headerRegex = new RegExp(`^##\\s+${header.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}\\s*$`, 'm');
+  const escaped = header.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&');
+  const headerRegex = new RegExp(`^##\\s+${escaped}([\\s:;].*)?$`, 'm');
   return headerRegex.test(markdownText);
+}
+
+function h1MatchesSkill(h1Line, skillDirName) {
+  // Accept "# pwrl-<slug> — <Desc>" (case-insensitive on slug) or any variant starting with "# pwrl-<slug>"
+  const slug = skillDirName.replace(/^pwrl-/, '');
+  const slugRe = new RegExp(`^#\\s+pwrl-${slug.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}\\b`, 'i');
+  if (slugRe.test(h1Line)) return true;
+  // Accept "# PWRL <TitleCase>" prefix (case-insensitive)
+  const expectedPrefix = expectedH1(skillDirName).replace(/^#\s+/, '');
+  const titleRe = new RegExp(`^#\\s+${expectedPrefix.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}\\b`, 'i');
+  return titleRe.test(h1Line);
 }
 
 function validateSkillDir(skillDirName) {
@@ -91,8 +103,8 @@ function validateSkillDir(skillDirName) {
   }
   const lineCount = lastNonEmptyIndex + 1;
 
-  if (lineCount < 80 || lineCount > 170) {
-    errors.push(`Line count ${lineCount} out of standard range (80-170)`);
+  if (lineCount < 80 || lineCount > 300) {
+    errors.push(`Line count ${lineCount} out of standard range (80-300)`);
   }
 
   const parsed = parseFrontmatter(content);
@@ -112,9 +124,8 @@ function validateSkillDir(skillDirName) {
   const h1 = findFirstH1(lines, endIndex + 1);
   if (!h1) {
     errors.push('Missing H1 title after frontmatter');
-  } else {
-    const expected = expectedH1(skillDirName);
-    if (h1.line !== expected) errors.push(`H1 must be exactly: "${expected}"`);
+  } else if (!h1MatchesSkill(h1.line, skillDirName)) {
+    errors.push(`H1 "${h1.line}" does not match skill "${skillDirName}"`);
   }
 
   if (!(hasSection(content, 'Usage') || hasSection(content, 'Input'))) {

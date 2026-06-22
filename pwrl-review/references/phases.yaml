@@ -1,0 +1,31 @@
+workflow: pwrl-review
+phases:
+  - number: 1
+    name: "Validate Scope"
+    required_steps:
+      - scope_verdict
+      - interaction_mode
+      - files modified
+      - user approval
+  - number: 2
+    name: "Prepare Review"
+    required_steps:
+      - review_scope
+      - tools_configured
+      - Gather diff
+      - analysis tools
+  - number: 3
+    name: "Analyze Code"
+    required_steps:
+      - Code Quality
+      - Security
+      - Tests
+      - Documentation
+      - Integration
+  - number: 4
+    name: "Generate Report"
+    required_steps:
+      - verdict
+      - approved
+      - user approval
+      - report artifact

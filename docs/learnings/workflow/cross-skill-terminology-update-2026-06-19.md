@@ -23,7 +23,7 @@ related:
 
 ## Context
 
-Renamed the user interaction mechanism reference from `ask_user` tool to `ask_user_questions` extension across the PWRL skill ecosystem. The change was triggered by a real platform correction: the interaction method is an *extension*, not a built-in tool, and the docs should reflect accurate naming.
+Renamed the user interaction mechanism reference from `ask_user` tool to `ask_user_question` extension across the PWRL skill ecosystem. The change was triggered by a real platform correction: the interaction method is an _extension_, not a built-in tool, and the docs should reflect accurate naming.
 
 Affected 14 files in a single coordinated change:
 
@@ -59,13 +59,13 @@ Do **not** restrict to `pwrl-*/SKILL.md` only — references, standards, and ind
 
 Group matches by location:
 
-| Location pattern | Examples |
-| --- | --- |
-| Main skill files | `pwrl-*/SKILL.md` |
-| Reference files | `pwrl-*/references/*.md` |
-| Standards/canonical | `pwrl-standards/SCHEMA.md` |
-| Task & plan indexes | `docs/tasks/INDEX.md`, `docs/plans/INDEX.md` |
-| Root docs | `README.md`, `INSTALLATION.md`, `QUICKSTART.md`, `GUIDE.md` |
+| Location pattern    | Examples                                                    |
+| ------------------- | ----------------------------------------------------------- |
+| Main skill files    | `pwrl-*/SKILL.md`                                           |
+| Reference files     | `pwrl-*/references/*.md`                                    |
+| Standards/canonical | `pwrl-standards/SCHEMA.md`                                  |
+| Task & plan indexes | `docs/tasks/INDEX.md`, `docs/plans/INDEX.md`                |
+| Root docs           | `README.md`, `INSTALLATION.md`, `QUICKSTART.md`, `GUIDE.md` |
 
 ### Phase 3: Apply Replacements
 

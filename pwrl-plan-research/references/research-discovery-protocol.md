@@ -26,7 +26,7 @@ related_learnings: [...]
 
 ### User Context
 
-May prompt user via `ask_user_questions` for:
+May prompt user via `ask_user_question` for:
 
 - Confirmation of tech stack detection
 - Approval for external research

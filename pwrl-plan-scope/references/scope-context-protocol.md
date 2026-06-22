@@ -26,7 +26,7 @@ EXAMPLES:
 
 ### User Context
 
-The skill may need to prompt the user via `ask_user_questions` extension if:
+The skill may need to prompt the user via `ask_user_question` extension if:
 
 - Input is empty (ask: "What would you like to plan?")
 - Input is ambiguous (ask clarifying questions)

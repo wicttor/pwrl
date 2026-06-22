@@ -10,7 +10,7 @@ Execute implementation work through a deterministic 4-phase pipeline: triage inp
 
 ## Interaction Method
 
-- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Use platform's `ask_user_question`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
 - Ask one question at a time
 - Use multiple-choice questions when possible
 - If input is empty, ask: "What work would you like to execute? Provide a task file path, plan file, or describe the work to be done."

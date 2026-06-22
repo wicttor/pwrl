@@ -11,7 +11,7 @@ argument-hint: "[scoped context from pwrl-plan-scope]"
 
 ## Interaction Method
 
-- Use the platform's `ask_user_questions` extension for decisions (e.g., approve external research).
+- Use the platform's `ask_user_question` extension for decisions (e.g., approve external research).
 - Ask one question at a time. Present findings before asking for confirmation.
 - Use multiple-choice questions when possible (e.g., "Should I run external research on [topic]?").
 - If input is empty or missing scoped context, ask: "Please provide a task description or run pwrl-plan-scope first to gather context."
@@ -123,7 +123,7 @@ Generate targeted librarian or web search queries when external research is reco
 
 ### Step 6: Present and Confirm
 
-1. Present the full research findings to the user via `ask_user_questions`.
+1. Present the full research findings to the user via `ask_user_question`.
 2. Ask: "Are these findings sufficient to proceed to design?"
 3. If confirmed: Return the research findings object.
 4. If corrections needed: Iterate on steps 1-5 as needed based on feedback.

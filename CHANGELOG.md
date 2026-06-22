@@ -40,7 +40,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ### Changed
 
-- Renamed `ask_user` tool references to `ask_user_questions` extension across plan and review skill documentation (`pwrl-plan`, `pwrl-plan-scope`, `pwrl-plan-research`, `pwrl-plan-design`, `pwrl-plan-generate`, `pwrl-review-scope`, `pwrl-standards/SCHEMA.md`, `docs/tasks/INDEX.md`)
+- Renamed `ask_user` tool references to `ask_user_question` extension across plan and review skill documentation (`pwrl-plan`, `pwrl-plan-scope`, `pwrl-plan-research`, `pwrl-plan-design`, `pwrl-plan-generate`, `pwrl-review-scope`, `pwrl-standards/SCHEMA.md`, `docs/tasks/INDEX.md`)
 - Bumped package version to 1.2.5
 
 ## [1.2.4] - 2026-06-16
@@ -94,6 +94,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 ### Changed
 
 **CLI & Installation:**
+
 - Simplified `initProject()` to remove automatic docs directory creation
 - Updated initialization output messaging to focus on skills and agent setup
 - Removed reference documentation from init output (users should consult GUIDE.md and README.md)
@@ -105,10 +106,12 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 ### Added
 
 **Agents & Orchestration:**
+
 - Added `pwrl-work.agent.md` orchestrator that implements 5-phase work execution workflow (triage → prepare → execute → review → ship) with phase-by-phase user feedback and inline/serial/parallel execution modes
 - Added `pwrl-planner.agent.md` orchestrator that routes planning requests through 4 planning micro-skills (scope → research → design → generate) with fallback monolithic workflow support
 
 **Micro-Skills:**
+
 - Added `pwrl-work-triage` micro-skill for task prioritization and dependencies analysis
 - Added `pwrl-work-prepare` micro-skill for environment and context setup
 - Added `pwrl-work-execute` micro-skill for implementation execution with inline/serial/parallel modes
@@ -117,6 +120,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 - Added `pwrl-work-sync-status` utility for GitHub integration and deployment status tracking
 
 **Planning Micro-Skills (Enhanced):**
+
 - Added `pwrl-plan-scope` micro-skill with learnings gate and requirement bootstrap
 - Added `pwrl-plan-research` micro-skill for local and external research with high-risk detection
 - Added `pwrl-plan-design` micro-skill for technical design with state schema and U-ID generation
@@ -124,11 +128,13 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 - Added comprehensive reference documentation for all planning micro-skills (edge cases, state schemas, workflow details)
 
 **Testing & Validation:**
+
 - Added comprehensive test suites for pwrl-work skills (`tests/pwrl-work/skills.test.js`)
 - Added comprehensive test suites for pwrl-plan skills (`tests/pwrl-plan/skills.test.js`)
 - Added test fixtures and sample plans for validation scenarios
 
 **Documentation & Learning:**
+
 - Added `docs/analysis/2026-06-05-pwrl-work-structure-analysis.md` documenting work skill decomposition
 - Added `docs/examples/pwrl-work-agent-example.md` with complete workflow examples
 - Added `docs/examples/work-workflow.md` showing 5-phase execution examples
@@ -144,6 +150,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 - Updated `docs/learnings/INDEX.md` with latest patterns and decisions
 
 **CLI & Installation:**
+
 - Enhanced `bin/pwrl.js` to list all available agents and micro-skills with phase numbers
 - Enhanced `bin/postinstall.js` with platform-specific agent setup guidance (GitHub Copilot, Cursor, Claude, others)
 - Added agent-enhanced vs. fallback mode explanations to CLI help output
@@ -151,12 +158,14 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 ### Changed
 
 **Skill Reorganization:**
+
 - Sliced monolithic `pwrl-work` skill into 6 micro-skills with dedicated fallback logic
 - Refactored `pwrl-plan` into 4 micro-skills with routing orchestrator
 - Enhanced all micro-skills with standardized error handling and validation
 - Updated `pwrl-work/SKILL.md` with integrated fallback workflow documentation
 
 **Documentation Updates:**
+
 - Updated README.md Project Structure to include `agents/` folder for orchestrators
 - Updated README.md Quick Start to explain agent installation and fallback routing
 - Updated QUICKSTART.md "What happens", "Common Patterns", and workflow diagrams for 5-phase work execution
@@ -169,6 +178,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 - Fixed all broken references to work skill documentation
 
 **Micro-Skill References:**
+
 - Added comprehensive reference sections to all planning skills:
   - Edge case handling guides
   - State schema documentation

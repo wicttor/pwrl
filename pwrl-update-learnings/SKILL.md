@@ -10,7 +10,7 @@ Keep `docs/learnings/INDEX.md` synchronized with the current learning documents.
 
 ## Interaction Method
 
-- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Use platform's `ask_user_question`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
 - Ask one question at a time
 - Use multiple-choice questions when possible
 - If input is empty, ask: "Should the learnings index be updated? Default is to sync recently changed learnings only."

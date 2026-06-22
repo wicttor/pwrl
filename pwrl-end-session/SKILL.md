@@ -10,7 +10,7 @@ Preserve session context with a well-documented commit capturing state, decision
 
 ## Interaction Method
 
-- Use platform's `ask_user_questions`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
+- Use platform's `ask_user_question`, `ask_user`, `ask_user_input`, `vscode/askQuestions` or any available extension/tool for user interaction for all decisions
 - Ask one question at a time
 - Use multiple-choice questions when possible
 - If input is empty, ask: "Would you like to end this session? Optionally provide a reason or context for why this session is ending."

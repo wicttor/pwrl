@@ -26,7 +26,7 @@ This file documents seven edge cases encountered during the research phase (S3) 
 
 1. Document both patterns
 2. Identify the differences (trade-offs, contexts, versions)
-3. Ask user via `ask_user_questions`: "Two different auth approaches exist in the codebase. Which should this task follow, or should we unify them?"
+3. Ask user via `ask_user_question`: "Two different auth approaches exist in the codebase. Which should this task follow, or should we unify them?"
 4. Options:
    - **Follow JWT approach:** Document rationale
    - **Follow session approach:** Document rationale
@@ -47,7 +47,7 @@ This file documents seven edge cases encountered during the research phase (S3) 
 2. Use alternative detection methods:
    - Inspect directory structure for clues (src/, app/, lib/, etc.)
    - Examine file extensions (_.py → Python, _.go → Go, \*.js → Node.js)
-   - Ask user via `ask_user_questions`: "What's your tech stack? (e.g., Node.js v18, Express, PostgreSQL)"
+   - Ask user via `ask_user_question`: "What's your tech stack? (e.g., Node.js v18, Express, PostgreSQL)"
 3. Collect tech stack info from user if available
 4. Pass to downstream skills with note: "Tech stack manually verified" or "Auto-detected"
 

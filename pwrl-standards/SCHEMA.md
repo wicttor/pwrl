@@ -425,7 +425,7 @@ Read `assets/templates.md` and choose the appropriate template based on the lear
 
 ✅ **Correct:**
 
-- "Use the platform's `ask_user_questions` extension"
+- "Use the platform's `ask_user_question` extension"
 - "If the environment exposes a parallel subagent facility"
 - "Read tools (Read, Grep, Glob, git blame)"
 

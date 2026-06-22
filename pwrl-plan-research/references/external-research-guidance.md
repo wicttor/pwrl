@@ -13,7 +13,7 @@ should_run_external_research = high_risk_detected AND patterns_found_count < 3
 - **high_risk_detected:** One or more high-risk areas identified (see high-risk-detection.md)
 - **patterns_found_count:** Number of similar local implementations found (< 3 = insufficient)
 
-If this condition is true, ask the user via `ask_user_questions`:
+If this condition is true, ask the user via `ask_user_question`:
 
 > "This task involves high-risk area(s) ([areas]) with only [count] local example(s). Should I run external research?"
 

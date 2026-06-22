@@ -227,7 +227,7 @@ Check dependency graph above. Cannot start task X until task Y is complete? Look
 1. Re-read the relevant task file and plan
 2. Check Related Learnings (if any exist)
 3. Check Acceptance Criteria (what must be true at end?)
-4. Ask clarifying questions (use `ask_user_questions` extension)
+4. Ask clarifying questions (use `ask_user_question` extension)
 
 ---
 

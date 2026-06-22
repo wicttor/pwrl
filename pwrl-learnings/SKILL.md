@@ -63,6 +63,7 @@ COMPLETE
 - Input: Source content and type
 - Output: Extraction artifact with candidates
 - Tests: 50 cases
+- **Quality Gate Validation:** Run `/pwrl-phase-checkpoint learnings 1 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 - See: [README](../pwrl-learnings-extract/README.md)
 
 ### U4.2: pwrl-learnings-classify
@@ -72,6 +73,7 @@ COMPLETE
 - Input: Extraction artifact (extracted learnings)
 - Output: Classification artifact (refined, prioritized)
 - Tests: 50 cases
+- **Quality Gate Validation:** Run `/pwrl-phase-checkpoint learnings 2 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 - See: [README](../pwrl-learnings-classify/README.md)
 
 ### U4.3: pwrl-learnings-structure
@@ -81,6 +83,7 @@ COMPLETE
 - Input: Classification artifact
 - Output: Structure artifact (formatted, indexed, ready to save)
 - Tests: 45 cases
+- **Quality Gate Validation:** Run `/pwrl-phase-checkpoint learnings 3 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 - See: [README](../pwrl-learnings-structure/README.md)
 
 ### U4.4: pwrl-learnings-dedup
@@ -90,6 +93,7 @@ COMPLETE
 - Input: Structure artifact
 - Output: Deduplicated artifact (with archive mapping)
 - Tests: 50 cases
+- **Quality Gate Validation:** Run `/pwrl-phase-checkpoint learnings 4 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 - See: [README](../pwrl-learnings-dedup/README.md)
 
 ### U4.5: pwrl-learnings-save
@@ -99,6 +103,7 @@ COMPLETE
 - Input: Deduplicated artifact
 - Output: Saved artifact (persistent, indexed, accessible)
 - Tests: 45 cases
+- **Quality Gate Validation:** Run `/pwrl-phase-checkpoint learnings 5 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 - See: [README](../pwrl-learnings-save/README.md)
 
 ## Test Coverage

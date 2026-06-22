@@ -296,6 +296,35 @@ OR
 
 ---
 
+### Phase Manifest (Core Workflow Skills)
+
+Core workflow orchestrators MUST include a `references/phases.yaml` manifest declaring their required phases and per-phase step keywords. The validator (`validate-skills.js`) mechanically enforces that the SKILL.md contains the declared phase headings and step keywords — model-agnostic, file-content-only.
+
+**REQUIRED (5 core orchestrators):**
+
+- `pwrl-review` — must have `pwrl-review/references/phases.yaml`
+- `pwrl-work` — must have `pwrl-work/references/phases.yaml`
+- `pwrl-plan` — must have `pwrl-plan/references/phases.yaml`
+- `pwrl-tasks` — must have `pwrl-tasks/references/phases.yaml`
+- `pwrl-learnings` — must have `pwrl-learnings/references/phases.yaml`
+
+**OPTIONAL:** All other skills. If absent, no manifest checks are performed.
+
+**Format reference:** See `references/phase-manifest-schema.md` for the complete schema definition.
+
+**Phase definition source:** See `pwrl-phase-checkpoint/references/phase-schemas.md` for canonical phase schemas and quality gates.
+
+#### Validation Rules
+
+When a manifest is present, the validator enforces:
+
+1. **Heading presence:** Each declared phase must have a corresponding `### Phase <N>:` heading in SKILL.md (case-insensitive name match, optional colon)
+2. **Step keyword presence:** Each declared `required_steps` keyword must appear in that phase's section (between the phase heading and the next `### `/`## ` heading or EOF)
+3. **No cross-section bleeding:** Keywords in one phase don't satisfy another phase's requirements
+4. **Non-core exclusion:** Skills without manifest are not flagged
+
+---
+
 ## Support File Organization
 
 ### Directory Structure

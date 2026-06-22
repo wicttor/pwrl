@@ -1,43 +1,141 @@
-# Learnings Index
+---
+title: Learning Index
+type: index
+generated: 2026-06-22
+total_learnings: 6
+---
 
-Canonical index of all learning documents.
+# PWRL Learning Index
 
-## Rules
+**Last Updated:** 2026-06-22  
+**Total Learnings:** 6  
+**Categories:** pattern (2), workflow (3), decision (1), gotcha (1)
 
-- Every learning document under docs/learnings must have exactly one row in this index.
-- Every row must include a short description (1 sentence, concrete, searchable).
-- Keep rows sorted newest-first by date.
-- Update this index whenever creating, refreshing, archiving, or consolidating learnings.
+## By Type
 
-## Entries
+### Pattern (2)
 
-| Date       | Category      | Title                                                                   | Path                                                                             | Short Description                                                                                                                                                                                             |
-| ---------- | ------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2026-06-21 | pattern       | Non-Destructive Index Regeneration                                      | `pattern/non-destructive-index-regeneration-2026-06-21.md`                      | Back up prior docs/tasks/INDEX.md before overwriting when re-slicing a plan, preserving prior plan lineage (e.g., INDEX-2026-06-05-plan-slice.md).                                                            |
-| 2026-06-21 | pattern       | Validator Regex Relaxation as Root-Cause Fix                            | `pattern/validator-regex-relaxation-root-cause-2026-06-21.md`                   | When many files fail a header gate using a common valid variant (## Output: Foo), relax hasSection() to accept prefixes rather than rewriting 50+ headers — clears 18 failures with zero edits.              |
-| 2026-06-21 | decision      | Hybrid Line-Gate Strategy for Incremental Right-Sizing                  | `decision/hybrid-line-gate-strategy-2026-06-21.md`                              | Relax a line-count ceiling (170->300) to get the gate green fast, defer incremental tightening (300->...->170) to future plans, avoiding one massive multi-session extraction push.                          |
-| 2026-06-21 | pattern       | Phase Manifest as Model-Agnostic Enforcement                            | `pattern/phase-manifest-model-agnostic-enforcement-2026-06-21.md`               | Machine-readable references/phases.yaml per core skill, parsed by the validator, makes advisory phase gates deterministic without coupling to any agent/model runtime.                                       |
-| 2026-06-21 | gotcha        | validate-skills.js Exact-Match Header Regex                             | `gotcha/validate-skills-exact-match-header-regex-2026-06-21.md`                 | hasSection() uses exact-match regex: ## Output: Foo and ## Quality Gates by Workflow do NOT satisfy ## Output / ## Quality Criteria gates — relax the regex or rename the header.                            |
-| 2026-06-19 | workflow      | Cross-Skill Terminology Update Workflow                               | `workflow/cross-skill-terminology-update-2026-06-19.md`                       | Six-phase workflow for renaming a term across the PWRL docs ecosystem: broad grep, categorize, replace, fix table alignment, bump version+CHANGELOG, verify via end-session.                                  |
-| 2026-06-16 | decision      | Remove Agent Infrastructure, Adopt Pure Skill-Based Framework            | `decision/remove-agent-infrastructure-2026-06-16.md`                           | Removed all agent orchestrators, routing docs, and rebranded PWRL from "agentic" to pure skill-based development framework.                                                                                     |
-| 2026-06-16 | decision      | Remove Mandatory [AGENT: ...] Attribution Trailer from Commit Protocol | `decision/remove-agent-attribution-trailer-2026-06-16.md`                      | Removed mandatory agent attribution trailer from end-session commit protocol as part of agent infrastructure cleanup.                                                                                         |
-| 2026-06-16 | pattern       | Explicit Three-Tier Verdict Flow for Code Review                       | `pattern/explicit-review-verdict-flow-2026-06-16.md`                            | Three-tier review verdict (APPROVED / REQUEST CHANGES / REJECTED) each with specific task file management actions, replacing binary approve/deny.                                                             |
-| 2026-06-16 | pattern       | End-Session Two-Phase Micro-Skill Pipeline                             | `pattern/end-session-two-phase-pipeline-2026-06-16.md`                           | Concrete instance of micro-skill decomposition for session-ending: checkpoint (verify state) → commit (draft+commit) → optional learnings chain.
-| 2026-06-16 | decision      | Rebrand Phase Labels to Final Orchestrator Names                        | `decision/rebrand-phase-labels-to-orchestrator-names-2026-06-16.md`               | Replace outdated "Phase X of PWRL Architecture Refactoring" labels with final descriptive names across skill READMEs.
-| 2026-06-13 | decision      | Coordinated Version Numbering Across Micro-Skills Ecosystem             | `decision/coordinated-versioning-ecosystem-2026-06-13.md`                        | Standardize all 27 micro-skills to share package.json version for simplified release management and ecosystem compatibility.                                                                                  |
-| 2026-06-13 | decision      | YAML Frontmatter Version Field Placement Standard                      | `decision/yaml-frontmatter-version-placement-2026-06-13.md`                      | Place version field after description in YAML frontmatter for semantic grouping and human readability.                                                                                                         |
-| 2026-06-13 | workflow      | Bulk Metadata Synchronization with multi_replace_string_in_file         | `workflow/bulk-metadata-sync-2026-06-13.md`                                      | Parallel multi-replacement pattern for updating the same field across 20+ files atomically with sample verification.                                                                                          |
-| 2026-06-13 | workflow      | Sample Verification After Bulk Changes Quality Gate                     | `workflow/sample-verification-quality-gate-2026-06-13.md`                        | Verify 3 samples after bulk operations to catch formatting issues with minimal overhead, raising confidence from 70% to 95%.                                                                                  |
-| 2026-06-12 | pattern       | Explicit Task File Movement as Critical Phase Operation                 | `pattern/explicit-task-file-movement-critical.md`                                | Make task file movement between folders (to-do→in-progress→for-review) an explicit, documented critical operation at phase boundaries, ensuring folder location always reflects true task status.             |
-| 2026-06-12 | decision      | Interaction Modes for User Engagement Control                           | `decision/interaction-modes-for-user-engagement.md`                              | Offer users Detailed (step-by-step review) or Yolo (full automation) modes at workflow start to control engagement level and approval authority based on task complexity and user confidence.                 |
-| 2026-06-12 | decision      | Branch-Ready Workflow Over Auto-Ship to Main                            | `decision/branch-ready-workflow-over-autoship.md`                                | Changed from automatic merge to main to keeping feature branches active for manual PR creation, enabling structured review and user agency in merge decisions while working with standard PR-based workflows. |
-| 2026-06-10 | pattern       | Skill Integration Testing Pattern for Micro-Skills                      | `pattern/skill-integration-testing-micro-skills-2026-06-10.md`                   | Test pattern for validating micro-skill decompositions: per-skill unit tests, cross-skill contract validation, and example workflow verification to catch integration issues early.                           |
-| 2026-06-10 | decision      | Code Review Fixes & Validation for Skill Decomposition                  | `decision/code-review-fixes-validation-2026-06-10.md`                            | Applied 3 P2 fixes to pwrl-work decomposition: explicit parallel mode fallback, GitHub CLI testing with mocks, and standardized unit-id naming across all state schemas.                                      |
-| 2026-06-09 | technical-fix | pwrl init: Incorrect agent source path                                  | `technical-fix/pwrl-init-incorrect-agent-path-2026-06-09.md`                     | Fixed pwrl init to copy agents from 'agents/' instead of '.agents/agents/', ensuring agents are correctly installed when users run init.                                                                      |
-| 2026-06-08 | workflow      | PWRL Documentation Revised for Work Agent Orchestration                 | `workflow/pwrl-documentation-revised-for-work-agent-orchestration-2026-06-08.md` | Synchronized README, GUIDE, INSTALLATION, QUICKSTART, and CLI tools with Work Agent's 5-phase orchestration (triage→prepare→execute→review→ship) and platform-specific agent setup.                           |
-| 2026-06-08 | workflow      | Compact After Every Unit — Task-Granular Commits                        | `workflow/compact-after-every-unit-2026-06-08.md`                                | Commit after each task unit completes with structured messages, creating clean reviewable history where each commit maps to exactly one task in the INDEX.                                                    |
-| 2026-06-05 | plan          | PWL-Work Slicing Plan: Dual-Path Architecture                           | `plan/pwrl-work-slicing-plan-2026-06-05.md`                                      | Decompose pwrl-work into 6 micro-skills with agent orchestration and monolithic fallback, supporting three execution modes (inline/serial/parallel) with safety gates and GitHub integration.                 |
-| 2026-06-05 | pattern       | Planning Tier Architecture - Fast, Standard, Deep                       | `pattern/planning-tier-architecture-2026-06-05.md`                               | Three-level planning depth system where tier selection tunes investigation rigor and documentation depth within all 4 phases, not which phases run.                                                           |
-| 2026-06-05 | pattern       | State Schema Design for Workflow Context Passing                        | `pattern/state-schema-workflow-context-2026-06-05.md`                            | Structured approach to defining how context flows between sequential workflow phases using explicit input/output contracts, enabling phase isolation and reusability.                                         |
-| 2026-06-05 | pattern       | Skill Decomposition & Agent Orchestration Pattern                       | `pattern/skill-decomposition-agent-orchestration-2026-06-05.md`                  | Decompose multi-phase workflows into focused micro-skills with explicit phase boundaries and independent testability. Agent orchestration part superseded by pure skill chaining (see v1.2.1).               |
-| 2026-06-05 | decision      | Fallback Architecture Design for System Resilience (SUPERSEDED)         | `decision/fallback-architecture-design-2026-06-05.md`                            | ⚠️ SUPERSEDED by v1.2.1 agent removal. Smart routing (agent+fallback) replaced by pure skill-based single-path architecture.                                                                                  |
+- **[TDD RED Phase - Test-First Specification](pattern/tdd-red-phase-test-first-spec.md)**
+  Use dual-implementation comparison to effectively document and prove test specification gaps.
+  *Tags: tdd, test-first, specification, behavioral-contract*
+  *Severity: HIGH*
+
+- **[Task State Management - Dual-Layer Tracking](pattern/task-state-management-dual-layer-tracking.md)**
+  Use file location + frontmatter status for both human-readable and machine-readable state signals.
+  *Tags: task-tracking, state-machine, human-readable, machine-readable*
+  *Severity: MEDIUM*
+
+### Workflow (3)
+
+- **[Code Review 4-Phase Pipeline](workflow/code-review-4-phase-pipeline.md)**
+  Structured code review with deterministic phases, clear artifacts, and quality gates at each phase.
+  *Tags: code-review, workflow, quality-gates, deterministic*
+  *Severity: HIGH*
+
+- **[Cross-Reference Integration - Single Source of Truth](workflow/cross-reference-integration-single-source-of-truth.md)**
+  Establish canonical source for shared concepts, reference from multiple locations, prevent version drift.
+  *Tags: documentation, references, deduplication, maintainability*
+  *Severity: MEDIUM*
+
+### Decision (1)
+
+- **[Schema Design - Simple Line Parser](decision/schema-design-simple-line-parser.md)**
+  Parse YAML using simple 2-space line-based parser (not external library) for lightweight, auditable validator.
+  *Tags: schema-design, constraints, no-external-deps, yaml*
+  *Severity: HIGH*
+
+### Gotcha (1)
+
+- **[RED Tests as Executable Specification](gotcha/red-tests-as-executable-specification.md)**
+  Failing tests in RED phase prove specification gaps, not code bugs. Clear naming and documentation essential.
+  *Tags: tdd, red-phase, test-naming, common-mistake*
+  *Severity: HIGH*
+
+---
+
+## By Domain
+
+### Testing (3)
+
+- TDD RED Phase - Test-First Specification
+- RED Tests as Executable Specification
+- Code Review 4-Phase Pipeline (includes testing lens)
+
+### Architecture (1)
+
+- Schema Design - Simple Line Parser
+
+### Process (1)
+
+- Code Review 4-Phase Pipeline
+
+### State Management (1)
+
+- Task State Management - Dual-Layer Tracking
+
+### Documentation (1)
+
+- Cross-Reference Integration - Single Source of Truth
+
+---
+
+## By Severity
+
+### HIGH (4)
+
+- TDD RED Phase - Test-First Specification
+- Code Review 4-Phase Pipeline
+- Schema Design - Simple Line Parser
+- RED Tests as Executable Specification
+
+### MEDIUM (2)
+
+- Task State Management - Dual-Layer Tracking
+- Cross-Reference Integration - Single Source of Truth
+
+---
+
+## By Applicability
+
+### all-projects (1)
+
+- TDD RED Phase - Test-First Specification
+
+### all-teams (1)
+
+- Code Review 4-Phase Pipeline
+
+### test-driven-development (1)
+
+- RED Tests as Executable Specification
+
+### validators-parsers (1)
+
+- Schema Design - Simple Line Parser
+
+### task-systems (1)
+
+- Task State Management - Dual-Layer Tracking
+
+### documentation-systems (1)
+
+- Cross-Reference Integration - Single Source of Truth
+
+---
+
+## Search Index
+
+**Keywords:** tdd, red-phase, test-first, specification, schema-design, yaml, parser, code-review, workflow, process, testing, quality-gates, deterministic, task-tracking, state-machine, documentation, references, deduplication, gotcha, common-mistake
+
+**Files:** 6  
+**Formats:** Markdown (.md)  
+**Repository:** /home/wicttor/Projects/pwrl/docs/learnings/
+
+---
+
+## Quick Links
+
+- **Start with:** TDD RED Phase - Test-First Specification (foundational pattern)
+- **Most used:** Code Review 4-Phase Pipeline (cross-team workflow)
+- **Critical gotcha:** RED Tests as Executable Specification (avoid misconceptions)
+- **Architecture decision:** Schema Design - Simple Line Parser (design rationale)

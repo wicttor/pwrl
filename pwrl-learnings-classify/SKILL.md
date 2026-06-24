@@ -100,9 +100,43 @@ source_extract_id: YYYY-MM-DD-NNN-extract
 
 Artifact passed to `pwrl-learnings-structure`.
 
-## Workflow
+## Detailed Workflow
 
-### Step 1: Verify Extraction Artifact
+For complete step-by-step instructions, see [classify-learnings-detailed-workflow.md](references/classify-learnings-detailed-workflow.md).
+
+This SKILL.md provides an overview. The detailed workflow document contains:
+- Type refinement heuristics
+- Domain assignment logic and keywords
+- Priority assessment rules
+- Applicability scoring methodology
+- Tag assignment strategies
+- Related learning detection
+- Interaction flow examples
+
+## Early Duplicate Detection (Phase 2 Enhancement)
+
+This phase includes early duplicate detection to improve coverage:
+
+1. **Load existing learnings** from `docs/learnings/.index.json`
+2. **Check each candidate** against existing learnings by type + domain + tags
+3. **Flag potential updates** (candidates matching existing learnings)
+4. **Warn user** before proceeding to next phase
+
+See [duplicate-handling-consolidated.md](../pwrl-learnings/references/duplicate-handling-consolidated.md#early-duplicate-detection-phase-2) for detailed early detection logic.
+
+## Quality Gate Validation
+
+After completing this phase, run quality gate validation:
+
+```bash
+/pwrl-phase-checkpoint learnings 2 [artifact-path]
+```
+
+See [pwrl-phase-checkpoint](../../pwrl-phase-checkpoint/SKILL.md) for validation rules.
+
+---
+
+
 
 1. Check that input artifact has:
    - Valid `extract_id`

@@ -79,9 +79,32 @@ created: ISO-8601-timestamp
 - **Search:** Available via .index.json
 ```
 
-## Workflow
+## Detailed Workflow
 
-### Step 1: Verify Dedup Artifact
+For complete step-by-step instructions, see [save-learnings-detailed-workflow.md](references/save-learnings-detailed-workflow.md).
+
+This SKILL.md provides an overview. The detailed workflow document contains:
+- Storage environment validation
+- Backup creation and verification
+- File writing process with error handling
+- Index file generation (INDEX.md, BY_TYPE.md, etc.)
+- Data validation checklist
+- Git integration process
+- Artifact generation
+
+## Quality Gate Validation
+
+After completing this phase, run quality gate validation:
+
+```bash
+/pwrl-phase-checkpoint learnings 5 [artifact-path]
+```
+
+See [pwrl-phase-checkpoint](../../pwrl-phase-checkpoint/SKILL.md) for validation rules.
+
+---
+
+
 
 Check input has valid `dedup_id` and `learnings` array with complete data.
 

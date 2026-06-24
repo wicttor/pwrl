@@ -34,86 +34,73 @@ End a work session cleanly by creating a single, clear commit that captures prog
 
 After commit succeeds, optionally chain to `/pwrl-learnings` to capture session insights.
 
-## Support Files
+## Key References
 
-- `references/commit-message-examples.md` — Example messages for common scenarios
+- [checkpoint-protocol.md](pwrl-end-session-checkpoint/references/checkpoint-protocol.md) — Detailed validation rules for Phase 1
+- [commit-protocol.md](pwrl-end-session-commit/references/commit-protocol.md) — Message drafting rules and version bump handling
+- [commit-message-examples.md](references/commit-message-examples.md) — Common session completion types
+- [pwrl-learnings](../pwrl-learnings/SKILL.md) — Optional chaining for extracting session insights
 
 ## Architecture
 
 **Pure Skill Pipeline** — Direct sequence of 2 micro-skills (checkpoint and commit), optionally followed by learnings extraction:
 
 ```
-Input
+INPUT (user invokes /pwrl-end-session)
   ↓
-Phase 1: pwrl-end-session-checkpoint (micro-skill)
-  ├ Input: Reason (optional)
-  ├ Processing: Verify state, confirm completion
-  ├ Output: Checkpoint artifact (approved_files, session_summary)
+PHASE 1: Checkpoint (pwrl-end-session-checkpoint)
+  → Verify state, confirm completion
+  → Output: Checkpoint artifact
   ↓
-Phase 2: pwrl-end-session-commit (micro-skill)
-  ├ Input: Checkpoint artifact
-  ├ Processing: Draft message, create commit
-  ├ Output: Commit artifact (commit_sha, message)
+PHASE 2: Commit (pwrl-end-session-commit)
+  → Draft message, create commit
+  → Output: Commit artifact
   ↓
-Phase 3 (Optional): Chain to pwrl-learnings
-  ├ Input: Commit SHA and session context
-  ├ Processing: Extract and save session learnings
-  ├ Output: Learning documents saved
+PHASE 3 (Optional): Chain to pwrl-learnings
+  → Extract and save session insights
   ↓
-COMPLETE
+OUTPUT (session complete)
 ```
 
-## Workflow
+## Workflow: 3-Phase Pipeline
+
+Each phase executes sequentially. The orchestrator invokes the micro-skill, validates output with quality gates, and passes the artifact to the next phase.
 
 ### Phase 1: Checkpoint (pwrl-end-session-checkpoint)
 
-**Purpose:** Verify repository state and get session completion confirmation
+Verify repository state and get session completion confirmation.
 
-**Input:** Optional reason/context from user
+**See detailed workflow:** [checkpoint-protocol.md](pwrl-end-session-checkpoint/references/checkpoint-protocol.md)
 
-**Processing:** (See `pwrl-end-session-checkpoint/references/checkpoint-protocol.md`)
-
-1. Check working tree state (git status, changed files tool)
-2. If no changes, inform user and exit
-3. Review changed files and ask for confirmation
-4. Confirm session is ready to close (incomplete work → show next steps)
-5. Generate checkpoint artifact with approved files and summary
-
-**Output:** Checkpoint artifact with approved_files, session_summary, user_confirmation
-
-**Quality Gate Validation:** If you have incomplete work from pwrl-review or pwrl-work, run `/pwrl-phase-checkpoint [workflow] [phase] [artifact-path]` to verify phase status before ending session. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
+- Check working tree state (git status)
+- Identify all changes (staged, unstaged, untracked)
+- Display summary and get user confirmation
+- Handle incomplete work (capture next steps)
+- Generate checkpoint artifact
 
 ### Phase 2: Create Commit (pwrl-end-session-commit)
 
-**Purpose:** Prepare commit message and create commit with proper attribution
+Prepare commit message and create commit with proper attribution.
 
-**Input:** Checkpoint artifact
+**See detailed workflow:** [commit-protocol.md](pwrl-end-session-commit/references/commit-protocol.md)
 
-**Processing:** (See `pwrl-end-session-commit/references/commit-protocol.md`)
-
-1. Draft commit subject (imperative, ≤50 chars)
-2. Write body: explain why, highlight key decisions, list next steps if partial
-3. Append `[AGENT: <agent-name>]` trailer (mandatory)
-4. Show full message and apply user edits
-5. Detect version bump and update `CHANGELOG.md` if needed
-6. Stage files and create commit
-7. Generate commit artifact with commit SHA
-
-**Output:** Commit artifact with commit_sha, message, version_bumped
+- Draft subject (imperative, ≤50 chars)
+- Write body (why/what/next)
+- Detect version bump and update CHANGELOG.md if needed
+- Get user approval of message
+- Stage files and create commit
+- Capture commit SHA
 
 ### Phase 3: Document Learnings (Optional Chain)
 
-**Purpose:** Capture session insights and learnings
+Capture session insights and learnings for future reference.
 
-**Input:** Commit SHA and session context
-
-**Processing:** Chain to `/pwrl-learnings` with changed files from commit
+**Invoke:** `/pwrl-learnings` with changed files from Phase 2
 
 - User can opt in or skip
-- pwrl-learnings handles extraction, classification, dedup, and save
-- All learnings automatically include commit SHA as reference
-
-**Output:** Learning documents saved in docs/learnings/
+- Extracts, classifies, deduplicates, and saves learnings
+- Links learnings to session commit SHA
+- Result: Learning documents in docs/learnings/
 
 ## Rules
 

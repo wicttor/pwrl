@@ -28,51 +28,7 @@ user_approval: true
 
 ## Output: Prepare Artifact
 
-Emit prepare artifact (YAML + markdown):
-
-```yaml
----
-format: pwrl-review-prepare-artifact
-version: "1.0"
-prepare_id: YYYY-MM-DD-UNN-prepare
-created: ISO-8601-timestamp
----
-
-# Review Environment Preparation
-
-## Commit & Branch Info
-- Source Branch: [branch name]
-- Target Branch: [main/dev]
-- Base Commit: [hash]
-- Head Commit: [hash]
-
-## Code Metrics
-- Files Modified: [count]
-- Lines Added: [count]
-- Lines Deleted: [count]
-- Net Change: [+/- count]
-
-## Modified File Types
-- Source Code: [count] files
-- Tests: [count] files
-- Documentation: [count] files
-- Configuration: [count] files
-- Other: [count] files
-
-## Review Scope Configuration
-
-### Enabled Checks
-- Code Quality: [yes/no]
-- Security: [yes/no]
-- Performance: [yes/no]
-- Test Coverage: [yes/no]
-- Documentation: [yes/no]
-
-### Tools Configured
-- Linter: [tool name] ✓
-- Test Framework: [framework] ✓
-- Coverage Tool: [tool] ✓
-- Type Checker: [tool] ✓
+Emit prepare artifact. See [artifact-schemas.md](../pwrl-review/references/artifact-schemas.md) for the complete schema.
 
 ## Ready for Analysis
 - **Status:** ready
@@ -198,25 +154,9 @@ Create prepare artifact with:
 
 **Emit artifact to console/file for next skill.**
 
-## Error Handling
+## Error Handling & Testing
 
-| Error                     | Recovery                                              |
-| ------------------------- | ----------------------------------------------------- |
-| Scope not approved        | Return error; direct to pwrl-review-scope             |
-| Invalid branch/commit     | Ask user to verify branch name and status             |
-| No modified files         | Return error; no changes to review                    |
-| Build fails               | Ask user to fix build; optionally skip check          |
-| Tools not found           | Ask user to skip or install; proceed if user confirms |
-| Metrics calculation fails | Continue with partial metrics                         |
-
-## Testing Coverage
-
-Test file: `tests/pwrl-review/prepare-setup.test.ts`
-
-**Happy Path Tests:**
-
-- ✅ Standard code changes (code + tests)
-- ✅ Config-only changes (no performance/coverage checks)
+See [error-and-testing.md](../pwrl-review/references/error-and-testing.md) for comprehensive error recovery strategies, prevention tactics, and test coverage expectations for this phase.
 - ✅ Docs-only changes (minimal checks)
 - ✅ Large refactor (all checks enabled)
 

@@ -358,37 +358,6 @@ cross_plan_groups:
 
 ---
 
-### 5. NEW: Check GitHub Integration Readiness (moved from old step 4)
-
-**Step 1 — Read `.pwrlrc.json`:**
-
-```json
-{
-  "integrations": {
-    "githubIssues": true
-  }
-}
-```
-
-**Step 2 — Evaluate:**
-
-- If `githubIssues` is `true` → GitHub integration enabled
-- Otherwise → skip GitHub syncing
-
-**Step 3 — If enabled, check each task for `github-issue` field:**
-
-- Build list of tasks that have linked issues
-- Validate issue numbers are numeric
-- Mark `readyForSync: true` if any tasks have issues
-
-**Step 4 — If disabled, log and continue:**
-
-```yaml
-githubEnabled: false
-readyForSync: false
-reason: "GitHub Issues integration disabled in .pwrlrc.json"
-```
-
 ### 5. User Confirmation Checkpoint
 
 Before proceeding to execution, present a summary and ask for confirmation:

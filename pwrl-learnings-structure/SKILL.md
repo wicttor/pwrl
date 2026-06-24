@@ -523,31 +523,3 @@ docs/learnings/
 | Duplicate slug                  | Append -1, -2, etc. to slug; regenerate path    |
 | Slug generation fails           | Use UUID as fallback                            |
 | Index generation fails          | Create partial indexes; flag for manual review  |
-
-## Testing Coverage
-
-Test file: `tests/pwrl-learnings/structure-learnings.test.ts`
-
-**Happy Path Tests:**
-
-- ✅ Structure by type (all learnings stored)
-- ✅ Structure by domain (all learnings stored)
-- ✅ All index files generated
-- ✅ Full-text index accurate
-- ✅ Markdown formatting correct
-
-**Edge Cases:**
-
-- ✅ Slug collision (auto-numbered)
-- ✅ Special characters in title (sanitized)
-- ✅ Missing metadata fields (defaults applied)
-- ✅ Very long learning content (formatted)
-- ✅ Related learning references (valid)
-
-**Output Validation Tests:**
-
-- ✅ All files exist and readable
-- ✅ Index structure valid
-- ✅ Metadata complete in each file
-- ✅ Links in indexes valid
-- ✅ .index.json valid JSON

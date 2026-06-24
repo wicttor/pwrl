@@ -32,72 +32,7 @@ tools_configured: [linter, test_framework, type_checker]
 
 ## Output: Analyze Artifact
 
-Emit analyze artifact (YAML + markdown):
-
-```yaml
----
-format: pwrl-review-analyze-artifact
-version: "1.0"
-analyze_id: YYYY-MM-DD-UNN-analyze
-created: ISO-8601-timestamp
----
-
-# Code Analysis Findings
-
-## Summary
-- **Total Issues Found:** [count]
-- **Critical Issues:** [count]
-- **Major Issues:** [count]
-- **Minor Issues:** [count]
-
-## Analysis Results
-
-### Code Quality
-- **Status:** ✓ pass | ⚠ pass-with-warnings | ✗ fail
-- **Issues Found:** [count]
-- **Top Findings:**
-  - High cyclomatic complexity in [file:line]
-  - Unused variable in [file:line]
-  - [Finding 3]
-
-### Security
-- **Status:** ✓ pass | ⚠ pass-with-warnings | ✗ fail
-- **Issues Found:** [count]
-- **Top Findings:**
-  - Potential SQL injection in [file:line]
-  - Missing input validation in [file:line]
-  - [Finding 3]
-
-### Test Coverage
-- **Overall Coverage:** [0-100]%
-- **Required Coverage:** [target]%
-- **Status:** ✓ pass | ⚠ warning | ✗ fail
-- **Issues Found:** [count]
-- **Gaps:**
-  - [Function/class] not covered
-  - [Error path] not tested
-
-### Documentation
-- **Status:** ✓ complete | ⚠ incomplete | ✗ missing
-- **Issues Found:** [count]
-- **Gaps:**
-  - README not updated for new API
-  - Type annotations missing in [file]
-  - [Issue 3]
-
-### Integration
-- **Build Status:** ✓ pass | ✗ fail
-- **Test Status:** ✓ pass | ✗ fail
-- **Import Status:** ✓ valid | ✗ broken
-- **Regression Status:** ✓ none detected | ✗ possible regressions
-
-## Detailed Findings
-
-[Full listing of all findings with context, severity, file/line references]
-
-## Recommendation
-- **Verdict:** approved | request-changes | rejected
-- **Rationale:** [Summary of decision]
+Emit analyze artifact. See [artifact-schemas.md](../pwrl-review/references/artifact-schemas.md) for the complete schema.
 
 ## Ready for Report
 - **Status:** ready
@@ -285,28 +220,9 @@ Artifact passed to `pwrl-review-report`.
 
 Emit complete artifact with all findings, recommendation, and next steps.
 
-## Error Handling
+## Error Handling & Testing
 
-| Error                        | Recovery                                                |
-| ---------------------------- | ------------------------------------------------------- |
-| Prepare artifact invalid     | Return error; direct to pwrl-review-prepare             |
-| Build fails                  | Flag as CRITICAL; continue analysis of other dimensions |
-| Tests fail                   | Flag as CRITICAL; continue analysis of other dimensions |
-| Tool not available           | Skip that analysis; continue with others                |
-| Coverage metrics unavailable | Skip coverage analysis; continue with others            |
-| Parse tool output fails      | Manual review of file; note in findings                 |
-
-## Testing Coverage
-
-Test file: `tests/pwrl-review/analyze-review.test.ts`
-
-**Happy Path Tests:**
-
-- ✅ Code + tests modified (all checks pass)
-- ✅ Security issue detected (CRITICAL)
-- ✅ Low test coverage (MAJOR)
-- ✅ Documentation complete
-- ✅ Integration passes (recommended: approved)
+See [error-and-testing.md](../pwrl-review/references/error-and-testing.md) for comprehensive error recovery strategies, prevention tactics, and test coverage expectations for this phase.
 
 **Edge Cases:**
 

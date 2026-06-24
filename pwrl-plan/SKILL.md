@@ -106,13 +106,7 @@ Each plan includes (tier-dependent):
 - If input is empty, ask: "What would you like to plan? Describe the task or project."
 - Provide clear recovery suggestions when errors occur
 
-## Architecture: No Agent Routing
-
-**Difference from Previous Version:**
-
-**Before:** Skill detected if agent was available, then either delegated to agent OR ran monolithic fallback (two code paths)
-
-**After:** Skill directly calls micro-skills in sequence—single deterministic pipeline, no branching:
+## Architecture
 
 ```
 pwrl-plan orchestrator
@@ -143,22 +137,6 @@ pwrl-plan orchestrator
 - [docs/guides/micro-skill-patterns.md](../docs/guides/micro-skill-patterns.md) — How to extend with new micro-skills
 - [docs/guides/architecture-refactoring.md](../docs/guides/architecture-refactoring.md) — Rationale for refactoring
 
-## Testing & Validation
-
-**Comprehensive test coverage:**
-
-- 30+ tests for pwrl-plan-scope (U1.1)
-- 25+ tests for pwrl-plan-research (U1.2)
-- 35+ tests for pwrl-plan-design (U1.3)
-- 30+ tests for pwrl-plan-generate (U1.4)
-- 30+ integration tests for full orchestration pipeline
-
-**Backward Compatibility:**
-
-- Same input/output behavior as previous version
-- Existing plans generated successfully
-- No breaking changes for users
-
 ## Frequently Asked Questions
 
 **Q: What if a phase fails? Can I skip it or retry?**
@@ -168,17 +146,3 @@ A: Yes. Each phase has explicit error handling with recovery suggestions. You ca
 **Q: Can I use just one micro-skill (e.g., only generate from design)?**
 
 A: The orchestrator expects to call all four phases in sequence. If you want to use a single micro-skill, call it directly by name: `/pwrl-plan-scope`, `/pwrl-plan-design`, etc.
-
-**Q: Why no agent routing?**
-
-A: Agents were adding complexity without value. The micro-skill pipeline is deterministic, testable, and easier to understand. Direct skill calling is simpler and more maintainable.
-
-**Q: Can I extend this for other workflows?**
-
-A: Yes! The micro-skills are reusable. For example, pwrl-work can use pwrl-plan-design for unit decomposition. See [docs/guides/micro-skill-patterns.md](../docs/guides/micro-skill-patterns.md).
-
----
-
-**Status:** Pure skill pipeline (no agent routing)
-**Version:** 2.0 (refactored from agent-dependent architecture)
-**Created:** 2026-06-11

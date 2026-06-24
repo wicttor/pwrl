@@ -62,112 +62,25 @@ Phase 4: pwrl-review-report
 COMPLETE
 ```
 
-## Workflow
+## Phase Summary
 
-### Phase 1: Validate Scope
+Each phase is orchestrated sequentially. The orchestrator calls the micro-skill, receives the output artifact, validates it with a quality gate, and passes it to the next phase.
 
-**Purpose:** Ensure code changes match requirements without scope creep
+**Phase 1: Scope** ([pwrl-review-scope](../pwrl-review-scope/SKILL.md)) — Validate branch scope and file categorization. Output: Scope artifact.
 
-**Input:** Source branch/PR, requirements context
+**Phase 2: Prepare** ([pwrl-review-prepare](../pwrl-review-prepare/SKILL.md)) — Setup review environment and configure analysis tools. Output: Prepare artifact.
 
-**Processing:** (See `pwrl-review-scope/references/scope-validation-protocol.md`)
+**Phase 3: Analyze** ([pwrl-review-analyze](../pwrl-review-analyze/SKILL.md)) — Review code quality, security, tests, docs, integration. Output: Analyze artifact.
 
-1. Extract requirements from task/plan
-2. Compare to actual files modified
-3. Detect scope creep (unrelated file changes)
-4. Get user approval if justified
-5. **Ask interaction mode:**
-   - **Detailed:** Step-by-step interaction at each phase (review, confirm, adjust)
-   - **Yolo:** Full automation from Phase 1 through Phase 4, final confirmation only
-6. Generate scope artifact with interaction_mode
+**Phase 4: Report** ([pwrl-review-report](../pwrl-review-report/SKILL.md)) — Compile findings and determine approval verdict. Output: Report artifact.
 
-**Output:** Scope artifact with scope_verdict (on-target/justified/creep-detected), interaction_mode
+**Phase 5: Sync Status** ([pwrl-review-sync-status](../pwrl-review-sync-status/SKILL.md)) — Post findings to GitHub PR with comment, formal review, and labels. Output: Sync confirmation.
 
-**Quality Gate Validation:** Run `/pwrl-phase-checkpoint review 1 [artifact-path]` to validate phase completion before proceeding to Phase 2. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
+**Quality Gates:** Run `/pwrl-phase-checkpoint review N [artifact-path]` to validate each phase. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 
-### Phase 2: Prepare Review
+## Verdict Criteria
 
-**Purpose:** Setup review environment and configure analysis tools
-
-**Input:** Scope artifact (approved)
-
-**Processing:** (See `pwrl-review-prepare/references/prepare-review-protocol.md`)
-
-1. Gather diff, LOC changes, file types
-2. Establish baseline for comparison
-3. Identify review scope (code quality, security, tests, docs)
-4. Configure analysis tools (linter, test framework, coverage)
-
-**Output:** Prepare artifact with tools_configured and review_scope
-
-**Quality Gate Validation:** Run `/pwrl-phase-checkpoint review 2 [artifact-path]` to validate phase completion before proceeding to Phase 3. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
-
-### Phase 3: Analyze Code
-
-**Purpose:** Review code quality, security, tests, documentation, and integration
-
-**Input:** Prepare artifact
-
-**Processing:** (See `pwrl-review-analyze/references/analyze-code-protocol.md`)
-
-1. **Code Quality:** Logic, complexity, style, error handling, dead code
-2. **Security:** Input validation, injection risks, auth/authz, secrets, dependencies
-3. **Tests:** Coverage, scenarios, assertions, speed, isolation
-4. **Documentation:** README updates, comments, types, changelog
-5. **Integration:** Build success, test pass, no regressions, no broken imports
-
-**Output:** Analyze artifact with findings organized by category and severity
-
-**Quality Gate Validation:** Run `/pwrl-phase-checkpoint review 3 [artifact-path]` to validate phase completion before proceeding to Phase 4. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
-
-### Phase 4: Generate Report
-
-**Purpose:** Compile findings and determine approval status
-
-**Input:** Analyze artifact
-
-**Processing:** (See `pwrl-review-report/references/report-generation-protocol.md`)
-
-1. Format findings into readable report
-2. Calculate approval verdict based on issues:
-   - **APPROVED:** 0 critical issues, <5 major, all checks pass
-   - **REQUEST CHANGES:** 1-2 critical or 5-10 major (fixable)
-   - **REJECTED:** >2 critical or >10 major (unfixable)
-3. Get user approval
-4. Generate report artifact
-
-**Output:** Report artifact with verdict (approved/request-changes/rejected)
-
-**Quality Gate Validation:** Run `/pwrl-phase-checkpoint review 4 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
-
----
-
-## Quality Assessment
-
-**Code is APPROVED when:**
-
-- ✓ Scope matches requirements (no creep)
-- ✓ Code logic is correct
-- ✓ No security vulnerabilities
-- ✓ Tests are adequate (>50% coverage)
-- ✓ Documentation updated
-- ✓ Build passes, tests pass
-- ✓ No regressions
-
-**REQUEST CHANGES when:**
-
-- ⚠ 1-2 critical issues (fixable)
-- ⚠ 5-10 major issues (fixable)
-- ⚠ Some tests failing (fixable)
-- ⚠ Build warnings
-
-**REJECT when:**
-
-- ✗ >2 critical issues (unfixable)
-- ✗ >10 major issues
-- ✗ Build fails
-- ✗ Core tests fail
-- ✗ Significant scope creep
+See [verdict-criteria.md](references/verdict-criteria.md) for comprehensive approval matrices, quality score calculations, and decision logic for all verdicts (APPROVED, REQUEST CHANGES, REJECTED).
 
 ## Review Lenses
 
@@ -204,123 +117,19 @@ Optional tokens control review depth and execution mode:
 
 Tokens are stripped before interpreting remainder as branch/PR/commit/URL. Error if conflicting depth tokens provided.
 
-## Workflow
+## Micro-Skill References
 
-### 1. Determine Scope
+For detailed implementation and workflow specifications for each phase, see:
 
-Get the diff based on argument type:
+- [pwrl-review-scope](../pwrl-review-scope/SKILL.md) — Phase 1: Scope validation
+- [pwrl-review-prepare](../pwrl-review-prepare/SKILL.md) — Phase 2: Environment preparation
+- [pwrl-review-analyze](../pwrl-review-analyze/SKILL.md) — Phase 3: Code analysis
+- [pwrl-review-report](../pwrl-review-report/SKILL.md) — Phase 4: Report generation
 
-- **Task file**: If argument is a path to a task file (e.g., `docs/tasks/in-progress/2026-05-04-u1-task.md`):
-  - Read task frontmatter to extract `github-issue`, `files`, `plan`, and `unit-id`
-  - Use `files` field to determine scope of review
-  - Read linked plan for technical context
-  - Get diff for all files listed in task's `files` field
-  - If task is in `done/` directory, review the final implementation
-  - If task is in `in-progress/`, review current work-in-progress
-
-- **PR/commit/URL**: Use `gh pr diff <pr>` or `git show <commit>`
-- **Branch**: Use `git diff $(git merge-base HEAD <branch>)..<branch>`
-- **No argument**: Use `git diff $(git merge-base HEAD $(git rev-parse --abbrev-ref HEAD)@{upstream})`
-
-Extract changed files, full diff, and line counts.
-
-### 2. Understand Intent
-
-From PR description, commit messages, or branch name, determine:
-
-- What is this change trying to accomplish?
-- What behavior is being added, modified, or removed?
-- Are there documented requirements or plans?
-
-**Check for associated task or plan:**
-
-- Look for task files in `docs/tasks/in-progress/`, `docs/tasks/for-review/`, or `docs/tasks/done/` that match the work scope
-- If a task file exists with `github-issue` field matching current PR/branch:
-  - Read task file for detailed context: goal, acceptance criteria, edge cases
-  - Read linked plan (from task's `plan` field) for broader technical context
-  - Use task's expected files to verify scope hasn't drifted
-- If no task found, look for related plans in `docs/plans/`
-- If task has GitHub issue, note it for potential status updates after review
-
-If intent is unclear after checking tasks/plans, ask: "What is the primary goal of these changes?"
-
-### 3. Review
-
-Examine the diff through each lens:
-
-- **Correctness**: Logic errors, edge cases, state bugs, error handling
-- **Testing**: Coverage gaps, edge case tests, assertion quality
-- **Maintainability**: Code clarity, complexity, naming, duplication
-- **Security**: Input validation, auth checks, injection risks, data exposure
-- **Performance**: Inefficient patterns, unnecessary work, resource usage
-- **API Contracts**: Breaking changes, versioning, backward compatibility
-
-**Execution Modes:**
-
-- **Single-pass** (default or `subagents:off`): Review in-process using review lenses above
-- **Parallel subagents** (`depth:deep` or `subagents:on`): Spawn 6 specialized reviewers in parallel (correctness, testing, maintainability, security, performance, api)
-
-**See `references/subagent-protocol.md` for detailed orchestration, JSON schemas, and error handling.**
-
-**Validation Pass (depth:deep only):**
-
-Run independent validators on top 15 findings using `references/validator-template.md`. Validators return `{"validated": true|false, "reason": "..."}`. Drop findings where `validated:false`.
-
-**Artifacts (depth:deep only):**
-
-Write full analysis to `.context/pwrl-review/{run_id}/` with per-reviewer JSON and validation results.
-
-### 4. Report Findings
-
-Present results as checklist format:
-
-```
-# Code Review
-
-**Scope**: <branch/PR description>
-**Intent**: <1-2 line summary>
-**Source**: [Task: docs/tasks/.../task-file.md | Plan: docs/plans/plan.md | None]
-**Changed**: N files, +X/-Y lines
-
-## Findings
-
-### P0 - Critical
-- [ ] **[Category]** File:Line - Issue description
-      → Why it matters | Suggested fix
-      Evidence: <snippet> (depth:deep only)
-
-[...P1, P2, P3 sections follow same format...]
-
-## Summary
-
-**Verdict**: Ready to merge | Ready with fixes | Not ready
-**Reason**: <brief explanation>
-**Testing Gaps**: <list important missing tests>
-**Scope Check**: [If task-based] Files match task expectations | [List any unexpected changes]
-**Artifacts**: .context/pwrl-review/<run_id>/ (depth:deep only)
-```
-
-**Post-Review Actions:**
-
-If review is based on a task file:
-
-1. If verdict is **APPROVED** (no bugs, issues, or remaining tasks found):
-   - Move task from `for-review/` to `done/`
-   - Update frontmatter: `status: for-review` → `status: done`
-   - Update GitHub Issue status to "Done" (if integration enabled)
-
-2. If verdict is **REQUEST CHANGES** (fixable issues found):
-   - Move task back from `for-review/` to `in-progress/`
-   - Update frontmatter: `status: for-review` → `status: in-progress`
-   - Add review findings (P0/P1 issues) to task body as required fixes
-   - Update GitHub Issue status to "In Progress" (if integration enabled)
-
-3. If verdict is **REJECTED** (unfixable issues or scope creep):
-   - Leave task in `for-review/`
-   - Add findings to task body with explanation
-   - Request clarification from user before proceeding
+Each micro-skill is complete and self-contained with its own workflow, error handling, and testing coverage.
 
 ## Output
 
-- A checklist-style review report grouped by severity (P0-P3)
-- For `depth:deep`, optional artifacts written to `.context/pwrl-review/<run_id>/`
+- Code review report with findings grouped by severity
+- Verdict: APPROVED | REQUEST CHANGES | REJECTED
+- Artifacts from each phase (scope, prepare, analyze, report)

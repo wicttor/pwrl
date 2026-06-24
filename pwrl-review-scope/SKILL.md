@@ -18,49 +18,7 @@ argument-hint: "[branch name, unit ID, or PR number]"
 
 ## Output: Scope Artifact
 
-After completing the workflow, produce a scope artifact (markdown) with this schema:
-
-```yaml
----
-format: pwrl-review-scope-artifact
-version: "1.0"
-scope_id: YYYY-MM-DD-UNN-scope
-created: ISO-8601-timestamp
-unit_id: UNN or null
-branch_name: feature/...
----
-
-# Scope Validation Result
-
-## Requirements Summary
-- [Extracted requirement 1]
-- [Extracted requirement 2]
-
-## File Categorization
-
-### Required Files (implement requirement)
-- src/module/file.ts — [reason]
-
-### Supporting Files (enable requirement)
-- tests/module/file.test.ts — [reason]
-- docs/module/README.md — [reason]
-
-### Questioned Files (unrelated/suspicious)
-- src/other/unrelated.ts — [reason for suspicion]
-
-## Scope Verdict
-- **Status:** on-target | justified | creep-detected
-- **Severity:** low | medium | high (if creep-detected)
-- **Confidence:** 0-100%
-
-## User Approval
-- **Approved:** true | false
-- **Notes:** [User's justification or concerns]
-
-## Ready for Analysis
-- **Next Skill:** pwrl-review-prepare
-- **Artifacts Passed:** This scope artifact
-```
+After completing the workflow, produce a scope artifact. See [artifact-schemas.md](../pwrl-review/references/artifact-schemas.md) for the complete schema.
 
 This artifact is passed to `pwrl-review-prepare` (next phase).
 
@@ -142,24 +100,9 @@ Confidence:        [90%]
 
 Emit the scope artifact (YAML + markdown) to be consumed by `pwrl-review-prepare`.
 
-## Error Handling
+## Error Handling & Testing
 
-| Error                       | Recovery                                             |
-| --------------------------- | ---------------------------------------------------- |
-| No branch/unit found        | Ask user to specify or provide context manually      |
-| No requirements found       | Ask user to describe what changes should occur       |
-| Conflicting categorizations | Ask user to clarify purpose of each questioned file  |
-| User rejects scope          | Return error; guide user to return to implementation |
-| Git access fails            | Fall back to manual file list from user              |
-
-## Testing Coverage
-
-Test file: `tests/pwrl-review/scope-validation.test.ts`
-
-**Happy Path Tests:**
-
-- ✅ On-target scope (2 required, 2 supporting, 0 questioned)
-- ✅ Justified scope (2 required, 2 supporting, 1 questioned with reason)
+See [error-and-testing.md](../pwrl-review/references/error-and-testing.md) for comprehensive error recovery strategies, prevention tactics, and test coverage expectations for this phase.
 - ✅ Creep-detected (2 required, 5 questioned across multiple modules)
 
 **Edge Cases:**

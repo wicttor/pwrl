@@ -1,0 +1,20 @@
+workflow: pwrl-tasks
+phases:
+  - number: 1
+    name: "Locate and Read the Plan"
+    required_steps:
+      - plan
+      - implementation units
+      - learnings
+  - number: 2
+    name: "Generate Task Files"
+    required_steps:
+      - task-template.md
+      - frontmatter
+      - unit
+  - number: 3
+    name: "Generate Index and Report"
+    required_steps:
+      - INDEX.md
+      - Validate dependencies
+      - critical path

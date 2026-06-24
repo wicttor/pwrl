@@ -1,0 +1,35 @@
+workflow: pwrl-learnings
+phases:
+  - number: 1
+    name: "Extract Learnings"
+    required_steps:
+      - source type
+      - candidates
+      - interaction_mode
+      - candidate types
+  - number: 2
+    name: "Classify Learnings"
+    required_steps:
+      - type classifications
+      - domains
+      - priority
+      - duplicates
+  - number: 3
+    name: "Structure Learnings"
+    required_steps:
+      - metadata
+      - storage paths
+      - indexes
+  - number: 4
+    name: "Deduplicate Learnings"
+    required_steps:
+      - duplicates
+      - merge
+      - archive mapping
+  - number: 5
+    name: "Save Learnings"
+    required_steps:
+      - backup
+      - persistent storage
+      - indexes
+      - commit

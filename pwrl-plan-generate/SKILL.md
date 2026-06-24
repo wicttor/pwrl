@@ -80,73 +80,6 @@ Use the loaded template to populate each section based on the chosen tier. For d
    - "No relevant learnings found"
    - "No learning gaps identified at this time"
 
-### Step 4.5: NEW - Write Intermediate Plan Files to Disk
-
-**Purpose:** Persist planning state for audit trail and multi-session resumption.
-
-**Timing:** Write intermediate files after S2 scope, after S3 research, after S4 design.
-
-**Files written:**
-
-1. **Scope file** (after S2 completes):
-   - Path: `docs/plans/.scope/YYYY-MM-DD-NNN-scope.md`
-   - Contains: Problem statement, criteria, domain validation, related learnings
-   - Frontmatter: `id`, `status: "scope-complete"`, `created`, `updated`
-
-2. **Research file** (after S3 completes):
-   - Path: `docs/plans/.research/YYYY-MM-DD-NNN-research.md`
-   - Contains: Risk assessment, patterns found, constraints, research findings
-   - Frontmatter: `id`, `status: "research-complete"`, `updated`
-
-3. **Design file** (after S4 completes):
-   - Path: `docs/plans/.design/YYYY-MM-DD-NNN-design.md`
-   - Contains: Implementation units, dependencies, approach, verification criteria
-   - Frontmatter: `id`, `status: "design-complete"`, `updated`
-
-**Config handling (from `.pwrlrc.json`):**
-
-```json
-{
-  "intermediatePlanFiles": "persist" // or "archive" or "delete"
-}
-```
-
-- **"persist"**: Keep all intermediate files; user can review planning history
-- **"archive"**: After final plan generated, move intermediate files to `docs/plans/.archive/`
-- **"delete"**: After final plan generated, delete intermediate files
-
-**Default:** "persist" (safest for audit trail)
-
-**Implementation:**
-
-```pseudocode
-writeIntermediateFiles(scope, research, design, config):
-  writeToFile("docs/plans/.scope/YYYY-MM-DD-NNN-scope.md", scope)
-  writeToFile("docs/plans/.research/YYYY-MM-DD-NNN-research.md", research)
-  writeToFile("docs/plans/.design/YYYY-MM-DD-NNN-design.md", design)
-
-  log("Intermediate files written for plan YYYY-MM-DD-NNN")
-```
-
-**Cleanup (after final plan saved):**
-
-```pseudocode
-cleanupIntermediateFiles(planId, config):
-  if config.intermediatePlanFiles == "archive":
-    move("docs/plans/.scope/YYYY-MM-DD-NNN-scope.md", "docs/plans/.archive/")
-    move("docs/plans/.research/YYYY-MM-DD-NNN-research.md", "docs/plans/.archive/")
-    move("docs/plans/.design/YYYY-MM-DD-NNN-design.md", "docs/plans/.archive/")
-    log("Intermediate files archived")
-
-  else if config.intermediatePlanFiles == "delete":
-    delete("docs/plans/.scope/YYYY-MM-DD-NNN-scope.md")
-    delete("docs/plans/.research/YYYY-MM-DD-NNN-research.md")
-    delete("docs/plans/.design/YYYY-MM-DD-NNN-design.md")
-    log("Intermediate files deleted")
-
-  else:  # "persist" (default)
-    log("Intermediate files persisted for future reference")
-
 ### Step 5: Generate Filename
 
 1. Format: `docs/plans/YYYY-MM-DD-NNN-<kebab-case-name>.md`
@@ -181,8 +114,7 @@ Before saving, validate:
 3. If Yes: Write the file and confirm.
 4. If Edit: Iterate on specific sections the user wants changed.
 5. If Cancel: Discard and exit.
-6. After saving: Run cleanup (Step 4.5 cleanup logic per config)
-7. Return the file path and a brief summary.
+6. Return the file path and a brief summary.
 
 ## Edge Cases
 
@@ -195,4 +127,7 @@ Seven edge cases commonly encountered during generation: template loading failur
 - **Input:** Scoped context (S2) + Research findings (S3) + Units (S4)
 - **Output:** `docs/plans/YYYY-MM-DD-NNN-<name>.md`
 - **Learnings:** `docs/learnings/INDEX.md` for embedding
+
+```
+
 ```

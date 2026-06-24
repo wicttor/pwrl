@@ -75,6 +75,7 @@ created: ISO-8601-timestamp
 For complete step-by-step instructions, see [dedup-learnings-detailed-workflow.md](references/dedup-learnings-detailed-workflow.md).
 
 This SKILL.md provides an overview. The detailed workflow document contains:
+
 - Fingerprint calculation (exact, semantic, text similarity)
 - Duplicate finding algorithm
 - Merge strategy selection
@@ -104,8 +105,6 @@ After completing this phase, run quality gate validation:
 See [pwrl-phase-checkpoint](../../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 
 ---
-
-
 
 Check input has valid `structure_id` and `learnings` array with complete metadata.
 

@@ -2,10 +2,10 @@
 
 Complete step-by-step workflow for the dedup phase of the learnings pipeline.
 
-**Parent Skill:** [pwrl-learnings-dedup](../SKILL.md)  
-**Phase:** 4  
-**Input:** Structure artifact from Phase 3  
-**Output:** Dedup artifact with merged learnings and archive mapping  
+**Parent Skill:** [pwrl-learnings-dedup](../SKILL.md)
+**Phase:** 4
+**Input:** Structure artifact from Phase 3
+**Output:** Dedup artifact with merged learnings and archive mapping
 
 ## Workflow Overview
 
@@ -159,27 +159,27 @@ Example:
 ```
 For each learning L1:
   For each learning L2 (where L2 != L1 and not yet compared):
-    
+
     IF exact_fingerprint(L1) == exact_fingerprint(L2):
       → Record as [exact_duplicate]
       → Confidence: 95%+
       → Action: Auto-merge in Step 5
-    
+
     ELSE IF semantic_fingerprint(L1) == semantic_fingerprint(L2):
       → Record as [semantic_duplicate]
       → Confidence: 85-95%
       → Action: Auto-merge in Step 5
-    
+
     ELSE IF cosine_similarity(L1, L2) > 0.85:
       → Record as [high_similarity]
       → Confidence: 85%
       → Action: Flag for user decision in Step 6
-    
+
     ELSE IF related_tags(L1, L2) AND type(L1) != type(L2):
       → Record as [complementary]
       → Confidence: High
       → Action: Link in Step 7 (no merge)
-    
+
     ELSE:
       → No relationship detected
       → Continue to next pair
@@ -190,19 +190,19 @@ For each learning L1:
 ```yaml
 dedup_findings:
   exact_duplicates:
-    - learning_id_1: learning_id_2  # L1 duplicates L2
+    - learning_id_1: learning_id_2 # L1 duplicates L2
     - learning_id_3: learning_id_4
-  
+
   semantic_duplicates:
     - learning_id_5: learning_id_6
-  
+
   high_similarity:
     - pair: [learning_id_7, learning_id_8]
       similarity: 0.91
       confidence: 0.91
-  
+
   complementary:
-    - learning_id_9: learning_id_10  # Complementary pair
+    - learning_id_9: learning_id_10 # Complementary pair
 ```
 
 ## Step 4: Apply Merge Strategy
@@ -297,9 +297,9 @@ After Merge (L1 wins):
     id: L1-uuid
     title: "Race Condition in Shared Cache"
     problem: "Multiple threads accessing cache without locking, causing data corruption"
-    tags: [concurrency, cache, threading]  # Deduplicated
-    source: [src/cache.ts:42, src/old-cache.ts:20]  # Both preserved
-    examples: ["Reproducer code 1", "Reproducer code 2"]  # Both preserved
+    tags: [concurrency, cache, threading] # Deduplicated
+    source: [src/cache.ts:42, src/old-cache.ts:20] # Both preserved
+    examples: ["Reproducer code 1", "Reproducer code 2"] # Both preserved
     merged_from: [L2-uuid]
     merged_at: 2026-06-12T14:00:00Z
 
@@ -319,13 +319,13 @@ After Merge (L1 wins):
 ```
 1. Display comparison:
    High Similarity Match (91%)
-   
+
    Learning A: "React Hook Dependency Gotcha"
    Problem: "Dependencies array changes cause stale closures"
-   
+
    Learning B: "React Hooks - Dependency Array Gotcha"
    Problem: "Omitting dependencies from array causes stale values"
-   
+
    Should these be merged? [Yes / No / Keep Separate]
 
 2. User decides:
@@ -361,7 +361,7 @@ If Learning A and Learning B have:
   - Different types (e.g., Gotcha + Pattern)
   - Related tags
   - Related problems/solutions
-  
+
 Then create cross-reference:
   Learning A.related_learnings:
     - complements: B
@@ -417,9 +417,11 @@ created: ISO-8601-timestamp
 Lookup table for audit trail:
 
 ```
-OLD_LEARNING_ID    NEW_LEARNING_ID    CONFIDENCE
-L2-uuid            L1-uuid            95%
-L4-uuid            L3-uuid            88%
+
+OLD_LEARNING_ID NEW_LEARNING_ID CONFIDENCE
+L2-uuid L1-uuid 95%
+L4-uuid L3-uuid 88%
+
 ```
 
 ## Data Preservation
@@ -436,13 +438,13 @@ L4-uuid            L3-uuid            88%
 
 ## Error Handling
 
-| Error | Recovery |
-|-------|----------|
-| Structure artifact invalid | Return error; direct to pwrl-learnings-structure |
-| Fingerprint calculation fails | Skip that learning; continue |
-| User can't decide on similarity | Default: keep separate; add cross-reference |
-| Merge creates conflict | Preserve all data; mark for manual review |
-| Archive mapping invalid | Log error; restore from backup |
+| Error                           | Recovery                                         |
+| ------------------------------- | ------------------------------------------------ |
+| Structure artifact invalid      | Return error; direct to pwrl-learnings-structure |
+| Fingerprint calculation fails   | Skip that learning; continue                     |
+| User can't decide on similarity | Default: keep separate; add cross-reference      |
+| Merge creates conflict          | Preserve all data; mark for manual review        |
+| Archive mapping invalid         | Log error; restore from backup                   |
 
 ## Interaction Points
 

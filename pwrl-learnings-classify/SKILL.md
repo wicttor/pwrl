@@ -105,6 +105,7 @@ Artifact passed to `pwrl-learnings-structure`.
 For complete step-by-step instructions, see [classify-learnings-detailed-workflow.md](references/classify-learnings-detailed-workflow.md).
 
 This SKILL.md provides an overview. The detailed workflow document contains:
+
 - Type refinement heuristics
 - Domain assignment logic and keywords
 - Priority assessment rules
@@ -135,8 +136,6 @@ After completing this phase, run quality gate validation:
 See [pwrl-phase-checkpoint](../../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 
 ---
-
-
 
 1. Check that input artifact has:
    - Valid `extract_id`

@@ -2,10 +2,10 @@
 
 Complete step-by-step workflow for the classify phase of the learnings pipeline.
 
-**Parent Skill:** [pwrl-learnings-classify](../SKILL.md)  
-**Phase:** 2  
-**Input:** Extraction artifact from Phase 1  
-**Output:** Classification artifact with refined types, priorities, and domains  
+**Parent Skill:** [pwrl-learnings-classify](../SKILL.md)
+**Phase:** 2
+**Input:** Extraction artifact from Phase 1
+**Output:** Classification artifact with refined types, priorities, and domains
 
 ## Workflow Overview
 
@@ -63,13 +63,13 @@ OUTPUT: Ready for Phase 3 (Structure)
 
 **Refinement heuristics:**
 
-| Preliminary | Evidence Keywords | Refined Type | Confidence |
-|-----------|-------------------|--------------|-----------|
-| **Gotcha** | "beware", "watch out", "trap", "edge case", "race condition", "pitfall", "avoid", "don't" | Gotcha | High |
-| **Pattern** | "use X for Y", "approach", "best practice", "idiom", "reusable", "technique", "strategy" | Pattern | High |
-| **Decision** | "why X?", "why not Y?", "chose", "tradeoff", "alternative", "rationale", "architecture" | Decision | High |
-| **Technical Fix** | "how to", "solve", "fix", "workaround", "bug", "error", "solution", "debugging" | Technical Fix | High |
-| **Workflow** | "steps", "process", "sequence", "checklist", "procedure", "workflow", "pipeline" | Workflow | High |
+| Preliminary       | Evidence Keywords                                                                         | Refined Type  | Confidence |
+| ----------------- | ----------------------------------------------------------------------------------------- | ------------- | ---------- |
+| **Gotcha**        | "beware", "watch out", "trap", "edge case", "race condition", "pitfall", "avoid", "don't" | Gotcha        | High       |
+| **Pattern**       | "use X for Y", "approach", "best practice", "idiom", "reusable", "technique", "strategy"  | Pattern       | High       |
+| **Decision**      | "why X?", "why not Y?", "chose", "tradeoff", "alternative", "rationale", "architecture"   | Decision      | High       |
+| **Technical Fix** | "how to", "solve", "fix", "workaround", "bug", "error", "solution", "debugging"           | Technical Fix | High       |
+| **Workflow**      | "steps", "process", "sequence", "checklist", "procedure", "workflow", "pipeline"          | Workflow      | High       |
 
 **Ambiguous resolution:**
 
@@ -78,7 +78,7 @@ Case: "Could be Pattern or Workflow"
   → Question: "Is this a reusable approach or a sequence of steps?"
   → If "reusable approach" → Pattern
   → If "sequence of steps" → Workflow
-  
+
 Case: "Could be Gotcha or Technical Fix"
   → Question: "Is this about avoiding a problem or solving it?"
   → If "avoiding/preventing" → Gotcha (avoidance-oriented)
@@ -111,28 +111,28 @@ Case: "Could be Pattern or Decision"
 ```
 Domain          Keywords
 ------          --------
-Backend         Node.js, Python, Java, Express, Django, databases, SQL, APIs, 
+Backend         Node.js, Python, Java, Express, Django, databases, SQL, APIs,
                 authentication, authorization, microservices, RPC, protocols
 
-Frontend        React, Vue, TypeScript, CSS, HTML, browser, DOM, UI, 
+Frontend        React, Vue, TypeScript, CSS, HTML, browser, DOM, UI,
                 accessibility, responsive, styling
 
-Architecture    System design, scalability, patterns, microservices, 
+Architecture    System design, scalability, patterns, microservices,
                 monolithic, distributed systems, SOLID, design patterns
 
-DevOps          Docker, Kubernetes, CI/CD, deployment, infrastructure, 
+DevOps          Docker, Kubernetes, CI/CD, deployment, infrastructure,
                 monitoring, logging, metrics, containers, orchestration
 
-Security        Vulnerabilities, injection, XSS, CSRF, authentication, 
+Security        Vulnerabilities, injection, XSS, CSRF, authentication,
                 authorization, encryption, secrets, validation, sanitization
 
-Performance     Optimization, caching, algorithms, memory, CPU, profiling, 
+Performance     Optimization, caching, algorithms, memory, CPU, profiling,
                 benchmarks, latency, throughput
 
-Process         Git workflow, code review, planning, documentation, 
+Process         Git workflow, code review, planning, documentation,
                 agile, branching, release management
 
-Testing         Unit tests, integration tests, E2E tests, mocking, stubs, 
+Testing         Unit tests, integration tests, E2E tests, mocking, stubs,
                 coverage, fixtures, TDD, BDD
 ```
 
@@ -147,11 +147,11 @@ Testing         Unit tests, integration tests, E2E tests, mocking, stubs,
 
 ```
 Learning: "Race condition in shared cache"
-  Primary keywords: "cache", "shared", "race condition" 
+  Primary keywords: "cache", "shared", "race condition"
   → Primary domain: Architecture (system behavior)
   → Secondary domain: Performance (caching is optimization)
   → Assigned: Architecture
-  
+
 Learning: "React Hook dependency array gotcha"
   Primary keywords: "React", "Hook", "dependency"
   → Primary domain: Frontend (React-specific)
@@ -182,12 +182,12 @@ CRITICAL         • Security vulnerability or risk
                  • Data loss or corruption possible
                  • Blocking issue (prevents shipping)
                  • Common mistake with severe consequences
-                 
+
 IMPORTANT        • Best practice that should be known
                  • Common mistake with moderate impact
                  • Performance optimization with significant benefit
                  • Improves reliability or maintainability
-                 
+
 NICE_TO_KNOW     • Edge case that rarely occurs
                  • Niche knowledge for specific contexts
                  • Optimization with minor benefit
@@ -303,7 +303,7 @@ Learning: "Kubernetes resource limits configuration"
 ```
 Language:       javascript, typescript, python, java, sql, bash, go, rust, etc.
 Framework:      react, vue, nextjs, express, django, fastapi, docker, kubernetes, etc.
-Topic:          performance, security, architecture, testing, deployment, 
+Topic:          performance, security, architecture, testing, deployment,
                 caching, error-handling, concurrency, etc.
 Difficulty:     beginner, intermediate, advanced, expert
 Severity:       critical, high, medium, low (for security/performance issues)
@@ -455,7 +455,7 @@ source_extract_id: YYYY-MM-DD-NNN-extract
 - **Type:** [refined type]
 - **Domain:** [primary domain]
 - **Priority:** [critical | important | nice_to_know]
-- **Applicability:** 
+- **Applicability:**
   - Current Project: [0-10]
   - General: [0-10]
 - **Tags:** [list of tags]
@@ -484,13 +484,13 @@ source_extract_id: YYYY-MM-DD-NNN-extract
 
 ## Error Handling
 
-| Error | Recovery |
-|-------|----------|
-| Artifact invalid | Return error; direct to pwrl-learnings-extract |
-| Type unassigned | Auto-assign medium confidence; mark for review |
-| Domain unclear | Assign most likely; tag secondary domains |
-| Priority calculation fails | Default to IMPORTANT |
-| Applicability scoring fails | Use domain heuristics; estimate 5-7 |
+| Error                       | Recovery                                       |
+| --------------------------- | ---------------------------------------------- |
+| Artifact invalid            | Return error; direct to pwrl-learnings-extract |
+| Type unassigned             | Auto-assign medium confidence; mark for review |
+| Domain unclear              | Assign most likely; tag secondary domains      |
+| Priority calculation fails  | Default to IMPORTANT                           |
+| Applicability scoring fails | Use domain heuristics; estimate 5-7            |
 
 ## Interaction Flow
 

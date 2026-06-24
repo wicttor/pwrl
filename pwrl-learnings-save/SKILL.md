@@ -84,6 +84,7 @@ created: ISO-8601-timestamp
 For complete step-by-step instructions, see [save-learnings-detailed-workflow.md](references/save-learnings-detailed-workflow.md).
 
 This SKILL.md provides an overview. The detailed workflow document contains:
+
 - Storage environment validation
 - Backup creation and verification
 - File writing process with error handling
@@ -103,8 +104,6 @@ After completing this phase, run quality gate validation:
 See [pwrl-phase-checkpoint](../../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 
 ---
-
-
 
 Check input has valid `dedup_id` and `learnings` array with complete data.
 

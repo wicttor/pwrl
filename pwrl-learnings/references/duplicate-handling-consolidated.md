@@ -60,7 +60,7 @@ For each candidate:
      - Same type + domain + tag overlap
      - Same title (case-insensitive)
      - Problem statement similarity (high overlap)
-  
+
   2. Heuristics:
      IF type(candidate) == type(existing) AND domain(candidate) == domain(existing) AND tags_overlap > 50%:
        → Flag as potential_update
@@ -85,7 +85,7 @@ IF potential_updates found:
   IF interaction_mode == detailed:
     Display: "Review potential updates"
     List: [potential matches with confidence]
-    Ask: "Create new learnings or update existing? 
+    Ask: "Create new learnings or update existing?
           - Create new (N)
           - Update existing (U)
           - Review each (R)"
@@ -125,14 +125,14 @@ Three fingerprints per learning enable multi-level deduplication:
    - Lowercase
    - Strip whitespace
    - Replace multiple spaces → single space
-   
+
 2. Hash: MD5(type + "|" + domain + "|" + normalized_title)
 
 3. Example:
    Title: "Race Condition in Shared Cache"
    Domain: "architecture"
    Type: "gotcha"
-   
+
    Normalized: "race condition in shared cache"
    Hash: MD5("gotcha|architecture|race condition in shared cache")
    → "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6"
@@ -158,10 +158,10 @@ IF exact_fingerprint(L1) == exact_fingerprint(L2):
 ```
 1. Hash problem statement:
    problem_hash = MD5(problem_normalized)
-   
+
 2. Sort tags alphabetically:
    sorted_tags = ["tag1", "tag2", "tag3"].sorted.join("|")
-   
+
 3. Hash: MD5(type + "|" + domain + "|" + problem_hash + "|" + sorted_tags)
 
 4. Example:
@@ -169,7 +169,7 @@ IF exact_fingerprint(L1) == exact_fingerprint(L2):
    Tags: [concurrency, cache, threading]
    Domain: "architecture"
    Type: "gotcha"
-   
+
    Problem hash: MD5("multiple threads accessing cache...")
    Sorted tags: "cache|concurrency|threading"
    Hash: MD5("gotcha|architecture|<hash>|cache|concurrency|threading")
@@ -317,7 +317,7 @@ After (L1 wins):
 ```yaml
 archive_mapping:
   old_learning_id: new_learning_id
-  confidence: [0.95, 0.88, 0.85]  # Merge confidence
+  confidence: [0.95, 0.88, 0.85] # Merge confidence
   merged_at: timestamp
 ```
 
@@ -325,9 +325,9 @@ archive_mapping:
 
 ```yaml
 archive_mapping:
-  L2-uuid: L1-uuid  # Race condition duplicate
-  L4-uuid: L3-uuid  # Hook gotcha duplicate
-  L6-uuid: L5-uuid  # SQL injection duplicate
+  L2-uuid: L1-uuid # Race condition duplicate
+  L4-uuid: L3-uuid # Hook gotcha duplicate
+  L6-uuid: L5-uuid # SQL injection duplicate
 ```
 
 **Usage:**
@@ -347,7 +347,7 @@ archive_mapping:
 ```
 Display: "Potential updates found"
 List: [candidate ↔ existing learning matches]
-Ask: "Create new or update existing? 
+Ask: "Create new or update existing?
       - Create new (N)
       - Update existing (U)
       - Review each (R)"

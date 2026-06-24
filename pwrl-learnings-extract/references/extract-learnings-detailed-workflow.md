@@ -2,10 +2,10 @@
 
 Complete step-by-step workflow for the extract phase of the learnings pipeline.
 
-**Parent Skill:** [pwrl-learnings-extract](../SKILL.md)  
-**Phase:** 1 (Entry point)  
-**Input:** Source material (code, commit, task, documentation, error, review)  
-**Output:** Extraction artifact with identified learning candidates  
+**Parent Skill:** [pwrl-learnings-extract](../SKILL.md)
+**Phase:** 1 (Entry point)
+**Input:** Source material (code, commit, task, documentation, error, review)
+**Output:** Extraction artifact with identified learning candidates
 
 ## Workflow Overview
 
@@ -52,11 +52,11 @@ OUTPUT: Ready for Phase 2 (Classify)
 
 **Error Cases:**
 
-| Case | Action |
-|------|--------|
-| Invalid source type | Ask user: "Is this code, commit, task, documentation, error, or review?" |
+| Case                 | Action                                                                   |
+| -------------------- | ------------------------------------------------------------------------ |
+| Invalid source type  | Ask user: "Is this code, commit, task, documentation, error, or review?" |
 | Empty source content | Return error: "Please provide source content to extract learnings from." |
-| Unreadable format | Ask: "Can you provide plain text or a summary instead?" |
+| Unreadable format    | Ask: "Can you provide plain text or a summary instead?"                  |
 
 ## Step 2: Scan for Learning Signals
 
@@ -94,12 +94,12 @@ OUTPUT: Ready for Phase 2 (Classify)
 // FIXME: Race condition when multiple instances access cache
 class Cache {
   constructor() {
-    this.data = {};  // Magic dictionary, no locking
+    this.data = {}; // Magic dictionary, no locking
   }
   get(key) {
     // HACK: Workaround until DB migration complete
     if (this.legacyFormat) {
-      return convertFromLegacy(this.data[key]);  // Unsafe access
+      return convertFromLegacy(this.data[key]); // Unsafe access
     }
     return this.data[key];
   }
@@ -121,6 +121,7 @@ class Cache {
 ```
 
 **Signals extracted:**
+
 1. FIXME comment → race condition gotcha
 2. HACK comment → workaround technical fix
 3. Unsafe data access → type safety gotcha
@@ -456,13 +457,13 @@ source_ref: [file_path | commit_hash | task_id]
 
 ## Error Handling
 
-| Error | Recovery |
-|-------|----------|
-| Invalid source_type | Ask user to clarify (code/commit/task/documentation/error/review) |
-| Empty source content | Return error; ask user to provide content |
-| Unreadable format | Ask user to provide plain text or summary |
-| No signals found | Return empty artifact; continue to classify (it may have learnings to refine) |
-| Parse error | Log issue; continue with parsed portion |
+| Error                | Recovery                                                                      |
+| -------------------- | ----------------------------------------------------------------------------- |
+| Invalid source_type  | Ask user to clarify (code/commit/task/documentation/error/review)             |
+| Empty source content | Return error; ask user to provide content                                     |
+| Unreadable format    | Ask user to provide plain text or summary                                     |
+| No signals found     | Return empty artifact; continue to classify (it may have learnings to refine) |
+| Parse error          | Log issue; continue with parsed portion                                       |
 
 ## Performance Guidelines
 

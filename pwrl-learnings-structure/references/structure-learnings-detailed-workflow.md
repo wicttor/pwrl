@@ -2,10 +2,10 @@
 
 Complete step-by-step workflow for the structure phase of the learnings pipeline.
 
-**Parent Skill:** [pwrl-learnings-structure](../SKILL.md)  
-**Phase:** 3  
-**Input:** Classification artifact from Phase 2  
-**Output:** Structure artifact with normalized format and metadata  
+**Parent Skill:** [pwrl-learnings-structure](../SKILL.md)
+**Phase:** 3
+**Input:** Classification artifact from Phase 2
+**Output:** Structure artifact with normalized format and metadata
 
 ## Workflow Overview
 
@@ -76,6 +76,7 @@ by_category  /DATE/TYPE-SLUG  /2026-06/gotcha-race-*.md     Browsing by time
 **Selection logic:**
 
 1. **Ask user (detailed mode):**
+
    ```
    How should learnings be organized?
    - By Type (Gotchas, Patterns, Decisions, etc.)
@@ -104,7 +105,10 @@ ELSE:
 id: [UUID or auto-generated]
 slug: [URL-safe identifier]
 type: [gotcha | pattern | decision | technical_fix | workflow]
-domain: [backend | frontend | architecture | devops | security | performance | process | testing]
+domain:
+  [
+    backend | frontend | architecture | devops | security | performance | process | testing,
+  ]
 priority: [critical | important | nice_to_know]
 applicability:
   current_project: [0-10 score]
@@ -259,7 +263,7 @@ Index entries:
 For each learning:
   IF related_learnings found in phase 2:
     Add cross-references
-    
+
   Create backreferences from related learnings:
     IF Learning A complements Learning B:
       Learning A.related ← Learning B
@@ -389,7 +393,7 @@ confidence: [confidence level]
 
 **Content formatting rules:**
 
-```
+````
 1. Title: Use H1 (#), matches field `title`
 2. Problem: Use H2 (##), include specific context
 3. Solution: Use H2 (##), actionable steps
@@ -397,10 +401,12 @@ confidence: [confidence level]
 5. Code blocks: Use markdown fences with language
    ```typescript
    // code here
-   ```
+````
+
 6. Lists: Use - for bullets, 1. for numbered
 7. Emphasis: Use **bold** for important terms
-```
+
+````
 
 ## Step 7: Create Index Files
 
@@ -431,7 +437,7 @@ Central index of all learnings in the knowledge base.
 ## Quick Browse
 
 [Links to each type/domain folder]
-```
+````
 
 ### BY_TYPE.md
 
@@ -594,13 +600,13 @@ storage_strategy: by_type | by_domain | by_category
 
 ## Error Handling
 
-| Error | Recovery |
-|-------|----------|
-| Classification artifact invalid | Return error; direct to pwrl-learnings-classify |
-| Cannot create directory | Check permissions; return error with fix suggestion |
-| Slug collision | Append -1, -2, etc. |
-| Invalid filename chars | Replace with hyphens or underscores |
-| Missing required field | Use default; mark for review |
+| Error                           | Recovery                                            |
+| ------------------------------- | --------------------------------------------------- |
+| Classification artifact invalid | Return error; direct to pwrl-learnings-classify     |
+| Cannot create directory         | Check permissions; return error with fix suggestion |
+| Slug collision                  | Append -1, -2, etc.                                 |
+| Invalid filename chars          | Replace with hyphens or underscores                 |
+| Missing required field          | Use default; mark for review                        |
 
 ## Performance Expectations
 

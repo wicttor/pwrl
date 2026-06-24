@@ -2,10 +2,10 @@
 
 Complete step-by-step workflow for the save phase of the learnings pipeline.
 
-**Parent Skill:** [pwrl-learnings-save](../SKILL.md)  
-**Phase:** 5 (Final)  
-**Input:** Dedup artifact from Phase 4  
-**Output:** Save artifact with learnings persisted to disk  
+**Parent Skill:** [pwrl-learnings-save](../SKILL.md)
+**Phase:** 5 (Final)
+**Input:** Dedup artifact from Phase 4
+**Output:** Save artifact with learnings persisted to disk
 
 ## Workflow Overview
 
@@ -64,7 +64,7 @@ OUTPUT: Learnings persisted and accessible
 ```
 IF docs/learnings/ directory does not exist:
   Create it: mkdir -p docs/learnings/
-  
+
 IF directory creation fails:
   Return error: "Cannot create docs/learnings/ directory. Check permissions."
 ```
@@ -87,11 +87,11 @@ Required space calculation:
   Average file size: 5 KB per learning
   Estimated total: learnings.count * 5 KB
   Recommended: at least 2× estimated (for backups and indexes)
-  
+
 If available space < 2× estimated:
   Warn user: "Low disk space (X MB available, Y MB recommended)"
   Ask: "Continue anyway? Yes/No"
-  
+
 If user chooses "No":
   Return error with recovery suggestion
 ```
@@ -101,7 +101,7 @@ If user chooses "No":
 ```
 IF .backups/ subdirectory doesn't exist:
   Create: mkdir -p docs/learnings/.backups/
-  
+
 IF creation fails:
   Warn user but continue (backups secondary)
 ```
@@ -130,7 +130,7 @@ After creating backup:
   1. Check file exists and size > 0
   2. Verify it can be read
   3. List contents: tar -tzf backup.tar.gz | head
-  
+
 If verification fails:
   Warn: "Backup verification failed, but continuing"
   Log issue for review
@@ -215,15 +215,18 @@ For each learning file written:
 [Header with link to other indexes]
 
 ## Summary
+
 - Total: [count]
 - By Type: Gotchas: X, Patterns: X, ...
 - By Domain: Backend: X, Frontend: X, ...
 - By Priority: Critical: X, Important: X, ...
 
 ## Navigation
+
 [Links to all index files]
 
 ## Quick Browse
+
 [Links grouped by type/domain]
 ```
 
@@ -353,7 +356,7 @@ Last 20 learnings by creation date (most recent first):
    For each link in indexes:
      Check that referenced file exists
      Check that file is readable
-     
+
 3. Validate .index.json:
    Parse as JSON (not malformed)
    Verify count matches learning count
@@ -387,11 +390,11 @@ Last 20 learnings by creation date (most recent first):
 ```
 IF validation fails:
   Log detailed error: [field, learning, issue]
-  
+
   IF critical error (major data loss):
     Restore backup: tar -xzf backup.tar.gz -C docs/
     Return error: "Validation failed. Backup restored. Please retry."
-  
+
   ELSE (minor issue):
     Log for review; continue
     Mark issue in artifact
@@ -425,7 +428,7 @@ ELSE (yolo mode):
 
 3. Create commit message:
    Format: "Add/update learnings: N learnings, types, domains"
-   
+
    Example:
    "Add learnings: 5 learnings (3 gotchas, 2 patterns)
    Domains: backend, architecture
@@ -434,7 +437,7 @@ ELSE (yolo mode):
 
 4. Commit:
    git commit -m "[message]"
-   
+
 5. Capture commit info:
    Commit hash, timestamp, message
 
@@ -451,7 +454,7 @@ ELSE (yolo mode):
 
 **Artifact structure:**
 
-```yaml
+````yaml
 ---
 format: pwrl-learnings-save-artifact
 version: "1.0"
@@ -502,11 +505,12 @@ tar -xzf docs/learnings/.backups/BACKUP_NAME.tar.gz -C docs/
 
 # Re-run save phase
 /pwrl-learnings-save [dedup-artifact-path]
-```
+````
 
 ## Access
 
 Browse learnings:
+
 ```bash
 # Master index
 open docs/learnings/INDEX.md
@@ -522,9 +526,11 @@ open docs/learnings/gotcha/2026-06-12-race-condition-cache.md
 ```
 
 ## Ready for Access
+
 - **Status:** complete
 - **Next Action:** Browse INDEX.md or use search
 - **Artifacts:** All learnings now persistent and searchable
+
 ```
 
 ## Performance Expectations
@@ -571,3 +577,4 @@ open docs/learnings/gotcha/2026-06-12-race-condition-cache.md
 - **Previous Phase:** [Dedup Learnings Workflow](../pwrl-learnings-dedup/references/dedup-learnings-detailed-workflow.md)
 - **Quality Validation:** See [pwrl-phase-checkpoint](../../pwrl-phase-checkpoint/SKILL.md)
 - **Next Steps:** Browse learnings via INDEX.md or integrate with search
+```

@@ -18,7 +18,7 @@ argument-hint: "[task description, requirements doc, or goal to plan]"
 
 ## Output: Scoped Context
 
-After completing the workflow, produce a scoped context block (in memory or as markdown) with this schema:
+After completing the workflow, produce a scoped context block (as markdown) with this schema:
 
 ```yaml
 scope-id: YYYY-MM-DD-NNN-scope
@@ -131,7 +131,7 @@ Seven edge cases commonly encountered during scope gathering: outdated existing 
 
 ## State Passing (to S3: pwrl-plan-research)
 
-The scoped context object is passed to `pwrl-plan-research` in markdown format with YAML frontmatter. Downstream skills read it from memory or from `docs/plans/.scope/YYYY-MM-DD-NNN-scope.md`. For detailed schema documentation, field reference, storage conventions, and versioning rules, see **[state-schema.md](references/state-schema.md)**.
+The scoped context object is passed to `pwrl-plan-research` in markdown format with YAML frontmatter. Downstream skills read it from `docs/plans/.scope/YYYY-MM-DD-NNN-scope.md`. For detailed schema documentation, field reference, storage conventions, and versioning rules, see **[state-schema.md](references/state-schema.md)**.
 
 ## References
 

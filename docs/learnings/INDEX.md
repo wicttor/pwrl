@@ -1,141 +1,62 @@
----
-title: Learning Index
-type: index
-generated: 2026-06-22
-total_learnings: 6
----
+# PWRl Learnings Index
 
-# PWRL Learning Index
+Central index of all learnings extracted from development sessions.
 
-**Last Updated:** 2026-06-22  
-**Total Learnings:** 6  
-**Categories:** pattern (2), workflow (3), decision (1), gotcha (1)
+## Session: wave-2-u3-u4-u6 Refactoring (2026-06-24)
 
-## By Type
+**File:** [2026-06-24-wave-2-refactoring-learnings.md](2026-06-24-wave-2-refactoring-learnings.md)
 
-### Pattern (2)
+**Commit:** 334da40
 
-- **[TDD RED Phase - Test-First Specification](pattern/tdd-red-phase-test-first-spec.md)**
-  Use dual-implementation comparison to effectively document and prove test specification gaps.
-  *Tags: tdd, test-first, specification, behavioral-contract*
-  *Severity: HIGH*
+**Key Learnings:**
 
-- **[Task State Management - Dual-Layer Tracking](pattern/task-state-management-dual-layer-tracking.md)**
-  Use file location + frontmatter status for both human-readable and machine-readable state signals.
-  *Tags: task-tracking, state-machine, human-readable, machine-readable*
-  *Severity: MEDIUM*
+1. **Pure Orchestrator Pattern** (Architecture)
+   - Orchestrators should contain coordination only, not workflow details
+   - Reference consolidation files for shared concerns
+   - Result: 59% size reduction without feature loss
+   - Reusable for: pwrl-work, pwrl-plan, pwrl-learnings
 
-### Workflow (3)
+2. **Consolidation Strategy** (Consolidation Technique)
+   - Consolidate N-way duplication to central references + one-line links
+   - Targets: schemas, error handling, decision logic, API protocols
+   - Result: ~328 lines of duplication eliminated, single source of truth
+   - Metrics: 1,673 lines centralized, 18% average skill size reduction
 
-- **[Code Review 4-Phase Pipeline](workflow/code-review-4-phase-pipeline.md)**
-  Structured code review with deterministic phases, clear artifacts, and quality gates at each phase.
-  *Tags: code-review, workflow, quality-gates, deterministic*
-  *Severity: HIGH*
+3. **GitHub Integration Pattern** (Feature Architecture)
+   - 5-step workflow: validate, format, post, review, labels
+   - Stateless design enables idempotent re-runs
+   - Error recovery: transient retry + permanent fallback
+   - Verdict mapping: APPROVED/REQUEST_CHANGES/REJECTED → GitHub actions + labels
 
-- **[Cross-Reference Integration - Single Source of Truth](workflow/cross-reference-integration-single-source-of-truth.md)**
-  Establish canonical source for shared concepts, reference from multiple locations, prevent version drift.
-  *Tags: documentation, references, deduplication, maintainability*
-  *Severity: MEDIUM*
+4. **Cross-Skill Artifact Chain** (System Design)
+   - Explicit input/output validation between phases
+   - Each phase consumes previous output, produces next input
+   - Artifact IDs enable audit trail
+   - Prevents cascading failures from schema mismatches
 
-### Decision (1)
+**Themes:**
+- Single Source of Truth (consolidation)
+- Explicit Data Flow (architecture)
+- Error Recovery (reliability)
 
-- **[Schema Design - Simple Line Parser](decision/schema-design-simple-line-parser.md)**
-  Parse YAML using simple 2-space line-based parser (not external library) for lightweight, auditable validator.
-  *Tags: schema-design, constraints, no-external-deps, yaml*
-  *Severity: HIGH*
+## How to Use These Learnings
 
-### Gotcha (1)
+### For Architecture Decisions
+- Reference "Pure Orchestrator Pattern" when designing new multi-phase skills
+- Reference "Artifact Chain" when designing data transformations
 
-- **[RED Tests as Executable Specification](gotcha/red-tests-as-executable-specification.md)**
-  Failing tests in RED phase prove specification gaps, not code bugs. Clear naming and documentation essential.
-  *Tags: tdd, red-phase, test-naming, common-mistake*
-  *Severity: HIGH*
+### For Code Consolidation
+- Use "Consolidation Strategy" when finding N-way duplication
+- Checklist: Is this content in 2+ skills? → Consolidate to references/
 
----
+### For GitHub Integration
+- Reference "GitHub Integration Pattern" for PR sync workflows
+- Copy error recovery strategies from github-pr-sync-protocol.md
 
-## By Domain
-
-### Testing (3)
-
-- TDD RED Phase - Test-First Specification
-- RED Tests as Executable Specification
-- Code Review 4-Phase Pipeline (includes testing lens)
-
-### Architecture (1)
-
-- Schema Design - Simple Line Parser
-
-### Process (1)
-
-- Code Review 4-Phase Pipeline
-
-### State Management (1)
-
-- Task State Management - Dual-Layer Tracking
-
-### Documentation (1)
-
-- Cross-Reference Integration - Single Source of Truth
+### For Next Sessions
+- Apply pure orchestrator pattern to: pwrl-work, pwrl-plan, pwrl-learnings
+- Consider: Should new skills follow artifact chain pattern?
 
 ---
 
-## By Severity
-
-### HIGH (4)
-
-- TDD RED Phase - Test-First Specification
-- Code Review 4-Phase Pipeline
-- Schema Design - Simple Line Parser
-- RED Tests as Executable Specification
-
-### MEDIUM (2)
-
-- Task State Management - Dual-Layer Tracking
-- Cross-Reference Integration - Single Source of Truth
-
----
-
-## By Applicability
-
-### all-projects (1)
-
-- TDD RED Phase - Test-First Specification
-
-### all-teams (1)
-
-- Code Review 4-Phase Pipeline
-
-### test-driven-development (1)
-
-- RED Tests as Executable Specification
-
-### validators-parsers (1)
-
-- Schema Design - Simple Line Parser
-
-### task-systems (1)
-
-- Task State Management - Dual-Layer Tracking
-
-### documentation-systems (1)
-
-- Cross-Reference Integration - Single Source of Truth
-
----
-
-## Search Index
-
-**Keywords:** tdd, red-phase, test-first, specification, schema-design, yaml, parser, code-review, workflow, process, testing, quality-gates, deterministic, task-tracking, state-machine, documentation, references, deduplication, gotcha, common-mistake
-
-**Files:** 6  
-**Formats:** Markdown (.md)  
-**Repository:** /home/wicttor/Projects/pwrl/docs/learnings/
-
----
-
-## Quick Links
-
-- **Start with:** TDD RED Phase - Test-First Specification (foundational pattern)
-- **Most used:** Code Review 4-Phase Pipeline (cross-team workflow)
-- **Critical gotcha:** RED Tests as Executable Specification (avoid misconceptions)
-- **Architecture decision:** Schema Design - Simple Line Parser (design rationale)
+*Index generated from session learnings. Update manually or via pwrl-update-learnings skill.*

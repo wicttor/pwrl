@@ -62,7 +62,6 @@ COMPLETE
 
 - Input: Source content and type
 - Output: Extraction artifact with candidates
-- Tests: 50 cases
 - **Quality Gate Validation:** Run `/pwrl-phase-checkpoint learnings 1 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 - See: [README](../pwrl-learnings-extract/README.md)
 
@@ -72,7 +71,6 @@ COMPLETE
 
 - Input: Extraction artifact (extracted learnings)
 - Output: Classification artifact (refined, prioritized)
-- Tests: 50 cases
 - **Quality Gate Validation:** Run `/pwrl-phase-checkpoint learnings 2 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 - See: [README](../pwrl-learnings-classify/README.md)
 
@@ -82,7 +80,6 @@ COMPLETE
 
 - Input: Classification artifact
 - Output: Structure artifact (formatted, indexed, ready to save)
-- Tests: 45 cases
 - **Quality Gate Validation:** Run `/pwrl-phase-checkpoint learnings 3 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 - See: [README](../pwrl-learnings-structure/README.md)
 
@@ -92,7 +89,6 @@ COMPLETE
 
 - Input: Structure artifact
 - Output: Deduplicated artifact (with archive mapping)
-- Tests: 50 cases
 - **Quality Gate Validation:** Run `/pwrl-phase-checkpoint learnings 4 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 - See: [README](../pwrl-learnings-dedup/README.md)
 
@@ -102,15 +98,8 @@ COMPLETE
 
 - Input: Deduplicated artifact
 - Output: Saved artifact (persistent, indexed, accessible)
-- Tests: 45 cases
 - **Quality Gate Validation:** Run `/pwrl-phase-checkpoint learnings 5 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 - See: [README](../pwrl-learnings-save/README.md)
-
-## Test Coverage
-
-- **Total:** 240+ tests across 5 micro-skills
-- **Format:** GIVEN-WHEN-THEN
-- **Coverage:** Happy path, error cases, edge cases, full workflows
 
 ## Key Protocols
 

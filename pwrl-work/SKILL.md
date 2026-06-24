@@ -65,101 +65,15 @@ COMPLETE
 
 Each phase produces an explicit **artifact** (YAML frontmatter + structured data) consumed by the next phase. Enables resumability, traceability, and independent testing.
 
-## Workflow
+## Phase Summary
 
-### Phase 0: Triage Input
+**Phase 0: Triage** — Validate input, classify work, extract requirements. See [pwrl-work-triage/SKILL.md](../pwrl-work-triage/SKILL.md).
 
-**Purpose:** Classify input, extract task data, and validate requirements
+**Phase 1: Prepare** — Verify repository, resolve ambiguities, setup branch and environment. See [pwrl-work-prepare/SKILL.md](../pwrl-work-prepare/SKILL.md).
 
-**Input:** Task file path, plan file path, bare prompt, or empty (defaults to latest task)
+**Phase 2: Execute** — Implement with test-first discipline, verify quality gates. See [pwrl-work-execute/SKILL.md](../pwrl-work-execute/SKILL.md).
 
-**Processing:** (See `pwrl-work-triage/references/triage-input-protocol.md`)
-
-1. Identify input type
-2. Extract task data (unit_id, files, dependencies, acceptance_criteria)
-3. Validate required fields
-4. Detect conflicts with in-progress tasks
-5. **Ask interaction mode:**
-   - **Detailed:** Step-by-step interaction at each phase (review, confirm, adjust)
-   - **Yolo:** Full automation from Phase 0 through Phase 3, final confirmation only
-6. Confirm with user
-7. Generate triage artifact with interaction_mode
-
-**Output:** Triage artifact with unit_id, title, goal, files, acceptance_criteria, dependencies, interaction_mode
-
-**Quality Gate Validation:** Run `/pwrl-phase-checkpoint work 0 [artifact-path]` to validate phase completion before proceeding to Phase 1. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
-
-### Phase 1: Prepare Environment
-
-**Purpose:** Setup branch, verify repository state, identify verification commands
-
-**Input:** Triage artifact (includes interaction_mode)
-
-**Processing:** (See `pwrl-work-prepare/references/prepare-environment-protocol.md`)
-
-1. Verify repository clean, pulled, correct branch
-2. Clarify ambiguities (file creation vs. extension, vague approach, test scenarios, dependency location)
-3. Establish branch strategy (create feature/U<N>, use existing, or continue on dev)
-4. Identify verification commands (build, test, lint, precommit)
-5. Check environment (Node, npm, dependencies, database, env vars)
-6. **Move task file:** `docs/tasks/to-do/` → `docs/tasks/in-progress/`
-7. Update task status to `in-progress` in frontmatter
-8. Generate prepare artifact
-
-**Output:** Prepare artifact with branch, verification_commands, environment state, task moved and status updated
-
-**Quality Gate Validation:** Run `/pwrl-phase-checkpoint work 1 [artifact-path]` to validate phase completion before proceeding to Phase 2. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
-
-### Phase 2: Execute Implementation
-
-**Purpose:** Implement work with test-first discipline and incremental verification
-
-**Input:** Prepare artifact
-
-**Processing:** (See `pwrl-work-execute/references/execute-implementation-protocol.md`)
-
-1. Scaffold directory structure
-2. For each test scenario: write test → implement → refactor → verify
-3. Verify all acceptance criteria
-4. Run quality gates: tests pass, lint clean, build succeeds, no regressions, coverage acceptable
-5. Prepare for review: clear commits, remove debug code, update docs
-6. **Move task file:** `docs/tasks/in-progress/` → `docs/tasks/for-review/`
-7. Update task status to `for-review` in frontmatter
-8. Generate execute artifact
-
-**Output:** Execute artifact with files changed, tests passing, build/lint status, task moved and marked for-review
-
-**Quality Gate Validation:** Run `/pwrl-phase-checkpoint work 2 [artifact-path]` to validate phase completion before proceeding to Phase 3. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
-
-**Quality Gates (all must pass):**
-
-- ✓ All tests pass (0 failures)
-- ✓ Linting passes (0 errors)
-- ✓ Build succeeds (0 errors)
-- ✓ No regressions (existing tests still pass)
-- ✓ Coverage acceptable (>50%)
-
-### Phase 3: Review & Simplify
-
-**Purpose:** Final code quality check and consolidation
-
-**Input:** Execute artifact
-
-**Processing:** (See `pwrl-work-review/references/review-quality-protocol.md`)
-
-1. Verify scope (no unrelated changes)
-2. Review diff (code quality, security, style)
-3. Review tests (adequate coverage, meaningful tests)
-4. Check documentation (README, comments, types updated)
-5. Detect and consolidate duplication
-6. Get user approval
-7. Generate review artifact
-
-**Output:** Review artifact with scope_check, diff_review, approval status, branch info, PR instructions
-
-**Quality Gate Validation:** Run `/pwrl-phase-checkpoint work 3 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
-
-After approval, branch remains active for pull request creation and can optionally chain to `/pwrl-end-session` for learnings documentation.
+**Phase 3: Review** — Verify scope, review code quality, get approval. See [pwrl-work-review/SKILL.md](../pwrl-work-review/SKILL.md).
 
 ---
 
@@ -181,16 +95,9 @@ After approval, branch remains active for pull request creation and can optional
 - **No scope creep** — Get approval before expanding beyond task
 - **Quality gates** — All checks must pass before marking ready
 
-## Error Recovery
+## Error Handling & Recovery
 
-Each phase includes error detection and recovery:
-
-- **Triage:** File not found, missing fields, conflicts with in-progress → suggest fix
-- **Prepare:** Uncommitted changes, wrong branch, missing dependencies → ask action
-- **Execute:** Build failure, test failure, regression, low coverage → recovery instructions
-- **Review:** Scope creep, quality issues, security concerns → request fix
-
-All errors include user-facing explanation and recovery path (never silent failure).
+For comprehensive error scenarios, recovery strategies, and escalation rules, see [references/error-handling.md](references/error-handling.md).
 
 ## Support Files
 

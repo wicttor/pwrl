@@ -1,0 +1,30 @@
+workflow: pwrl-work
+phases:
+  - number: 0
+    name: "Triage Input"
+    required_steps:
+      - unit_id
+      - acceptance_criteria
+      - interaction_mode
+      - Confirm with user
+  - number: 1
+    name: "Prepare Environment"
+    required_steps:
+      - branch strategy
+      - verification_commands
+      - Move task file
+      - Verify repository
+  - number: 2
+    name: "Execute Implementation"
+    required_steps:
+      - tests pass
+      - Build succeeds
+      - files changed
+      - no regressions
+  - number: 3
+    name: "Review & Simplify"
+    required_steps:
+      - Verify scope
+      - Review tests
+      - Get user approval
+      - approval status

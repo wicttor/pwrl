@@ -42,137 +42,23 @@ PHASE 4: Generate (pwrl-plan-generate)
 OUTPUT (plan file ready for execution)
 ```
 
-## Phase Details
+## Phase Summary
 
-### Phase 1: Scope (pwrl-plan-scope)
+Each phase is orchestrated sequentially: the orchestrator calls the micro-skill, receives the output artifact, validates it with a quality gate, and passes it to the next phase.
 
-**Purpose:** Entry point to planning workflow. Gathers context, checks existing plans and learnings, validates domain, and returns a scoped context object.
+**Phase 1: Scope** ([pwrl-plan-scope](../pwrl-plan-scope/SKILL.md)) — Gather context, validate domain, set interaction mode. Output: Scoped context artifact.
 
-**Micro-Skill:** `pwrl-plan-scope`
+**Phase 2: Research** ([pwrl-plan-research](../pwrl-plan-research/SKILL.md)) — Discover tech stack, local patterns, and risk areas. Output: Research findings artifact.
 
-**Input:**
+**Phase 3: Design** ([pwrl-plan-design](../pwrl-plan-design/SKILL.md)) — Decompose into units, map dependencies, assess complexity. Output: Design artifact with unit decomposition.
 
-- User provides task description, requirements doc, or goal
-- Empty input prompts user: "What would you like to plan?"
+**Phase 4: Generate** ([pwrl-plan-generate](../pwrl-plan-generate/SKILL.md)) — Select tier, render plan, embed learnings, save to `docs/plans/`. Output: Final plan document.
 
-**Processing:**
+**Quality Gates:** Run `/pwrl-phase-checkpoint plan N [artifact-path]` to validate each phase. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 
-1. Check for existing plans in `docs/plans/`; suggest resume/review/archive/delete/new
-2. Validate domain (software vs. non-software)
-3. Bootstrap problem frame, intended behavior, success criteria
-4. Search `docs/learnings/INDEX.md` for related learnings
-5. Search `docs/requirements/` and `docs/brainstorms/` for matching docs
-6. Confirm context with user
-7. **Ask interaction mode:**
-   - **Detailed:** Step-by-step interaction at each phase (review, confirm, adjust)
-   - **Yolo:** Full automation from Phase 1 through Phase 4, final confirmation only
-8. Generate scope artifact with interaction_mode
+### Interaction Mode Propagation
 
-**Output:** Scoped context artifact with:
-
-- Problem frame, intended behavior, success criteria
-- Related learnings (HIGH-relevance)
-- Learning gaps identified
-- Requirements found
-- interaction_mode (detailed or yolo)
-
-**Quality Gate Validation:** Run `/pwrl-phase-checkpoint plan 1 [artifact-path]` to validate phase completion before proceeding to Phase 2. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
-
-**See:** [pwrl-plan-scope/SKILL.md](../pwrl-plan-scope/SKILL.md) for detailed workflow
-
-### Phase 2: Research (pwrl-plan-research)
-
-**Purpose:** Discover local patterns, tech stack, and high-risk areas. Recommend external research if needed.
-
-**Micro-Skill:** `pwrl-plan-research`
-
-**Input:** Scoped context artifact from Phase 1
-
-**Processing:**
-
-1. Detect tech stack from `package.json`, `Dockerfile`, codebase structure
-2. Discover local patterns (architecture, async style, testing, organization)
-3. Identify high-risk areas (security, performance, migrations, distributed systems, compliance)
-4. Recommend external research for high-risk areas (optional)
-5. Integrate insights from related learnings
-6. Compile research findings
-
-**Output:** Research artifact with:
-
-- Tech stack detection
-- Local patterns identified
-- Risk areas with recommendations
-- External research findings (if performed)
-- Learnings integration notes
-
-**Quality Gate Validation:** Run `/pwrl-phase-checkpoint plan 2 [artifact-path]` to validate phase completion before proceeding to Phase 3. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
-
-**See:** [pwrl-plan-research/SKILL.md](../pwrl-plan-research/SKILL.md) for detailed workflow
-
-### Phase 3: Design (pwrl-plan-design)
-
-**Purpose:** Decompose work into implementation units, identify dependencies and risks, assess complexity.
-
-**Micro-Skill:** `pwrl-plan-design`
-
-**Input:** Scoped context + Research findings
-
-**Processing:**
-
-1. Identify work units from success criteria and risk areas
-2. Map dependencies between units (topological sort)
-3. Detect circular dependencies; prompt for refactoring
-4. Create risk mitigation units
-5. Generate Mermaid diagrams for complex workflows (5+ units)
-6. Assess complexity (LOW/MEDIUM/HIGH)
-7. Estimate effort
-8. Confirm decomposition with user
-
-**Output:** Design artifact with:
-
-- Implementation units (U1, U2, ..., UX) with test scenarios and acceptance criteria
-- Dependency graph and topological ordering
-- Risk mitigations
-- Mermaid diagrams (if complex)
-- Complexity assessment and effort estimate
-
-**Quality Gate Validation:** Run `/pwrl-phase-checkpoint plan 3 [artifact-path]` to validate phase completion before proceeding to Phase 4. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
-
-**See:** [pwrl-plan-design/SKILL.md](../pwrl-plan-design/SKILL.md) for detailed workflow
-
-### Phase 4: Generate (pwrl-plan-generate)
-
-**Purpose:** Select tier (Fast/Standard/Deep), render plan using tier template, embed learnings, save to `docs/plans/`.
-
-**Micro-Skill:** `pwrl-plan-generate`
-
-**Input:** Design artifact (from Phase 3) + Scope artifact (from Phase 1)
-
-**Processing:**
-
-1. Auto-select tier based on complexity/units/effort; prompt if ambiguous
-   - **FAST:** LOW complexity, 1-3 units, <5 hours
-   - **STANDARD:** MEDIUM complexity, 4-8 units, 5-20 hours
-   - **DEEP:** HIGH complexity, 9+ units, 20+ hours
-2. Render plan using tier-specific template
-3. Embed top 3-5 HIGH-relevance learnings from scope
-4. Generate unique filename: `YYYY-MM-DD-NNN-<slug>.md`
-5. Handle filename collisions (increment sequence or update existing)
-6. Save plan to `docs/plans/`
-
-**Output:** Plan document saved to file with:
-
-- Problem & scope
-- Success criteria
-- Implementation units (tier-specific detail level)
-- Risk analysis (STANDARD/DEEP)
-- Related learnings (STANDARD/DEEP)
-- Learning gaps (DEEP)
-- Rollout notes (STANDARD/DEEP)
-
-**Quality Gate Validation:** Run `/pwrl-phase-checkpoint plan 4 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
-
-**See:** [pwrl-plan-generate/SKILL.md](../pwrl-plan-generate/SKILL.md) for detailed workflow
+Interaction mode (detailed or yolo) is set in Phase 1 and read at the start of each subsequent phase. Determines whether confirmation steps execute or are skipped. Exception: Error recovery steps always pause the pipeline.
 
 ## Planning Tiers
 
@@ -186,49 +72,20 @@ OUTPUT (plan file ready for execution)
 
 ## Core Principles
 
-- **Deterministic Pipeline:** Phases always execute in sequence: scope → research → design → generate (no branching, no fallback)
+- **Deterministic Pipeline:** Phases always execute in sequence: scope → research → design → generate (no agent switching, no fallback paths). Conditional pauses for error recovery (e.g., circular dependencies, ambiguous tier selection) are expected error handling, not branching.
 - **Focus on Decisions:** Capture approach, structure, risks, and sequencing (not code simulation)
 - **Right-Size:** Small tasks → short plans; complex work → more structure
 - **Separate Planning from Execution:** Don't simulate implementation during planning
 - **Be Concrete:** Use specific files, components, and dependencies
 - **Stay Portable:** Use repository-relative paths only
 - **Transparent Artifacts:** Each phase produces explicit output artifact for next phase
+- **Interaction Mode Propagation:** Once set in Phase 1, interaction_mode (detailed or yolo) is read at the start of each subsequent phase and determines whether confirmation steps execute.
 
 ## Error Handling & Recovery
 
 **Philosophy:** Fail explicitly, not silently. Each phase has clear error handling with recovery suggestions.
 
-### Phase 1 (Scope) Errors
-
-- **Empty Input:** Prompt user for task description; retry
-- **Non-Software Domain:** Return error; suggest alternative tool
-- **Ambiguous Input:** Ask clarifying questions; bootstrap with user responses
-- **No Learnings/Requirements:** Continue (not an error)
-
-**Recovery:** User can retry, provide clarification, or abort
-
-### Phase 2 (Research) Errors
-
-- **Codebase Analysis Fails:** Continue with minimal tech stack info
-- **High-Risk Area Identified:** Recommend external research; user can approve or skip
-
-**Recovery:** User can approve research, skip, or manually investigate
-
-### Phase 3 (Design) Errors
-
-- **Circular Dependency Detected:** Report cycle path; prompt user to refactor
-- **Too Many Units (15+):** Warn about complexity; suggest consolidation
-- **Insufficient Detail:** Prompt to add test scenarios or split units
-
-**Recovery:** User can refactor, consolidate, or proceed with awareness
-
-### Phase 4 (Generate) Errors
-
-- **Filename Collision:** Offer options: update, increment, or cancel
-- **Tier Selection Ambiguous:** Prompt user to choose tier
-- **Failed File Write:** Check permissions/directory; retry or suggest manual save
-
-**Recovery:** User can choose action or save manually
+**See:** [references/error-handling.md](references/error-handling.md) for comprehensive error recovery workflows across all phases, including circular dependencies, tier ambiguity, missing directories, filename collisions, and resume operations.
 
 ## Key Outputs
 
@@ -284,7 +141,7 @@ pwrl-plan orchestrator
 
 - [references/planning-tiers.md](references/planning-tiers.md) — Tier definitions and decision criteria
 - [docs/guides/micro-skill-patterns.md](../docs/guides/micro-skill-patterns.md) — How to extend with new micro-skills
-- [docs/guides/skill-architecture-refactoring.md](../docs/guides/skill-architecture-refactoring.md) — Rationale for refactoring
+- [docs/guides/architecture-refactoring.md](../docs/guides/architecture-refactoring.md) — Rationale for refactoring
 
 ## Testing & Validation
 

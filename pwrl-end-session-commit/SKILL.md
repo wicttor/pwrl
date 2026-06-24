@@ -42,86 +42,77 @@ This is the second phase of `/pwrl-end-session` orchestrator, executed after Pha
 - `references/commit-protocol.md` — Message drafting rules and version bump handling
 - `references/commit-examples.md` — Examples for different session completion types
 
+## Detailed Workflow
+
+For complete step-by-step instructions, see [commit-protocol.md](references/commit-protocol.md).
+
+This SKILL.md provides an overview. The detailed workflow document contains:
+- Commit subject drafting with imperative mood
+- Commit body structure (why/what/next)
+- Version bump detection and CHANGELOG.md updates
+- User approval flow with edit capability
+- Git staging and commit creation
+- Error handling and recovery
+
+## Quality Gate Validation
+
+After completing this phase, run quality gate validation:
+
+```bash
+/pwrl-phase-checkpoint end-session 2 [artifact-path]
+```
+
+See [pwrl-phase-checkpoint](../../pwrl-phase-checkpoint/SKILL.md) for validation rules.
+
+---
+
 ## Workflow
 
 ### Phase 1: Draft Commit Message
 
-**Purpose:** Create a meaningful, descriptive commit that explains session work
+Create a meaningful commit message with subject and body.
 
-**Input:** Checkpoint artifact with approved_files, session_reason, next_steps
+**See detailed workflow:** [commit-protocol.md](references/commit-protocol.md#phase-1-draft-commit-message)
 
-**Processing:** (See `references/commit-protocol.md`)
-
-1. Draft subject line (imperative, ≤50 chars)
-   - Start with verb: "Add", "Fix", "Refactor", "Document", "Complete"
-   - Summarize session focus concisely
-2. Write commit body:
-   - **Why:** Explain the reason for this session
-   - **What:** Key changes and decisions
-   - **Blockers:** Any unresolved issues or incomplete work
-   - **Next:** Specific next steps (from checkpoint)
-3. Validate message (subject ≤50, body readable)
-
-**Output:** Draft commit message (subject + body + trailer)
+- Draft subject line (imperative, ≤50 chars)
+- Write body: explain why, what changed, blockers/notes, next steps
+- Validate format (subject ≤50, body readable, proper structure)
 
 ### Phase 2: Handle Version Bump
 
-**Purpose:** Update changelog and detect version changes
+Detect and process version changes with CHANGELOG.md updates.
 
-**Input:** Draft message, checkpoint artifact with version_bumped flag
+**See detailed workflow:** [commit-protocol.md](references/commit-protocol.md#phase-2-handle-version-bump)
 
-**Processing:**
-
-1. If version_bumped is false: skip to Phase 3
-2. If version_bumped is true:
-   - Detect new version from package.json or version constants
-   - Update `CHANGELOG.md` with entry: date, version, brief summary
-   - Stage `CHANGELOG.md` alongside other approved files
-   - Note in commit body that version was bumped (if not already)
-
-**Output:** Updated files list (with CHANGELOG.md if bumped)
+- If version_bumped flag is false: skip to Phase 3
+- If true: extract new version from checkpoint artifact
+- Update CHANGELOG.md with entry (date, version, summary)
+- Stage CHANGELOG.md alongside approved files
 
 ### Phase 3: User Approval
 
-**Purpose:** Get explicit user approval of commit message before creating commit
+Get explicit approval of commit message before staging/committing.
 
-**Input:** Draft commit message, files to be staged
+**See detailed workflow:** [commit-protocol.md](references/commit-protocol.md#phase-3-user-approval)
 
-**Processing:**
-
-1. Display full commit message to user
-2. Ask user to approve or request edits
-3. Allow user to modify: subject, body, or specific next steps
-4. Re-validate message after edits
-5. Once approved, proceed to staging
-
-**Output:** Approved commit message, ready to stage
+- Display full commit message to user
+- Ask approve/edit/cancel
+- If edit: allow modification of subject/body/next steps
+- Re-validate message after edits
+- Once approved, proceed to staging
 
 ### Phase 4: Create Commit
 
-**Purpose:** Stage files and create the commit
+Stage files and create the commit with proper git handling.
 
-**Input:** Approved message, approved files list
+**See detailed workflow:** [commit-protocol.md](references/commit-protocol.md#phase-4-create-commit)
 
-**Processing:**
-
-1. Verify git is in clean state (no merge/rebase conflicts)
-2. Stage approved files: `git add [files...]`
-3. Verify staging is correct: `git status`
-4. Create commit: `git commit -m "[subject]" -m "[body]"`
-5. Capture commit SHA from git output
-6. Verify commit exists: `git log -1`
-
-**Output:** Commit artifact
-
-```yaml
-commit_sha: "abc123..."
-message: "[full commit message]"
-version_bumped: true|false
-new_version: "version if bumped, or null"
-files_committed: [array of staged files]
-timestamp: "ISO 8601 timestamp"
-```
+- Verify git state (no merge/rebase in progress)
+- Stage approved files: `git add [files...]`
+- Verify staging with `git status`
+- Create commit: `git commit -m "[subject]" -m "[body]"`
+- Capture commit SHA
+- Verify commit exists and contains `[AGENT: ...]` trailer
 
 ## Rules
 

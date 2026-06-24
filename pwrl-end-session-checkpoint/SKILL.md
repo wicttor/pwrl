@@ -39,64 +39,65 @@ This is typically invoked by `/pwrl-end-session` orchestrator, or directly to ve
 
 - `references/checkpoint-protocol.md` — Detailed validation rules and decision tree
 
+## Detailed Workflow
+
+For complete step-by-step instructions, see [checkpoint-protocol.md](references/checkpoint-protocol.md).
+
+This SKILL.md provides an overview. The detailed workflow document contains:
+- Working tree detection and file categorization
+- Change summary and confirmation flow
+- Session reason capture and next steps
+- Version bump detection
+- Checkpoint artifact generation
+- Error handling and recovery
+
+## Quality Gate Validation
+
+After completing this phase, run quality gate validation:
+
+```bash
+/pwrl-phase-checkpoint end-session 1 [artifact-path]
+```
+
+See [pwrl-phase-checkpoint](../../pwrl-phase-checkpoint/SKILL.md) for validation rules.
+
+---
+
 ## Workflow
 
 ### Phase 1: Verify Working Tree
 
-**Purpose:** Detect what changes exist and whether commit is viable
+Detect all changes and determine if commit is viable.
 
-**Input:** Optional user context
+**See detailed workflow:** [checkpoint-protocol.md](references/checkpoint-protocol.md#step-1-verify-working-tree)
 
-**Processing:** (See `references/checkpoint-protocol.md`)
-
-1. Run `git status` or platform changed-files tool
-2. Detect modified files, staged changes, untracked files
-3. If no changes exist, inform user and exit (checkpoint failed)
-4. Categorize changes: staged vs. unstaged, new vs. modified
-5. Generate summary of what will be included
-
-**Output:** Working tree summary with file counts and categories
+- Run `git status` to detect modified, staged, untracked files
+- Exit if no changes found
+- Categorize changes into staged, unstaged, untracked
 
 ### Phase 2: Review and Confirm Changes
 
-**Purpose:** Get user explicit approval on what will be committed
+Get user explicit approval on what will be committed.
 
-**Input:** Working tree summary
+**See detailed workflow:** [checkpoint-protocol.md](references/checkpoint-protocol.md#step-2-summarize-changes)
 
-**Processing:**
-
-1. Display list of files that will be included (all changed files)
-2. Ask user to confirm this list is correct
-3. Optionally allow user to specify files to include/exclude
-4. Ask user to describe why work is ending here (completed, partial, blocked, etc.)
-5. If incomplete work: ask user for next steps to document in commit
-
-**Output:** Approved files list, session_reason, next_steps (if partial)
+- Display summary of all changes
+- Ask user to confirm this list is correct
+- Optionally allow inclusion/exclusion of specific files
+- Ask user to describe why work is ending here
+- If incomplete: ask for next steps to document
 
 ### Phase 3: Generate Checkpoint Artifact
 
-**Purpose:** Create structured output for Phase 2 commit creation
+Create structured output for Phase 2 (commit creation).
 
-**Input:** Confirmed files, reason, next steps
+**See detailed workflow:** [checkpoint-protocol.md](references/checkpoint-protocol.md#step-6-generate-checkpoint-artifact)
 
-**Processing:**
-
-1. Structure approved files as array
-2. Create session summary (why, what's included, blockers if any)
-3. Detect any version bump in files (check package.json, version constants)
-4. Validate all required fields present
-5. Generate checkpoint artifact with YAML frontmatter
-
-**Output:** Checkpoint artifact
-
-```yaml
-approved_files: [array of file paths]
-session_reason: "reason session is ending"
-next_steps: "specific next steps if work is incomplete"
-version_bumped: true|false
-version: "new version if bumped, or null"
-user_confirmation: true
-```
+- Structure approved files as array
+- Detect version bump (check package.json, VERSION files)
+- Create session summary with reason and next steps
+- Validate all required fields
+- Generate YAML artifact with metadata
 
 ## Rules
 

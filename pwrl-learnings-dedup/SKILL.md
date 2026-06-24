@@ -70,9 +70,42 @@ created: ISO-8601-timestamp
 - **Artifacts Passed:** This dedup artifact + updated learnings
 ```
 
-## Workflow
+## Detailed Workflow
 
-### Step 1: Verify Structure Artifact
+For complete step-by-step instructions, see [dedup-learnings-detailed-workflow.md](references/dedup-learnings-detailed-workflow.md).
+
+This SKILL.md provides an overview. The detailed workflow document contains:
+- Fingerprint calculation (exact, semantic, text similarity)
+- Duplicate finding algorithm
+- Merge strategy selection
+- Merge algorithm with winner selection
+- High-similarity flagging process
+- Related learning linking
+- Archive mapping with audit trail
+
+## Duplicate Detection: Late Resolution
+
+This phase performs final duplicate resolution using three fingerprinting strategies:
+
+1. **Exact Fingerprint:** MD5(type + domain + title) → 95%+ confidence
+2. **Semantic Fingerprint:** MD5(type + domain + problem + sorted_tags) → 85-95% confidence
+3. **Text Similarity:** Cosine similarity of tokenized content → 70-95% confidence
+
+See [duplicate-handling-consolidated.md](../pwrl-learnings/references/duplicate-handling-consolidated.md#late-duplicate-resolution-phase-4) for complete fingerprinting details.
+
+## Quality Gate Validation
+
+After completing this phase, run quality gate validation:
+
+```bash
+/pwrl-phase-checkpoint learnings 4 [artifact-path]
+```
+
+See [pwrl-phase-checkpoint](../../pwrl-phase-checkpoint/SKILL.md) for validation rules.
+
+---
+
+
 
 Check input has valid `structure_id` and `learnings` array with complete metadata.
 

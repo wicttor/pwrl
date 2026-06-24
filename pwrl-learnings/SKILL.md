@@ -101,13 +101,14 @@ COMPLETE
 - **Quality Gate Validation:** Run `/pwrl-phase-checkpoint learnings 5 [artifact-path]` to validate phase completion. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 - See: [README](../pwrl-learnings-save/README.md)
 
-## Key Protocols
+## Key References
 
-- [Extract Learnings Protocol](../pwrl-learnings-extract/references/extract-learnings-protocol.md)
-- [Classify Learnings Protocol](../pwrl-learnings-classify/references/classify-learnings-protocol.md)
-- [Structure Learnings Protocol](../pwrl-learnings-structure/references/structure-learnings-protocol.md)
-- [Deduplicate Learnings Protocol](../pwrl-learnings-dedup/references/dedup-learnings-protocol.md)
-- [Save Learnings Protocol](../pwrl-learnings-save/references/save-learnings-protocol.md)
+- [Extract Learnings Workflow](pwrl-learnings-extract/references/extract-learnings-detailed-workflow.md) — Complete step-by-step extraction process
+- [Classify Learnings Workflow](pwrl-learnings-classify/references/classify-learnings-detailed-workflow.md) — Classification, priority, domain, and early duplicate detection
+- [Structure Learnings Workflow](pwrl-learnings-structure/references/structure-learnings-detailed-workflow.md) — Normalization, metadata, and index generation
+- [Dedup Learnings Workflow](pwrl-learnings-dedup/references/dedup-learnings-detailed-workflow.md) — Fingerprinting, merging, and archive mapping
+- [Save Learnings Workflow](pwrl-learnings-save/references/save-learnings-detailed-workflow.md) — Persistence, backup, and validation
+- [Duplicate Handling Consolidated](references/duplicate-handling-consolidated.md) — Single source of truth for all duplicate detection logic
 
 ## Usage
 
@@ -167,115 +168,56 @@ COMPLETE
 - ✓ Git history maintained
 - ✓ Ready for search/retrieval
 
-## Workflow
+## Workflow: 5-Phase Pipeline
+
+Each phase is executed sequentially by the orchestrator. The orchestrator invokes the micro-skill, validates output with quality gates, and passes the artifact to the next phase.
 
 ### Phase 1: Extract Learnings
 
-**Purpose:** Entry point to learning lifecycle. Identifies learning candidates and asks for interaction mode.
+Extract learning candidates from source material (code, commits, tasks, documentation, errors, reviews). Identify signal patterns, create candidates, set interaction mode.
 
-**Micro-Skill:** `pwrl-learnings-extract`
-
-**Input:** Source material (code, commit, task, documentation, error, or manual input)
-
-**Processing:** (See `pwrl-learnings-extract/references/extract-learnings-protocol.md`)
-
-1. Identify source type and content
-2. Extract learning candidates from source
-3. Identify candidate types (gotcha, pattern, decision, technical_fix, workflow)
-4. Validate extracted candidates
-5. **Ask interaction mode:**
-   - **Detailed:** Step-by-step interaction at each phase (review, confirm, adjust)
-   - **Yolo:** Full automation from Phase 1 through Phase 5, final confirmation only
-6. Generate extraction artifact with interaction_mode
-
-**Output:** Extraction artifact with:
-
-- Learning candidates identified
-- Candidate types assigned
-- Source references tracked
-- interaction_mode (detailed or yolo)
-
-**See:** [pwrl-learnings-extract/SKILL.md](../pwrl-learnings-extract/SKILL.md) for detailed workflow
+**See detailed workflow:** [extract-learnings-detailed-workflow.md](pwrl-learnings-extract/references/extract-learnings-detailed-workflow.md)
 
 ### Phase 2: Classify Learnings
 
-**Purpose:** Refine classification and priority
+Refine type classifications, assign priority and domain, score applicability, detect potential duplicates. Flag early duplicate warnings for improved coverage.
 
-**Micro-Skill:** `pwrl-learnings-classify`
-
-**Input:** Extraction artifact (includes interaction_mode)
-
-**Processing:** (See `pwrl-learnings-classify/references/classify-learnings-protocol.md`)
-
-1. Refine type classifications
-2. Assess severity and priority
-3. Assign domains and tags
-4. Detect potential duplicates
-5. Generate classification artifact
-
-**Output:** Classification artifact with refined, prioritized learnings
-
-**See:** [pwrl-learnings-classify/SKILL.md](../pwrl-learnings-classify/SKILL.md) for detailed workflow
+**See detailed workflow:** [classify-learnings-detailed-workflow.md](pwrl-learnings-classify/references/classify-learnings-detailed-workflow.md)
 
 ### Phase 3: Structure Learnings
 
-**Purpose:** Normalize format and prepare for storage
+Normalize format, generate metadata (slugs, fingerprints, indexes), determine storage paths, create full-text search indexes.
 
-**Micro-Skill:** `pwrl-learnings-structure`
-
-**Input:** Classification artifact
-
-**Processing:** (See `pwrl-learnings-structure/references/structure-learnings-protocol.md`)
-
-1. Normalize format and structure
-2. Generate metadata
-3. Determine storage paths
-4. Create indexes
-5. Generate structure artifact
-
-**Output:** Structure artifact with normalized, indexed learnings
-
-**See:** [pwrl-learnings-structure/SKILL.md](../pwrl-learnings-structure/SKILL.md) for detailed workflow
+**See detailed workflow:** [structure-learnings-detailed-workflow.md](pwrl-learnings-structure/references/structure-learnings-detailed-workflow.md)
 
 ### Phase 4: Deduplicate Learnings
 
-**Purpose:** Merge identical/similar learnings and maintain lineage
+Calculate fingerprints, find exact/semantic/high-similarity matches, merge with lineage preservation, link complementary learnings.
 
-**Micro-Skill:** `pwrl-learnings-dedup`
-
-**Input:** Structure artifact
-
-**Processing:** (See `pwrl-learnings-dedup/references/dedup-learnings-protocol.md`)
-
-1. Identify exact duplicates
-2. Flag high-similarity learnings
-3. Merge duplicates with lineage
-4. Create archive mapping
-5. Generate dedup artifact
-
-**Output:** Deduplicated artifact with merged learnings and archive mapping
-
-**See:** [pwrl-learnings-dedup/SKILL.md](../pwrl-learnings-dedup/SKILL.md) for detailed workflow
+**See detailed workflow:** [dedup-learnings-detailed-workflow.md](pwrl-learnings-dedup/references/dedup-learnings-detailed-workflow.md)
 
 ### Phase 5: Save Learnings
 
-**Purpose:** Persist to disk with backups and git versioning
+Validate environment, create backup, write files with metadata, update indexes, commit to git, validate data integrity.
 
-**Micro-Skill:** `pwrl-learnings-save`
+**See detailed workflow:** [save-learnings-detailed-workflow.md](pwrl-learnings-save/references/save-learnings-detailed-workflow.md)
 
-**Input:** Deduplicated artifact
+## Interaction Mode Propagation
 
-**Processing:** (See `pwrl-learnings-save/references/save-learnings-protocol.md`)
+Interaction mode (detailed or yolo) is set in Phase 1 and propagated through all phases:
 
-1. Create backup of existing learnings
-2. Write learnings to persistent storage
-3. Update indexes
-4. Git commit changes
-5. Generate save artifact
+- **Detailed:** Step-by-step interaction at each phase (review, confirm, adjust). Users make decisions on ambiguous classifications and duplicate handling.
+- **Yolo:** Full automation from Phase 1 through Phase 5. Only final confirmation before persisting. Auto-decisions use conservative thresholds (high confidence).
 
-**Output:** Saved artifact (persistent, indexed, accessible)
+Exception: Error recovery steps always pause the pipeline for user action.
 
-**See:** [pwrl-learnings-save/SKILL.md](../pwrl-learnings-save/SKILL.md) for detailed workflow
+## Duplicate Detection: Early + Late Coverage
+
+**Early detection (Phase 2):** Classify phase checks extracted learnings against existing knowledge base. Flags candidates that appear to update existing learnings (suggest update instead of create).
+
+**Late resolution (Phase 4):** Dedup phase runs full fingerprinting and merge algorithm. Handles exact, semantic, and high-similarity matches with archive mapping.
+
+**Result:** Significantly reduced duplicates through multi-stage coverage.
 
 ## Integration Points
 

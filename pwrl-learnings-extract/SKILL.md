@@ -80,9 +80,31 @@ source_ref: [file_path | commit_hash | task_id | error_id]
 
 Artifact passed to `pwrl-learnings-classify`.
 
-## Workflow
+## Detailed Workflow
 
-### Step 1: Validate Input
+For complete step-by-step instructions, see [extract-learnings-detailed-workflow.md](references/extract-learnings-detailed-workflow.md).
+
+This SKILL.md provides an overview. The detailed workflow document contains:
+- Exact steps for signal scanning by source type
+- Learning candidate creation templates
+- Metadata extraction details
+- Validation checklists
+- Error handling table
+- Testing scenarios
+
+## Quality Gate Validation
+
+After completing this phase, run quality gate validation:
+
+```bash
+/pwrl-phase-checkpoint learnings 1 [artifact-path]
+```
+
+See [pwrl-phase-checkpoint](../../pwrl-phase-checkpoint/SKILL.md) for validation rules.
+
+---
+
+
 
 1. Check that source type is one of: code, commit, task, documentation, error, review
 2. Verify source content is provided

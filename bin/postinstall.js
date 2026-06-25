@@ -6,11 +6,11 @@
  * Runs after npm install to provide setup instructions.
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-const isGlobal = process.env.npm_config_global === 'true';
-const PWRL_DIR = path.join(__dirname, '..');
+const isGlobal = process.env.npm_config_global === "true";
+const PWRL_DIR = path.join(__dirname, "..");
 
 console.log(`
 ╔═══════════════════════════════════════════════════════════════╗
@@ -18,13 +18,13 @@ console.log(`
 ║   Plan. Work. Review. Learn.                                  ║
 ╚═══════════════════════════════════════════════════════════════╝
 
-${isGlobal ? 'Global Installation' : 'Local Installation'}
-
 PWRL skills are now available for your AI assistant.
 
 Next Steps:
   1. Initialize PWRL in your project:
-     ${isGlobal ? '$ pwrl init' : '$ npx pwrl init'}
+     ${isGlobal ? "$ pwrl init" : "$ npx pwrl init"}
+
+     Skills will be installed globally to ~/.agents/skills/
 
   2. Start using PWRL in your AI assistant:
      Planning:
@@ -40,9 +40,9 @@ Next Steps:
        /pwrl-end-session          Clean commit at session end
 
 Documentation:
-  ${isGlobal ? '$ pwrl docs' : '$ npx pwrl docs'}          Show documentation paths
-  ${isGlobal ? '$ pwrl info' : '$ npx pwrl info'}          Show skill locations and agents
-  ${isGlobal ? '$ pwrl help' : '$ npx pwrl help'}          Show CLI help
+  ${isGlobal ? "$ pwrl docs" : "$ npx pwrl docs"}          Show documentation paths
+  ${isGlobal ? "$ pwrl info" : "$ npx pwrl info"}          Show skill locations and agents
+  ${isGlobal ? "$ pwrl help" : "$ npx pwrl help"}          Show CLI help
 
 Quick Start:
   See QUICKSTART.md for example workflows
@@ -53,4 +53,3 @@ For detailed setup instructions:
 
 Happy building with PWRL!
 `);
-

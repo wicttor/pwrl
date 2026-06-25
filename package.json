@@ -37,7 +37,6 @@
     "pwrl-*/**/*",
     "bin/**/*",
     "lib/**/*",
-    "agents/**/*",
     "README.md",
     "INSTALLATION.md",
     "QUICKSTART.md",

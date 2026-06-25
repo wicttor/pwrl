@@ -6,6 +6,25 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-06-24
+
+### Changed
+
+- **Installation:** `pwrl init` now installs all skills globally to `~/.agents/skills/` with a clean delete-then-copy strategy — removes the interactive skills-folder prompt and eliminates stale-skill bugs (`cc1b300`)
+- **CLI:** `pwrl init` no longer asks where to put skills; the destination is fixed to `~/.agents/skills/`
+- **Configuration:** `lib/config.js` defaults updated to use `~/.agents/skills/` (was `.agents/skills/`), aligning with the new global-only behavior
+- **Documentation:** All user-facing docs (README, INSTALLATION, QUICKSTART, GUIDE) updated to reflect global-only install and remove interactive-setup language
+- **Packaging:** Removed stale `agents/**/*` entry from `package.json` `files` array
+
+### Removed
+
+- **CLI:** Removed `compareVersions` function and version-comparison logic from `initProject()` (no longer needed with clean-replace strategy)
+- **Documentation:** Removed "Recommended Extension" section from README.md (was unrelated to skill-based framework design)
+
+### Maintenance
+
+- Bumped package version to 1.5.0
+
 ## [1.4.0] - 2026-06-24
 
 ### Added

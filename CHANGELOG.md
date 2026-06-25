@@ -6,6 +6,41 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-06-24
+
+### Added
+
+- Standards remediation plan covering all skills with phase-step enforcement (`acae170`)
+- Standards remediation plan sliced into 20 executable tasks (`5e8e7bd`)
+- 5 learnings from standards remediation planning session (`0b5d13e`)
+- 6 learnings from Wave 1 review session (`a3d236a`)
+- Wave 2 refactoring learnings: pure orchestrator patterns, skill consolidation, GitHub integration (`a20b344`)
+- Learning: blank line required before nested Markdown lists for proper rendering (`be6b212`)
+
+### Changed
+
+- **Skill Architecture:** Refactored `pwrl-end-session` to pure orchestrator pattern — micro-skills for checkpoint and commit phases (`3798a19`)
+- **Skill Architecture:** Refactored `pwrl-learnings` to pure orchestrator with comprehensive duplicate detection (`c02935f`)
+- **Skill Architecture:** Refactored `pwrl-review` to pure orchestrator with GitHub sync integration (`334da40`)
+- **Skill Architecture:** Streamlined phase summaries and enhanced error handling across core micro-skills (`45641d9`)
+- Cross-skill terminology update: "agent" → "orchestrator/agent-agnostic" (`a63f988`)
+- Wave 1 units (U1, U2, U5): pwrl-extension removal, TDD test suite, phase-manifest schema (`7b29e46`)
+- Wave 1 review complete: U1, U2, U5 approved and moved to done (`2c5e7ec`)
+- Wave 2 review: U3/U4 approved, U6 flagged for fixes (`e2a06c6`)
+
+### Removed
+
+- Obsolete tasks and documentation related to pwrl skills extraction and validation, including task INDEX.md cleanup (`fa4fbdb`)
+
+### Fixed
+
+- Markdown formatting issues in end-session SKILL documentation (`16f2763`)
+
+### Maintenance
+
+- Formatting cleanup: trailing whitespace and blank line consistency across all skill files (`ca00f32`)
+- Bumped package version to 1.4.0
+
 ## [1.3.0] - 2026-06-21
 
 ### Added

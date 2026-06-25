@@ -47,6 +47,7 @@ This is the second phase of `/pwrl-end-session` orchestrator, executed after Pha
 For complete step-by-step instructions, see [commit-protocol.md](references/commit-protocol.md).
 
 This SKILL.md provides an overview. The detailed workflow document contains:
+
 - Commit subject drafting with imperative mood
 - Commit body structure (why/what/next)
 - Version bump detection and CHANGELOG.md updates

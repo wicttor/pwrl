@@ -44,6 +44,7 @@ This is typically invoked by `/pwrl-end-session` orchestrator, or directly to ve
 For complete step-by-step instructions, see [checkpoint-protocol.md](references/checkpoint-protocol.md).
 
 This SKILL.md provides an overview. The detailed workflow document contains:
+
 - Working tree detection and file categorization
 - Change summary and confirmation flow
 - Session reason capture and next steps

@@ -12,11 +12,11 @@ Stop vibing, start shipping. PWRL turns chaotic AI-assisted coding into predicta
 # Install
 npm install -g @wicttor/pwrl
 
-# Initialize in your project (interactive setup)
+# Initialize in your project
 pwrl init
 
-# Skills will be copied to .agents/skills/ (or your custom location)
-# Configuration saved in .pwrlrc.json
+# Skills are installed globally at ~/.agents/skills/
+# Project config written to .pwrlrc.json
 
 # Use in your AI assistant
 /pwrl-plan
@@ -26,10 +26,6 @@ pwrl init
 /pwrl-update-learnings
 /pwrl-end-session
 ```
-
-### Recommended Extension (Optional)
-
-For the best experience, install the [`rpiv-ask-user-question`](https://pi.dev/packages/@juicesharp/rpiv-ask-user-question) extension. It powers the interactive confirmations used throughout PWRL's plan and review workflows (scope, research, design, generate, review). **Not required** — PWRL works without it, but interactive prompts will be less ergonomic. Install it through your agent's extension manager before running the skills above.
 
 **Result:** Complete, tested, documented feature with clean commit.
 
@@ -167,10 +163,10 @@ Each orchestrator runs a deterministic sequence of micro-skills, with phase-base
 
 After running `pwrl init`, your project settings are stored in `.pwrlrc.json`:
 
-- **Skills location**: Where PWRL skills are installed (default: `.agents/skills/`)
+- **Skills location**: PWRL skills are always installed globally at `~/.agents/skills/`. Run `pwrl init` in any project to ensure the latest skills are available.
 - **GitHub Issues integration**: Enable automatic task tracking with GitHub Issues
 
-You can reconfigure at any time by running `pwrl init` again or editing `.pwrlrc.json` manually.
+You can re-run `pwrl init` to refresh skills or reconfigure.
 
 ---
 
@@ -273,12 +269,6 @@ git push origin feature-branch
 # Global (recommended)
 npm install -g @wicttor/pwrl
 pwrl init
-
-# Per-project
-cd your-project
-npm install --save-dev @wicttor/pwrl
-npx @wicttor/pwrl init
-# This will copy bundled skills into .agents/skills/ in your project
 ```
 
 See [INSTALLATION.md](INSTALLATION.md) for platform-specific setup.
@@ -316,16 +306,10 @@ Works with any AI assistant that supports custom instructions or skills:
 
 After initialization:
 
+> **Note:** PWRL skills are installed globally at `~/.agents/skills/`, not in your project directory.
+
 ```
 your-project/
-  .agents/
-    skills/                   # PWRL skills (or custom location)
-      pwrl-plan/
-      pwrl-tasks/
-      pwrl-work/
-      pwrl-review/
-      pwrl-learnings/
-      ....
   docs/
     plans/                    # Implementation plans
       2026-05-04-auth.md

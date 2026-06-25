@@ -13,12 +13,7 @@ cd your-project
 pwrl init
 ```
 
-During initialization, you'll be asked:
-
-1. **Skills folder location** — Default: `.agents/skills/` (or specify custom path)
-2. **GitHub Issues integration** — Enable task tracking with GitHub Issues
-
-Configuration is saved in `.pwrlrc.json`.
+Skills are installed globally at `~/.agents/skills/`. Run `pwrl init` in each project to configure GitHub Issues integration and create `.pwrlrc.json`.
 
 ## What You Get
 
@@ -33,20 +28,9 @@ PWRL provides standardized workflow skills:
 
 After running `pwrl init`, your project will have:
 
-```
-.agents/
-  skills/               # PWRL skills (or your custom location)
-    pwrl-plan/
-      SKILL.md
-      references/
-    pwrl-work/
-      SKILL.md
-      references/
-    pwrl-review/
-      SKILL.md
-      references/
-    ... (other skills)
+> **Note:** PWRL skills live globally at `~/.agents/skills/` — not inside your project.
 
+```
 docs/
   learnings/            # Categorized knowledge capture
     technical-fix/
@@ -70,25 +54,25 @@ docs/
 ### GitHub Copilot (VS Code)
 
 **Skills Setup:**
-Skills in `.agents/skills/` are automatically discovered by GitHub Copilot.
+Skills in `~/.agents/skills/` are automatically discovered by GitHub Copilot.
 
 Invoke with: `/pwrl-plan`, `/pwrl-work`, `/pwrl-review`, etc.
 
 ### Claude (Desktop/Web)
 
 1. Create a Claude Project for your codebase
-2. Add `.agents/skills/` folder as project knowledge
+2. Add `~/.agents/skills/` folder as project knowledge
 3. Invoke with: `/pwrl-plan`, `/pwrl-work`, etc.
 
 ### Cursor
 
-Skills in `.agents/skills/` are automatically discovered by Cursor.
+Skills in `~/.agents/skills/` are automatically discovered by Cursor.
 
 Invoke with: `/pwrl-plan`, `/pwrl-work`, etc.
 
 ### Other AI Assistants (LangChain, AutoGen, Custom)
 
-1. Reference skill files from `.agents/skills/` in your assistant's context
+1. Reference skill files from `~/.agents/skills/` in your assistant's context
 2. Use natural language prompts aligned with skill workflows
 
 ## Verification
@@ -128,7 +112,7 @@ After initialization, `.pwrlrc.json` stores your project settings:
 ```json
 {
   "version": "1.0",
-  "skillsPath": ".agents/skills",
+  "skillsPath": "~/.agents/skills",
   "integrations": {
     "githubIssues": false
   },
@@ -136,7 +120,7 @@ After initialization, `.pwrlrc.json` stores your project settings:
 }
 ```
 
-You can manually edit this file or re-run `pwrl init` to reconfigure.
+Run `pwrl init` again to refresh skills.
 
 ---
 

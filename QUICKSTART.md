@@ -10,13 +10,12 @@ Get started with PWRL workflows for common development tasks.
 # Install globally
 npm install -g @wicttor/pwrl
 
-# Initialize in your project (interactive)
+# Initialize in your project
 cd your-project
 pwrl init
 
-# Follow prompts to configure:
-# - Skills folder location (default: .agents/skills/)
-# - GitHub Issues integration (optional)
+Skills are installed globally at `~/.agents/skills/`.
+Run `pwrl init` in each project to enable GitHub Issues integration.
 ```
 
 ## Core Workflow

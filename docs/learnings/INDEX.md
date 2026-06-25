@@ -39,6 +39,21 @@ Central index of all learnings extracted from development sessions.
 - Explicit Data Flow (architecture)
 - Error Recovery (reliability)
 
+## Session: End-session formatting fix (2026-06-24)
+
+**File:** [pattern/markdown-blank-line-before-nested-list-2026-06-24.md](pattern/markdown-blank-line-before-nested-list-2026-06-24.md)
+
+**Commit:** 16f2763
+
+**Key Learnings:**
+
+1. **Blank Line Before Nested Lists** (Documentation)
+   - Always add a blank line before a nested list following a paragraph
+   - Ensures correct rendering across all Markdown parsers
+   - Fixed in pwrl-end-session-checkpoint and pwrl-end-session-commit SKILL files
+
+---
+
 ## How to Use These Learnings
 
 ### For Architecture Decisions

@@ -43,6 +43,39 @@ Plan document path, or blank to auto-discover the latest plan in `docs/plans/`.
 
 ## Workflow
 
+### Phase 0: Select Interaction Mode
+
+Before locating the plan, ask the user to choose their engagement level for this slicing workflow. Use the platform's `ask_user_question` extension (or equivalent) to present the following three options:
+
+**Question:** "How would you like to proceed with this task slicing?"
+
+**Options:**
+
+- **Detailed (Step-by-Step)** — Show each generated task file to the user before writing; pause for ambiguous dependency resolutions; require explicit approval before updating the index. Maximum control. Best for complex plans where dependency resolution is non-obvious.
+- **Smart (Risk-gated automation)** — Write all task files automatically; pause only for ambiguous dependency resolutions (e.g., a unit that references a missing unit-id) and for the index update. v1 simplification: behaves like Yolo with a single confirmation prompt at workflow start.
+- **Yolo (Full Automation)** — Write all task files automatically; auto-resolve dependencies with conservative defaults (e.g., assume a missing dependency is a future unit, do not block on it); auto-update the index. Fastest. Best for routine plans and trusted plan templates.
+
+Store the selection in the orchestrator context for use by Phases 2 and 3:
+
+```yaml
+interactionMode: detailed | smart | yolo
+```
+
+> **Note:** A future enhancement could read the mode from `.pwrlrc.json` so users who always want Yolo don't get re-prompted. Out of scope for plan 2026-06-29-001 — see `docs/learnings/pattern/interaction-mode-three-mode-propagation-2026-06-29.md` §"Future Refinements".
+
+### Interaction Mode Propagation
+
+The `interactionMode` value is set in Phase 0 and consumed by Phases 2 and 3:
+
+- **Phase 2 (Generate Task Files):**
+  - **Detailed:** Show each generated task file to the user before writing; pause for ambiguous dependency resolutions.
+  - **Smart:** Write all task files automatically; pause only for ambiguous dependency resolutions.
+  - **Yolo:** Write all task files automatically; auto-resolve dependencies with conservative defaults.
+- **Phase 3 (Generate Index and Report):**
+  - **Detailed:** Show the proposed index update to the user before writing; require explicit approval.
+  - **Smart:** Write the index automatically; report the diff afterward.
+  - **Yolo:** Write the index automatically; no diff preview.
+
 ### Phase 1: Locate and Read the Plan
 
 1. If a path is provided, read that plan; otherwise scan `docs/plans/` for the latest active/draft plan.

@@ -11,7 +11,7 @@ argument-hint: "[source type: code|commit|task|documentation|error|review, and s
 ## Interaction Method
 
 - Accepts source type and content as input.
-- Minimal interaction; primarily automated scanning and extraction.
+- The level of interaction is controlled by the `interactionMode` selected in Step 1.5 below. The scanning itself is identical in all three modes; only the confirmations and dedup resolutions differ.
 - Ask user only if source ambiguous: "Is this code or configuration?"
 - Show extraction progress and candidate count.
 - No approval gate; proceed to next skill.
@@ -42,6 +42,7 @@ extract_id: YYYY-MM-DD-NNN-extract
 created: ISO-8601-timestamp
 source_type: code | commit | task | documentation | error | review
 source_ref: [file_path | commit_hash | task_id | error_id]
+interactionMode: detailed | smart | yolo
 ---
 
 # Learning Extraction Results
@@ -76,9 +77,38 @@ source_ref: [file_path | commit_hash | task_id | error_id]
 ## Ready for Classification
 - **Next Skill:** pwrl-learnings-classify
 - **Artifacts Passed:** This extraction artifact + source reference
+- **Interaction Mode:** [chosen-value]
 ```
 
 Artifact passed to `pwrl-learnings-classify`.
+
+### Step 1.5: Select Interaction Mode
+
+Before scanning source materials, ask the user to choose their engagement level for this extraction. Use the platform's `ask_user_question` extension (or equivalent) to present the following three options:
+
+**Question:** "How would you like to proceed with this extraction?"
+
+**Options:**
+
+- **Detailed (Step-by-Step)** — Pause for confirmation on every ambiguous classification in Phase 2 (classify) and every dedup decision in Phase 4 (dedup); inspect candidate learnings before they are committed. Maximum control. Best for curating a high-quality personal learnings library.
+- **Smart (Risk-gated automation)** — Phases run automatically; pause only for HIGH-confidence-low-applicability entries (those that are technically certain but whose actionability is unclear) and for any dedup decision where the existing entry is itself low-confidence. v1 simplification: behaves like Yolo with a single confirmation prompt at workflow start.
+- **Yolo (Full Automation)** — Every candidate is auto-classified, dedup is auto-resolved, and only the final extraction report is shown. Fastest. Best for routine session-end batch extraction or trusted source materials.
+
+> **Note:** In Yolo mode (the default for users who skip the prompt), the workflow proceeds as it did before this mode ask was added.
+
+Store the selection in the extraction artifact (replacing the placeholder in the schema above):
+
+```yaml
+interactionMode: detailed | smart | yolo
+```
+
+**Mode-aware behavior propagation:** The `interactionMode` value flows into `pwrl-learnings-classify`, `pwrl-learnings-dedup`, `pwrl-learnings-structure`, and `pwrl-learnings-save` artifacts. Each downstream phase reads the value and adjusts its confirmation behavior:
+
+- **Detailed:** Pause for every ambiguous classification and dedup decision; show candidate learning before saving.
+- **Smart:** Auto-classify with high confidence; pause only for low-applicability or low-confidence-conflicting entries; auto-resolve obvious dedup.
+- **Yolo:** Auto-resolve every classification and dedup; report only the final extraction + save summary.
+
+---
 
 ## Detailed Workflow
 

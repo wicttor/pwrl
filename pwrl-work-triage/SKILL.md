@@ -224,30 +224,29 @@ planningRecommended: false
 
 ### 5. Select Interaction Mode
 
-After classifying input, ask user to choose interaction style:
+After classifying input, ask the user to choose their engagement level for this workflow. Use the platform's `ask_user_question` extension (or equivalent) to present the following three options:
 
-**Prompt:** "How would you like to proceed?"
+**Question:** "How would you like to proceed with this workflow?"
 
 **Options:**
 
-- **Detailed (Step-by-Step):**
-  - Review and confirm at each phase (Prepare → Execute → Review → Finalize)
-  - Inspect generated artifacts
-  - Approval gates at each transition
-  - Slower but more control and visibility
-  - Best for: Complex work, unfamiliar codebases, learning
-
-- **Yolo (Full Automation):**
-  - Fully automated from Phase 1 through Phase 3
-  - Review and confirm only at the end
-  - Faster execution
-  - Best for: Straightforward tasks, well-understood scope, time-sensitive
+- **Detailed (Step-by-Step)** — Review and confirm at each phase transition (Prepare → Execute → Review → Finalize); inspect generated artifacts; approval gates at each transition. Slower but maximum control. Best for complex work, unfamiliar codebases, and learning.
+- **Smart (Risk-gated automation)** — Phases run automatically; pause only when the next phase produces a HIGH-risk operation (destructive git, irreversible API calls, schema-breaking migrations). v1 simplification: behaves like Yolo with a single confirmation prompt at workflow start. See `docs/learnings/pattern/interaction-mode-three-mode-propagation-2026-06-29.md` §"Future Refinements" for the full risk-classification roadmap.
+- **Yolo (Full Automation)** — Fully automated from Phase 1 through Phase 3; review and confirm only at the end. Fastest execution. Best for straightforward tasks, well-understood scope, and time-sensitive work.
 
 **Store selection in context:**
 
 ```yaml
-interactionMode: detailed | yolo
+interactionMode: detailed | smart | yolo
 ```
+
+**Propagation:** The `interactionMode` value flows into `pwrl-work-prepare`, `pwrl-work-execute`, `pwrl-work-review`, and `pwrl-work-sync-status` artifacts. Each downstream phase reads the value and adjusts its confirmation behavior:
+
+- **Detailed:** Pause at every phase transition; show generated artifacts; require explicit approval.
+- **Smart:** Run phases automatically; pause only at HIGH-risk operations.
+- **Yolo:** Run every phase automatically; report only the final outcome.
+
+**Backward compatibility note:** Downstream phases (e.g., older `pwrl-work-execute` builds) that still assume a two-value enum must treat any value other than `detailed` as `yolo` until upgraded. The `smart` value is new as of 2026-06-29.
 
 ---
 

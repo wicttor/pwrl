@@ -2,6 +2,17 @@
 
 Granular implementation task files sliced from plans. Organized by execution status.
 
+## To Do
+
+* [Define Interaction-Mode Schema in Standards](to-do/2026-06-29-u1-define-interaction-mode-schema.md) — Codify three-mode (Detailed / Smart / Yolo) `interactionMode` field + "Required Interaction Section" template in `pwrl-standards/SCHEMA.md`. Foundational unit for U2–U7. No dependencies.
+* [Add Mode Ask to `pwrl-plan-scope`](to-do/2026-06-29-u2-add-mode-ask-plan-scope.md) — Insert "Select Interaction Mode" step between Step 1 and Step 2; extend Scoped Context schema; document propagation. Depends on U1.
+* [Upgrade `pwrl-work-triage` to Three Modes](to-do/2026-06-29-u3-upgrade-work-triage-three-modes.md) — Replace existing 2-mode Step 5 with 3-mode template; update field comment; add Smart mode v1 note. Depends on U1.
+* [Add Mode Ask to `pwrl-review-scope`](to-do/2026-06-29-u4-add-mode-ask-review-scope.md) — Insert "Select Interaction Mode" step at the top; extend Scope Artifact schema; document cross-phase propagation. Depends on U1.
+* [Add Mode Ask to `pwrl-learnings-extract`](to-do/2026-06-29-u5-add-mode-ask-learnings-extract.md) — Replace "minimal interaction" sentence with 3-mode ask; extend extraction artifact schema; document mode-aware behavior. Depends on U1.
+* [Add Mode Ask to `pwrl-tasks` (Orchestrator)](to-do/2026-06-29-u6-add-mode-ask-tasks-orchestrator.md) — Add Phase 0 "Select Interaction Mode"; document mode-aware behavior in Phases 2 and 3; add "Interaction Mode Propagation" section. Depends on U1.
+* [Add Mode Ask to `pwrl-end-session-checkpoint`](to-do/2026-06-29-u7-add-mode-ask-end-session-checkpoint.md) — Add Step 1.5 "Select Interaction Mode"; extend checkpoint artifact schema; add propagation section to orchestrator. Depends on U1.
+* [Document Propagation in Orchestrators + Capture Learnings + Version Bump](to-do/2026-06-29-u8-document-propagation-and-version-bump.md) — Add/update "Interaction Mode Propagation" in all 6 orchestrators; create new pattern learning; update decision learning; bump version to 1.4.0; update CHANGELOG. Depends on U2–U7.
+
 ## For Review
 
 * [Define OKF Type Taxonomy & Create Root Index](for-review/2026-06-28-u1-okf-type-taxonomy-and-root-index.md) — Establish standard type values for all PWRL document categories; create bundle root index.
@@ -54,4 +65,4 @@ Granular implementation task files sliced from plans. Organized by execution sta
 
 ---
 
-**Last Updated:** 2026-06-29
+**Last Updated:** 2026-06-29 (8 new tasks added for plan 2026-06-29-001)

@@ -1,57 +1,57 @@
 {
-  "name": "@wicttor/pwrl",
-  "version": "1.5.0",
-  "description": "Plan. Work. Review. Learn. — A disciplined skill-based development framework",
-  "keywords": [
-    "ai",
-    "skills",
-    "development",
-    "workflow",
-    "development",
-    "workflow",
-    "copilot",
-    "claude",
-    "cursor",
-    "gemini",
-    "planning",
-    "documentation",
-    "learning",
-    "code-review"
-  ],
-  "homepage": "https://github.com/wicttor/pwrl#readme",
-  "bugs": {
-    "url": "https://github.com/wicttor/pwrl/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wicttor/pwrl.git"
-  },
-  "license": "MIT",
-  "author": "Wicttor Picanco Rios",
-  "type": "commonjs",
-  "main": "index.js",
-  "bin": {
-    "pwrl": "bin/pwrl.js"
-  },
-  "files": [
-    "pwrl-*/**/*",
-    "bin/**/*",
-    "lib/**/*",
-    "README.md",
-    "INSTALLATION.md",
-    "QUICKSTART.md",
-    "GUIDE.md",
-    "LICENSE"
-  ],
-  "scripts": {
-    "postinstall": "node ./bin/postinstall.js",
-    "validate:skills": "node ./pwrl-standards/scripts/validate-skills.js",
-    "test": "node --test tests/**/*.test.js",
-    "test:plan": "node --test tests/pwrl-plan/skills.test.js",
-    "test:work": "node --test tests/pwrl-work/skills.test.js"
-  },
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "packageManager": "npm@11.0.0"
+    "name": "@wicttor/pwrl",
+    "version": "1.6.0-dev.1",
+    "description": "Plan. Work. Review. Learn. — A disciplined skill-based development framework",
+    "keywords": [
+        "ai",
+        "skills",
+        "development",
+        "workflow",
+        "development",
+        "workflow",
+        "copilot",
+        "claude",
+        "cursor",
+        "gemini",
+        "planning",
+        "documentation",
+        "learning",
+        "code-review"
+    ],
+    "homepage": "https://github.com/wicttor/pwrl#readme",
+    "bugs": {
+        "url": "https://github.com/wicttor/pwrl/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/wicttor/pwrl.git"
+    },
+    "license": "MIT",
+    "author": "Wicttor Picanco Rios",
+    "type": "commonjs",
+    "main": "index.js",
+    "bin": {
+        "pwrl": "bin/pwrl.js"
+    },
+    "files": [
+        "pwrl-*/**/*",
+        "bin/**/*",
+        "lib/**/*",
+        "README.md",
+        "INSTALLATION.md",
+        "QUICKSTART.md",
+        "GUIDE.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "postinstall": "node ./bin/postinstall.js",
+        "validate:skills": "node ./pwrl-standards/scripts/validate-skills.js",
+        "test": "node --test tests/**/*.test.js",
+        "test:plan": "node --test tests/pwrl-plan/skills.test.js",
+        "test:work": "node --test tests/pwrl-work/skills.test.js"
+    },
+    "engines": {
+        "node": ">=14.0.0"
+    },
+    "packageManager": "npm@11.0.0"
 }

@@ -1,7 +1,7 @@
 ---
 unit-id: U8
 plan: docs/plans/2026-06-29-001-restore-interaction-mode-ask.md
-status: for-review
+status: done
 created: 2026-06-29
 dependencies: [U2, U3, U4, U5, U6, U7]
 files:
@@ -74,7 +74,7 @@ Follow the `cross-skill-terminology-update-2026-06-19.md` six-phase workflow: di
 ### Part E: Version Bump + CHANGELOG (2 files)
 
 10. **Read current version** from `package.json`.
-11. **Bump to 1.4.0** (MINOR per semver: new user-facing feature = mode ask; no breaking schema changes). Follow `coordinated-versioning-ecosystem-2026-06-13.md` — record the new version in the version-bump log section of that learning if appropriate.
+11. **Bump to next MINOR** per semver (new user-facing feature = mode ask; no breaking schema changes). The target depends on current version — was bumped to `1.6.0-dev.2` at implementation time. Follow `coordinated-versioning-ecosystem-2026-06-13.md` — record the new version in the version-bump log section of that learning if appropriate.
 12. **Add a CHANGELOG entry** under `[Unreleased]`:
     ```markdown
     ## [Unreleased]
@@ -114,7 +114,7 @@ grep -q "DONE 2026-06-29" /home/wicttor/Projects/pwrl/docs/learnings/decision/in
 grep -q "interaction-mode-three-mode-propagation-2026-06-29" /home/wicttor/Projects/pwrl/docs/learnings/INDEX.md && echo "✓ INDEX updated"
 
 # Part E: Version bumped
-grep -q '"version": "1.4.0"' /home/wicttor/Projects/pwrl/package.json && echo "✓ Version bumped"
+grep -q '"version": "1.6.0-dev.2"' /home/wicttor/Projects/pwrl/package.json && echo "✓ Version bumped"
 
 # Part E: CHANGELOG updated
 grep -q "Interaction mode (Detailed / Smart / Yolo)" /home/wicttor/Projects/pwrl/CHANGELOG.md && echo "✓ CHANGELOG updated"
@@ -136,7 +136,7 @@ git diff -- '*.md' | grep -E '^\+.*\|' | head
 - [ ] New pattern learning exists at the expected path with problem/solution/implementation/validation structure.
 - [ ] Existing decision learning's "Future Refinements" note is marked done with the new date.
 - [ ] Learnings INDEX has the new entry in the `# Patterns` section.
-- [ ] `package.json` version is bumped to 1.4.0.
+- [ ] `package.json` version is bumped (MINOR semver bump; actual target depends on current version).
 - [ ] CHANGELOG has an entry under `[Unreleased]` with `### Added` and `### Changed` subsections.
 - [ ] Markdown table alignment is preserved across all edited files.
 

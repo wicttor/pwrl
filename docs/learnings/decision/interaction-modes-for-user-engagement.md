@@ -122,10 +122,11 @@ Store selection in context:
 
 - See: [Branch-Ready Workflow Over Auto-Ship to Main](#)
 - See: [Explicit Task File Movement as Critical Phase Operation](#)
+- See: [Pattern: Interaction-Mode Three-Mode Propagation](pattern/interaction-mode-three-mode-propagation-2026-06-29.md) — codifies the canonical three-mode contract, entry-point placement rule, and artifact propagation contract across all 6 core PWRL workflows. The pattern is the formalization of the "Add third mode: Smart" refinement marked done above.
 
 ## Future Refinements
 
-- Add third mode: "Smart" (Detailed for complex, Yolo for simple)
+- [DONE 2026-06-29] Add third mode: "Smart" (Detailed for complex, Yolo for simple) — see `pattern/interaction-mode-three-mode-propagation-2026-06-29.md` for the v1 implementation. v1 simplification: Smart behaves like Yolo with a single confirmation prompt at workflow start; the full risk-classification taxonomy is a follow-up.
 - Add per-phase override (stay in Yolo for Prepare, switch to Detailed for Execute)
 - Remember user preference per codebase/domain
 - Offer suggested mode based on task complexity analysis

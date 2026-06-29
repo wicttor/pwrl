@@ -78,6 +78,18 @@ Each phase is orchestrated sequentially. The orchestrator calls the micro-skill,
 
 **Quality Gates:** Run `/pwrl-phase-checkpoint review N [artifact-path]` to validate each phase. See [pwrl-phase-checkpoint](../pwrl-phase-checkpoint/SKILL.md) for validation rules.
 
+### Interaction Mode Propagation
+
+Interaction mode (`detailed | smart | yolo`) is set in Phase 1 (via `pwrl-review-scope` Step 0) and read at the start of each subsequent phase. The mode is stored in the scope artifact's `interactionMode` field and propagated through every downstream phase.
+
+- **`detailed`** — Pause at every phase transition (Scope → Prepare → Analyze → Report → Sync); show generated artifacts; require explicit approval to proceed. Best for complex reviews, unfamiliar code, and high-stakes changes.
+- **`smart`** — Phases run automatically; pause only when the next phase produces a HIGH-risk operation (e.g., posting a formal GitHub review, labeling a PR with a release-blocker). v1 simplification: behaves like Yolo with a single confirmation prompt at workflow start.
+- **`yolo`** — Every phase runs automatically; only the final report is shown. Fastest. Best for routine, well-understood reviews.
+
+**Future refinement:** In Yolo mode, `pwrl-review-report` should auto-approve the review unless CRITICAL issues are found (currently it always asks). This behavior change is out of scope for plan 2026-06-29-001; see `docs/learnings/pattern/interaction-mode-three-mode-propagation-2026-06-29.md` §"Future Refinements".
+
+**Exception:** Error recovery steps always pause the pipeline, regardless of mode.
+
 ## Verdict Criteria
 
 See [verdict-criteria.md](references/verdict-criteria.md) for comprehensive approval matrices, quality score calculations, and decision logic for all verdicts (APPROVED, REQUEST CHANGES, REJECTED).

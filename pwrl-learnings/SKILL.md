@@ -204,12 +204,15 @@ Validate environment, create backup, write files with metadata, update indexes, 
 
 ## Interaction Mode Propagation
 
-Interaction mode (detailed or yolo) is set in Phase 1 and propagated through all phases:
+Interaction mode (`detailed | smart | yolo`) is set in Phase 1 (via `pwrl-learnings-extract` Step 1.5) and propagated through all five phases. The mode is stored in the extraction artifact's `interactionMode` field.
 
-- **Detailed:** Step-by-step interaction at each phase (review, confirm, adjust). Users make decisions on ambiguous classifications and duplicate handling.
-- **Yolo:** Full automation from Phase 1 through Phase 5. Only final confirmation before persisting. Auto-decisions use conservative thresholds (high confidence).
+- **`detailed`** — Step-by-step interaction at each phase. Pause for every ambiguous classification in Phase 2 (classify) and every dedup decision in Phase 4 (dedup); inspect candidate learnings before they are committed. Maximum control. Best for curating a high-quality personal learnings library.
+- **`smart`** — Phases run automatically; pause only for HIGH-confidence-low-applicability entries and for dedup decisions where the existing entry is itself low-confidence. v1 simplification: behaves like Yolo with a single confirmation prompt at workflow start.
+- **`yolo`** — Full automation from Phase 1 through Phase 5. Only final confirmation before persisting. Auto-decisions use conservative thresholds (high confidence). Fastest. Best for routine session-end batch extraction or trusted source materials.
 
-Exception: Error recovery steps always pause the pipeline for user action.
+**Note:** The scanning itself (FIXME/HACK/TODO detection, commit-message analysis, etc.) is identical in all three modes — only the confirmations and dedup resolutions differ.
+
+**Exception:** Error recovery steps always pause the pipeline for user action, regardless of mode. See `docs/learnings/pattern/interaction-mode-three-mode-propagation-2026-06-29.md` for the full contract.
 
 ## Duplicate Detection: Early + Late Coverage
 

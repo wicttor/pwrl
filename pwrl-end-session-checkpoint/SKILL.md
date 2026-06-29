@@ -73,8 +73,30 @@ Detect all changes and determine if commit is viable.
 **See detailed workflow:** [checkpoint-protocol.md](references/checkpoint-protocol.md#step-1-verify-working-tree)
 
 - Run `git status` to detect modified, staged, untracked files
-- Exit if no changes found
+- If no changes found, skip the mode ask (Step 1.5) and exit — there is nothing to commit
 - Categorize changes into staged, unstaged, untracked
+
+### Step 1.5: Select Interaction Mode
+
+If changes were detected, ask the user to choose their engagement level for this session-end. Use the platform's `ask_user_question` extension (or equivalent) to present the following three options:
+
+**Question:** "How would you like to proceed with this session-end?"
+
+**Options:**
+
+- **Detailed (Step-by-Step)** — Show the draft commit message in `pwrl-end-session-commit` and let the user edit it before approval; show pre-flight summary in the checkpoint. Maximum control. Best for complex sessions with breaking changes, version bumps, or sensitive attribution.
+- **Smart (Risk-gated automation)** — Show a pre-flight summary (files, line counts, version-bump check) and approve the commit with one click; only pause for HIGH-risk operations (e.g., version bump detected, breaking-change warning). v1 simplification: behaves like Yolo with a single confirmation prompt at workflow start.
+- **Yolo (Full Automation)** — Entire session-end (checkpoint + commit) auto-runs and only reports the final commit SHA. Fastest. Best for routine, low-risk session ends.
+
+Store the selection in the checkpoint artifact (replacing the placeholder in the schema above):
+
+```yaml
+interactionMode: detailed | smart | yolo
+```
+
+> **Empty working tree:** If there are no changes, the mode ask is skipped (since there is nothing to commit). Users with no changes will not be prompted.
+
+> **Learnings chaining:** The optional Phase 3 chain to `/pwrl-learnings` has its own mode ask (set by `pwrl-learnings-extract` Step 1.5). The mode set in this step controls only checkpoint and commit behavior.
 
 ### Phase 2: Review and Confirm Changes
 

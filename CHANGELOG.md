@@ -6,6 +6,33 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+### Added
+
+- **Interaction mode (Detailed / Smart / Yolo) asked at the start of every core PWRL skill workflow.** Entry points: `pwrl-plan-scope` (Step 1.5), `pwrl-work-triage` (Step 5), `pwrl-review-scope` (Step 0), `pwrl-learnings-extract` (Step 1.5), `pwrl-tasks` (Phase 0), `pwrl-end-session-checkpoint` (Step 1.5). The canonical ask wording lives in `pwrl-standards/SCHEMA.md` §"Required Interaction Section Template" and is pasted verbatim into every entry point to eliminate drift.
+- **Canonical `interactionMode` field schema** in `pwrl-standards/SCHEMA.md` §"Interaction Mode Field" — a single source of truth for the `detailed | smart | yolo` field, its semantics, and its required-in/optional-in artifact scope.
+- **Interaction Mode Propagation sections** in all six orchestrators (`pwrl-plan`, `pwrl-work`, `pwrl-review`, `pwrl-learnings`, `pwrl-tasks`, `pwrl-end-session`) — each documents where the mode is set, how it propagates through artifacts, and how the three modes change phase behavior.
+- **New pattern learning:** `docs/learnings/pattern/interaction-mode-three-mode-propagation-2026-06-29.md` — codifies the three-mode contract, entry-point placement rule, artifact-propagation rule, and Smart-mode risk-gating rule.
+
+### Changed
+
+- **Vocabulary expansion from two-mode (Detailed / Yolo) to three-mode (Detailed / Smart / Yolo)** across orchestrators, entry-point sub-skills, and the schema doc. `pwrl-work-triage` was the only sub-skill with the two-mode ask; it is now three-mode.
+- **"Minimal interaction; primarily automated scanning and extraction" line** in `pwrl-learnings-extract` replaced with a three-mode ask; downstream phases now read `interactionMode` from the extraction artifact to control confirmations and dedup resolutions.
+- **`pwrl-learnings-extract` extraction artifact** schema extended with `interactionMode: detailed | smart | yolo`.
+- **`pwrl-review-scope` scope artifact** schema extended with `interactionMode: detailed | smart | yolo`.
+- **`pwrl-plan-scope` scoped context** schema extended with `interactionMode: detailed | smart | yolo`.
+- **`pwrl-end-session-checkpoint` checkpoint artifact** schema (in `references/checkpoint-protocol.md`) extended with `interactionMode: detailed | smart | yolo`.
+
+### Documentation
+
+- Existing decision learning `docs/learnings/decision/interaction-modes-for-user-engagement.md` updated: "Add third mode: Smart" refinement marked `[DONE 2026-06-29]`; cross-link added to the new pattern learning.
+
+### Future Refinements (Out of Scope for This Release)
+
+- Smart-mode risk-classification taxonomy (which sub-skill operations count as HIGH-risk)
+- Cross-session mode persistence via `.pwrlrc.json` or `--mode` CLI flag
+- Mode-aware review verdict logic (Yolo auto-approves unless CRITICAL issues)
+- Per-phase mode override without re-invoking the workflow
+
 ## [1.5.0] - 2026-06-24
 
 ### Changed

@@ -20,9 +20,44 @@ argument-hint: "[branch name, unit ID, or PR number]"
 
 After completing the workflow, produce a scope artifact. See [artifact-schemas.md](../pwrl-review/references/artifact-schemas.md) for the complete schema.
 
+The artifact must include the user's chosen interaction mode:
+
+```yaml
+scope_id: YYYY-MM-DD-NNN-scope
+unit_id: [from task or plan]
+branch_name: [git branch under review]
+interactionMode: detailed | smart | yolo
+```
+
 This artifact is passed to `pwrl-review-prepare` (next phase).
 
 ## Workflow
+
+### Step 0: Select Interaction Mode
+
+Ask the user to choose their engagement level for this review. Use the platform's `ask_user_question` extension (or equivalent) to present the following three options:
+
+**Question:** "How would you like to proceed with this review?"
+
+**Options:**
+
+- **Detailed (Step-by-Step)** — Review and confirm at each phase transition (Scope → Prepare → Analyze → Report → Sync); inspect generated artifacts; approval gates at each transition. Slower but maximum control. Best for complex reviews, unfamiliar code, and high-stakes changes.
+- **Smart (Risk-gated automation)** — Phases run automatically; pause only when the next phase produces a HIGH-risk operation (e.g., posting a formal GitHub review, labeling a PR with a release-blocker). v1 simplifies this to a single confirmation prompt at workflow start.
+- **Yolo (Full Automation)** — Every phase runs automatically; only the final report is shown. Fastest. Best for routine, well-understood reviews.
+
+Store the selection in the scope artifact (replacing the placeholder in the schema above):
+
+```yaml
+interactionMode: detailed | smart | yolo
+```
+
+**Cross-phase propagation:** The `interactionMode` value flows into `pwrl-review-prepare`, `pwrl-review-analyze`, `pwrl-review-report`, and `pwrl-review-sync-status` artifacts. Each downstream phase reads the value and adjusts its confirmation behavior:
+
+- **Detailed:** Pause at every phase transition; show generated artifacts; require explicit approval.
+- **Smart:** Run phases automatically; pause only at HIGH-risk operations.
+- **Yolo:** Run every phase automatically; report only the final outcome.
+
+**Future refinement:** In Yolo mode, `pwrl-review-report` should auto-approve the review unless CRITICAL issues are found (currently it always asks). This behavior change is out of scope for plan 2026-06-29-001; see `docs/learnings/pattern/interaction-mode-three-mode-propagation-2026-06-29.md` §"Future Refinements".
 
 ### Step 1: Identify Source & Requirements
 

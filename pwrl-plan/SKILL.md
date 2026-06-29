@@ -58,7 +58,13 @@ Each phase is orchestrated sequentially: the orchestrator calls the micro-skill,
 
 ### Interaction Mode Propagation
 
-Interaction mode (detailed or yolo) is set in Phase 1 and read at the start of each subsequent phase. Determines whether confirmation steps execute or are skipped. Exception: Error recovery steps always pause the pipeline.
+Interaction mode (`detailed | smart | yolo`) is set in Phase 1 (via `pwrl-plan-scope` Step 1.5) and read at the start of each subsequent phase. Determines whether confirmation steps execute or are skipped. The three modes behave as follows:
+
+- **`detailed`** — Pause at every phase transition; show generated artifacts; require explicit approval to proceed.
+- **`smart`** — Phases run automatically; pause only when the next phase produces a HIGH-risk operation. v1 simplification: behaves like Yolo with a single confirmation prompt at workflow start.
+- **`yolo`** — Every phase runs automatically; only the final outcome is reported.
+
+**Exception:** Error recovery steps always pause the pipeline, regardless of mode. See the canonical pattern in `docs/learnings/pattern/interaction-mode-three-mode-propagation-2026-06-29.md`.
 
 ## Planning Tiers
 
@@ -79,7 +85,7 @@ Interaction mode (detailed or yolo) is set in Phase 1 and read at the start of e
 - **Be Concrete:** Use specific files, components, and dependencies
 - **Stay Portable:** Use repository-relative paths only
 - **Transparent Artifacts:** Each phase produces explicit output artifact for next phase
-- **Interaction Mode Propagation:** Once set in Phase 1, interaction_mode (detailed or yolo) is read at the start of each subsequent phase and determines whether confirmation steps execute.
+- **Interaction Mode Propagation:** Once set in Phase 1, interaction_mode (detailed, smart, or yolo) is read at the start of each subsequent phase and determines whether confirmation steps execute. See `docs/learnings/pattern/interaction-mode-three-mode-propagation-2026-06-29.md` for the full contract.
 
 ## Error Handling & Recovery
 

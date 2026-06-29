@@ -24,6 +24,7 @@ After completing the workflow, produce a scoped context block (as markdown) with
 scope-id: YYYY-MM-DD-NNN-scope
 domain: software | non-software
 status: confirmed
+interactionMode: detailed | smart | yolo
 
 # Scoped Context
 
@@ -82,7 +83,31 @@ This context is passed to `pwrl-plan-research` (S3) for the research phase.
 
 3. **If no existing plan is found:**
    - Set `existing_plan.path: null`, `existing_plan.action: none`
-   - Proceed to Step 2
+   - Proceed to Step 1.5
+
+### Step 1.5: Select Interaction Mode
+
+Ask the user to choose their engagement level for this workflow. Use the platform's `ask_user_question` extension (or equivalent) to present the following three options:
+
+**Question:** "How would you like to proceed with this workflow?"
+
+**Options:**
+
+- **Detailed (Step-by-Step)** — Review and confirm at each phase transition; inspect generated artifacts before proceeding; maximum control. Best for complex work, unfamiliar codebases, and learning.
+- **Smart (Risk-gated automation)** — Phases run automatically; pause only when the next phase produces a HIGH-risk operation. v1 simplifies this to a single confirmation prompt at workflow start.
+- **Yolo (Full Automation)** — Every phase runs automatically; only the final outcome is reported. Fastest. Best for straightforward, well-understood work and time-sensitive hotfixes.
+
+Store the selection in the scoped context (replacing the placeholder in the schema above):
+
+```yaml
+interactionMode: detailed | smart | yolo
+```
+
+**Propagation:** The `interactionMode` value flows into `pwrl-plan-research`, `pwrl-plan-design`, and `pwrl-plan-generate` artifacts. Each downstream phase reads the value and adjusts its confirmation behavior:
+
+- **Detailed:** Pause at every phase transition; show generated artifacts; require explicit approval.
+- **Smart:** Run phases automatically; pause only at HIGH-risk operations.
+- **Yolo:** Run every phase automatically; report only the final outcome.
 
 ### Step 2: Domain Validation
 

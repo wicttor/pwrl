@@ -179,6 +179,7 @@ next_steps: |
 
 version_bumped: true
 new_version: "1.2.0"
+interactionMode: detailed | smart | yolo
 
 user_confirmation: true
 timestamp: "2026-06-16T14:30:00Z"
@@ -194,6 +195,7 @@ Before generating artifact, verify:
 - ✓ `next_steps` present if reason is partial/blocked/switching
 - ✓ `version_bumped` is boolean
 - ✓ If version_bumped=true, `new_version` must be valid semver
+- ✓ `interactionMode` is one of: detailed, smart, yolo (set by Step 1.5 in SKILL.md)
 - ✓ `user_confirmation` is true
 
 ## Error Cases

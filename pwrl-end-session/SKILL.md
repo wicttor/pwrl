@@ -43,24 +43,37 @@ After commit succeeds, optionally chain to `/pwrl-learnings` to capture session 
 
 ## Architecture
 
-**Pure Skill Pipeline** — Direct sequence of 2 micro-skills (checkpoint and commit), optionally followed by learnings extraction:
+**Pure Skill Pipeline** — Direct sequence of 2 micro-skills (checkpoint and commit), optionally followed by learnings extraction. The `interactionMode` is set in Phase 1 (checkpoint) and propagated through the artifact to Phase 2 (commit) and the optional Phase 3 (learnings chain):
 
 ```
 INPUT (user invokes /pwrl-end-session)
   ↓
 PHASE 1: Checkpoint (pwrl-end-session-checkpoint)
+  → Step 1.5: Select Interaction Mode (detailed | smart | yolo)
   → Verify state, confirm completion
-  → Output: Checkpoint artifact
+  → Output: Checkpoint artifact (includes interactionMode)
   ↓
 PHASE 2: Commit (pwrl-end-session-commit)
-  → Draft message, create commit
+  → Reads interactionMode from checkpoint artifact
+  → Adjusts commit-message draft + approval flow
   → Output: Commit artifact
   ↓
 PHASE 3 (Optional): Chain to pwrl-learnings
+  → /pwrl-learnings-extract re-asks the mode for the learnings workflow
   → Extract and save session insights
   ↓
 OUTPUT (session complete)
 ```
+
+### Interaction Mode Propagation
+
+The `interactionMode` is set in `pwrl-end-session-checkpoint` Step 1.5 and controls behavior across the rest of the pipeline:
+
+- **`detailed`** — User sees the draft commit message in `pwrl-end-session-commit` and edits it before approval; pre-flight summary in the checkpoint is shown line-by-line. Maximum control.
+- **`smart`** — User sees a pre-flight summary (files, line counts, version-bump check) and approves the commit with one click; only pause for HIGH-risk operations (e.g., version bump detected, breaking-change warning). v1 simplification: behaves like Yolo with a single confirmation prompt at workflow start.
+- **`yolo`** — Entire session-end (checkpoint + commit) auto-runs and only reports the final commit SHA. Fastest.
+
+The mode set in this workflow does **not** affect Phase 3 (learnings chain). The optional chain to `/pwrl-learnings` re-asks the mode via `pwrl-learnings-extract` Step 1.5 so users can mix modes across phases (e.g., Yolo for the commit, Detailed for the learnings review).
 
 ## Workflow: 3-Phase Pipeline
 

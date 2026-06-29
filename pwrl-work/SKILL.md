@@ -67,13 +67,23 @@ Each phase produces an explicit **artifact** (YAML frontmatter + structured data
 
 ## Phase Summary
 
-**Phase 0: Triage** — Validate input, classify work, extract requirements. See [pwrl-work-triage/SKILL.md](../pwrl-work-triage/SKILL.md).
+**Phase 0: Triage** — Validate input, classify work, extract requirements, set interaction mode. See [pwrl-work-triage/SKILL.md](../pwrl-work-triage/SKILL.md).
 
 **Phase 1: Prepare** — Verify repository, resolve ambiguities, setup branch and environment. See [pwrl-work-prepare/SKILL.md](../pwrl-work-prepare/SKILL.md).
 
 **Phase 2: Execute** — Implement with test-first discipline, verify quality gates. See [pwrl-work-execute/SKILL.md](../pwrl-work-execute/SKILL.md).
 
 **Phase 3: Review** — Verify scope, review code quality, get approval. See [pwrl-work-review/SKILL.md](../pwrl-work-review/SKILL.md).
+
+### Interaction Mode Propagation
+
+Interaction mode (`detailed | smart | yolo`) is set in Phase 0 (via `pwrl-work-triage` Step 5) and read at the start of each subsequent phase. The mode is stored in the triage artifact's `interactionMode` field and propagated through every downstream phase. Determines whether confirmation steps execute or are skipped.
+
+- **`detailed`** — Pause at every phase transition (Triage → Prepare → Execute → Review); show generated artifacts; require explicit approval to proceed. Best for complex work, unfamiliar codebases, and learning.
+- **`smart`** — Phases run automatically; pause only when the next phase produces a HIGH-risk operation (destructive git, irreversible API calls, schema-breaking migrations). v1 simplification: behaves like Yolo with a single confirmation prompt at workflow start. See `docs/learnings/pattern/interaction-mode-three-mode-propagation-2026-06-29.md` §"Future Refinements" for the full risk-classification roadmap.
+- **`yolo`** — Every phase runs automatically; only the final review report is shown. Fastest. Best for straightforward, well-understood work and time-sensitive hotfixes.
+
+**Exception:** Error recovery steps always pause the pipeline, regardless of mode. Downstream phases that still assume a legacy two-value enum must treat any value other than `detailed` as `yolo` until upgraded; `smart` is new as of 2026-06-29.
 
 ---
 

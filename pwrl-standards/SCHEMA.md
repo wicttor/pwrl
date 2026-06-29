@@ -111,6 +111,93 @@ argument-hint: "[What users should provide when invoking this skill]"
 
 ---
 
+## Interaction Mode Field
+
+The `interactionMode` field encodes the user's chosen level of engagement for a workflow. It is the single contract every core PWRL skill uses to gate confirmations, previews, and per-phase pauses.
+
+### Field Specification
+
+| Aspect        | Value                                                              |
+| ------------- | ------------------------------------------------------------------ |
+| **Name**      | `interactionMode`                                                  |
+| **Type**      | string enum                                                        |
+| **Valid values** | `detailed` \| `smart` \| `yolo`                                 |
+| **Required in** | Workflow-context artifacts (e.g., Scoped Context, Classified Context, Scope Artifact, Extraction Artifact, Checkpoint Artifact) |
+| **Optional in** | Standalone skills and one-off scripts that do not emit an artifact |
+| **Default**   | None — the user must choose explicitly (no implicit default)       |
+| **Where it lives** | YAML frontmatter of the emitted artifact, OR inline schema block of the skill that emits the artifact |
+
+### Value Semantics
+
+- **`detailed`** — Pause at every phase transition; show generated artifacts; require explicit approval to proceed. Best for complex work, unfamiliar codebases, learning, high-stakes changes.
+- **`smart`** — Run phases automatically; pause only when a phase produces a HIGH-risk operation (destructive git, irreversible API calls, schema-breaking migrations). Best for mixed-risk work where most steps are routine.
+  - **v1 simplification:** Smart mode behaves like Yolo with a single confirmation prompt at workflow start. The risk-classification taxonomy that gates mid-workflow pauses is a future enhancement — see `docs/learnings/pattern/interaction-mode-three-mode-propagation-2026-06-29.md` §"Future Refinements".
+- **`yolo`** — Run every phase automatically; report only the final outcome. Best for straightforward, well-understood work, time-sensitive hotfixes, or trust-but-verify contexts.
+
+### When to Include the Field
+
+- **Include** in any skill that produces a workflow-context artifact (e.g., `pwrl-plan-scope` → Scoped Context, `pwrl-work-triage` → Classified Context, `pwrl-review-scope` → Scope Artifact, `pwrl-learnings-extract` → Extraction Artifact, `pwrl-end-session-checkpoint` → Checkpoint Artifact).
+- **Omit** in standalone reference skills, validation scripts, or sub-skills that do not emit a top-level workflow artifact.
+- **Backward compatibility:** If a downstream consumer reads `interactionMode` and assumes a legacy two-value enum (`detailed | yolo`), it must treat any value other than `detailed` as `yolo` until upgraded. The `smart` value is new as of 2026-06-29.
+
+### Cross-References
+
+- **Decision:** `docs/learnings/decision/interaction-modes-for-user-engagement.md` — the original two-mode rationale and the upgrade-to-three-mode refinement.
+- **Pattern (new):** `docs/learnings/pattern/interaction-mode-three-mode-propagation-2026-06-29.md` — canonical placement, propagation, and Smart-mode risk-gating rules. *(Created by plan 2026-06-29-001, unit U8.)*
+
+---
+
+## Required Interaction Section Template
+
+Copy this template verbatim into the first sub-skill the user invokes (or, for `pwrl-tasks`, into the orchestrator's Phase 0). Substituting synonyms, reordering options, or paraphrasing the prompt defeats the canonical-template goal — keep the wording identical across all skills.
+
+### Step Heading
+
+```markdown
+### Step N: Select Interaction Mode
+
+Ask the user to choose their engagement level for this workflow.
+```
+
+*(For `pwrl-tasks` and other single-file orchestrators without sub-skills, use `### Phase 0: Select Interaction Mode` and place it at the very top of the Workflow section.)*
+
+### Ask Block
+
+```yaml
+question: "How would you like to proceed with this workflow?"
+header: "Engagement"
+options:
+  - label: "Detailed (Step-by-Step)"
+    description: "Review and confirm at each phase transition; inspect generated artifacts before proceeding; maximum control. Best for complex work, unfamiliar codebases, and learning."
+  - label: "Smart (Risk-gated automation)"
+    description: "Phases run automatically; pause only when the next phase produces a HIGH-risk operation (destructive git, irreversible API calls, schema-breaking migrations). v1 simplifies this to a single confirmation prompt at workflow start."
+  - label: "Yolo (Full Automation)"
+    description: "Every phase runs automatically; only the final outcome is reported. Fastest. Best for straightforward, well-understood work and time-sensitive hotfixes."
+multiSelect: false
+```
+
+*(For agents without a structured `ask_user_question` tool, render the same three options as a numbered list with the same descriptions and ask the user to reply with the label.)*
+
+### Field Storage Example
+
+```yaml
+interactionMode: detailed | smart | yolo
+```
+
+Append this line to the emitted artifact's YAML frontmatter (or to the inline schema block of the skill that emits the artifact).
+
+### Propagation Note (Append After the Step)
+
+```markdown
+The selected `interactionMode` value is stored in the emitted artifact and consumed by all subsequent phases of this workflow. Downstream phases must read the value from the artifact and adjust their confirmation behavior accordingly:
+
+- **Detailed:** Pause at every phase transition; show generated artifacts; require explicit approval.
+- **Smart:** Run phases automatically; pause only at HIGH-risk operations (see the pattern learning for the risk taxonomy).
+- **Yolo:** Run every phase automatically; report only the final outcome.
+```
+
+---
+
 ## Document Structure
 
 ### Required Sections

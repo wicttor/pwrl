@@ -1,131 +1,140 @@
 # Task Index
 
-**Generated:** 2026-06-24
-**Source Plan:** [Update Documentation and Installation Process](../plans/2026-06-24-001-update-docs-and-installation.md)
+**Generated:** 2026-06-28
+**Source Plan:** [OKF Compliance Migration for PWRL Documents](../plans/2026-06-28-001-okf-compliance-migration.md)
 **Total Tasks:** 7
 
 ## Quick Stats
 
-- **To Do:** 0 tasks
+- **To Do:** 7 tasks
 - **In Progress:** 0 tasks
-- **For Review:** 0 tasks
-- **Done:** 7 tasks
+- **Done:** 0 tasks
 - **Blocked:** 0 tasks
 
 ## Execution Roadmap
 
 ### Critical Path
 
-The longest dependency chain:
+The longest dependency chain (determines minimum project duration):
 
 ```
-U1 → U2 → (end)
-U1 → U3 → (end)
-U1 → U4 → (end)
-U1 → U5 → (end)
-U1 → U7 → (end)
-U6 → (end)
+U1 → U2 → U6 → U7 (4 tasks)
 ```
 
-**Effective depth:** 2 levels. U1 is the only gateway task; after it completes, U2-U5+U7 can all run in parallel.
+Also: U1 → U3 → U6 → U7 (same length, 4 tasks)
 
 ### Recommended Starting Tasks
 
 These tasks have no dependencies and can start immediately:
 
-- ~~[U1 - Simplify pwrl init command](done/2026-06-24-u1-simplify-init-command.md)~~ ✅
-- ~~[U6 - Review package.json files array](done/2026-06-24-u6-review-package-json.md)~~ ✅
-- ~~[U2 - Update README.md](done/2026-06-24-u2-update-readme.md)~~ ✅
-- ~~[U3 - Update INSTALLATION.md](done/2026-06-24-u3-update-installation.md)~~ ✅
-- ~~[U4 - Update QUICKSTART.md](done/2026-06-24-u4-update-quickstart.md)~~ ✅
-- ~~[U5 - Update GUIDE.md](done/2026-06-24-u5-update-guide.md)~~ ✅
-- ~~[U7 - Update postinstall.js](done/2026-06-24-u7-update-postinstall.md)~~ ✅
+* [U1: Define OKF Type Taxonomy & Create Root Index](to-do/2026-06-28-u1-okf-type-taxonomy-and-root-index.md) — Establish standard type values for all PWRL document categories.
 
 ### Parallel Execution Groups
 
-**Group 1** (Start immediately — no dependencies):
-- U1: Simplify pwrl init command
-- U6: Review package.json files array
+Tasks organized by when they can start:
 
-**Group 2** (After U1 completes):
-- U2: Update README.md
-- U3: Update INSTALLATION.md
-- U4: Update QUICKSTART.md
-- U5: Update GUIDE.md
-- U7: Update postinstall.js
+**Group 1** (Start immediately):
+* [U1: Define OKF Type Taxonomy & Create Root Index](to-do/2026-06-28-u1-okf-type-taxonomy-and-root-index.md)
 
-All Group 2 tasks can run in parallel — they touch different files with no cross-dependencies.
+**Group 2** (After U1 — all can run in parallel):
+* [U2: Update Learnings Frontmatter](to-do/2026-06-28-u2-update-learnings-frontmatter.md) — 36 learning docs
+* [U3: Update Tasks Frontmatter](to-do/2026-06-28-u3-update-tasks-frontmatter.md) — 31 task docs
+* [U4: Update Analysis & Guides Frontmatter](to-do/2026-06-28-u4-update-analysis-guides-frontmatter.md) — 10 analysis + guide docs
+* [U5: Update Examples, Plans & Test-Plans Frontmatter](to-do/2026-06-28-u5-update-examples-plans-testplans-frontmatter.md) — 7 docs
+
+**Group 3** (After U2 and U3):
+* [U6: Restructure INDEX.md Files](to-do/2026-06-28-u6-restructure-index-files.md) — depends on U2, U3
+
+**Group 4** (After U2, U3, U4, U5, U6):
+* [U7: Validate OKF Conformance & Capture Learnings](to-do/2026-06-28-u7-validate-conformance-and-capture-learnings.md) — depends on all prior tasks
 
 ## All Tasks
 
 ### To Do
 
-*(Empty — all tasks completed)*
+| Unit ID | Task | Dependencies | Files |
+|---------|------|--------------|-------|
+| U1 | [Define OKF Type Taxonomy & Create Root Index](to-do/2026-06-28-u1-okf-type-taxonomy-and-root-index.md) | None | `docs/OKF-TYPES.md`, `docs/index.md` |
+| U2 | [Update Learnings Frontmatter](to-do/2026-06-28-u2-update-learnings-frontmatter.md) | U1 | 36 files in `docs/learnings/` |
+| U3 | [Update Tasks Frontmatter](to-do/2026-06-28-u3-update-tasks-frontmatter.md) | U1 | 31 files in `docs/tasks/` |
+| U4 | [Update Analysis & Guides Frontmatter](to-do/2026-06-28-u4-update-analysis-guides-frontmatter.md) | U1 | 10 files in `docs/analysis/`, `docs/guides/` |
+| U5 | [Update Examples, Plans & Test-Plans Frontmatter](to-do/2026-06-28-u5-update-examples-plans-testplans-frontmatter.md) | U1 | 7 files in `docs/examples/`, `docs/plans/`, `docs/test-plans/` |
+| U6 | [Restructure INDEX.md Files](to-do/2026-06-28-u6-restructure-index-files.md) | U2, U3 | `docs/learnings/INDEX.md`, `docs/tasks/INDEX.md` |
+| U7 | [Validate Conformance & Capture Learnings](to-do/2026-06-28-u7-validate-conformance-and-capture-learnings.md) | U2, U3, U4, U5, U6 | ~85 files (validate), 1 new learning |
 
 ### In Progress
 
-*(Empty — no tasks in progress)*
-
-### For Review
-
-*(Empty — all tasks moved to done/)*
+| Unit ID | Task | Dependencies | Files |
+|---------|------|--------------|-------|
+| — | — | — | — |
 
 ### Done
 
 | Unit ID | Task | Dependencies | Files |
 |---------|------|--------------|-------|
-| U1 | [Simplify pwrl init command](done/2026-06-24-u1-simplify-init-command.md) | None | `bin/pwrl.js`, `bin/postinstall.js`, `lib/config.js` |
-| U2 | [Update README.md](done/2026-06-24-u2-update-readme.md) | U1 | `README.md` |
-| U3 | [Update INSTALLATION.md](done/2026-06-24-u3-update-installation.md) | U1 | `INSTALLATION.md` |
-| U4 | [Update QUICKSTART.md](done/2026-06-24-u4-update-quickstart.md) | U1 | `QUICKSTART.md` |
-| U5 | [Update GUIDE.md](done/2026-06-24-u5-update-guide.md) | U1 | `GUIDE.md` |
-| U6 | [Review package.json files array](done/2026-06-24-u6-review-package-json.md) | None | `package.json` |
-| U7 | [Update postinstall.js](done/2026-06-24-u7-update-postinstall.md) | U1 | `bin/postinstall.js` |
+| — | — | — | — |
+
+### Blocked
+
+| Unit ID | Task | Dependencies | Files |
+|---------|------|--------------|-------|
+| — | — | — | — |
 
 ## Dependency Graph
 
 ```mermaid
 graph TD
-    U1[U1: Simplify pwrl init]
-    U2[U2: Update README.md]
-    U3[U3: Update INSTALLATION.md]
-    U4[U4: Update QUICKSTART.md]
-    U5[U5: Update GUIDE.md]
-    U6[U6: Review package.json]
-    U7[U7: Update postinstall.js]
+    U1[U1: OKF Type Taxonomy + Root Index]
+    U2[U2: Learnings Frontmatter]
+    U3[U3: Tasks Frontmatter]
+    U4[U4: Analysis + Guides Frontmatter]
+    U5[U5: Examples + Plans + Test-Plans Frontmatter]
+    U6[U6: Restructure INDEX.md Files]
+    U7[U7: Validate Conformance + Capture Learnings]
 
     U1 --> U2
     U1 --> U3
     U1 --> U4
     U1 --> U5
-    U1 --> U7
+    U2 --> U6
+    U3 --> U6
+    U2 --> U7
+    U3 --> U7
+    U4 --> U7
+    U5 --> U7
+    U6 --> U7
 ```
-
-**Note:** U6 is intentionally disconnected — it has no dependencies and can run at any time.
 
 ## Task Status
 
 ### Status Tracking
 
-Tasks move through folders as they progress:
-- `to-do/` → `in-progress/` → `for-review/` → `done/`
+Tasks are tracked by:
+1. **File Location:** All tasks start in `docs/tasks/to-do/`
+2. **Frontmatter:** Update `status` field to `in-progress`, `for-review`, or `done`
 
-To start a task, use `/pwrl-work docs/tasks/to-do/YYYY-MM-DD-uX-name.md`.
+**To mark a task in-progress:**
+```yaml
+status: in-progress
+```
+
+**To mark a task complete:**
+```yaml
+status: done
+```
 
 ### Updating This Index
 
-Re-run `/pwrl-tasks` or manually update when:
-- Tasks change status folders
-- Dependencies are modified
-- New tasks are added
+Regenerate when tasks change status or dependencies shift. New tasks follow the naming convention `YYYY-MM-DD-uX-<slug>.md`.
 
 ## Notes
 
-- **U1 is the critical gateway task** — all documentation tasks (U2-U5, U7) depend on its completion to ensure consistency with the actual CLI behavior
-- **U6 is a quick-win** — can be done at any time, even before U1
-- **U2-U5 + U7 are documentation-only** — no code changes, just search/replace and section rewrites in Markdown files
-- **Learnings:** U1 references the Consolidation Strategy learning for single-source-of-truth principle applied to the skills path
+- U2, U3, U4, U5 all depend only on U1 and can execute in parallel — this is where the most time savings come from
+- U6 and U7 are sequential gates; U7 validates everything
+- Total files touched: ~85 concept docs + 3 index files + 2 new files = ~90 files
+- The migration is docs-only with zero code changes; git history provides full rollback
+- All tasks are self-contained; each task file contains complete implementation steps and verification commands
 
 ---
 
-**Last Updated:** 2026-06-24
+**Last Updated:** 2026-06-28

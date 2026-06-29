@@ -2,6 +2,16 @@
 
 Granular implementation task files sliced from plans. Organized by execution status.
 
+## To Do
+
+* [U1: Add Canonical Task Lifecycle Contract to `pwrl-work` Orchestrator](to-do/2026-06-29-u1-canonical-task-lifecycle-contract.md) — Establish the four-row owner table in `pwrl-work/SKILL.md`; promote `workflow-details.md` to a copy-pasteable table. No dependencies.
+* [U2: Add Pre-Flight Guard and Responsibility Boundary to `pwrl-work-prepare`](to-do/2026-06-29-u2-preflight-guard-prepare.md) — Reinforce `to-do → in-progress` as the exclusive transition of this skill; forbid `done`. Depends on U1.
+* [U3: Strengthen Transitions in `pwrl-work-execute` and Add Pre-Flight Guard](to-do/2026-06-29-u3-preflight-guard-execute.md) — Add the "CRITICAL: Move task file" block to Serial and Parallel modes (currently Inline-only); forbid `done`. Depends on U1.
+* [U4: Add Pre-Flight Guard, Responsibility Boundary, and REQUEST CHANGES Revert Logic to `pwrl-work-review`](to-do/2026-06-29-u4-preflight-guard-work-review.md) — Implement the missing rework loop (`for-review → in-progress` on REQUEST CHANGES); forbid `done`. Depends on U1.
+* [U5: Add "Promote Approved Tasks" Step to `pwrl-review-report`](to-do/2026-06-29-u5-promote-approved-tasks.md) — Implement the missing `for-review → done` transition on APPROVED verdict; this is the only skill that may move tasks to `done/`. Depends on U1.
+* [U6: Create New Pattern Learning — Task State Machine Enforcement](to-do/2026-06-29-u6-new-pattern-learning.md) — Document the failure mode, the contract, and the consequences of violation. Depends on U1.
+* [U7: CHANGELOG Entry and Version Bump](to-do/2026-06-29-u7-changelog-version-bump.md) — Consolidate U1–U6 in a single commit; bump `1.6.0-dev.2` → `1.7.0-dev.1`. Depends on U1–U6.
+
 ## For Review
 
 * [Define Interaction-Mode Schema in Standards](for-review/2026-06-29-u1-define-interaction-mode-schema.md) — Codify three-mode (Detailed / Smart / Yolo) `interactionMode` field + "Required Interaction Section" template in `pwrl-standards/SCHEMA.md`. Foundational unit for U2–U7. No dependencies.
@@ -62,4 +72,4 @@ Granular implementation task files sliced from plans. Organized by execution sta
 
 ---
 
-**Last Updated:** 2026-06-29 (8 tasks from plan 2026-06-29-001 moved from to-do to for-review)
+**Last Updated:** 2026-06-29 (7 tasks from plan 2026-06-29-003 sliced into to-do; awaiting execution)

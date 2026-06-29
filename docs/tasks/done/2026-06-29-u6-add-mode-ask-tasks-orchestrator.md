@@ -1,7 +1,7 @@
 ---
 unit-id: U6
 plan: docs/plans/2026-06-29-001-restore-interaction-mode-ask.md
-status: for-review
+status: done
 created: 2026-06-29
 dependencies: [U1]
 files:

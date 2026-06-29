@@ -3,6 +3,7 @@ unit-id: S9
 plan: docs/plans/2026-06-05-001-slice-pwrl-plan-skill.md
 status: for-review
 created: 2026-06-05
+type: PWRL Task
 dependencies: [S1, S2, S3, S4, S5, S6, S7, S8]
 files:
   - skills/pwrl-plan-scope/SKILL.md

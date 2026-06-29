@@ -1,6 +1,7 @@
 ---
 title: TDD RED Phase - Test-First Specification
-type: pattern
+category: pattern
+type: PWRL Learning
 domain: testing
 severity: high
 tags: [tdd, test-first, specification, behavioral-contract]

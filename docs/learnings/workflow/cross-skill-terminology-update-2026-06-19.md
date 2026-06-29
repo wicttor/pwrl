@@ -1,8 +1,8 @@
 ---
 title: Cross-Skill Terminology Update Workflow
-date: 2026-06-19
+timestamp: 2026-06-19
 category: workflow
-type: workflow
+type: PWRL Learning
 severity: medium
 tags:
   - documentation

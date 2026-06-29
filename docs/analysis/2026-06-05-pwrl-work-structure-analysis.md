@@ -1,3 +1,11 @@
+---
+title: PWL-Work Structure Analysis (2026-06-05)
+description: Comprehensive analysis of the pwrl-work skill structure, phases, entry points, execution modes, and external integrations.
+type: PWRL Analysis
+timestamp: 2026-06-05
+tags: [architecture, analysis, pwrl-work, skill-structure]
+---
+
 # PWL-Work Structure Analysis (2026-06-05)
 
 ## Overview

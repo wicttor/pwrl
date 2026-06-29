@@ -1,3 +1,12 @@
+---
+title: PWL-Work Slicing Plan (2026-06-05)
+description: Dual-Path Architecture for Skill Decomposition — Agent Orchestration + Monolithic Fallback
+category: plan
+type: PWRL Learning
+timestamp: 2026-06-05
+tags: [skill-decomposition, plan, architecture, agent-orchestration, fallback]
+---
+
 # Learning: PWL-Work Slicing Plan (2026-06-05)
 
 ## Topic

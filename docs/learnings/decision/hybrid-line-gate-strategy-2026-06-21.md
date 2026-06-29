@@ -1,7 +1,8 @@
 ---
 title: Hybrid Line-Gate Strategy for Incremental Right-Sizing
-date: 2026-06-21
+timestamp: 2026-06-21
 category: decision
+type: PWRL Learning
 tags: [line-count, right-sizing, incremental, validate-skills, SCHEMA]
 severity: medium
 priority: high

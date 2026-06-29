@@ -1,8 +1,8 @@
 ---
 title: Sample Verification After Bulk Changes Quality Gate
-date: 2026-06-13
+timestamp: 2026-06-13
 category: workflow
-type: pattern
+type: PWRL Learning
 severity: medium
 tags:
   - quality-gates

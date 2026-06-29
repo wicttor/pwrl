@@ -1,3 +1,11 @@
+---
+title: Micro-Skill Composition Patterns Guide (Phase 7, U7.1)
+description: Complete guide for composing micro-skills into orchestrators and pipelines, documenting patterns established through the PWRL architecture refactoring.
+type: PWRL Guide
+timestamp: 2026-06-12
+tags: [micro-skills, composition, patterns, guide, pipeline]
+---
+
 # Micro-Skill Composition Patterns Guide (Phase 7, U7.1)
 
 **Document:** Complete guide for composing micro-skills into orchestrators and pipelines

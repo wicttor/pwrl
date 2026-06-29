@@ -1,3 +1,11 @@
+---
+title: Architecture Refactoring Guide — From Agent Routing to Micro-Skill Pipelines
+description: A guide explaining the PWRL architecture transformation from agent-based routing to micro-skill pipelines and its benefits.
+type: PWRL Guide
+timestamp: 2026-06-12
+tags: [architecture, refactoring, micro-skills, guide, migration]
+---
+
 # Architecture Refactoring Guide: From Agent Routing to Micro-Skill Pipelines
 
 A guide explaining the PWRL architecture transformation and its benefits.

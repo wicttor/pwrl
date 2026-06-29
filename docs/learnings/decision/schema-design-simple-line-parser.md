@@ -1,6 +1,7 @@
 ---
 title: Schema Design - Simple Line Parser
-type: decision
+category: decision
+type: PWRL Learning
 domain: architecture
 severity: high
 tags: [schema-design, constraints, no-external-deps, yaml]

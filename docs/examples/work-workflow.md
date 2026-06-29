@@ -1,3 +1,11 @@
+---
+title: PWL-Work Workflow Examples
+description: Complete execution workflows for inline, serial, and parallel modes in the pwrl-work skill pipeline.
+type: PWRL Example
+timestamp: 2026-06-05
+tags: [pwrl-work, workflow, examples, inline, serial, parallel]
+---
+
 # PWL-Work Workflow Examples
 
 Complete execution workflows for inline, serial, and parallel modes.

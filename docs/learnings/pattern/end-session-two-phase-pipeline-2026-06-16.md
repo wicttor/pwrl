@@ -1,7 +1,8 @@
 ---
 title: End-Session Two-Phase Micro-Skill Pipeline
-date: 2026-06-16
+timestamp: 2026-06-16
 category: pattern
+type: PWRL Learning
 tags:
   - skill-architecture
   - micro-skill

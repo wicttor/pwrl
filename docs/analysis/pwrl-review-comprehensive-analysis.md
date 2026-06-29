@@ -1,6 +1,7 @@
 ---
 title: "pwrl-review Orchestrator: Comprehensive Analysis"
-date: 2026-06-24
+timestamp: 2026-06-24
+type: PWRL Analysis
 analysis_type: architectural
 scope: pwrl-review + 4 micro-skills (pwrl-review-scope, prepare, analyze, report)
 focus_areas:

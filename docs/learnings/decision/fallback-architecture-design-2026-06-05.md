@@ -1,7 +1,8 @@
 ---
 title: Fallback Architecture Design for System Resilience
-date: 2026-06-05
+timestamp: 2026-06-05
 category: decision
+type: PWRL Learning
 tags:
   - architecture
   - resilience

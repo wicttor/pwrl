@@ -1,3 +1,11 @@
+---
+title: Micro-Skill Composition Patterns
+description: A guide to building reusable, composable micro-skills in the PWRL ecosystem, covering orchestrator patterns, templates, artifact design, and common patterns.
+type: PWRL Guide
+timestamp: 2026-06-12
+tags: [micro-skills, patterns, composition, guide, templates]
+---
+
 # Micro-Skill Composition Patterns
 
 A guide to building reusable, composable micro-skills in the PWRL ecosystem.

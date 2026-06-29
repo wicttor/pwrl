@@ -1,7 +1,8 @@
 ---
 title: "Branch-Ready Workflow Over Auto-Ship to Main"
-date: 2026-06-12
+timestamp: 2026-06-12
 category: decision
+type: PWRL Learning
 severity: high
 tags:
   - workflow-design

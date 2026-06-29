@@ -1,7 +1,8 @@
 ---
 title: State Schema Design for Workflow Context Passing
-date: 2026-06-05
+timestamp: 2026-06-05
 category: pattern
+type: PWRL Learning
 tags:
   - state-management
   - workflow-design

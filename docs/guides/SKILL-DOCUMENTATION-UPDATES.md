@@ -1,3 +1,11 @@
+---
+title: Skill Documentation Updates Guide (Phase 7, U7.3)
+description: Updated documentation templates for all 4 main orchestrator skills in the refactored PWRL architecture.
+type: PWRL Guide
+timestamp: 2026-06-12
+tags: [documentation, skills, guide, templates, refactoring]
+---
+
 # Skill Documentation Updates Guide (Phase 7, U7.3)
 
 **Document:** Updates to all skill documentation for refactored architecture

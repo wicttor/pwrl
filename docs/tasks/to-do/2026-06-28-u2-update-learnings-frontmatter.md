@@ -3,6 +3,7 @@ unit-id: U2
 plan: docs/plans/2026-06-28-001-okf-compliance-migration.md
 status: to-do
 created: 2026-06-28
+type: PWRL Task
 dependencies: [U1]
 files:
   - docs/learnings/decision/branch-ready-workflow-over-autoship.md

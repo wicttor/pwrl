@@ -1,7 +1,8 @@
 ---
 title: Remove Mandatory [AGENT: ...] Attribution Trailer from Commit Protocol
-date: 2026-06-16
+timestamp: 2026-06-16
 category: decision
+type: PWRL Learning
 tags:
   - commit-protocol
   - attribution

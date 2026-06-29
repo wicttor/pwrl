@@ -1,7 +1,8 @@
 ---
 title: "Explicit Task File Movement as Critical Phase Operation"
-date: 2026-06-12
+timestamp: 2026-06-12
 category: pattern
+type: PWRL Learning
 severity: high
 tags:
   - task-lifecycle

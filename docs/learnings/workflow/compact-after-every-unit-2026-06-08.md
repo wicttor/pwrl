@@ -1,7 +1,8 @@
 ---
 title: Compact After Every Unit — Task-Granular Commits
-date: 2026-06-08
+timestamp: 2026-06-08
 category: workflow
+type: PWRL Learning
 tags:
   - pwrl-work
   - commits

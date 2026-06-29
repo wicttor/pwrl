@@ -1,8 +1,8 @@
 ---
 title: Bulk Metadata Synchronization with multi_replace_string_in_file
-date: 2026-06-13
+timestamp: 2026-06-13
 category: workflow
-type: pattern
+type: PWRL Learning
 severity: medium
 tags:
   - bulk-edits

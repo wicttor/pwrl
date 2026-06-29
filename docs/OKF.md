@@ -1,3 +1,11 @@
+---
+title: Open Knowledge Format (OKF)
+description: OKF v0.1 specification — an open, human- and agent-friendly format for representing knowledge as markdown with YAML frontmatter.
+type: PWRL Reference
+timestamp: 2026-06-28
+tags: [okf, specification, standard, reference]
+---
+
 # Open Knowledge Format (OKF)
 
 **Version 0.1 — Draft**

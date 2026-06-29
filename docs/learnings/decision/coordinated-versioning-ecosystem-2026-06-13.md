@@ -1,8 +1,8 @@
 ---
 title: Coordinated Version Numbering Across Micro-Skills Ecosystem
-date: 2026-06-13
+timestamp: 2026-06-13
 category: decision
-type: decision
+type: PWRL Learning
 severity: high
 tags:
   - versioning

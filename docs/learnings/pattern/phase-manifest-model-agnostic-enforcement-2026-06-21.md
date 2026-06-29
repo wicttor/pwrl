@@ -1,7 +1,8 @@
 ---
 title: Phase Manifest as Model-Agnostic Enforcement
-date: 2026-06-21
+timestamp: 2026-06-21
 category: pattern
+type: PWRL Learning
 tags: [phase-manifest, model-agnostic, enforcement, validate-skills, core-skills]
 severity: medium
 priority: high

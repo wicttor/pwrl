@@ -1,6 +1,7 @@
 ---
 session: wave-2-u3-u4-u6
-date: 2026-06-24
+timestamp: 2026-06-24
+type: PWRL Learning
 commit: 334da40
 learnings_extracted: 4
 categories: [architecture, consolidation, patterns, github-integration]

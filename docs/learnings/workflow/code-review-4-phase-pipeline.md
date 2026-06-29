@@ -1,6 +1,7 @@
 ---
 title: Code Review 4-Phase Pipeline
-type: workflow
+category: workflow
+type: PWRL Learning
 domain: process
 severity: high
 tags: [code-review, workflow, quality-gates, deterministic]

@@ -3,6 +3,7 @@ unit-id: S8
 plan: docs/plans/2026-06-05-002-slice-pwrl-work-skill.md
 status: for-review
 created: 2026-06-05
+type: PWRL Task
 dependencies: [S2, S3, S4, S5, S6, S7]
 files:
   - agents/pwrl-work.agent.md

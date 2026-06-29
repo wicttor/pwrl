@@ -4,6 +4,7 @@ plan: docs/plans/2026-06-05-001-slice-pwrl-plan-skill.md
 status: archived
 superseded-by: docs/plans/2026-06-10-002-fix-and-verify-pwrl-plan.md (Units U1-U8)
 created: 2026-06-05
+type: PWRL Task
 archived: 2026-06-10
 dependencies: [S1, S2, S3, S4, S5]
 files:

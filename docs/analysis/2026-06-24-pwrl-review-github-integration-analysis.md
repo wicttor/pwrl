@@ -1,3 +1,11 @@
+---
+title: PWRL Review — GitHub Integration Analysis
+description: Analysis of current GitHub capabilities in pwrl-review and synchronization opportunities to enable review findings syncing back to GitHub PRs.
+type: PWRL Analysis
+timestamp: 2026-06-24
+tags: [github-integration, pwrl-review, analysis, pr-review]
+---
+
 # PWRL Review: GitHub Integration Analysis
 
 **Date:** 2026-06-24

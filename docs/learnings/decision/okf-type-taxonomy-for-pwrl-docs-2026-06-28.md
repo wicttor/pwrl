@@ -1,6 +1,5 @@
 ---
 title: OKF Type Taxonomy Design for PWRL Agent-Generated Documents
-date: 2026-06-28
 category: decision
 type: PWRL Learning
 timestamp: 2026-06-28T23:30:00Z

@@ -1,7 +1,8 @@
 ---
 title: Validator Regex Relaxation as Root-Cause Fix
-date: 2026-06-21
+timestamp: 2026-06-21
 category: pattern
+type: PWRL Learning
 tags: [validate-skills, regex, root-cause, hasSection, relaxation]
 severity: medium
 priority: high

@@ -1,7 +1,8 @@
 ---
 title: Blank Line Before Nested Markdown Lists for Proper Rendering
-date: 2026-06-24
+timestamp: 2026-06-24
 category: pattern
+type: PWRL Learning
 tags: [markdown, documentation, formatting, pwrl-end-session, style]
 severity: low
 priority: low

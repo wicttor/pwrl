@@ -1,7 +1,8 @@
 ---
 title: validate-skills.js Exact-Match Header Regex Gotcha
-date: 2026-06-21
+timestamp: 2026-06-21
 category: gotcha
+type: PWRL Learning
 tags: [validate-skills, hasSection, regex, exact-match, gotcha]
 severity: medium
 priority: high

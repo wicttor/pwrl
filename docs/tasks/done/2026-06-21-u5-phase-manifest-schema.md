@@ -3,6 +3,7 @@ unit-id: U5
 plan: docs/plans/2026-06-21-001-skills-standards-remediation.md
 status: done
 created: 2026-06-21
+type: PWRL Task
 started: 2026-06-22
 dependencies: []
 files:

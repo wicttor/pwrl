@@ -1,3 +1,11 @@
+---
+title: PWRL Planner Agent — Detailed Walkthrough
+description: A concrete example of using the PWRL Planner Agent to plan a feature, walking through each phase, checkpoint, and decision point.
+type: PWRL Example
+timestamp: 2026-06-05
+tags: [planner, agent, examples, walkthrough, pwrl-plan]
+---
+
 # PWRL Planner Agent — Detailed Walkthrough
 
 This document walks through a concrete example of using the PWRL Planner Agent to plan a feature. Follow along to understand each phase, checkpoint, and decision point.

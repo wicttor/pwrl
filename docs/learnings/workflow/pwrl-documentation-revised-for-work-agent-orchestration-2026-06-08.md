@@ -1,7 +1,8 @@
 ---
 title: PWRL Documentation Revised for Work Agent Orchestration
-date: 2026-06-08
+timestamp: 2026-06-08
 category: workflow
+type: PWRL Learning
 tags: [pwrl, documentation, agents, work-execution, orchestration]
 severity: high
 ---

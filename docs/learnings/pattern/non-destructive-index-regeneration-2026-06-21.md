@@ -1,7 +1,8 @@
 ---
 title: Non-Destructive Index Regeneration
-date: 2026-06-21
+timestamp: 2026-06-21
 category: pattern
+type: PWRL Learning
 tags: [pwrl-tasks, index, backup, non-destructive, lineage]
 severity: low
 priority: medium

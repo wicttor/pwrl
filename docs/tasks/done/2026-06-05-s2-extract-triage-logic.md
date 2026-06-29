@@ -3,6 +3,7 @@ unit-id: S2
 plan: docs/plans/2026-06-05-002-slice-pwrl-work-skill.md
 status: for-review
 created: 2026-06-05
+type: PWRL Task
 dependencies: [S1]
 files:
   - pwrl-work-triage/SKILL.md

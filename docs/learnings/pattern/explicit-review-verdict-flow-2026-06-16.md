@@ -1,7 +1,8 @@
 ---
 title: Explicit Three-Tier Verdict Flow for Code Review (APPROVED / REQUEST CHANGES / REJECTED)
-date: 2026-06-16
+timestamp: 2026-06-16
 category: pattern
+type: PWRL Learning
 tags:
   - code-review
   - verdict

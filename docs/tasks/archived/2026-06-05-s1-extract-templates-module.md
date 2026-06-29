@@ -3,6 +3,7 @@ unit-id: S1
 plan: docs/plans/2026-06-05-001-slice-pwrl-plan-skill.md
 status: for-review
 created: 2026-06-05
+type: PWRL Task
 dependencies: []
 files:
   - skills/pwrl-plan/references/plan-templates.md
@@ -92,6 +93,7 @@ id: YYYY-MM-DD-NNN
 status: active
 tier: Fast
 created: YYYY-MM-DD
+type: PWRL Task
 ---
 
 # [Plan Title]

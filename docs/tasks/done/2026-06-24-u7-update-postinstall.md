@@ -3,6 +3,7 @@ unit-id: U7
 plan: docs/plans/2026-06-24-001-update-docs-and-installation.md
 status: done
 created: 2026-06-24
+type: PWRL Task
 dependencies: [U1]
 files:
   - bin/postinstall.js

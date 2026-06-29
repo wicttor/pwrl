@@ -3,6 +3,7 @@ unit-id: S1
 plan: docs/plans/2026-06-05-002-slice-pwrl-work-skill.md
 status: for-review
 created: 2026-06-05
+type: PWRL Task
 dependencies: []
 files: []
 learnings:

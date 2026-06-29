@@ -1,7 +1,8 @@
 ---
 title: Skill Integration Testing Pattern for Micro-Skills
-date: 2026-06-10
+timestamp: 2026-06-10
 category: pattern
+type: PWRL Learning
 tags:
   - testing
   - micro-skills

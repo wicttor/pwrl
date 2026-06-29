@@ -1,3 +1,11 @@
+---
+title: Plan — Update Documentation and Installation Process
+description: Fast-tier plan for updating PWRL documentation and installation process, including README, quickstart, and post-install scripts.
+type: PWRL Plan
+timestamp: 2026-06-24
+tags: [documentation, installation, plan, fast-tier]
+---
+
 # Plan: Update Documentation and Installation Process
 
 **Tier:** FAST

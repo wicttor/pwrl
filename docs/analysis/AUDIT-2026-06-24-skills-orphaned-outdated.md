@@ -1,3 +1,11 @@
+---
+title: Skills Audit Report — Orphan, Outdated, & Non-Compliant Tasks
+description: Comprehensive audit of pwrl-testing, pwrl-update-learnings, pwrl-refresh-learnings, pwrl-phase-checkpoint, and pwrl-standards skills for orphaned tasks, outdated references, and non-compliant documentation.
+type: PWRL Analysis
+timestamp: 2026-06-24
+tags: [audit, skills, compliance, documentation, pwrl-standards]
+---
+
 # Skills Audit Report: Orphan, Outdated, & Non-Compliant Tasks
 
 **Date:** 2026-06-24

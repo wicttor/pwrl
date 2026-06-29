@@ -3,6 +3,7 @@ unit-id: U1
 plan: docs/plans/2026-06-28-001-okf-compliance-migration.md
 status: to-do
 created: 2026-06-28
+type: PWRL Task
 dependencies: []
 files:
   - docs/OKF-TYPES.md

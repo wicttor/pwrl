@@ -1,5 +1,6 @@
 ---
 created: 2026-06-05
+type: PWRL Task
 updated: 2026-06-05
 status: active
 plan: docs/plans/2026-06-05-001-slice-pwrl-plan-skill.md

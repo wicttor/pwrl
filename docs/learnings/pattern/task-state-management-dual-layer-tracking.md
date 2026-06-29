@@ -1,6 +1,7 @@
 ---
 title: Task State Management - Dual-Layer Tracking
-type: pattern
+category: pattern
+type: PWRL Learning
 domain: state-management
 severity: medium
 tags: [task-tracking, state-machine, human-readable, machine-readable]

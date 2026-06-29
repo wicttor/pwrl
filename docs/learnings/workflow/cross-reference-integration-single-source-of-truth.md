@@ -1,6 +1,7 @@
 ---
 title: Cross-Reference Integration - Single Source of Truth
-type: workflow
+category: workflow
+type: PWRL Learning
 domain: documentation
 severity: medium
 tags: [documentation, references, deduplication, maintainability]

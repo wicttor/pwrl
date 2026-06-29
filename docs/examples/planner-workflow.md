@@ -1,3 +1,11 @@
+---
+title: Planning Workflows
+description: Comparison of the two available paths for running the planning workflow — the Agent Path (recommended) and the Fallback Path.
+type: PWRL Example
+timestamp: 2026-06-05
+tags: [planning, workflow, examples, agent-path, fallback]
+---
+
 # Planning Workflows
 
 This document compares the two available paths for running the planning workflow: the **Agent Path** (recommended) and the **Fallback Path** (always available).

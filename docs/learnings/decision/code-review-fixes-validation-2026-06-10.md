@@ -1,7 +1,8 @@
 ---
 title: Code Review Fixes & Validation Approach for Skill Decomposition
-date: 2026-06-10
+timestamp: 2026-06-10
 category: decision
+type: PWRL Learning
 tags:
   - code-review
   - pwrl-work

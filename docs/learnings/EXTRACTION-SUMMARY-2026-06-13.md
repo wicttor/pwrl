@@ -1,6 +1,7 @@
 ---
 title: Learning Extraction Summary – Version 1.2.0-dev.2 Bulk Update
-date: 2026-06-13
+timestamp: 2026-06-13
+type: PWRL Learning
 ---
 
 # Learning Extraction Complete: Add Version to All Skills

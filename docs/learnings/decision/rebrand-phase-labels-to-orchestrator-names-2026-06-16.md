@@ -1,7 +1,8 @@
 ---
 title: Rebrand Phase Labels to Final Orchestrator Names
-date: 2026-06-16
+timestamp: 2026-06-16
 category: decision
+type: PWRL Learning
 tags:
   - naming
   - documentation

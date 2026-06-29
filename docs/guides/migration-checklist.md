@@ -1,3 +1,11 @@
+---
+title: PWRL Architecture Migration Checklist
+description: A step-by-step checklist for migrating to the new micro-skill pipeline architecture, with effort estimates, complexity ratings, and risk assessments.
+type: PWRL Guide
+timestamp: 2026-06-12
+tags: [migration, checklist, architecture, micro-skills]
+---
+
 # PWRL Architecture Migration Checklist
 
 A step-by-step checklist for migrating to the new micro-skill pipeline architecture.

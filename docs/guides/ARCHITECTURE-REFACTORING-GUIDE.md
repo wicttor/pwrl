@@ -1,3 +1,11 @@
+---
+title: PWRL Architecture Refactoring Guide (Phase 7, U7.2)
+description: Complete guide to PWRL's 7-phase architecture refactoring, covering all phases from initial analysis to final integration.
+type: PWRL Guide
+timestamp: 2026-06-12
+tags: [architecture, refactoring, guide, micro-skills, pipeline]
+---
+
 # PWRL Architecture Refactoring Guide (Phase 7, U7.2)
 
 **Document:** Complete guide to PWRL's 7-phase architecture refactoring

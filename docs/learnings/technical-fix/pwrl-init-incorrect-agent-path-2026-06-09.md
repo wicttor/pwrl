@@ -1,7 +1,8 @@
 ---
 title: "pwrl init: Incorrect agent source path"
-date: 2026-06-09
+timestamp: 2026-06-09
 category: technical-fix
+type: PWRL Learning
 tags: [pwrl, init, agents, bundling, npm-package]
 severity: medium
 ---

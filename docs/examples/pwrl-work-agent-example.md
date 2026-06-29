@@ -1,3 +1,11 @@
+---
+title: PWL-Work Agent Orchestration Examples
+description: How to use the pwrl-work agent orchestrator to execute work from plans, task files, and prompts.
+type: PWRL Example
+timestamp: 2026-06-05
+tags: [pwrl-work, agent, orchestration, examples]
+---
+
 # PWL-Work Agent Orchestration Examples
 
 How to use the `pwrl-work.agent.md` orchestrator to execute work from plans, task files, and prompts.

@@ -1,6 +1,5 @@
 ---
 title: OKF Compliance Bulk-Migration Pattern
-date: 2026-06-28
 category: pattern
 type: PWRL Learning
 timestamp: 2026-06-28T23:30:00Z

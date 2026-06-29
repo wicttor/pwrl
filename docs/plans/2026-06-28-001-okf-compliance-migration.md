@@ -1,6 +1,7 @@
 ---
 id: 2026-06-28-001
 status: active
+type: PWRL Plan
 tier: Standard
 created: 2026-06-28
 updated: 2026-06-28

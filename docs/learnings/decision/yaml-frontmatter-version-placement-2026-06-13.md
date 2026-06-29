@@ -1,8 +1,8 @@
 ---
 title: YAML Frontmatter Version Field Placement Standard
-date: 2026-06-13
+timestamp: 2026-06-13
 category: technical-fix
-type: decision
+type: PWRL Learning
 severity: low
 tags:
   - yaml-structure

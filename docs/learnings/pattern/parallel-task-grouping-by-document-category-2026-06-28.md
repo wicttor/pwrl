@@ -1,6 +1,5 @@
 ---
 title: Parallel Task Grouping by Document Category for Bulk Updates
-date: 2026-06-28
 category: pattern
 type: PWRL Learning
 timestamp: 2026-06-28T23:30:00Z

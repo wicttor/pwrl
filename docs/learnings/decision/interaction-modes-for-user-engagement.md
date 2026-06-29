@@ -1,7 +1,8 @@
 ---
 title: "Interaction Modes for User Engagement Control"
-date: 2026-06-12
+timestamp: 2026-06-12
 category: decision
+type: PWRL Learning
 severity: high
 tags:
   - user-control

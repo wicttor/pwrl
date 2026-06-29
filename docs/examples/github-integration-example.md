@@ -1,3 +1,11 @@
+---
+title: GitHub Issues Integration Examples
+description: How pwrl-work-sync-status manages GitHub Issues labels and comments as tasks progress through their lifecycle.
+type: PWRL Example
+timestamp: 2026-06-05
+tags: [github, integration, examples, pwrl-work, sync-status]
+---
+
 # GitHub Issues Integration Examples
 
 How `pwrl-work-sync-status` manages GitHub Issues labels and comments as tasks progress through their lifecycle.

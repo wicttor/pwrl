@@ -1,6 +1,5 @@
 ---
 title: Plan-to-Tasks Pipeline for Documentation-Only Migrations
-date: 2026-06-28
 category: workflow
 type: PWRL Learning
 timestamp: 2026-06-28T23:30:00Z

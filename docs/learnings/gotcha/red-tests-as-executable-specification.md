@@ -1,6 +1,7 @@
 ---
 title: RED Tests as Executable Specification
-type: gotcha
+category: gotcha
+type: PWRL Learning
 domain: testing
 severity: high
 tags: [tdd, red-phase, test-naming, common-mistake]

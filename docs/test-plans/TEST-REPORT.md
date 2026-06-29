@@ -1,3 +1,11 @@
+---
+title: Integration Test Report
+description: Test report for slicing pwrl-plan skill into micro-skills — all 10 test suites executed across agent and fallback paths.
+type: PWRL Test Plan
+timestamp: 2026-06-05
+tags: [testing, integration, test-report, pwrl-plan]
+---
+
 # Integration Test Report
 
 **Date:** 2026-06-05

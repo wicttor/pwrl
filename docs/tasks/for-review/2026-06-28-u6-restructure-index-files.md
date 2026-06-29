@@ -1,7 +1,7 @@
 ---
 unit-id: U6
 plan: docs/plans/2026-06-28-001-okf-compliance-migration.md
-status: to-do
+status: for-review
 created: 2026-06-28
 type: PWRL Task
 dependencies: [U2, U3]

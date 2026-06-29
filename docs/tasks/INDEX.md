@@ -2,15 +2,15 @@
 
 Granular implementation task files sliced from plans. Organized by execution status.
 
-## To Do
+## For Review
 
-* [Define OKF Type Taxonomy & Create Root Index](to-do/2026-06-28-u1-okf-type-taxonomy-and-root-index.md) — Establish standard type values for all PWRL document categories; create bundle root index.
-* [Update Learnings Frontmatter](to-do/2026-06-28-u2-update-learnings-frontmatter.md) — Add type: PWRL Learning to ~36 learning docs; rename date→timestamp; handle files lacking frontmatter.
-* [Update Tasks Frontmatter](to-do/2026-06-28-u3-update-tasks-frontmatter.md) — Add type: PWRL Task to ~31 task documents in done/ and archived/.
-* [Update Analysis & Guides Frontmatter](to-do/2026-06-28-u4-update-analysis-guides-frontmatter.md) — Add frontmatter with type to ~10 analysis and guide documents.
-* [Update Examples, Plans & Test-Plans Frontmatter](to-do/2026-06-28-u5-update-examples-plans-testplans-frontmatter.md) — Add frontmatter with type to ~7 example, plan, and test-plan documents.
-* [Restructure INDEX.md Files to OKF §6](to-do/2026-06-28-u6-restructure-index-files.md) — Update learnings/INDEX.md and tasks/INDEX.md to follow OKF §6 index structure.
-* [Validate OKF Conformance & Capture Learnings](to-do/2026-06-28-u7-validate-conformance-and-capture-learnings.md) — Full conformance check against OKF v0.1; fix gaps; document migration as a new learning.
+* [Define OKF Type Taxonomy & Create Root Index](for-review/2026-06-28-u1-okf-type-taxonomy-and-root-index.md) — Establish standard type values for all PWRL document categories; create bundle root index.
+* [Update Learnings Frontmatter](for-review/2026-06-28-u2-update-learnings-frontmatter.md) — Add type: PWRL Learning to ~36 learning docs; rename date→timestamp; handle files lacking frontmatter.
+* [Update Tasks Frontmatter](for-review/2026-06-28-u3-update-tasks-frontmatter.md) — Add type: PWRL Task to ~31 task documents in done/ and archived/.
+* [Update Analysis & Guides Frontmatter](for-review/2026-06-28-u4-update-analysis-guides-frontmatter.md) — Add frontmatter with type to ~10 analysis and guide documents.
+* [Update Examples, Plans & Test-Plans Frontmatter](for-review/2026-06-28-u5-update-examples-plans-testplans-frontmatter.md) — Add frontmatter with type to ~7 example, plan, and test-plan documents.
+* [Restructure INDEX.md Files to OKF §6](for-review/2026-06-28-u6-restructure-index-files.md) — Update learnings/INDEX.md and tasks/INDEX.md to follow OKF §6 index structure.
+* [Validate OKF Conformance & Capture Learnings](for-review/2026-06-28-u7-validate-conformance-and-capture-learnings.md) — Full conformance check against OKF v0.1; fix gaps; document migration as a new learning.
 
 ## Done
 

@@ -17,6 +17,7 @@ Knowledge extracted from development sessions — decisions, patterns, workflows
 * [Remove Agent Infrastructure, Adopt Pure Skill-Based Framework](decision/remove-agent-infrastructure-2026-06-16.md) — Decision to remove agent-based orchestration entirely and adopt a pure skill-based architecture with deterministic phases.
 * [Schema Design — Simple Line Parser](decision/schema-design-simple-line-parser.md) — Chose simple 2-space-indented line-based parser over full YAML parser for phase manifest parsing.
 * [YAML Frontmatter Version Field Placement Standard](decision/yaml-frontmatter-version-placement-2026-06-13.md) — Standard for where to place the version field in YAML frontmatter across 27 PWRL SKILL.md files.
+* [Documented vs Implemented Contract Gap](decision/documented-vs-implemented-contract-gap-2026-06-29.md) — A transition described in a pattern learning but with no step in any SKILL.md is effectively invisible to the agent. Each transition needs an implementing skill, or remove it from the learning.
 
 ## Patterns
 
@@ -36,6 +37,7 @@ Knowledge extracted from development sessions — decisions, patterns, workflows
 * [Task State Management — Dual-Layer Tracking](pattern/task-state-management-dual-layer-tracking.md) — Use dual-layer state tracking: file location (directory) + frontmatter status (YAML) for human and machine readability.
 * [TDD RED Phase — Test-First Specification](pattern/tdd-red-phase-test-first-spec.md) — Use dual-implementation comparison (TARGET vs STRICT) to effectively document and prove test specification gaps.
 * [Validator Regex Relaxation as Root-Cause Fix](pattern/validator-regex-relaxation-root-cause-2026-06-21.md) — When many files fail a structural gate due to a common valid variant, relax the validator's regex rather than rewriting all files.
+* [Cross-Skill Contract Enforcement — Ownership, Pre-Flight Guard, and Centralization](pattern/cross-skill-contract-enforcement-2026-06-29.md) — A contract spanning multiple skills is enforced reliably when each transition has a single owner, each owner skill opens with a Pre-Flight Guard, and the canonical contract lives in the orchestrator's SKILL.md.
 
 ## Workflows
 
@@ -52,6 +54,7 @@ Knowledge extracted from development sessions — decisions, patterns, workflows
 
 * [RED Tests as Executable Specification](gotcha/red-tests-as-executable-specification.md) — Developers unfamiliar with TDD RED phase may incorrectly assume failing tests indicate bad code rather than specification.
 * [validate-skills.js Exact-Match Header Regex Gotcha](gotcha/validate-skills-exact-match-header-regex-2026-06-21.md) — The validator uses exact-match regex for required sections; headers with additional words fail even if semantically correct.
+* [Asymmetric Action Descriptions Across Execution Modes](gotcha/asymmetric-action-descriptions-across-execution-modes-2026-06-29.md) — When only one of Inline/Serial/Parallel modes has the explicit "CRITICAL: Move file" step, the agent interprets the others' "Update status" as frontmatter-only and skips the file move.
 
 ## Technical Fixes
 

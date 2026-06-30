@@ -3,12 +3,14 @@ unit-id: U4
 plan: docs/plans/2026-06-29-003-pwrl-work-task-lifecycle-contract.md
 status: in-progress
 created: 2026-06-29
+updated: 2026-06-30
 dependencies: [U1]
 files:
-  - /home/wicttor/.agents/skills/pwrl-work-review/SKILL.md
+  - /home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md
 learnings:
   - docs/learnings/pattern/explicit-review-verdict-flow-2026-06-16.md
   - docs/learnings/pattern/task-state-machine-enforcement-2026-06-29.md
+  - docs/learnings/gotcha/install-path-vs-repo-path-divergence-2026-06-30.md
 ---
 
 # U4: Add Pre-Flight Guard, Responsibility Boundary, and REQUEST CHANGES Revert Logic to `pwrl-work-review`
@@ -21,7 +23,7 @@ learnings:
 
 ## Implementation Steps
 
-1. **Open `/home/wicttor/.agents/skills/pwrl-work-review/SKILL.md`** and locate the section after the "Interaction Method" block.
+1. **Open `/home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md`** and locate the section after the "Interaction Method" block.
 
 2. **Insert a new `## Pre-Flight Guard` section** that states:
    - "Assert that the input task file is in `docs/tasks/for-review/`."
@@ -79,25 +81,26 @@ learnings:
 
 ```bash
 # Verify Pre-Flight Guard section
-grep -A 1 "## Pre-Flight Guard" /home/wicttor/.agents/skills/pwrl-work-review/SKILL.md
+grep -A 1 "## Pre-Flight Guard" /home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md
 
 # Verify Step 8 exists
-grep -A 1 "Handle Rework Loop" /home/wicttor/.agents/skills/pwrl-work-review/SKILL.md
+grep -A 1 "Handle Rework Loop" /home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md
 
 # Verify the output YAML has the new flags
-grep -E "(approved|changesRequested):" /home/wicttor/.agents/skills/pwrl-work-review/SKILL.md
+grep -E "(approved|changesRequested):" /home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md
 ```
 
 ## Acceptance Criteria
 
-- [ ] `pwrl-work-review/SKILL.md` has a new `## Pre-Flight Guard` section
+- [ ] `pwrl-work-review/SKILL.md` (in the repo, not the install) has a new `## Pre-Flight Guard` section
 - [ ] `pwrl-work-review/SKILL.md` has a new `## Responsibility Boundary` section with both sub-headings
-- [ ] Step 8 "Handle Rework Loop" contains the "CRITICAL: Move task file" block (verbatim from U3 Inline pattern)
+- [ ] Step 8 "Handle Rework Loop" contains the "**CRITICAL: Move file**" block (verbatim from U3 Inline pattern)
 - [ ] The output YAML includes `approved` and `changesRequested` fields
 - [ ] On `changesRequested: true`: task moves to `in-progress/` with "Review Findings" section appended
 - [ ] On `approved: true`: task stays in `for-review/`
 - [ ] On neither flag: skill asks the user to clarify
-- [ ] Line count in `pwrl-work-review/SKILL.md` stays within the standard (≤ 350 lines, current: ~290)
+- [ ] Line count in `pwrl-work-review/SKILL.md` stays within the OKF acceptable range (per `pwrl-standards/SCHEMA.md` §Document Structure: 80–300 lines)
+- [ ] **Verify with `grep` against the repo path, not the install** — see `docs/learnings/gotcha/verify-against-repo-not-install-2026-06-30.md`
 
 ## Dependencies
 
@@ -109,8 +112,8 @@ grep -E "(approved|changesRequested):" /home/wicttor/.agents/skills/pwrl-work-re
 
 ## Related Files
 
-- `/home/wicttor/.agents/skills/pwrl-work-review/SKILL.md` — Skill to update
-- `/home/wicttor/.agents/skills/pwrl-work/SKILL.md` — Cross-reference source (U1)
+- `/home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md` — Skill to update
+- `/home/wicttor/Projects/pwrl/pwrl-work/SKILL.md` — Cross-reference source (U1)
 
 ## Notes
 
@@ -121,7 +124,7 @@ grep -E "(approved|changesRequested):" /home/wicttor/.agents/skills/pwrl-work-re
 
 **Verdict: REJECTED**
 
-**Critical:** The implementation was applied to `/home/wicttor/.agents/skills/pwrl-work-review/SKILL.md` instead of `/home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md`. The repo file has **zero** occurrences of "Pre-Flight Guard", "Responsibility Boundary", "Handle Rework Loop", or the new `approved` / `changesRequested` output fields. The Pre-Flight Guard, Responsibility Boundary, and Step 8 "Handle Rework Loop" are all missing from the published file. The entire rework-loop logic is absent in the repo.
+**Critical:** The implementation was applied to `/home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md` instead of `/home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md`. The repo file has **zero** occurrences of "Pre-Flight Guard", "Responsibility Boundary", "Handle Rework Loop", or the new `approved` / `changesRequested` output fields. The Pre-Flight Guard, Responsibility Boundary, and Step 8 "Handle Rework Loop" are all missing from the published file. The entire rework-loop logic is absent in the repo.
 
 **Action required for re-execution:**
 

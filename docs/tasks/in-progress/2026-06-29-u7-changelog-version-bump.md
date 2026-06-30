@@ -3,19 +3,21 @@ unit-id: U7
 plan: docs/plans/2026-06-29-003-pwrl-work-task-lifecycle-contract.md
 status: in-progress
 created: 2026-06-29
+updated: 2026-06-30
 dependencies: [U1, U2, U3, U4, U5, U6]
 files:
   - /home/wicttor/Projects/pwrl/CHANGELOG.md
   - /home/wicttor/Projects/pwrl/package.json
-  - /home/wicttor/.agents/skills/pwrl-work/SKILL.md
-  - /home/wicttor/.agents/skills/pwrl-work-prepare/SKILL.md
-  - /home/wicttor/.agents/skills/pwrl-work-execute/SKILL.md
-  - /home/wicttor/.agents/skills/pwrl-work-review/SKILL.md
-  - /home/wicttor/.agents/skills/pwrl-review-report/SKILL.md
+  - /home/wicttor/Projects/pwrl/pwrl-work/SKILL.md
+  - /home/wicttor/Projects/pwrl/pwrl-work-prepare/SKILL.md
+  - /home/wicttor/Projects/pwrl/pwrl-work-execute/SKILL.md
+  - /home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md
+  - /home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md
 learnings:
   - docs/learnings/workflow/bulk-metadata-sync-2026-06-13.md
   - docs/learnings/decision/coordinated-versioning-ecosystem-2026-06-13.md
   - docs/learnings/workflow/sample-verification-quality-gate-2026-06-13.md
+  - docs/learnings/workflow/commit-message-vs-diff-verification-2026-06-30.md
 ---
 
 # U7: CHANGELOG Entry and Version Bump
@@ -25,6 +27,19 @@ learnings:
 ## Context
 
 This unit is the final step that consolidates U1–U6 into a single release. Per the precedent set in plan `2026-06-29-001`, the version bump is MINOR (new user-facing behavior; no breaking changes) and the CHANGELOG entry summarizes the change in 4 bullets. The coordinated version bump follows `docs/learnings/decision/coordinated-versioning-ecosystem-2026-06-13.md` and the bulk-metadata-sync workflow from `bulk-metadata-sync-2026-06-13.md`.
+
+> **CRITICAL ordering note (2026-06-30):** U7 must execute **AFTER** U1–U6 are confirmed present in the **repo** (not just in `~/.agents/skills/`). The previous attempt committed U7's CHANGELOG entry + version bump **before** U1–U5 work was actually present in the repo, resulting in a commit that advertised behavior the package did not have. See `docs/learnings/workflow/commit-message-vs-diff-verification-2026-06-30.md` and `docs/learnings/pattern/implementation-layer-chain-2026-06-30.md`.
+
+> **Pre-execution checklist (must pass before this unit can start):**
+> 1. `grep "## Task Lifecycle Contract" /home/wicttor/Projects/pwrl/pwrl-work/SKILL.md` returns a match (U1 ✓)
+> 2. `grep -c "## Pre-Flight Guard" /home/wicttor/Projects/pwrl/pwrl-*-*/SKILL.md` returns `≥ 4` (U2, U3, U4, U5 each have one) — **NOT** in the install
+> 3. `grep "## Responsibility Boundary" /home/wicttor/Projects/pwrl/pwrl-*-*/SKILL.md` returns `≥ 4` (same)
+> 4. `grep -c "CRITICAL: Move file" /home/wicttor/Projects/pwrl/pwrl-work-execute/SKILL.md` returns `≥ 3` (Inline + Serial + Parallel — U3)
+> 5. `grep "Handle Rework Loop" /home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md` returns a match (U4)
+> 6. `grep "Promote Approved Tasks" /home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md` returns a match (U5)
+> 7. `ls /home/wicttor/Projects/pwrl/docs/learnings/pattern/task-state-machine-enforcement-2026-06-29.md` shows the file exists (U6)
+>
+> If any check fails, return to the corresponding upstream unit and fix before proceeding.
 
 ## Implementation Steps
 
@@ -41,12 +56,12 @@ This unit is the final step that consolidates U1–U6 into a single release. Per
 
 4. **Open `/home/wicttor/Projects/pwrl/package.json`** and update the `"version"` field from `"1.6.0-dev.2"` to `"1.7.0-dev.1"`.
 
-5. **Update the `version:` field in the following 5 SKILL.md frontmatters** (if present, per the YAML Frontmatter Version Placement Standard):
-   - `/home/wicttor/.agents/skills/pwrl-work/SKILL.md`
-   - `/home/wicttor/.agents/skills/pwrl-work-prepare/SKILL.md`
-   - `/home/wicttor/.agents/skills/pwrl-work-execute/SKILL.md`
-   - `/home/wicttor/.agents/skills/pwrl-work-review/SKILL.md`
-   - `/home/wicttor/.agents/skills/pwrl-review-report/SKILL.md`
+5. **Update the `version:` field in the following 5 SKILL.md frontmatters** (if present, per the YAML Frontmatter Version Placement Standard) — **in the REPO, not the install**:
+   - `/home/wicttor/Projects/pwrl/pwrl-work/SKILL.md`
+   - `/home/wicttor/Projects/pwrl/pwrl-work-prepare/SKILL.md`
+   - `/home/wicttor/Projects/pwrl/pwrl-work-execute/SKILL.md`
+   - `/home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md`
+   - `/home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md`
 
 6. **Use the bulk-metadata-sync workflow** (multi-replace) to make all 6 version edits in a single coordinated commit. Do not make this change in 6 separate commits.
 
@@ -55,7 +70,7 @@ This unit is the final step that consolidates U1–U6 into a single release. Per
 1. **A SKILL.md does not have a `version:` field**
    - **Scenario:** Some skill files lack the `version:` field in their frontmatter.
    - **Handling:** Per the YAML Frontmatter Version Placement Standard, the field is required in all skill files. If a file lacks it, add it as part of this unit (not in a separate fix).
-   - **Test:** Run `grep -L "version:" /home/wicttor/.agents/skills/pwrl-work*/SKILL.md` and verify the 5 affected files all have the field after the edit.
+   - **Test:** Run `grep -L "version:" /home/wicttor/Projects/pwrl/pwrl-work*/SKILL.md` and verify the 5 affected files all have the field after the edit.
 
 2. **The CHANGELOG has multiple `[Unreleased]` sections**
    - **Scenario:** A previous plan left two `[Unreleased]` sections in the file.
@@ -73,9 +88,10 @@ This unit is the final step that consolidates U1–U6 into a single release. Per
 
 - **Structural:** `CHANGELOG.md` `[Unreleased]` section contains the four `### Added` bullets and the one `### Changed` bullet.
 - **Structural:** `package.json` `"version"` field equals `"1.7.0-dev.1"`.
-- **Structural:** All five affected SKILL.md frontmatters show `version: 1.7.0-dev.1` (or have it added if missing).
+- **Structural:** All five affected SKILL.md frontmatters in the **REPO** show `version: 1.7.0-dev.1` (or have it added if missing).
 - **Coordinated:** The version bump is a single commit touching all 6 files (not 6 separate commits).
 - **Quality gate:** Use the Sample Verification pattern from `docs/learnings/workflow/sample-verification-quality-gate-2026-06-13.md` to spot-check 3 of the 6 files post-edit.
+- **Commit-message vs diff:** Run the verification from `docs/learnings/workflow/commit-message-vs-diff-verification-2026-06-30.md` before pushing.
 
 ### Verification Commands
 
@@ -86,12 +102,12 @@ grep -A 1 "## \[Unreleased\]" /home/wicttor/Projects/pwrl/CHANGELOG.md
 # Verify package.json
 grep "version" /home/wicttor/Projects/pwrl/package.json
 
-# Verify all 5 SKILL.md frontmatters
-for f in /home/wicttor/.agents/skills/pwrl-work/SKILL.md \
-         /home/wicttor/.agents/skills/pwrl-work-prepare/SKILL.md \
-         /home/wicttor/.agents/skills/pwrl-work-execute/SKILL.md \
-         /home/wicttor/.agents/skills/pwrl-work-review/SKILL.md \
-         /home/wicttor/.agents/skills/pwrl-review-report/SKILL.md; do
+# Verify all 5 SKILL.md frontmatters IN THE REPO
+for f in /home/wicttor/Projects/pwrl/pwrl-work/SKILL.md \
+         /home/wicttor/Projects/pwrl/pwrl-work-prepare/SKILL.md \
+         /home/wicttor/Projects/pwrl/pwrl-work-execute/SKILL.md \
+         /home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md \
+         /home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md; do
   echo "=== $f ==="
   grep -m 1 "^version:" "$f"
 done

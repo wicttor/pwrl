@@ -3,12 +3,14 @@ unit-id: U5
 plan: docs/plans/2026-06-29-003-pwrl-work-task-lifecycle-contract.md
 status: in-progress
 created: 2026-06-29
+updated: 2026-06-30
 dependencies: [U1]
 files:
-  - /home/wicttor/.agents/skills/pwrl-review-report/SKILL.md
+  - /home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md
 learnings:
   - docs/learnings/pattern/explicit-review-verdict-flow-2026-06-16.md
   - docs/learnings/pattern/task-state-machine-enforcement-2026-06-29.md
+  - docs/learnings/gotcha/install-path-vs-repo-path-divergence-2026-06-30.md
 ---
 
 # U5: Add "Promote Approved Tasks" Step to `pwrl-review-report`
@@ -21,7 +23,7 @@ The `explicit-review-verdict-flow-2026-06-16.md` pattern learning documents that
 
 ## Implementation Steps
 
-1. **Open `/home/wicttor/.agents/skills/pwrl-review-report/SKILL.md`** and locate the section after the "Interaction Method" block.
+1. **Open `/home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md`** and locate the section after the "Interaction Method" block.
 
 2. **Insert a new `## Pre-Flight Guard` section** that states:
    - "Assert that there is at least one task file in `docs/tasks/for-review/` associated with the review scope (matched by `unit-id` or branch name)."
@@ -87,26 +89,27 @@ The `explicit-review-verdict-flow-2026-06-16.md` pattern learning documents that
 
 ```bash
 # Verify Pre-Flight Guard section
-grep -A 1 "## Pre-Flight Guard" /home/wicttor/.agents/skills/pwrl-review-report/SKILL.md
+grep -A 1 "## Pre-Flight Guard" /home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md
 
 # Verify Step 8.5 exists
-grep -A 1 "Promote Approved Tasks" /home/wicttor/.agents/skills/pwrl-review-report/SKILL.md
+grep -A 1 "Promote Approved Tasks" /home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md
 
 # Verify the output YAML has the new field
-grep "tasksPromoted" /home/wicttor/.agents/skills/pwrl-review-report/SKILL.md
+grep "tasksPromoted" /home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md
 ```
 
 ## Acceptance Criteria
 
-- [ ] `pwrl-review-report/SKILL.md` has a new `## Pre-Flight Guard` section
+- [ ] `pwrl-review-report/SKILL.md` (in the repo, not the install) has a new `## Pre-Flight Guard` section
 - [ ] `pwrl-review-report/SKILL.md` has a new `## Responsibility Boundary` section
-- [ ] Step 8.5 "Promote Approved Tasks" contains the "CRITICAL: Move task file" block
+- [ ] Step 8.5 "Promote Approved Tasks" contains the "**CRITICAL: Move file**" block
 - [ ] The output YAML includes `tasksPromoted: [list]`
 - [ ] On `verdict: approved`: matching task files move to `done/` with frontmatter updated
 - [ ] On `verdict: request-changes`: files remain in `for-review/`
 - [ ] On `verdict: rejected`: files remain in `for-review/`
 - [ ] `pwrl-work-sync-status` is called for the `done` transition
-- [ ] Line count in `pwrl-review-report/SKILL.md` stays within the standard (≤ 350 lines, current: ~290)
+- [ ] Line count in `pwrl-review-report/SKILL.md` stays within the OKF acceptable range (per `pwrl-standards/SCHEMA.md` §Document Structure: 80–300 lines)
+- [ ] **Verify with `grep` against the repo path, not the install** — see `docs/learnings/gotcha/verify-against-repo-not-install-2026-06-30.md`
 
 ## Dependencies
 
@@ -118,9 +121,9 @@ grep "tasksPromoted" /home/wicttor/.agents/skills/pwrl-review-report/SKILL.md
 
 ## Related Files
 
-- `/home/wicttor/.agents/skills/pwrl-review-report/SKILL.md` — Skill to update
-- `/home/wicttor/.agents/skills/pwrl-work/SKILL.md` — Cross-reference source (U1)
-- `/home/wicttor/.agents/skills/pwrl-work-sync-status/SKILL.md` — Called for GitHub sync
+- `/home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md` — Skill to update
+- `/home/wicttor/Projects/pwrl/pwrl-work/SKILL.md` — Cross-reference source (U1)
+- `/home/wicttor/Projects/pwrl/pwrl-work-sync-status/SKILL.md` — Called for GitHub sync
 
 ## Notes
 
@@ -132,7 +135,7 @@ grep "tasksPromoted" /home/wicttor/.agents/skills/pwrl-review-report/SKILL.md
 
 **Verdict: REJECTED**
 
-**Critical:** The implementation was applied to `/home/wicttor/.agents/skills/pwrl-review-report/SKILL.md` instead of `/home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md`. The repo file has **zero** occurrences of "Pre-Flight Guard", "Responsibility Boundary", "Promote Approved Tasks", or `tasksPromoted`. Step 8.5 (the only writer to `done/`) does not exist in the published file. The `done` transition is therefore not implemented for users of the published package.
+**Critical:** The implementation was applied to `/home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md` instead of `/home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md`. The repo file has **zero** occurrences of "Pre-Flight Guard", "Responsibility Boundary", "Promote Approved Tasks", or `tasksPromoted`. Step 8.5 (the only writer to `done/`) does not exist in the published file. The `done` transition is therefore not implemented for users of the published package.
 
 **Action required for re-execution:**
 

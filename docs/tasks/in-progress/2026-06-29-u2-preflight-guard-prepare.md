@@ -3,12 +3,14 @@ unit-id: U2
 plan: docs/plans/2026-06-29-003-pwrl-work-task-lifecycle-contract.md
 status: in-progress
 created: 2026-06-29
+updated: 2026-06-30
 dependencies: [U1]
 files:
-  - /home/wicttor/.agents/skills/pwrl-work-prepare/SKILL.md
+  - /home/wicttor/Projects/pwrl/pwrl-work-prepare/SKILL.md
 learnings:
   - docs/learnings/pattern/explicit-task-file-movement-critical.md
   - docs/learnings/pattern/task-state-machine-enforcement-2026-06-29.md
+  - docs/learnings/gotcha/install-path-vs-repo-path-divergence-2026-06-30.md
 ---
 
 # U2: Add Pre-Flight Guard and Responsibility Boundary to `pwrl-work-prepare`
@@ -21,7 +23,7 @@ learnings:
 
 ## Implementation Steps
 
-1. **Open `/home/wicttor/.agents/skills/pwrl-work-prepare/SKILL.md`** and locate the section after the "Interaction Method" block (the new Pre-Flight Guard goes near the top, after the "Interaction Method" block and before "Purpose" or "Input").
+1. **Open `/home/wicttor/Projects/pwrl/pwrl-work-prepare/SKILL.md`** and locate the section after the "Interaction Method" block (the new Pre-Flight Guard goes near the top, after the "Interaction Method" block and before "Purpose" or "Input").
 
 2. **Insert a new `## Pre-Flight Guard` section** that states:
    - "Assert that the input task file is currently in `docs/tasks/to-do/`."
@@ -65,20 +67,21 @@ learnings:
 
 ```bash
 # Verify Pre-Flight Guard section
-grep -A 1 "## Pre-Flight Guard" /home/wicttor/.agents/skills/pwrl-work-prepare/SKILL.md
+grep -A 1 "## Pre-Flight Guard" /home/wicttor/Projects/pwrl/pwrl-work-prepare/SKILL.md
 
 # Verify Responsibility Boundary
-grep -B 1 "OWNS the" /home/wicttor/.agents/skills/pwrl-work-prepare/SKILL.md
+grep -B 1 "OWNS the" /home/wicttor/Projects/pwrl/pwrl-work-prepare/SKILL.md
 ```
 
 ## Acceptance Criteria
 
-- [ ] `pwrl-work-prepare/SKILL.md` has a new `## Pre-Flight Guard` section near the top
+- [ ] `pwrl-work-prepare/SKILL.md` (in the repo, not the install) has a new `## Pre-Flight Guard` section near the top
 - [ ] `pwrl-work-prepare/SKILL.md` has a new `## Responsibility Boundary` section
 - [ ] Step 2B has a "Forbidden actions" list with the three items above
 - [ ] The guard refuses to proceed when the task is not in `to-do/`
 - [ ] The output context schema is unchanged
-- [ ] Line count in `pwrl-work-prepare/SKILL.md` stays within the standard (≤ 350 lines, current: ~310)
+- [ ] Line count in `pwrl-work-prepare/SKILL.md` stays within the OKF acceptable range (per `pwrl-standards/SCHEMA.md` §Document Structure: 80–300 lines)
+- [ ] **If the file exceeds 300 lines, extract content to `pwrl-work-prepare/references/` to bring it within range** — see `docs/learnings/decision/line-count-standard-self-reference-2026-06-30.md`
 
 ## Dependencies
 
@@ -90,8 +93,8 @@ grep -B 1 "OWNS the" /home/wicttor/.agents/skills/pwrl-work-prepare/SKILL.md
 
 ## Related Files
 
-- `/home/wicttor/.agents/skills/pwrl-work-prepare/SKILL.md` — Skill to update
-- `/home/wicttor/.agents/skills/pwrl-work/SKILL.md` — Cross-reference source (U1)
+- `/home/wicttor/Projects/pwrl/pwrl-work-prepare/SKILL.md` — Skill to update
+- `/home/wicttor/Projects/pwrl/pwrl-work/SKILL.md` — Cross-reference source (U1)
 
 ## Notes
 
@@ -102,7 +105,7 @@ grep -B 1 "OWNS the" /home/wicttor/.agents/skills/pwrl-work-prepare/SKILL.md
 
 **Verdict: REJECTED**
 
-**Critical:** The implementation was applied to `/home/wicttor/.agents/skills/pwrl-work-prepare/SKILL.md` instead of `/home/wicttor/Projects/pwrl/pwrl-work-prepare/SKILL.md`. The repo file has **zero** occurrences of "Pre-Flight Guard" or "Responsibility Boundary". The Pre-Flight Guard, Responsibility Boundary, and Step 2B "Forbidden actions" list are all missing from the published file.
+**Critical:** The implementation was applied to `/home/wicttor/Projects/pwrl/pwrl-work-prepare/SKILL.md` instead of `/home/wicttor/Projects/pwrl/pwrl-work-prepare/SKILL.md`. The repo file has **zero** occurrences of "Pre-Flight Guard" or "Responsibility Boundary". The Pre-Flight Guard, Responsibility Boundary, and Step 2B "Forbidden actions" list are all missing from the published file.
 
 **Major:** The line count standard changed on 2026-06-21 (relaxed from 170 → 300). This task's acceptance criterion says `≤ 350 lines`; the actual OKF standard is `≤ 300 lines`. Repo file is currently 431 lines — already over both thresholds. U2 cannot fix this in isolation; the agent must also extract content to `references/`.
 

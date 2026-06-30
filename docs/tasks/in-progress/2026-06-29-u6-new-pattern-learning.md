@@ -3,6 +3,7 @@ unit-id: U6
 plan: docs/plans/2026-06-29-003-pwrl-work-task-lifecycle-contract.md
 status: in-progress
 created: 2026-06-29
+updated: 2026-06-30
 dependencies: [U1]
 files:
   - /home/wicttor/Projects/pwrl/docs/learnings/pattern/task-state-machine-enforcement-2026-06-29.md
@@ -11,6 +12,8 @@ learnings:
   - docs/learnings/pattern/explicit-task-file-movement-critical.md
   - docs/learnings/pattern/task-state-management-dual-layer-tracking.md
   - docs/learnings/pattern/explicit-review-verdict-flow-2026-06-16.md
+  - docs/learnings/pattern/implementation-layer-chain-2026-06-30.md
+  - docs/learnings/pattern/code-edit-pre-flight-guard-location-2026-06-30.md
 ---
 
 # U6: Create New Pattern Learning — Task State Machine Enforcement
@@ -32,6 +35,10 @@ The new pattern learning codifies what this entire plan is trying to achieve: a 
    - `category: pattern`
    - `severity: high`
    - `domains: [pwrl-work, pwrl-review, task-management]`
+
+   **Update (2026-06-30):** The "Related Patterns" section must also cross-reference:
+   - `docs/learnings/pattern/implementation-layer-chain-2026-06-30.md` — extends the contract concept to the file-location chain (learning → plan → task → repo → install → published). The contract is not "fully implemented" until it propagates through every layer.
+   - `docs/learnings/pattern/code-edit-pre-flight-guard-location-2026-06-30.md` — extends the Pre-Flight Guard pattern to specify code-edit **location**, not just code-edit **who**. A 2026-06-29 implementation of this contract edited `~/.agents/skills/` (the install) instead of `~/Projects/pwrl/pwrl-*/` (the repo); the contract had nothing to say about location.
 
 2. **The learning body must contain these sections** (in order):
    - **Context:** "Codified in response to a 2026-06-29 session where the agent moved task files from `to-do/` directly to `done/`, skipping `for-review/`, and did not transition to `in-progress/` when starting work. The fix is a strict per-skill responsibility boundary plus a Pre-Flight Guard at the top of each phase that owns a transition."

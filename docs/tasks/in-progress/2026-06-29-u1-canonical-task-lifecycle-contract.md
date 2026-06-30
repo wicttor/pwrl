@@ -3,14 +3,16 @@ unit-id: U1
 plan: docs/plans/2026-06-29-003-pwrl-work-task-lifecycle-contract.md
 status: in-progress
 created: 2026-06-29
+updated: 2026-06-30
 dependencies: []
 files:
-  - /home/wicttor/.agents/skills/pwrl-work/SKILL.md
-  - /home/wicttor/.agents/skills/pwrl-work/references/workflow-details.md
+  - /home/wicttor/Projects/pwrl/pwrl-work/SKILL.md
+  - /home/wicttor/Projects/pwrl/pwrl-work/references/workflow-details.md
 learnings:
   - docs/learnings/pattern/explicit-task-file-movement-critical.md
   - docs/learnings/pattern/task-state-management-dual-layer-tracking.md
   - docs/learnings/pattern/explicit-review-verdict-flow-2026-06-16.md
+  - docs/learnings/gotcha/install-path-vs-repo-path-divergence-2026-06-30.md
 ---
 
 # U1: Add Canonical Task Lifecycle Contract to `pwrl-work` Orchestrator
@@ -23,7 +25,7 @@ The contract for the task status state machine (`to-do → in-progress → for-r
 
 ## Implementation Steps
 
-1. **Open `/home/wicttor/.agents/skills/pwrl-work/SKILL.md`** and locate the section between the existing "Phase Summary" and "Quality Criteria" sections.
+1. **Open `/home/wicttor/Projects/pwrl/pwrl-work/SKILL.md`** and locate the section between the existing "Phase Summary" and "Quality Criteria" sections.
 
 2. **Insert a new `## Task Lifecycle Contract` section** with the following content:
    - A four-row table mapping transition → owning skill:
@@ -36,7 +38,7 @@ The contract for the task status state machine (`to-do → in-progress → for-r
    - A bold **MUST NOT** rule: "No skill other than the owner listed in the table above may perform the corresponding transition. A skill that owns a transition is the only one allowed to write the new `status` value in the frontmatter AND move the file to the new folder."
    - A reference to `pwrl-work/references/workflow-details.md` for the canonical one-screen table.
 
-3. **Open `/home/wicttor/.agents/skills/pwrl-work/references/workflow-details.md`** and locate the existing "Task Status Transitions" prose section.
+3. **Open `/home/wicttor/Projects/pwrl/pwrl-work/references/workflow-details.md`** and locate the existing "Task Status Transitions" prose section.
 
 4. **Replace the prose with a copy-pasteable table** containing: status, folder, owner skill, transition trigger, and a single "Move + update frontmatter" action column. Remove the prose bullets that the table now subsumes.
 
@@ -47,7 +49,7 @@ The contract for the task status state machine (`to-do → in-progress → for-r
 1. **Other skills already link to the old prose section**
    - **Scenario:** A skill or doc links to "Task Status Transitions" by anchor name.
    - **Handling:** Keep the section heading text "Task Status Transitions" in `workflow-details.md` so existing anchors still resolve. Only the content (prose → table) changes.
-   - **Test:** `grep -r "Task Status Transitions" /home/wicttor/.agents/skills/` shows references still resolve.
+   - **Test:** `grep -r "Task Status Transitions" /home/wicttor/Projects/pwrl/` shows references still resolve.
 
 2. **The orchestrator gets long**
    - **Scenario:** Adding a new section to `pwrl-work/SKILL.md` pushes it over the line-count standard.
@@ -60,26 +62,27 @@ The contract for the task status state machine (`to-do → in-progress → for-r
 
 - **Structural:** `pwrl-work/SKILL.md` contains a section titled "Task Lifecycle Contract" with all four statuses, four owners, and the MUST NOT rule.
 - **Cross-link:** `pwrl-work/references/workflow-details.md` "Task Status Transitions" section is now a table (not prose).
-- **Grep:** `grep -l "Task Lifecycle Contract" /home/wicttor/.agents/skills/pwrl-work*/SKILL.md` returns at least one match.
+- **Grep:** `grep -l "Task Lifecycle Contract" /home/wicttor/Projects/pwrl/pwrl-work*/SKILL.md` returns at least one match.
 - **Regression:** No other section in either file is removed or renumbered.
 
 ### Verification Commands
 
 ```bash
 # Verify contract section exists
-grep -A 2 "## Task Lifecycle Contract" /home/wicttor/.agents/skills/pwrl-work/SKILL.md
+grep -A 2 "## Task Lifecycle Contract" /home/wicttor/Projects/pwrl/pwrl-work/SKILL.md
 
 # Verify table is present in reference
-grep -c "to-do" /home/wicttor/.agents/skills/pwrl-work/references/workflow-details.md
+grep -c "to-do" /home/wicttor/Projects/pwrl/pwrl-work/references/workflow-details.md
 ```
 
 ## Acceptance Criteria
 
-- [ ] `pwrl-work/SKILL.md` has a new `## Task Lifecycle Contract` section with the four-row owner table and the MUST NOT rule
-- [ ] `pwrl-work/references/workflow-details.md` "Task Status Transitions" is now a table, not prose
+- [ ] `pwrl-work/SKILL.md` (in the repo, not the install) has a new `## Task Lifecycle Contract` section with the four-row owner table and the MUST NOT rule
+- [ ] `pwrl-work/references/workflow-details.md` (in the repo) "Task Status Transitions" is now a table, not prose
 - [ ] Both files cross-reference each other
 - [ ] No other sections removed or renumbered
-- [ ] Line count in `pwrl-work/SKILL.md` stays within the standard (≤ 220 lines)
+- [ ] Line count in `pwrl-work/SKILL.md` stays within the OKF acceptable range (per `pwrl-standards/SCHEMA.md` §Document Structure: 80–300 lines)
+- [ ] **Verify with `grep` against the repo path, not the install** — see `docs/learnings/gotcha/verify-against-repo-not-install-2026-06-30.md`
 
 ## Dependencies
 
@@ -89,8 +92,8 @@ grep -c "to-do" /home/wicttor/.agents/skills/pwrl-work/references/workflow-detai
 
 ## Related Files
 
-- `/home/wicttor/.agents/skills/pwrl-work/SKILL.md` — Orchestrator where the contract lives
-- `/home/wicttor/.agents/skills/pwrl-work/references/workflow-details.md` — Canonical table
+- `/home/wicttor/Projects/pwrl/pwrl-work/SKILL.md` — Orchestrator where the contract lives
+- `/home/wicttor/Projects/pwrl/pwrl-work/references/workflow-details.md` — Canonical table
 
 ## Notes
 
@@ -101,7 +104,7 @@ grep -c "to-do" /home/wicttor/.agents/skills/pwrl-work/references/workflow-detai
 
 **Verdict: REJECTED**
 
-**Critical:** The implementation was applied to `/home/wicttor/.agents/skills/pwrl-work/SKILL.md` and `/home/wicttor/.agents/skills/pwrl-work/references/workflow-details.md` (the user's local install) instead of the repository paths `/home/wicttor/Projects/pwrl/pwrl-work/SKILL.md` and `/home/wicttor/Projects/pwrl/pwrl-work/references/workflow-details.md`. The repo's `pwrl-work/SKILL.md` contains **zero** occurrences of "Task Lifecycle Contract". The work is not in the published package and will be lost on any `npm install`.
+**Critical:** The implementation was applied to `/home/wicttor/Projects/pwrl/pwrl-work/SKILL.md` and `/home/wicttor/Projects/pwrl/pwrl-work/references/workflow-details.md` (the user's local install) instead of the repository paths `/home/wicttor/Projects/pwrl/pwrl-work/SKILL.md` and `/home/wicttor/Projects/pwrl/pwrl-work/references/workflow-details.md`. The repo's `pwrl-work/SKILL.md` contains **zero** occurrences of "Task Lifecycle Contract". The work is not in the published package and will be lost on any `npm install`.
 
 **Action required for re-execution:**
 

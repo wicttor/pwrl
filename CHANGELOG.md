@@ -8,6 +8,10 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ### Added
 
+- **Task Lifecycle Contract across `pwrl-work` and `pwrl-review`.** Each phase owns exactly one transition (`pwrl-work-prepare`: `to-do → in-progress`; `pwrl-work-execute`: `in-progress → for-review`; `pwrl-work-review`: `for-review → in-progress` for rework; `pwrl-review-report`: `for-review → done` for APPROVED). A new Pre-Flight Guard at the top of each phase refuses to proceed if the task file is not in the expected folder. The contract is documented in `pwrl-work/SKILL.md` §'Task Lifecycle Contract' and `pwrl-work/references/workflow-details.md`.
+- **`pwrl-review-report` now promotes tasks to `done/` on APPROVED verdicts.** New step 8.5 'Promote Approved Tasks' moves the file and updates the frontmatter; on REQUEST CHANGES the file remains in `for-review/`; on REJECTED the file remains in `for-review/`.
+- **`pwrl-work-review` now reverts tasks to `in-progress/` on REQUEST CHANGES.** New step 8 'Handle Rework Loop' moves the file back and appends a 'Review Findings' section to the task body. On APPROVED the file remains in `for-review/` (waiting for `pwrl-review-report`).
+- **New pattern learning:** `docs/learnings/pattern/task-state-machine-enforcement-2026-06-29.md` — codifies the per-skill responsibility boundary and the Pre-Flight Guard pattern.
 - **Interaction mode (Detailed / Smart / Yolo) asked at the start of every core PWRL skill workflow.** Entry points: `pwrl-plan-scope` (Step 1.5), `pwrl-work-triage` (Step 5), `pwrl-review-scope` (Step 0), `pwrl-learnings-extract` (Step 1.5), `pwrl-tasks` (Phase 0), `pwrl-end-session-checkpoint` (Step 1.5). The canonical ask wording lives in `pwrl-standards/SCHEMA.md` §"Required Interaction Section Template" and is pasted verbatim into every entry point to eliminate drift.
 - **Canonical `interactionMode` field schema** in `pwrl-standards/SCHEMA.md` §"Interaction Mode Field" — a single source of truth for the `detailed | smart | yolo` field, its semantics, and its required-in/optional-in artifact scope.
 - **Interaction Mode Propagation sections** in all six orchestrators (`pwrl-plan`, `pwrl-work`, `pwrl-review`, `pwrl-learnings`, `pwrl-tasks`, `pwrl-end-session`) — each documents where the mode is set, how it propagates through artifacts, and how the three modes change phase behavior.
@@ -15,6 +19,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ### Changed
 
+- **Version bump: `1.6.0-dev.2` → `1.7.0-dev.1`** (MINOR per semver: new user-facing behavior; no breaking changes).
 - **Vocabulary expansion from two-mode (Detailed / Yolo) to three-mode (Detailed / Smart / Yolo)** across orchestrators, entry-point sub-skills, and the schema doc. `pwrl-work-triage` was the only sub-skill with the two-mode ask; it is now three-mode.
 - **"Minimal interaction; primarily automated scanning and extraction" line** in `pwrl-learnings-extract` replaced with a three-mode ask; downstream phases now read `interactionMode` from the extraction artifact to control confirmations and dedup resolutions.
 - **`pwrl-learnings-extract` extraction artifact** schema extended with `interactionMode: detailed | smart | yolo`.

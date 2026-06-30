@@ -1,7 +1,7 @@
 ---
 unit-id: U7
 plan: docs/plans/2026-06-29-003-pwrl-work-task-lifecycle-contract.md
-status: to-do
+status: for-review
 created: 2026-06-29
 dependencies: [U1, U2, U3, U4, U5, U6]
 files:

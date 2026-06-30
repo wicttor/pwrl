@@ -1,7 +1,7 @@
 ---
 unit-id: U3
 plan: docs/plans/2026-06-29-003-pwrl-work-task-lifecycle-contract.md
-status: for-review
+status: in-progress
 created: 2026-06-29
 dependencies: [U1]
 files:
@@ -107,3 +107,23 @@ grep "exclusive responsibility" /home/wicttor/.agents/skills/pwrl-work-execute/S
 
 - This is the most code-touching unit. Be careful when copying the "CRITICAL: Move task file" block from Inline Mode — any drift between the three modes will re-introduce the bug.
 - Consider using a `git diff` after the edit to verify the three blocks are character-identical.
+
+## Review Findings (2026-06-30)
+
+**Verdict: REJECTED**
+
+**Critical (×2):**
+
+1. The implementation was applied to `/home/wicttor/.agents/skills/pwrl-work-execute/SKILL.md` instead of `/home/wicttor/Projects/pwrl/pwrl-work-execute/SKILL.md`. The repo file has **zero** occurrences of "Pre-Flight Guard" or "Responsibility Boundary". The Pre-Flight Guard and Responsibility Boundary sections are missing from the published file.
+
+2. **Even in the installed file, the task is incomplete.** The "CRITICAL: Move file" block appears only in **Inline Mode Step 5 (line 95)**. Serial Mode Step 2a and Parallel Mode Step 2 still say only "Update task status to `for-review`" without the full file-move block. Acceptance criteria #3 ("Serial Mode Step 2a now contains the 'CRITICAL: Move task file' block") and #4 ("Parallel Mode Step 2 now contains the 'CRITICAL: Move task file' block") are **not met** even in the installed version.
+
+**Major:** Repo file is 516 lines (vs. OKF standard ≤ 300). U3 cannot fix this in isolation; content must be extracted to `pwrl-work-execute/references/`.
+
+**Action required for re-execution:**
+
+1. Update `files:` frontmatter to point at `/home/wicttor/Projects/pwrl/pwrl-work-execute/SKILL.md`.
+2. Copy the "CRITICAL: Move file" block from Inline Mode into Serial Mode Step 2a and Parallel Mode Step 2 (verbatim from Inline) — this is missing in BOTH the installed and repo files.
+3. Sync the installed changes into the repo.
+4. Extract content to `pwrl-work-execute/references/` to bring SKILL.md ≤ 300 lines.
+5. Verify with: `grep -c "CRITICAL: Move file" /home/wicttor/Projects/pwrl/pwrl-work-execute/SKILL.md` returns `≥ 3` (Inline + Serial + Parallel).

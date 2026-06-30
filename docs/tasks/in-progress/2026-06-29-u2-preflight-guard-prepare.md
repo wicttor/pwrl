@@ -1,7 +1,7 @@
 ---
 unit-id: U2
 plan: docs/plans/2026-06-29-003-pwrl-work-task-lifecycle-contract.md
-status: for-review
+status: in-progress
 created: 2026-06-29
 dependencies: [U1]
 files:
@@ -97,3 +97,18 @@ grep -B 1 "OWNS the" /home/wicttor/.agents/skills/pwrl-work-prepare/SKILL.md
 
 - This unit can be developed in parallel with U3, U4, U5, U6 (all depend on U1, none depend on each other).
 - The Pre-Flight Guard is a documentation-level guard. No script is required; the agent reading the SKILL.md should internalize the rule and self-check.
+
+## Review Findings (2026-06-30)
+
+**Verdict: REJECTED**
+
+**Critical:** The implementation was applied to `/home/wicttor/.agents/skills/pwrl-work-prepare/SKILL.md` instead of `/home/wicttor/Projects/pwrl/pwrl-work-prepare/SKILL.md`. The repo file has **zero** occurrences of "Pre-Flight Guard" or "Responsibility Boundary". The Pre-Flight Guard, Responsibility Boundary, and Step 2B "Forbidden actions" list are all missing from the published file.
+
+**Major:** The line count standard changed on 2026-06-21 (relaxed from 170 → 300). This task's acceptance criterion says `≤ 350 lines`; the actual OKF standard is `≤ 300 lines`. Repo file is currently 431 lines — already over both thresholds. U2 cannot fix this in isolation; the agent must also extract content to `references/`.
+
+**Action required for re-execution:**
+
+1. Update `files:` frontmatter to point at `/home/wicttor/Projects/pwrl/pwrl-work-prepare/SKILL.md`.
+2. Sync the installed changes into the repo.
+3. After sync, extract enough content to `pwrl-work-prepare/references/` so the SKILL.md is ≤ 300 lines.
+4. Update the line-count acceptance criterion to `≤ 300 lines` per current OKF standard.

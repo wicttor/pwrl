@@ -1,7 +1,7 @@
 ---
 unit-id: U6
 plan: docs/plans/2026-06-29-003-pwrl-work-task-lifecycle-contract.md
-status: for-review
+status: in-progress
 created: 2026-06-29
 dependencies: [U1]
 files:
@@ -120,3 +120,16 @@ grep -E "(explicit-task-file-movement|task-state-management-dual-layer|explicit-
 
 - This unit is independent of U2–U5 in terms of execution: it can be written before or after the SKILL.md updates. But it MUST be written before U7 (the CHANGELOG entry references the new learning).
 - Consider also adding a small Mermaid state diagram to make the contract visual. This was flagged as a "Future Work" item but a simple diagram would not bloat the file.
+
+## Review Findings (2026-06-30)
+
+**Verdict: REQUEST CHANGES (mostly complete; minor gap)**
+
+**Pass:** The new file `docs/learnings/pattern/task-state-machine-enforcement-2026-06-29.md` exists in the repo with OKF-compliant frontmatter, contains the four-row ownership table, and is indexed in `docs/learnings/INDEX.md`. All three related patterns are cited.
+
+**Minor gap:** The new learning does not cross-reference the sibling pattern `docs/learnings/pattern/cross-skill-contract-enforcement-2026-06-29.md` (which also covers contract enforcement across skills). The two learnings overlap thematically and should be linked.
+
+**Action required for re-execution:**
+
+1. Add a "Related Patterns" entry in the new learning pointing at `cross-skill-contract-enforcement-2026-06-29.md` with a one-line note on the relationship.
+2. No file moves required — this task is otherwise complete.

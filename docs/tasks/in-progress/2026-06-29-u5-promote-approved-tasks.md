@@ -1,7 +1,7 @@
 ---
 unit-id: U5
 plan: docs/plans/2026-06-29-003-pwrl-work-task-lifecycle-contract.md
-status: for-review
+status: in-progress
 created: 2026-06-29
 dependencies: [U1]
 files:
@@ -127,3 +127,16 @@ grep "tasksPromoted" /home/wicttor/.agents/skills/pwrl-review-report/SKILL.md
 - This is the only unit that actually moves a task to `done/`. Every other unit in this plan reinforces the rule that this is the only place that can do so.
 - The `pwrl-work-sync-status` call should use the existing `done` status mapping from the utility (adds `done` label, removes `for-review`, posts "Task complete" comment, optionally closes the issue).
 - Consider adding a "Sample Verification" smoke test that runs the full pipeline on a sample task (U1 itself) to verify the contract end-to-end. This is the same pattern used in plan `2026-06-29-001`.
+
+## Review Findings (2026-06-30)
+
+**Verdict: REJECTED**
+
+**Critical:** The implementation was applied to `/home/wicttor/.agents/skills/pwrl-review-report/SKILL.md` instead of `/home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md`. The repo file has **zero** occurrences of "Pre-Flight Guard", "Responsibility Boundary", "Promote Approved Tasks", or `tasksPromoted`. Step 8.5 (the only writer to `done/`) does not exist in the published file. The `done` transition is therefore not implemented for users of the published package.
+
+**Action required for re-execution:**
+
+1. Update `files:` frontmatter to point at `/home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md`.
+2. Sync the installed changes into the repo.
+3. Verify with: `grep -c "Promote Approved Tasks\|Pre-Flight Guard\|Responsibility Boundary" /home/wicttor/Projects/pwrl/pwrl-review-report/SKILL.md` returns `≥ 3`.
+4. Verify the output YAML in Step 8 includes `tasksPromoted: [list]`.

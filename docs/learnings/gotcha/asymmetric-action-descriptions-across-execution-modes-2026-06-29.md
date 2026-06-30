@@ -109,6 +109,10 @@ Use **Option 1 (repeat the block)** for now. The drift risk is real but small, a
 - `task-state-management-dual-layer-tracking.md` — The dual-layer (folder + frontmatter) state model that breaks when this gotcha manifests.
 - `cross-skill-contract-enforcement-2026-06-29.md` — The Pre-Flight Guard is what catches the drift when this gotcha manifests.
 
+## Specific Instance
+
+- `technical-fix/u3-serial-parallel-move-file-block-gap-2026-06-30.md` — A specific instance of this gotcha: the Inline mode of `pwrl-work-execute` has the full "CRITICAL: Move file" block, but Serial and Parallel modes have only "Update status to `for-review`". The technical-fix file gives the line numbers, copy-paste fix, and verification command for plan 2026-06-29-003 U3.
+
 ## When This Gotcha Doesn't Apply
 
 - Single-mode skills (no Inline/Serial/Parallel split)

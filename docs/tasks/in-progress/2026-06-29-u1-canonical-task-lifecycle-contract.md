@@ -1,7 +1,7 @@
 ---
 unit-id: U1
 plan: docs/plans/2026-06-29-003-pwrl-work-task-lifecycle-contract.md
-status: for-review
+status: in-progress
 created: 2026-06-29
 dependencies: []
 files:
@@ -96,3 +96,15 @@ grep -c "to-do" /home/wicttor/.agents/skills/pwrl-work/references/workflow-detai
 
 - This is the foundational unit. U2–U5 will fail their pre-flight guard checks if this contract is not in place.
 - The wording in the MUST NOT rule is intentionally absolute. Future relaxations should be additive (explicit per-skill allowlist) rather than relaxing the rule.
+
+## Review Findings (2026-06-30)
+
+**Verdict: REJECTED**
+
+**Critical:** The implementation was applied to `/home/wicttor/.agents/skills/pwrl-work/SKILL.md` and `/home/wicttor/.agents/skills/pwrl-work/references/workflow-details.md` (the user's local install) instead of the repository paths `/home/wicttor/Projects/pwrl/pwrl-work/SKILL.md` and `/home/wicttor/Projects/pwrl/pwrl-work/references/workflow-details.md`. The repo's `pwrl-work/SKILL.md` contains **zero** occurrences of "Task Lifecycle Contract". The work is not in the published package and will be lost on any `npm install`.
+
+**Action required for re-execution:**
+
+1. Update the `files:` frontmatter in this task to point at repo paths (`/home/wicttor/Projects/pwrl/pwrl-work/SKILL.md` and `/home/wicttor/Projects/pwrl/pwrl-work/references/workflow-details.md`).
+2. Sync the installed changes back into the repo before re-running the acceptance-criteria verification.
+3. Verify the repo's `pwrl-work/SKILL.md` ends with `## Task Lifecycle Contract` containing the four-row ownership table and the `MUST NOT` rule, and that `wc -l pwrl-work/SKILL.md` is within the OKF standard (≤ 300 lines).

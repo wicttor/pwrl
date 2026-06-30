@@ -17,6 +17,7 @@ Knowledge extracted from development sessions — decisions, patterns, workflows
 * [Remove Agent Infrastructure, Adopt Pure Skill-Based Framework](decision/remove-agent-infrastructure-2026-06-16.md) — Decision to remove agent-based orchestration entirely and adopt a pure skill-based architecture with deterministic phases.
 * [Schema Design — Simple Line Parser](decision/schema-design-simple-line-parser.md) — Chose simple 2-space-indented line-based parser over full YAML parser for phase manifest parsing.
 * [YAML Frontmatter Version Field Placement Standard](decision/yaml-frontmatter-version-placement-2026-06-13.md) — Standard for where to place the version field in YAML frontmatter across 27 PWRL SKILL.md files.
+* [Line-Count Standard Self-Reference in Task Acceptance Criteria](decision/line-count-standard-self-reference-2026-06-30.md) — Task acceptance criteria should reference the current OKF line-count standard by name or path, not a hard-coded number; makes the criterion self-updating when the standard changes.
 * [Documented vs Implemented Contract Gap](decision/documented-vs-implemented-contract-gap-2026-06-29.md) — A transition described in a pattern learning but with no step in any SKILL.md is effectively invisible to the agent. Each transition needs an implementing skill, or remove it from the learning.
 
 ## Patterns
@@ -39,6 +40,8 @@ Knowledge extracted from development sessions — decisions, patterns, workflows
 * [TDD RED Phase — Test-First Specification](pattern/tdd-red-phase-test-first-spec.md) — Use dual-implementation comparison (TARGET vs STRICT) to effectively document and prove test specification gaps.
 * [Validator Regex Relaxation as Root-Cause Fix](pattern/validator-regex-relaxation-root-cause-2026-06-21.md) — When many files fail a structural gate due to a common valid variant, relax the validator's regex rather than rewriting all files.
 * [Cross-Skill Contract Enforcement — Ownership, Pre-Flight Guard, and Centralization](pattern/cross-skill-contract-enforcement-2026-06-29.md) — A contract spanning multiple skills is enforced reliably when each transition has a single owner, each owner skill opens with a Pre-Flight Guard, and the canonical contract lives in the orchestrator's SKILL.md.
+* [Code-Edit Pre-Flight Guard for Code-Edit Location](pattern/code-edit-pre-flight-guard-location-2026-06-30.md) — Extend the Pre-Flight Guard contract to specify not just who owns a transition but where it takes place; for PWRL, all edits to `pwrl-*/SKILL.md` must target the repo path, never the install path.
+* [Implementation-Layer Chain Audit Pattern](pattern/implementation-layer-chain-2026-06-30.md) — A documented change is only real if it propagates through every layer: Learning → Plan → Task → Repo → Install → Published. Walks the chain to find where the change stopped propagating.
 
 ## Workflows
 
@@ -48,6 +51,7 @@ Knowledge extracted from development sessions — decisions, patterns, workflows
 * [Cross-Reference Integration — Single Source of Truth](workflow/cross-reference-integration-single-source-of-truth.md) — Establish a single source of truth for shared concepts and reference it from multiple locations to reduce duplication.
 * [Cross-Skill Terminology Update Workflow](workflow/cross-skill-terminology-update-2026-06-19.md) — Renamed user interaction mechanism references from ask_user tool to ask_user_question extension across the PWRL ecosystem.
 * [Plan-to-Tasks Pipeline for Documentation-Only Migrations](workflow/plan-to-tasks-pipeline-for-docs-migrations-2026-06-28.md) — Use the full pwrl-plan → pwrl-tasks pipeline for documentation migrations even when no code changes are involved.
+* [Commit-Message vs Diff Verification](workflow/commit-message-vs-diff-verification-2026-06-30.md) — Before pushing or merging, verify the commit's claimed scope matches the file list in the diff; catches overstating commit messages at commit time.
 * [PWRL Documentation Revised for Work Agent Orchestration](workflow/pwrl-documentation-revised-for-work-agent-orchestration-2026-06-08.md) — Updated PWRL documentation, CLI help, and installation scripts to reflect the current work agent orchestration model.
 * [Sample Verification After Bulk Changes Quality Gate](workflow/sample-verification-quality-gate-2026-06-13.md) — When applying bulk changes to 20+ files, verify 3-5 samples as a lightweight quality gate before committing.
 
@@ -56,10 +60,13 @@ Knowledge extracted from development sessions — decisions, patterns, workflows
 * [RED Tests as Executable Specification](gotcha/red-tests-as-executable-specification.md) — Developers unfamiliar with TDD RED phase may incorrectly assume failing tests indicate bad code rather than specification.
 * [validate-skills.js Exact-Match Header Regex Gotcha](gotcha/validate-skills-exact-match-header-regex-2026-06-21.md) — The validator uses exact-match regex for required sections; headers with additional words fail even if semantically correct.
 * [Asymmetric Action Descriptions Across Execution Modes](gotcha/asymmetric-action-descriptions-across-execution-modes-2026-06-29.md) — When only one of Inline/Serial/Parallel modes has the explicit "CRITICAL: Move file" step, the agent interprets the others' "Update status" as frontmatter-only and skips the file move.
+* [Install-Path vs Repo-Path Divergence](gotcha/install-path-vs-repo-path-divergence-2026-06-30.md) — Editing `~/.agents/skills/pwrl-*/` does not propagate to the repo; the next `npm install` will silently overwrite the edits. Always edit the repo path.
+* [Verify Acceptance Criteria Against the Repo, Not the Install](gotcha/verify-against-repo-not-install-2026-06-30.md) — Verification commands that grep the install path can return PASS while the published package is missing the change. Always grep the repo path.
 
 ## Technical Fixes
 
 * [pwrl init: Incorrect Agent Source Path](technical-fix/pwrl-init-incorrect-agent-path-2026-06-09.md) — Agent files were not being copied to new projects' .agents/agents/ directory, leaving projects without orchestration agents.
+* [U3 Serial/Parallel Move-File Block Gap](technical-fix/u3-serial-parallel-move-file-block-gap-2026-06-30.md) — Specific fix for plan 2026-06-29-003 U3: the "CRITICAL: Move file" block in `pwrl-work-execute` is missing in Serial and Parallel modes; copy the Inline block verbatim into both.
 
 ## Plans
 

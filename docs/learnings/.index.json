@@ -1,0 +1,1387 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-06-30T01:20:00Z",
+  "total_learnings": 51,
+  "by_type": {
+    "decision": 14,
+    "technical-fix": 2,
+    "gotcha": 5,
+    "pattern": 20,
+    "technical_fix": 1,
+    "workflow": 9
+  },
+  "by_domain": {
+    "pwrl-work": 13,
+    "process-automation": 1,
+    "pwrl-review": 6,
+    "documentation": 2,
+    "skill-architecture": 7,
+    "user-experience": 1,
+    "pwrl-standards": 1,
+    "code-quality": 1,
+    "deployment": 2,
+    "verification": 1,
+    "task-management": 4,
+    "pwrl-end-session": 1,
+    "git": 1,
+    "code-review": 1
+  },
+  "learnings": [
+    {
+      "id": "decision-branch-ready-workflow-over-autoship-md",
+      "slug": "branch-ready-workflow-over-autoship",
+      "type": "decision",
+      "domains": [
+        "pwrl-work",
+        "process-automation"
+      ],
+      "severity": "high",
+      "title": "Branch-Ready Workflow Over Auto-Ship to Main",
+      "tags": [
+        "workflow-design",
+        "automation-philosophy",
+        "branch-strategy",
+        "user-control"
+      ],
+      "keywords": [
+        "branch-ready workflow over auto-ship to main",
+        "workflow-design",
+        "automation-philosophy",
+        "branch-strategy",
+        "user-control",
+        "pwrl-work",
+        "process-automation"
+      ],
+      "created_at": "2026-06-12",
+      "path": "decision/branch-ready-workflow-over-autoship.md"
+    },
+    {
+      "id": "decision-code-review-fixes-validation-2026-06-10-md",
+      "slug": "code-review-fixes-validation-2026-06-10",
+      "type": "decision",
+      "domains": [],
+      "severity": "high",
+      "title": "Code Review Fixes & Validation Approach for Skill Decomposition",
+      "tags": [
+        "code-review",
+        "pwrl-work",
+        "parallel-execution",
+        "state-management",
+        "testing-strategy"
+      ],
+      "keywords": [
+        "code review fixes & validation approach for skill decomposition",
+        "code-review",
+        "pwrl-work",
+        "parallel-execution",
+        "state-management",
+        "testing-strategy"
+      ],
+      "created_at": "2026-06-10",
+      "path": "decision/code-review-fixes-validation-2026-06-10.md"
+    },
+    {
+      "id": "decision-coordinated-versioning-ecosystem-2026-06-13-md",
+      "slug": "coordinated-versioning-ecosystem-2026-06-13",
+      "type": "decision",
+      "domains": [],
+      "severity": "high",
+      "title": "Coordinated Version Numbering Across Micro-Skills Ecosystem",
+      "tags": [
+        "versioning",
+        "release-management",
+        "ecosystem-design",
+        "compatibility",
+        "coordination"
+      ],
+      "keywords": [
+        "coordinated version numbering across micro-skills ecosystem",
+        "versioning",
+        "release-management",
+        "ecosystem-design",
+        "compatibility",
+        "coordination"
+      ],
+      "created_at": "2026-06-13",
+      "path": "decision/coordinated-versioning-ecosystem-2026-06-13.md"
+    },
+    {
+      "id": "decision-documented-vs-implemented-contract-gap-2026-06-29-md",
+      "slug": "documented-vs-implemented-contract-gap-2026-06-29",
+      "type": "decision",
+      "domains": [
+        "pwrl-work",
+        "pwrl-review",
+        "documentation",
+        "skill-architecture"
+      ],
+      "severity": "high",
+      "title": "A Transition Documented in a Pattern Learning but Not Implemented in Any Skill is Effectively Invisible",
+      "tags": [
+        "documentation-vs-implementation",
+        "pattern-learnings",
+        "contract-enforcement",
+        "audit-trail"
+      ],
+      "keywords": [
+        "a transition documented in a pattern learning but not implemented in any skill is effectively invisible",
+        "documentation-vs-implementation",
+        "pattern-learnings",
+        "contract-enforcement",
+        "audit-trail",
+        "pwrl-work",
+        "pwrl-review",
+        "documentation",
+        "skill-architecture"
+      ],
+      "created_at": "2026-06-29T19:45:00Z",
+      "path": "decision/documented-vs-implemented-contract-gap-2026-06-29.md"
+    },
+    {
+      "id": "decision-fallback-architecture-design-2026-06-05-md",
+      "slug": "fallback-architecture-design-2026-06-05",
+      "type": "decision",
+      "domains": [],
+      "severity": "high",
+      "title": "Fallback Architecture Design for System Resilience",
+      "tags": [
+        "architecture",
+        "resilience",
+        "backwards-compatibility",
+        "agent-infrastructure",
+        "pwrl"
+      ],
+      "keywords": [
+        "fallback architecture design for system resilience",
+        "architecture",
+        "resilience",
+        "backwards-compatibility",
+        "agent-infrastructure",
+        "pwrl"
+      ],
+      "created_at": "2026-06-05",
+      "path": "decision/fallback-architecture-design-2026-06-05.md"
+    },
+    {
+      "id": "decision-hybrid-line-gate-strategy-2026-06-21-md",
+      "slug": "hybrid-line-gate-strategy-2026-06-21",
+      "type": "decision",
+      "domains": [],
+      "severity": "medium",
+      "title": "Hybrid Line-Gate Strategy for Incremental Right-Sizing",
+      "tags": [
+        "[line-count",
+        "right-sizing",
+        "incremental",
+        "validate-skills",
+        "SCHEMA]"
+      ],
+      "keywords": [
+        "hybrid line-gate strategy for incremental right-sizing",
+        "[line-count",
+        "right-sizing",
+        "incremental",
+        "validate-skills",
+        "schema]"
+      ],
+      "created_at": "2026-06-21",
+      "path": "decision/hybrid-line-gate-strategy-2026-06-21.md"
+    },
+    {
+      "id": "decision-interaction-modes-for-user-engagement-md",
+      "slug": "interaction-modes-for-user-engagement",
+      "type": "decision",
+      "domains": [
+        "pwrl-work",
+        "user-experience"
+      ],
+      "severity": "high",
+      "title": "Interaction Modes for User Engagement Control",
+      "tags": [
+        "user-control",
+        "automation-philosophy",
+        "engagement-model",
+        "workflow-design"
+      ],
+      "keywords": [
+        "interaction modes for user engagement control",
+        "user-control",
+        "automation-philosophy",
+        "engagement-model",
+        "workflow-design",
+        "pwrl-work",
+        "user-experience"
+      ],
+      "created_at": "2026-06-12",
+      "path": "decision/interaction-modes-for-user-engagement.md"
+    },
+    {
+      "id": "decision-line-count-standard-self-reference-2026-06-30-md",
+      "slug": "line-count-standard-self-reference-2026-06-30",
+      "type": "decision",
+      "domains": [
+        "pwrl-standards",
+        "pwrl-work",
+        "documentation"
+      ],
+      "severity": "medium",
+      "title": "Task Acceptance Criteria Should Reference the Current OKF Line-Count Standard, Not a Hard-Coded Number",
+      "tags": [
+        "process",
+        "standards",
+        "line-count",
+        "okf",
+        "self-reference"
+      ],
+      "keywords": [
+        "task acceptance criteria should reference the current okf line-count standard, not a hard-coded number",
+        "process",
+        "standards",
+        "line-count",
+        "okf",
+        "self-reference",
+        "pwrl-standards",
+        "pwrl-work",
+        "documentation"
+      ],
+      "created_at": "2026-06-30T00:50:00Z",
+      "path": "decision/line-count-standard-self-reference-2026-06-30.md"
+    },
+    {
+      "id": "decision-okf-compliance-migration-2026-06-29-md",
+      "slug": "okf-compliance-migration-2026-06-29",
+      "type": "decision",
+      "domains": [],
+      "severity": "high",
+      "title": "OKF Compliance Migration for 85+ PWRL Documents",
+      "tags": [
+        "okf",
+        "migration",
+        "metadata",
+        "documentation-standards",
+        "compliance"
+      ],
+      "keywords": [
+        "okf compliance migration for 85+ pwrl documents",
+        "okf",
+        "migration",
+        "metadata",
+        "documentation-standards",
+        "compliance"
+      ],
+      "created_at": "2026-06-29T00:00:00Z",
+      "path": "decision/okf-compliance-migration-2026-06-29.md"
+    },
+    {
+      "id": "decision-okf-type-taxonomy-for-pwrl-docs-2026-06-28-md",
+      "slug": "okf-type-taxonomy-for-pwrl-docs-2026-06-28",
+      "type": "decision",
+      "domains": [],
+      "severity": "medium",
+      "title": "OKF Type Taxonomy Design for PWRL Agent-Generated Documents",
+      "tags": [
+        "okf",
+        "taxonomy",
+        "metadata",
+        "type-system",
+        "documentation-standards"
+      ],
+      "keywords": [
+        "okf type taxonomy design for pwrl agent-generated documents",
+        "okf",
+        "taxonomy",
+        "metadata",
+        "type-system",
+        "documentation-standards"
+      ],
+      "created_at": "2026-06-28T23:30:00Z",
+      "path": "decision/okf-type-taxonomy-for-pwrl-docs-2026-06-28.md"
+    },
+    {
+      "id": "decision-rebrand-phase-labels-to-orchestrator-names-2026-06-16-md",
+      "slug": "rebrand-phase-labels-to-orchestrator-names-2026-06-16",
+      "type": "decision",
+      "domains": [],
+      "severity": "medium",
+      "title": "Rebrand Phase Labels to Final Orchestrator Names",
+      "tags": [
+        "naming",
+        "documentation",
+        "refactoring",
+        "rebrand",
+        "micro-skill"
+      ],
+      "keywords": [
+        "rebrand phase labels to final orchestrator names",
+        "naming",
+        "documentation",
+        "refactoring",
+        "rebrand",
+        "micro-skill"
+      ],
+      "created_at": "2026-06-16",
+      "path": "decision/rebrand-phase-labels-to-orchestrator-names-2026-06-16.md"
+    },
+    {
+      "id": "decision-remove-agent-attribution-trailer-2026-06-16-md",
+      "slug": "remove-agent-attribution-trailer-2026-06-16",
+      "type": "decision",
+      "domains": [],
+      "severity": "medium",
+      "title": "Remove Mandatory [AGENT: ...] Attribution Trailer from Commit Protocol",
+      "tags": [
+        "commit-protocol",
+        "attribution",
+        "simplification",
+        "end-session"
+      ],
+      "keywords": [
+        "remove mandatory [agent: ...] attribution trailer from commit protocol",
+        "commit-protocol",
+        "attribution",
+        "simplification",
+        "end-session"
+      ],
+      "created_at": "2026-06-16",
+      "path": "decision/remove-agent-attribution-trailer-2026-06-16.md"
+    },
+    {
+      "id": "decision-remove-agent-infrastructure-2026-06-16-md",
+      "slug": "remove-agent-infrastructure-2026-06-16",
+      "type": "decision",
+      "domains": [],
+      "severity": "high",
+      "title": "Remove Agent Infrastructure, Adopt Pure Skill-Based Framework",
+      "tags": [
+        "architecture",
+        "simplification",
+        "skill-based",
+        "agent-removal",
+        "pwrl"
+      ],
+      "keywords": [
+        "remove agent infrastructure, adopt pure skill-based framework",
+        "architecture",
+        "simplification",
+        "skill-based",
+        "agent-removal",
+        "pwrl"
+      ],
+      "created_at": "2026-06-16",
+      "path": "decision/remove-agent-infrastructure-2026-06-16.md"
+    },
+    {
+      "id": "decision-schema-design-simple-line-parser-md",
+      "slug": "schema-design-simple-line-parser",
+      "type": "decision",
+      "domains": [],
+      "severity": "high",
+      "title": "Schema Design - Simple Line Parser",
+      "tags": [
+        "[schema-design",
+        "constraints",
+        "no-external-deps",
+        "yaml]"
+      ],
+      "keywords": [
+        "schema design - simple line parser",
+        "[schema-design",
+        "constraints",
+        "no-external-deps",
+        "yaml]"
+      ],
+      "created_at": "",
+      "path": "decision/schema-design-simple-line-parser.md"
+    },
+    {
+      "id": "decision-yaml-frontmatter-version-placement-2026-06-13-md",
+      "slug": "yaml-frontmatter-version-placement-2026-06-13",
+      "type": "technical-fix",
+      "domains": [],
+      "severity": "low",
+      "title": "YAML Frontmatter Version Field Placement Standard",
+      "tags": [
+        "yaml-structure",
+        "frontmatter",
+        "metadata-standard",
+        "consistency"
+      ],
+      "keywords": [
+        "yaml frontmatter version field placement standard",
+        "yaml-structure",
+        "frontmatter",
+        "metadata-standard",
+        "consistency"
+      ],
+      "created_at": "2026-06-13",
+      "path": "decision/yaml-frontmatter-version-placement-2026-06-13.md"
+    },
+    {
+      "id": "gotcha-asymmetric-action-descriptions-across-execution-modes-2026-06-29-md",
+      "slug": "asymmetric-action-descriptions-across-execution-modes-2026-06-29",
+      "type": "gotcha",
+      "domains": [
+        "pwrl-work",
+        "skill-architecture",
+        "code-quality"
+      ],
+      "severity": "high",
+      "title": "Asymmetric Action Descriptions Across Execution Modes Cause Skipped Transitions",
+      "tags": [
+        "execution-modes",
+        "inline-serial-parallel",
+        "consistency",
+        "hidden-bug"
+      ],
+      "keywords": [
+        "asymmetric action descriptions across execution modes cause skipped transitions",
+        "execution-modes",
+        "inline-serial-parallel",
+        "consistency",
+        "hidden-bug",
+        "pwrl-work",
+        "skill-architecture",
+        "code-quality"
+      ],
+      "created_at": "2026-06-29T19:45:00Z",
+      "path": "gotcha/asymmetric-action-descriptions-across-execution-modes-2026-06-29.md"
+    },
+    {
+      "id": "gotcha-install-path-vs-repo-path-divergence-2026-06-30-md",
+      "slug": "install-path-vs-repo-path-divergence-2026-06-30",
+      "type": "gotcha",
+      "domains": [
+        "pwrl-work",
+        "pwrl-review",
+        "deployment",
+        "skill-architecture"
+      ],
+      "severity": "critical",
+      "title": "Edit the Repo Path; the Install Path Is Read-Only After Install",
+      "tags": [
+        "process",
+        "deployment",
+        "postinstall",
+        "npm",
+        "skills-directory",
+        "repo-vs-install"
+      ],
+      "keywords": [
+        "edit the repo path; the install path is read-only after install",
+        "process",
+        "deployment",
+        "postinstall",
+        "npm",
+        "skills-directory",
+        "repo-vs-install",
+        "pwrl-work",
+        "pwrl-review",
+        "deployment",
+        "skill-architecture"
+      ],
+      "created_at": "2026-06-30T00:50:00Z",
+      "path": "gotcha/install-path-vs-repo-path-divergence-2026-06-30.md"
+    },
+    {
+      "id": "gotcha-red-tests-as-executable-specification-md",
+      "slug": "red-tests-as-executable-specification",
+      "type": "gotcha",
+      "domains": [],
+      "severity": "high",
+      "title": "RED Tests as Executable Specification",
+      "tags": [
+        "[tdd",
+        "red-phase",
+        "test-naming",
+        "common-mistake]"
+      ],
+      "keywords": [
+        "red tests as executable specification",
+        "[tdd",
+        "red-phase",
+        "test-naming",
+        "common-mistake]"
+      ],
+      "created_at": "",
+      "path": "gotcha/red-tests-as-executable-specification.md"
+    },
+    {
+      "id": "gotcha-validate-skills-exact-match-header-regex-2026-06-21-md",
+      "slug": "validate-skills-exact-match-header-regex-2026-06-21",
+      "type": "gotcha",
+      "domains": [],
+      "severity": "medium",
+      "title": "validate-skills.js Exact-Match Header Regex Gotcha",
+      "tags": [
+        "[validate-skills",
+        "hasSection",
+        "regex",
+        "exact-match",
+        "gotcha]"
+      ],
+      "keywords": [
+        "validate-skills.js exact-match header regex gotcha",
+        "[validate-skills",
+        "hassection",
+        "regex",
+        "exact-match",
+        "gotcha]"
+      ],
+      "created_at": "2026-06-21",
+      "path": "gotcha/validate-skills-exact-match-header-regex-2026-06-21.md"
+    },
+    {
+      "id": "gotcha-verify-against-repo-not-install-2026-06-30-md",
+      "slug": "verify-against-repo-not-install-2026-06-30",
+      "type": "gotcha",
+      "domains": [
+        "pwrl-work",
+        "pwrl-review",
+        "verification"
+      ],
+      "severity": "high",
+      "title": "Always Grep the Repo Path; the Install Can Lie",
+      "tags": [
+        "process",
+        "verification",
+        "acceptance-criteria",
+        "repo-vs-install",
+        "grep-discipline"
+      ],
+      "keywords": [
+        "always grep the repo path; the install can lie",
+        "process",
+        "verification",
+        "acceptance-criteria",
+        "repo-vs-install",
+        "grep-discipline",
+        "pwrl-work",
+        "pwrl-review",
+        "verification"
+      ],
+      "created_at": "2026-06-30T00:50:00Z",
+      "path": "gotcha/verify-against-repo-not-install-2026-06-30.md"
+    },
+    {
+      "id": "pattern-code-edit-pre-flight-guard-location-2026-06-30-md",
+      "slug": "code-edit-pre-flight-guard-location-2026-06-30",
+      "type": "pattern",
+      "domains": [
+        "pwrl-work",
+        "pwrl-review",
+        "skill-architecture",
+        "task-management"
+      ],
+      "severity": "high",
+      "title": "Extend the Pre-Flight Guard Contract to Code-Edit Location",
+      "tags": [
+        "architecture",
+        "contract-enforcement",
+        "pre-flight-guard",
+        "multi-tree",
+        "code-edit-location"
+      ],
+      "keywords": [
+        "extend the pre-flight guard contract to code-edit location",
+        "architecture",
+        "contract-enforcement",
+        "pre-flight-guard",
+        "multi-tree",
+        "code-edit-location",
+        "pwrl-work",
+        "pwrl-review",
+        "skill-architecture",
+        "task-management"
+      ],
+      "created_at": "2026-06-30T00:50:00Z",
+      "path": "pattern/code-edit-pre-flight-guard-location-2026-06-30.md"
+    },
+    {
+      "id": "pattern-cross-skill-contract-enforcement-2026-06-29-md",
+      "slug": "cross-skill-contract-enforcement-2026-06-29",
+      "type": "pattern",
+      "domains": [
+        "pwrl-work",
+        "pwrl-review",
+        "task-management",
+        "skill-architecture"
+      ],
+      "severity": "high",
+      "title": "Cross-Skill Contract Enforcement — Ownership, Pre-Flight Guard, and Centralization",
+      "tags": [
+        "contract-enforcement",
+        "multi-skill",
+        "ownership-boundary",
+        "pre-flight-guard",
+        "centralization"
+      ],
+      "keywords": [
+        "cross-skill contract enforcement — ownership, pre-flight guard, and centralization",
+        "contract-enforcement",
+        "multi-skill",
+        "ownership-boundary",
+        "pre-flight-guard",
+        "centralization",
+        "pwrl-work",
+        "pwrl-review",
+        "task-management",
+        "skill-architecture"
+      ],
+      "created_at": "2026-06-29T19:45:00Z",
+      "path": "pattern/cross-skill-contract-enforcement-2026-06-29.md"
+    },
+    {
+      "id": "pattern-end-session-two-phase-pipeline-2026-06-16-md",
+      "slug": "end-session-two-phase-pipeline-2026-06-16",
+      "type": "pattern",
+      "domains": [],
+      "severity": "high",
+      "title": "End-Session Two-Phase Micro-Skill Pipeline",
+      "tags": [
+        "skill-architecture",
+        "micro-skill",
+        "end-session",
+        "workflow",
+        "commit"
+      ],
+      "keywords": [
+        "end-session two-phase micro-skill pipeline",
+        "skill-architecture",
+        "micro-skill",
+        "end-session",
+        "workflow",
+        "commit"
+      ],
+      "created_at": "2026-06-16",
+      "path": "pattern/end-session-two-phase-pipeline-2026-06-16.md"
+    },
+    {
+      "id": "pattern-explicit-review-verdict-flow-2026-06-16-md",
+      "slug": "explicit-review-verdict-flow-2026-06-16",
+      "type": "pattern",
+      "domains": [],
+      "severity": "medium",
+      "title": "Explicit Three-Tier Verdict Flow for Code Review (APPROVED / REQUEST CHANGES / REJECTED)",
+      "tags": [
+        "code-review",
+        "verdict",
+        "task-management",
+        "workflow",
+        "pwrl-review"
+      ],
+      "keywords": [
+        "explicit three-tier verdict flow for code review (approved / request changes / rejected)",
+        "code-review",
+        "verdict",
+        "task-management",
+        "workflow",
+        "pwrl-review"
+      ],
+      "created_at": "2026-06-16",
+      "path": "pattern/explicit-review-verdict-flow-2026-06-16.md"
+    },
+    {
+      "id": "pattern-explicit-task-file-movement-critical-md",
+      "slug": "explicit-task-file-movement-critical",
+      "type": "pattern",
+      "domains": [
+        "pwrl-work",
+        "task-management"
+      ],
+      "severity": "high",
+      "title": "Explicit Task File Movement as Critical Phase Operation",
+      "tags": [
+        "task-lifecycle",
+        "file-operations",
+        "phase-design",
+        "critical-operations"
+      ],
+      "keywords": [
+        "explicit task file movement as critical phase operation",
+        "task-lifecycle",
+        "file-operations",
+        "phase-design",
+        "critical-operations",
+        "pwrl-work",
+        "task-management"
+      ],
+      "created_at": "2026-06-12",
+      "path": "pattern/explicit-task-file-movement-critical.md"
+    },
+    {
+      "id": "pattern-implementation-layer-chain-2026-06-30-md",
+      "slug": "implementation-layer-chain-2026-06-30",
+      "type": "pattern",
+      "domains": [
+        "pwrl-work",
+        "pwrl-review",
+        "deployment",
+        "skill-architecture"
+      ],
+      "severity": "high",
+      "title": "Implementation-Layer Chain — A Documented Change Is Only Real If It Reaches the Layer That Ships",
+      "tags": [
+        "architecture",
+        "contract-enforcement",
+        "audit",
+        "implementation-layers",
+        "propagation"
+      ],
+      "keywords": [
+        "implementation-layer chain — a documented change is only real if it reaches the layer that ships",
+        "architecture",
+        "contract-enforcement",
+        "audit",
+        "implementation-layers",
+        "propagation",
+        "pwrl-work",
+        "pwrl-review",
+        "deployment",
+        "skill-architecture"
+      ],
+      "created_at": "2026-06-30T00:50:00Z",
+      "path": "pattern/implementation-layer-chain-2026-06-30.md"
+    },
+    {
+      "id": "pattern-interaction-mode-three-mode-propagation-2026-06-29-md",
+      "slug": "interaction-mode-three-mode-propagation-2026-06-29",
+      "type": "pattern",
+      "domains": [],
+      "severity": "high",
+      "title": "Interaction-Mode Three-Mode Propagation",
+      "tags": [
+        "[interaction-mode",
+        "three-mode",
+        "propagation",
+        "entry-point-placement",
+        "smart-mode",
+        "core-skills]"
+      ],
+      "keywords": [
+        "interaction-mode three-mode propagation",
+        "[interaction-mode",
+        "three-mode",
+        "propagation",
+        "entry-point-placement",
+        "smart-mode",
+        "core-skills]"
+      ],
+      "created_at": "2026-06-29",
+      "path": "pattern/interaction-mode-three-mode-propagation-2026-06-29.md"
+    },
+    {
+      "id": "pattern-markdown-blank-line-before-nested-list-2026-06-24-md",
+      "slug": "markdown-blank-line-before-nested-list-2026-06-24",
+      "type": "pattern",
+      "domains": [],
+      "severity": "low",
+      "title": "Blank Line Before Nested Markdown Lists for Proper Rendering",
+      "tags": [
+        "[markdown",
+        "documentation",
+        "formatting",
+        "pwrl-end-session",
+        "style]"
+      ],
+      "keywords": [
+        "blank line before nested markdown lists for proper rendering",
+        "[markdown",
+        "documentation",
+        "formatting",
+        "pwrl-end-session",
+        "style]"
+      ],
+      "created_at": "2026-06-24",
+      "path": "pattern/markdown-blank-line-before-nested-list-2026-06-24.md"
+    },
+    {
+      "id": "pattern-non-destructive-index-regeneration-2026-06-21-md",
+      "slug": "non-destructive-index-regeneration-2026-06-21",
+      "type": "pattern",
+      "domains": [],
+      "severity": "low",
+      "title": "Non-Destructive Index Regeneration",
+      "tags": [
+        "[pwrl-tasks",
+        "index",
+        "backup",
+        "non-destructive",
+        "lineage]"
+      ],
+      "keywords": [
+        "non-destructive index regeneration",
+        "[pwrl-tasks",
+        "index",
+        "backup",
+        "non-destructive",
+        "lineage]"
+      ],
+      "created_at": "2026-06-21",
+      "path": "pattern/non-destructive-index-regeneration-2026-06-21.md"
+    },
+    {
+      "id": "pattern-okf-compliance-bulk-migration-2026-06-28-md",
+      "slug": "okf-compliance-bulk-migration-2026-06-28",
+      "type": "pattern",
+      "domains": [],
+      "severity": "medium",
+      "title": "OKF Compliance Bulk-Migration Pattern",
+      "tags": [
+        "okf",
+        "migration",
+        "frontmatter",
+        "bulk-edit",
+        "documentation",
+        "metadata"
+      ],
+      "keywords": [
+        "okf compliance bulk-migration pattern",
+        "okf",
+        "migration",
+        "frontmatter",
+        "bulk-edit",
+        "documentation",
+        "metadata"
+      ],
+      "created_at": "2026-06-28T23:30:00Z",
+      "path": "pattern/okf-compliance-bulk-migration-2026-06-28.md"
+    },
+    {
+      "id": "pattern-parallel-task-grouping-by-document-category-2026-06-28-md",
+      "slug": "parallel-task-grouping-by-document-category-2026-06-28",
+      "type": "pattern",
+      "domains": [],
+      "severity": "medium",
+      "title": "Parallel Task Grouping by Document Category for Bulk Updates",
+      "tags": [
+        "parallelism",
+        "task-grouping",
+        "bulk-edit",
+        "dependency-management",
+        "execution-strategy"
+      ],
+      "keywords": [
+        "parallel task grouping by document category for bulk updates",
+        "parallelism",
+        "task-grouping",
+        "bulk-edit",
+        "dependency-management",
+        "execution-strategy"
+      ],
+      "created_at": "2026-06-28T23:30:00Z",
+      "path": "pattern/parallel-task-grouping-by-document-category-2026-06-28.md"
+    },
+    {
+      "id": "pattern-phase-manifest-model-agnostic-enforcement-2026-06-21-md",
+      "slug": "phase-manifest-model-agnostic-enforcement-2026-06-21",
+      "type": "pattern",
+      "domains": [],
+      "severity": "medium",
+      "title": "Phase Manifest as Model-Agnostic Enforcement",
+      "tags": [
+        "[phase-manifest",
+        "model-agnostic",
+        "enforcement",
+        "validate-skills",
+        "core-skills]"
+      ],
+      "keywords": [
+        "phase manifest as model-agnostic enforcement",
+        "[phase-manifest",
+        "model-agnostic",
+        "enforcement",
+        "validate-skills",
+        "core-skills]"
+      ],
+      "created_at": "2026-06-21",
+      "path": "pattern/phase-manifest-model-agnostic-enforcement-2026-06-21.md"
+    },
+    {
+      "id": "pattern-planning-tier-architecture-2026-06-05-md",
+      "slug": "planning-tier-architecture-2026-06-05",
+      "type": "pattern",
+      "domains": [],
+      "severity": "medium",
+      "title": "Planning Tier Architecture - Fast, Standard, Deep",
+      "tags": [
+        "planning-workflow",
+        "tier-selection",
+        "user-intent",
+        "risk-assessment",
+        "pwrl"
+      ],
+      "keywords": [
+        "planning tier architecture - fast, standard, deep",
+        "planning-workflow",
+        "tier-selection",
+        "user-intent",
+        "risk-assessment",
+        "pwrl"
+      ],
+      "created_at": "2026-06-05",
+      "path": "pattern/planning-tier-architecture-2026-06-05.md"
+    },
+    {
+      "id": "pattern-skill-decomposition-agent-orchestration-2026-06-05-md",
+      "slug": "skill-decomposition-agent-orchestration-2026-06-05",
+      "type": "pattern",
+      "domains": [],
+      "severity": "high",
+      "title": "Skill Decomposition & Agent Orchestration Pattern",
+      "tags": [
+        "skill-architecture",
+        "orchestration",
+        "micro-services",
+        "workflow",
+        "pwrl"
+      ],
+      "keywords": [
+        "skill decomposition & agent orchestration pattern",
+        "skill-architecture",
+        "orchestration",
+        "micro-services",
+        "workflow",
+        "pwrl"
+      ],
+      "created_at": "2026-06-05",
+      "path": "pattern/skill-decomposition-agent-orchestration-2026-06-05.md"
+    },
+    {
+      "id": "pattern-skill-integration-testing-micro-skills-2026-06-10-md",
+      "slug": "skill-integration-testing-micro-skills-2026-06-10",
+      "type": "pattern",
+      "domains": [],
+      "severity": "high",
+      "title": "Skill Integration Testing Pattern for Micro-Skills",
+      "tags": [
+        "testing",
+        "micro-skills",
+        "integration-tests",
+        "decomposition",
+        "validation"
+      ],
+      "keywords": [
+        "skill integration testing pattern for micro-skills",
+        "testing",
+        "micro-skills",
+        "integration-tests",
+        "decomposition",
+        "validation"
+      ],
+      "created_at": "2026-06-10",
+      "path": "pattern/skill-integration-testing-micro-skills-2026-06-10.md"
+    },
+    {
+      "id": "pattern-state-schema-workflow-context-2026-06-05-md",
+      "slug": "state-schema-workflow-context-2026-06-05",
+      "type": "pattern",
+      "domains": [],
+      "severity": "high",
+      "title": "State Schema Design for Workflow Context Passing",
+      "tags": [
+        "state-management",
+        "workflow-design",
+        "contract-definition",
+        "data-schema",
+        "pwrl"
+      ],
+      "keywords": [
+        "state schema design for workflow context passing",
+        "state-management",
+        "workflow-design",
+        "contract-definition",
+        "data-schema",
+        "pwrl"
+      ],
+      "created_at": "2026-06-05",
+      "path": "pattern/state-schema-workflow-context-2026-06-05.md"
+    },
+    {
+      "id": "pattern-task-state-machine-enforcement-2026-06-29-md",
+      "slug": "task-state-machine-enforcement-2026-06-29",
+      "type": "pattern",
+      "domains": [],
+      "severity": "high",
+      "title": "Task State Machine Enforcement — Per-Skill Responsibility Boundaries",
+      "tags": [
+        "[task-lifecycle",
+        "state-machine",
+        "pwrl-work",
+        "pwrl-review",
+        "pre-flight-guard]"
+      ],
+      "keywords": [
+        "task state machine enforcement — per-skill responsibility boundaries",
+        "[task-lifecycle",
+        "state-machine",
+        "pwrl-work",
+        "pwrl-review",
+        "pre-flight-guard]"
+      ],
+      "created_at": "2026-06-29T19:30:00Z",
+      "path": "pattern/task-state-machine-enforcement-2026-06-29.md"
+    },
+    {
+      "id": "pattern-task-state-management-dual-layer-tracking-md",
+      "slug": "task-state-management-dual-layer-tracking",
+      "type": "pattern",
+      "domains": [],
+      "severity": "medium",
+      "title": "Task State Management - Dual-Layer Tracking",
+      "tags": [
+        "[task-tracking",
+        "state-machine",
+        "human-readable",
+        "machine-readable]"
+      ],
+      "keywords": [
+        "task state management - dual-layer tracking",
+        "[task-tracking",
+        "state-machine",
+        "human-readable",
+        "machine-readable]"
+      ],
+      "created_at": "",
+      "path": "pattern/task-state-management-dual-layer-tracking.md"
+    },
+    {
+      "id": "pattern-tdd-red-phase-test-first-spec-md",
+      "slug": "tdd-red-phase-test-first-spec",
+      "type": "pattern",
+      "domains": [],
+      "severity": "high",
+      "title": "TDD RED Phase - Test-First Specification",
+      "tags": [
+        "[tdd",
+        "test-first",
+        "specification",
+        "behavioral-contract]"
+      ],
+      "keywords": [
+        "tdd red phase - test-first specification",
+        "[tdd",
+        "test-first",
+        "specification",
+        "behavioral-contract]"
+      ],
+      "created_at": "",
+      "path": "pattern/tdd-red-phase-test-first-spec.md"
+    },
+    {
+      "id": "pattern-validator-regex-relaxation-root-cause-2026-06-21-md",
+      "slug": "validator-regex-relaxation-root-cause-2026-06-21",
+      "type": "pattern",
+      "domains": [],
+      "severity": "medium",
+      "title": "Validator Regex Relaxation as Root-Cause Fix",
+      "tags": [
+        "[validate-skills",
+        "regex",
+        "root-cause",
+        "hasSection",
+        "relaxation]"
+      ],
+      "keywords": [
+        "validator regex relaxation as root-cause fix",
+        "[validate-skills",
+        "regex",
+        "root-cause",
+        "hassection",
+        "relaxation]"
+      ],
+      "created_at": "2026-06-21",
+      "path": "pattern/validator-regex-relaxation-root-cause-2026-06-21.md"
+    },
+    {
+      "id": "technical-fix-pwrl-init-incorrect-agent-path-2026-06-09-md",
+      "slug": "pwrl-init-incorrect-agent-path-2026-06-09",
+      "type": "technical-fix",
+      "domains": [],
+      "severity": "medium",
+      "title": "pwrl init: Incorrect agent source path",
+      "tags": [
+        "[pwrl",
+        "init",
+        "agents",
+        "bundling",
+        "npm-package]"
+      ],
+      "keywords": [
+        "pwrl init: incorrect agent source path",
+        "[pwrl",
+        "init",
+        "agents",
+        "bundling",
+        "npm-package]"
+      ],
+      "created_at": "2026-06-09",
+      "path": "technical-fix/pwrl-init-incorrect-agent-path-2026-06-09.md"
+    },
+    {
+      "id": "technical-fix-u3-serial-parallel-move-file-block-gap-2026-06-30-md",
+      "slug": "u3-serial-parallel-move-file-block-gap-2026-06-30",
+      "type": "technical_fix",
+      "domains": [
+        "pwrl-work",
+        "task-management",
+        "skill-architecture"
+      ],
+      "severity": "critical",
+      "title": "Apply the CRITICAL: Move File Block in All Three Execution Modes, Not Just Inline",
+      "tags": [
+        "technical-fix",
+        "pwrl-work-execute",
+        "serial-parallel",
+        "inline-only-gap",
+        "task-file-movement"
+      ],
+      "keywords": [
+        "apply the critical: move file block in all three execution modes, not just inline",
+        "technical-fix",
+        "pwrl-work-execute",
+        "serial-parallel",
+        "inline-only-gap",
+        "task-file-movement",
+        "pwrl-work",
+        "task-management",
+        "skill-architecture"
+      ],
+      "created_at": "2026-06-30T00:50:00Z",
+      "path": "technical-fix/u3-serial-parallel-move-file-block-gap-2026-06-30.md"
+    },
+    {
+      "id": "workflow-bulk-metadata-sync-2026-06-13-md",
+      "slug": "bulk-metadata-sync-2026-06-13",
+      "type": "workflow",
+      "domains": [],
+      "severity": "medium",
+      "title": "Bulk Metadata Synchronization with multi_replace_string_in_file",
+      "tags": [
+        "bulk-edits",
+        "metadata-sync",
+        "efficiency",
+        "multi-replace",
+        "yaml-frontmatter"
+      ],
+      "keywords": [
+        "bulk metadata synchronization with multi_replace_string_in_file",
+        "bulk-edits",
+        "metadata-sync",
+        "efficiency",
+        "multi-replace",
+        "yaml-frontmatter"
+      ],
+      "created_at": "2026-06-13",
+      "path": "workflow/bulk-metadata-sync-2026-06-13.md"
+    },
+    {
+      "id": "workflow-code-review-4-phase-pipeline-md",
+      "slug": "code-review-4-phase-pipeline",
+      "type": "workflow",
+      "domains": [],
+      "severity": "high",
+      "title": "Code Review 4-Phase Pipeline",
+      "tags": [
+        "[code-review",
+        "workflow",
+        "quality-gates",
+        "deterministic]"
+      ],
+      "keywords": [
+        "code review 4-phase pipeline",
+        "[code-review",
+        "workflow",
+        "quality-gates",
+        "deterministic]"
+      ],
+      "created_at": "",
+      "path": "workflow/code-review-4-phase-pipeline.md"
+    },
+    {
+      "id": "workflow-commit-message-vs-diff-verification-2026-06-30-md",
+      "slug": "commit-message-vs-diff-verification-2026-06-30",
+      "type": "workflow",
+      "domains": [
+        "pwrl-work",
+        "pwrl-end-session",
+        "git",
+        "code-review"
+      ],
+      "severity": "high",
+      "title": "Verify the Commit Message Against the Diff Before Merging",
+      "tags": [
+        "process",
+        "git",
+        "commit-message",
+        "verification",
+        "commit-hygiene"
+      ],
+      "keywords": [
+        "verify the commit message against the diff before merging",
+        "process",
+        "git",
+        "commit-message",
+        "verification",
+        "commit-hygiene",
+        "pwrl-work",
+        "pwrl-end-session",
+        "git",
+        "code-review"
+      ],
+      "created_at": "2026-06-30T00:50:00Z",
+      "path": "workflow/commit-message-vs-diff-verification-2026-06-30.md"
+    },
+    {
+      "id": "workflow-compact-after-every-unit-2026-06-08-md",
+      "slug": "compact-after-every-unit-2026-06-08",
+      "type": "workflow",
+      "domains": [],
+      "severity": "medium",
+      "title": "Compact After Every Unit — Task-Granular Commits",
+      "tags": [
+        "pwrl-work",
+        "commits",
+        "git-workflow",
+        "reviewability",
+        "execution"
+      ],
+      "keywords": [
+        "compact after every unit — task-granular commits",
+        "pwrl-work",
+        "commits",
+        "git-workflow",
+        "reviewability",
+        "execution"
+      ],
+      "created_at": "2026-06-08",
+      "path": "workflow/compact-after-every-unit-2026-06-08.md"
+    },
+    {
+      "id": "workflow-cross-reference-integration-single-source-of-truth-md",
+      "slug": "cross-reference-integration-single-source-of-truth",
+      "type": "workflow",
+      "domains": [],
+      "severity": "medium",
+      "title": "Cross-Reference Integration - Single Source of Truth",
+      "tags": [
+        "[documentation",
+        "references",
+        "deduplication",
+        "maintainability]"
+      ],
+      "keywords": [
+        "cross-reference integration - single source of truth",
+        "[documentation",
+        "references",
+        "deduplication",
+        "maintainability]"
+      ],
+      "created_at": "",
+      "path": "workflow/cross-reference-integration-single-source-of-truth.md"
+    },
+    {
+      "id": "workflow-cross-skill-terminology-update-2026-06-19-md",
+      "slug": "cross-skill-terminology-update-2026-06-19",
+      "type": "workflow",
+      "domains": [],
+      "severity": "medium",
+      "title": "Cross-Skill Terminology Update Workflow",
+      "tags": [
+        "documentation",
+        "terminology",
+        "search-and-replace",
+        "version-bump",
+        "changelog",
+        "skill-docs"
+      ],
+      "keywords": [
+        "cross-skill terminology update workflow",
+        "documentation",
+        "terminology",
+        "search-and-replace",
+        "version-bump",
+        "changelog",
+        "skill-docs"
+      ],
+      "created_at": "2026-06-19",
+      "path": "workflow/cross-skill-terminology-update-2026-06-19.md"
+    },
+    {
+      "id": "workflow-plan-to-tasks-pipeline-for-docs-migrations-2026-06-28-md",
+      "slug": "plan-to-tasks-pipeline-for-docs-migrations-2026-06-28",
+      "type": "workflow",
+      "domains": [],
+      "severity": "low",
+      "title": "Plan-to-Tasks Pipeline for Documentation-Only Migrations",
+      "tags": [
+        "pwrl-plan",
+        "pwrl-tasks",
+        "documentation",
+        "migration",
+        "workflow-pipeline",
+        "metadata"
+      ],
+      "keywords": [
+        "plan-to-tasks pipeline for documentation-only migrations",
+        "pwrl-plan",
+        "pwrl-tasks",
+        "documentation",
+        "migration",
+        "workflow-pipeline",
+        "metadata"
+      ],
+      "created_at": "2026-06-28T23:30:00Z",
+      "path": "workflow/plan-to-tasks-pipeline-for-docs-migrations-2026-06-28.md"
+    },
+    {
+      "id": "workflow-pwrl-documentation-revised-for-work-agent-orchestration-2026-06-08-md",
+      "slug": "pwrl-documentation-revised-for-work-agent-orchestration-2026-06-08",
+      "type": "workflow",
+      "domains": [],
+      "severity": "high",
+      "title": "PWRL Documentation Revised for Work Agent Orchestration",
+      "tags": [
+        "[pwrl",
+        "documentation",
+        "agents",
+        "work-execution",
+        "orchestration]"
+      ],
+      "keywords": [
+        "pwrl documentation revised for work agent orchestration",
+        "[pwrl",
+        "documentation",
+        "agents",
+        "work-execution",
+        "orchestration]"
+      ],
+      "created_at": "2026-06-08",
+      "path": "workflow/pwrl-documentation-revised-for-work-agent-orchestration-2026-06-08.md"
+    },
+    {
+      "id": "workflow-sample-verification-quality-gate-2026-06-13-md",
+      "slug": "sample-verification-quality-gate-2026-06-13",
+      "type": "workflow",
+      "domains": [],
+      "severity": "medium",
+      "title": "Sample Verification After Bulk Changes Quality Gate",
+      "tags": [
+        "quality-gates",
+        "bulk-operations",
+        "verification",
+        "testing",
+        "confidence"
+      ],
+      "keywords": [
+        "sample verification after bulk changes quality gate",
+        "quality-gates",
+        "bulk-operations",
+        "verification",
+        "testing",
+        "confidence"
+      ],
+      "created_at": "2026-06-13",
+      "path": "workflow/sample-verification-quality-gate-2026-06-13.md"
+    }
+  ]
+}

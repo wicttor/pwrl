@@ -1,7 +1,7 @@
 ---
 unit-id: U7
 plan: docs/plans/2026-06-29-003-pwrl-work-task-lifecycle-contract.md
-status: for-review
+status: in-progress
 created: 2026-06-29
 dependencies: [U1, U2, U3, U4, U5, U6]
 files:
@@ -134,3 +134,19 @@ git log --oneline -1
 - This is the last unit to execute. After U7 lands, the lifecycle contract is in effect.
 - Consider adding a "Migration Notes" section to the CHANGELOG entry that calls out: "No action required for existing task files. The Pre-Flight Guard will surface any desync between frontmatter status and folder location on the next `/pwrl-work` invocation."
 - The commit message should follow the established format from the previous plans (e.g., "Plan 2026-06-29-003: Enforce task lifecycle contract across pwrl-work and pwrl-review (#NNN)").
+
+## Review Findings (2026-06-30)
+
+**Verdict: REJECTED**
+
+**Partial pass:** `CHANGELOG.md` was updated with the four `### Added` bullets and the `### Changed` version-bump bullet. `package.json` was bumped to `1.7.0-dev.1`. The version bump was a single coordinated commit (good).
+
+**Critical:** None of the 5 SKILL.md frontmatters in the repo have a `version:` field at all. The acceptance criterion "All 5 affected SKILL.md frontmatters reflect the new version" is not met in the repo. (Note: per `pwrl-standards/SCHEMA.md` line 106, `version` is optional; this task's own criterion is what makes it CRITICAL.)
+
+**Major:** U7 was committed **before** the underlying U1–U5 work was actually present in the repo (because the work was done in `~/.agents/skills/` only). The CHANGELOG entry advertises behavior that doesn't exist in the published package. This is misleading.
+
+**Action required for re-execution:**
+
+1. After U1–U5 are properly synced to the repo, add `version: 1.7.0-dev.1` to all 5 SKILL.md frontmatters in the repo (`pwrl-work`, `pwrl-work-prepare`, `pwrl-work-execute`, `pwrl-work-review`, `pwrl-review-report`).
+2. Re-verify: `for f in pwrl-work pwrl-work-prepare pwrl-work-execute pwrl-work-review pwrl-review-report; do grep -m1 "^version:" "$f/SKILL.md"; done` should print `version: 1.7.0-dev.1` five times.
+3. Re-consider whether the CHANGELOG entry should be amended to clarify that this is a documentation/marker release pending the SKILL.md sync.

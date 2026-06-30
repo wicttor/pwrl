@@ -1,7 +1,7 @@
 ---
 unit-id: U4
 plan: docs/plans/2026-06-29-003-pwrl-work-task-lifecycle-contract.md
-status: for-review
+status: in-progress
 created: 2026-06-29
 dependencies: [U1]
 files:
@@ -116,3 +116,16 @@ grep -E "(approved|changesRequested):" /home/wicttor/.agents/skills/pwrl-work-re
 
 - The "CRITICAL: Move task file" block in Step 8 should be character-identical to the one in `pwrl-work-execute` Inline Mode (U3) to avoid drift. Consider using a single canonical block in a reference file that both skills reference, but for this plan, copying verbatim is acceptable.
 - The user-facing prompt "Did the review approve, request changes, or reject?" should be a 4-option `ask_user_question` (Approve / Request changes / Reject / Defer) to make the verdict explicit.
+
+## Review Findings (2026-06-30)
+
+**Verdict: REJECTED**
+
+**Critical:** The implementation was applied to `/home/wicttor/.agents/skills/pwrl-work-review/SKILL.md` instead of `/home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md`. The repo file has **zero** occurrences of "Pre-Flight Guard", "Responsibility Boundary", "Handle Rework Loop", or the new `approved` / `changesRequested` output fields. The Pre-Flight Guard, Responsibility Boundary, and Step 8 "Handle Rework Loop" are all missing from the published file. The entire rework-loop logic is absent in the repo.
+
+**Action required for re-execution:**
+
+1. Update `files:` frontmatter to point at `/home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md`.
+2. Sync the installed changes into the repo.
+3. Verify with: `grep -c "Handle Rework Loop\|Pre-Flight Guard\|Responsibility Boundary" /home/wicttor/Projects/pwrl/pwrl-work-review/SKILL.md` returns `≥ 3`.
+4. Verify the output YAML in Step 7 contains both `approved:` and `changesRequested:` fields.

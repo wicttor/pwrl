@@ -2,11 +2,30 @@
 name: pwrl-review-report
 description: "Generate comprehensive review report and determine final approval status."
 argument-hint: "[analyze artifact from pwrl-review-analyze]"
+version: 1.7.0-dev.1
 ---
 
 # pwrl-review-report — Report Generation & Approval
 
 **Purpose:** Final phase of review workflow. Generates comprehensive, human-readable report from analysis findings, determines approval verdict, and collects user sign-off before code is ready to merge.
+
+## Pre-Flight Guard
+
+Assert that there is at least one task file in `docs/tasks/for-review/` associated with the review scope (matched by `unit-id` or branch name).
+
+If no matching file is found, log: "No task files found in for-review/. Lifecycle contract violation: review without a corresponding task file." and ask the user how to proceed (continue without promotion, cancel, or attach a different task file).
+
+**Cross-reference:** see [`pwrl-work/SKILL.md` §"Task Lifecycle Contract"](../pwrl-work/SKILL.md#task-lifecycle-contract).
+
+## Responsibility Boundary
+
+**This skill OWNS the `for-review → done` transition (APPROVED verdict).**
+
+**This skill MUST NOT promote tasks on REQUEST CHANGES or REJECTED verdicts.** Those are handled by `pwrl-work-review` (rework) or left in `for-review/` (rejected).
+
+> **Manual recovery:** Once a task is in `done/`, the next rework loop requires manually moving it back to `in-progress/` and adding a "Reopened" note. The skill should not silently undo the promotion.
+
+For the canonical ownership table, see [`pwrl-work/references/workflow-details.md` §"Task Status Transitions"](../pwrl-work/references/workflow-details.md#task-status-transitions-docstasks).
 
 ## Interaction Method
 
@@ -228,8 +247,35 @@ Create final report artifact with:
 - User approval status
 - Timestamp of review
 - Ready-to-merge flag
+- `tasksPromoted: [list of unit-ids that were moved to done/]` (populated by Step 8.5)
 
 **Emit artifact for merge/deployment workflow.**
+
+### Step 8.5: Promote Approved Tasks
+
+Read the verdict from the report artifact produced in Step 8. Promote tasks to `done/` only on an `approved` verdict.
+
+**If `verdict: approved`:**
+
+For each task file in `for-review/` associated with this review (matched by `unit-id` from the analyze artifact or by file content search):
+
+- **CRITICAL: Move task file** `for-review/` → `done/`
+  - Read the task file from `for-review/` folder
+  - Update frontmatter status: `status: for-review` → `status: done`
+  - Add frontmatter fields: `verdict: approved` and `approvedAt: <ISO timestamp>`
+  - Write the updated file to `done/` with same filename
+  - Delete original from `for-review/`
+  - Log: `Task promoted to done: docs/tasks/for-review/[file] → docs/tasks/done/[file]`
+- Update `docs/tasks/INDEX.md` to reflect the new location and status
+- Call `pwrl-work-sync-status` with the new `done` status (when GitHub integration is enabled)
+
+If a task file is missing or unreadable: log a warning and skip it. At the end, if no files were promoted, ask the user how to proceed.
+
+**If `verdict: request-changes`:** do nothing (the file remains in `for-review/`; the next `pwrl-work` loop will move it to `in-progress/` per U4).
+
+**If `verdict: rejected`:** do nothing (file remains in `for-review/` per the existing pattern).
+
+**If GitHub integration is disabled** (`.pwrlrc.json` has `integrations.githubIssues: false`): the `pwrl-work-sync-status` call is skipped per the existing utility's behavior. The local file move and frontmatter update still happen.
 
 ## Error Handling & Testing
 

@@ -17,11 +17,17 @@ Parallel constraints:
 
 ## Task Status Transitions (docs/tasks/)
 
-When using task files:
+Canonical contract — see also `pwrl-work/SKILL.md` §"Task Lifecycle Contract" and `docs/learnings/pattern/task-state-machine-enforcement-2026-06-29.md`.
 
-- `to-do` → `in-progress` when starting work
-- `in-progress` → `for-review` when verification passes
-- `for-review` → `done` after review approval (`/pwrl-review`)
+| Status | Folder | Owner Skill | Transition Trigger | Action |
+|---|---|---|---|---|
+| `to-do` | `docs/tasks/to-do/` | (initial) | Task created | Move + update frontmatter |
+| `in-progress` | `docs/tasks/in-progress/` | `pwrl-work-prepare` | Prepare phase starts work | Move + update frontmatter |
+| `for-review` | `docs/tasks/for-review/` | `pwrl-work-execute` | Execute phase completes verification | Move + update frontmatter |
+| `done` | `docs/tasks/done/` | `pwrl-review-report` | Review verdict is `APPROVED` | Move + update frontmatter |
+| (rework) `in-progress` | `docs/tasks/in-progress/` | `pwrl-work-review` | Review verdict is `REQUEST CHANGES` | Move + update frontmatter + append "Review Findings" section to task body |
+
+**MUST NOT:** Only the owner skill listed above may perform the corresponding transition. A skill that owns a transition is the only one allowed to write the new `status` value in the frontmatter AND move the file to the new folder.
 
 Keep `docs/tasks/INDEX.md` consistent with any status or location changes.
 

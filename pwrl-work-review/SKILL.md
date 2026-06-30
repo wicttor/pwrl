@@ -2,6 +2,7 @@
 name: pwrl-work-review
 description: Review, simplify, and consolidate code after execution
 argument-hint: "[Executed tasks from pwrl-work-execute, design specs (optional)]"
+version: 1.7.0-dev.1
 ---
 
 # pwrl-work-review — Code Simplification & System Review
@@ -13,6 +14,24 @@ argument-hint: "[Executed tasks from pwrl-work-execute, design specs (optional)]
 - Use multiple-choice questions when possible
 - If input is empty, ask: "Should the implementation be reviewed? Confirm scope match, test coverage, and code quality."
 - Provide clear recovery suggestions when errors occur
+
+## Pre-Flight Guard
+
+Assert that the input task file is in `docs/tasks/for-review/`.
+
+If the file is in any other folder, refuse to proceed with a recovery message.
+
+If the file is in `docs/tasks/in-progress/`, refuse: "Task is not in for-review/. Lifecycle contract violation. Refusing to review."
+
+**Cross-reference:** see [`pwrl-work/SKILL.md` §"Task Lifecycle Contract"](../pwrl-work/SKILL.md#task-lifecycle-contract).
+
+## Responsibility Boundary
+
+**This skill OWNS the `for-review → in-progress` transition (rework loop).**
+
+**This skill MUST NOT perform the `for-review → done` transition.** That is the exclusive responsibility of `pwrl-review-report`.
+
+For the canonical ownership table, see [`pwrl-work/references/workflow-details.md` §"Task Status Transitions"](../pwrl-work/references/workflow-details.md#task-status-transitions-docstasks).
 
 **Purpose:** Review code after execution to consolidate duplication, extract shared helpers, run system-wide consistency checks, compare UI implementations to design specs (when applicable), and determine readiness for shipping.
 
@@ -146,43 +165,7 @@ For confirmed candidates, extract shared logic:
 
 ### 4. Run System Checks
 
-After simplifying, verify system consistency:
-
-**Check 1: Event/Observer/Callback Triggering**
-
-- Are events emitted correctly? (e.g., `user.created` after signup)
-- Are listeners registered and invoked?
-- ✅ **Pass if:** Tests cover real event flow (not just mock assertions)
-- ⚠️ **Warn if:** All event tests use mocks (real listener not tested)
-
-**Check 2: Mock vs. Real Interaction Balance**
-
-- What proportion of tests use mocked dependencies vs. real implementations?
-- ✅ **Pass if:** ≥1 integration test per feature covers real interactions
-- ⚠️ **Warn if:** All tests use mocks (no integration coverage)
-
-**Check 3: Idempotency & Cleanup Safety**
-
-- Can operations be retried safely?
-- Are resources cleaned up after failure? (finally blocks, teardown)
-- ✅ **Pass if:** Retry doesn't cause double effects; cleanup always runs
-- ⚠️ **Warn if:** Failure leaves partial state or resource leaks
-
-**Check 4: Alternate Entry Points**
-
-- Is behavior consistent across different access methods?
-- ✅ **Pass if:** All entry points tested with same behavior expectations
-- ⚠️ **Warn if:** Only one entry point tested, or behavior diverges
-
-**Log results:**
-
-```
-System Check Results:
-  [✓] Event triggering: POST /user fires 'user.created'
-  [⚠] Mock coverage: 8/10 tests use mocks → add 2 integration tests
-  [✓] Idempotency: DELETE /user safe to retry
-  [✓] Alternate entry points: API + CLI tested, consistent behavior
-```
+After simplifying, verify system consistency. The four checks (Event/Observer/Callback Triggering, Mock vs. Real Interaction Balance, Idempotency & Cleanup Safety, Alternate Entry Points) and the log-result format are documented in [`references/system-checks.md`](references/system-checks.md).
 
 ### 5. Compare to Design Specs (UI Work Only)
 
@@ -244,43 +227,49 @@ systemChecks:
   alternateEntryPoints: pass
 refactoringScope: controlled
 readyForShipping: true
+approved: true | false
+changesRequested: true | false
+rejected: true | false
 recommendations:
   - "Add 2 integration tests with real DB for user module"
 ```
 
+The new flags `approved`, `changesRequested`, and `rejected` are set by the user at the end of the review (Step 8) and drive the rework-loop transition. The flags are mutually exclusive — set at most one to `true`.
+
 If `readyForShipping` is true, work is ready for pull request creation.
+
+### 8. Handle Rework Loop
+
+Read the current `Review Summary` artifact and branch on the user verdict. Use a 4-option `ask_user_question` (Approve / Request changes / Reject / Defer) to make the verdict explicit.
+
+**If `approved: true`:** do nothing — the file remains in `for-review/`. The next pipeline step, `pwrl-review-report`, will handle the `→ done` transition.
+
+**If `changesRequested: true`:**
+
+- **CRITICAL: Move task file** `for-review/` → `in-progress/`
+  - Read the task file from `for-review/` folder
+  - Update frontmatter status: `status: for-review` → `status: in-progress`
+  - Write the updated file to `in-progress/` with same filename
+  - Delete original from `for-review/`
+  - Log: `Task returned for rework: docs/tasks/for-review/[file] → docs/tasks/in-progress/[file]`
+- Add a "Review Findings" section to the task body listing the action items
+- The next `/pwrl-work` loop will pick it up from `in-progress/`
+
+**If `rejected: true`:** do not move the file (per the `explicit-review-verdict-flow-2026-06-16.md` pattern, REJECTED leaves the file in `for-review/`). Add a "Review Findings" section explaining why the change is unfixable in its current form.
+
+**If neither flag is set:** ask the user "Did the review approve, request changes, or reject?" before taking action.
 
 ---
 
 ## Optional Deep Review Mode
 
-For complex or high-risk changes, offer deep review:
-
-```
-/pwrl-work-review docs/tasks/for-review/ --deep
-```
-
-Deep review adds:
-
-- **Performance:** Any obvious regressions? (N+1 queries, memory leaks)
-- **Security:** New vulnerabilities? (XSS, injection, auth bypass)
-- **Accessibility:** UI changes only (ARIA labels, keyboard nav, contrast)
-- **API contracts:** Breaking changes? (new required params, removed fields)
-- **DB migrations:** Safe? (backward compatible, rollback plan)
-
-For detailed analysis, use the dedicated `/pwrl-review` skill.
+For complex or high-risk changes, deep review adds Performance, Security, Accessibility, API-contract, and DB-migration checks. Full list of dimensions and the `--deep` flag usage are in [`references/deep-review-and-error-handling.md`](references/deep-review-and-error-handling.md#optional-deep-review-mode). For detailed analysis, use the dedicated `/pwrl-review` skill.
 
 ---
 
 ## Error Handling
 
-| Scenario                       | Handling                                           |
-| ------------------------------ | -------------------------------------------------- |
-| No duplications found          | Log "No duplications detected" (normal)            |
-| Git diff parsing fails         | Log error, ask user to verify git state, retry     |
-| Design spec not found          | Skip design comparison, continue                   |
-| Tests fail after consolidation | Revert consolidation, mark as blocked, investigate |
-| Unrelated changes in diff      | Warn user, ask to remove or explain                |
+Full error-handling table is in [`references/deep-review-and-error-handling.md`](references/deep-review-and-error-handling.md#error-handling).
 
 ---
 

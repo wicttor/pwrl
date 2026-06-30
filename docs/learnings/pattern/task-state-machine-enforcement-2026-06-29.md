@@ -93,6 +93,7 @@ If two agents (or two phases within the same agent) both try to move the same ta
 - [Explicit Task File Movement as Critical Phase Operation](explicit-task-file-movement-critical.md) — Establishes that moving a task file between folders is a critical, explicitly documented operation at each phase boundary.
 - [Task State Management — Dual-Layer Tracking](task-state-management-dual-layer-tracking.md) — Use dual-layer state tracking: file location (directory) + frontmatter status (YAML) for human and machine readability.
 - [Explicit Three-Tier Verdict Flow for Code Review](explicit-review-verdict-flow-2026-06-16.md) — Structured review verdict system with three explicit outcomes (APPROVED / REQUEST CHANGES / REJECTED) and defined task file actions.
+- [Cross-Skill Contract Enforcement — Ownership, Pre-Flight Guard, and Centralization](cross-skill-contract-enforcement-2026-06-29.md) — Sibling pattern that codifies the three structural ingredients required for a multi-skill contract to be enforced reliably: per-transition ownership, per-skill Pre-Flight Guards, and a single canonical contract in the orchestrator's SKILL.md. This learning applies that pattern to the task lifecycle; the sibling applies it more broadly.
 
 ## When NOT to Use
 

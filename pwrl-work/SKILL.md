@@ -2,6 +2,7 @@
 name: pwrl-work
 description: Execute implementation work efficiently through 4-phase micro-skill pipeline
 argument-hint: "[Task file, plan doc path, or work description. Leave blank to use latest plan/task]"
+version: 1.7.0-dev.1
 ---
 
 # PWRL Work
@@ -84,6 +85,25 @@ Interaction mode (`detailed | smart | yolo`) is set in Phase 0 (via `pwrl-work-t
 - **`yolo`** — Every phase runs automatically; only the final review report is shown. Fastest. Best for straightforward, well-understood work and time-sensitive hotfixes.
 
 **Exception:** Error recovery steps always pause the pipeline, regardless of mode. Downstream phases that still assume a legacy two-value enum must treat any value other than `detailed` as `yolo` until upgraded; `smart` is new as of 2026-06-29.
+
+---
+
+## Task Lifecycle Contract
+
+The task status state machine (`to-do → in-progress → for-review → done`) is enforced by a strict per-skill ownership boundary. Each transition has exactly one owning skill, and no other skill may perform that transition.
+
+| Transition | Owner |
+|---|---|
+| `to-do → in-progress` | `pwrl-work-prepare` |
+| `in-progress → for-review` | `pwrl-work-execute` |
+| `for-review → in-progress` (REQUEST CHANGES) | `pwrl-work-review` |
+| `for-review → done` (APPROVED) | `pwrl-review-report` |
+
+**MUST NOT:** No skill other than the owner listed in the table above may perform the corresponding transition. A skill that owns a transition is the only one allowed to write the new `status` value in the frontmatter AND move the file to the new folder.
+
+For the canonical one-screen table (status, folder, owner, trigger, action), see [`references/workflow-details.md` §"Task Status Transitions"](references/workflow-details.md#task-status-transitions-docstasks).
+
+The full pattern learning codifying this contract — including the Pre-Flight Guard pattern, the responsibility-boundary template, and the consequences of violation — lives at `docs/learnings/pattern/task-state-machine-enforcement-2026-06-29.md`.
 
 ---
 
